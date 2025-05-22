@@ -1,0 +1,63 @@
+{
+  "navigation": {
+    "projects": {
+      "title": "Projects",
+      "description": "Explore my development work and technical solutions"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Read my thoughts on technology and development"
+    },
+    "resume": {
+      "title": "Resume",
+      "description": "View my professional experience and qualifications"
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch for collaborations and opportunities"
+    },
+    "home": {
+      "title": "Home page"
+    }
+  },
+  "skills": {
+    "database": "Database",
+    "others": "And more..."
+  },
+  "contact": {
+    "email": {
+      "action": "Send email"
+    },
+    "linkedin": {
+      "info": "Connect professionally",
+      "action": "Connect"
+    },
+    "github": {
+      "info": "View my repositories",
+      "action": "Follow"
+    }
+  },
+  "landingPage": {
+    "hero": {
+      "info": "Full Stack Developer & Technical Writer",
+      "about": "About me",
+      "contact": "Get In Touch"
+    },
+    "about": {
+      "title": "What I Do",
+      "subtitle": "Passionate about creating digital experiences and sharing knowledge",
+      "learnMore": "Explore"
+    },
+    "skills": {
+      "title": "Technical Skills",
+      "subtitle": "Technologies and tools I work with"
+    },
+    "contact": {
+      "title": "Let's Connect",
+      "subtitle": "Ready to collaborate or just want to say hello?"
+    }
+  },
+  "footer": {
+    "madeWith": "© 2025 Jakub Tutka. Built with Nuxt & Vuetify."
+  }
+}

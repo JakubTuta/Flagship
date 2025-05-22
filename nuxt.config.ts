@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
+    '@nuxtjs/i18n',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
@@ -64,6 +65,12 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: true,
+  },
+
+  i18n: {
+    strategy: 'no_prefix',
+    defaultLocale: 'en',
+    vueI18n: './i18n.config.ts',
   },
 
   compatibilityDate: '2024-07-18',

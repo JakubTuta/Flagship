@@ -1,0 +1,63 @@
+{
+  "navigation": {
+    "projects": {
+      "title": "Projekty",
+      "description": "Poznaj moją pracę programistyczną i rozwiązania techniczne"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Przeczytaj moje przemyślenia o technologii i programowaniu"
+    },
+    "resume": {
+      "title": "CV",
+      "description": "Zobacz moje doświadczenie zawodowe i kwalifikacje"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "description": "Skontaktuj się w sprawie współpracy i możliwości"
+    },
+    "home": {
+      "title": "Strona główna"
+    }
+  },
+  "skills": {
+    "database": "Baza danych",
+    "others": "I więcej..."
+  },
+  "contact": {
+    "email": {
+      "action": "Wyślij e-mail"
+    },
+    "linkedin": {
+      "info": "Połącz się zawodowo",
+      "action": "Połącz"
+    },
+    "github": {
+      "info": "Zobacz moje repozytoria",
+      "action": "Obserwuj"
+    }
+  },
+  "landingPage": {
+    "hero": {
+      "info": "Full Stack Developer i Technical Writer",
+      "about": "O mnie",
+      "contact": "Skontaktuj się"
+    },
+    "about": {
+      "title": "Co robię",
+      "subtitle": "Pasjonat tworzenia cyfrowych doświadczeń i dzielenia się wiedzą",
+      "learnMore": "Poznaj"
+    },
+    "skills": {
+      "title": "Umiejętności techniczne",
+      "subtitle": "Technologie i narzędzia, z którymi pracuję"
+    },
+    "contact": {
+      "title": "Nawiążmy kontakt",
+      "subtitle": "Gotowy na współpracę lub po prostu chcesz się przywitać?"
+    }
+  },
+  "footer": {
+    "madeWith": "© 2025 Jakub Tutka. Stworzone z Nuxt & Vuetify."
+  }
+}
