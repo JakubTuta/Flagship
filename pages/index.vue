@@ -23,13 +23,6 @@ const navigationCards = computed(() => [
     color: 'accent',
     route: '/resume',
   },
-  {
-    title: t('navigation.contact.title'),
-    description: t('navigation.contact.description'),
-    icon: 'mdi-email',
-    color: 'info',
-    route: '/contact',
-  },
 ])
 
 const skills = computed(() => [
@@ -179,9 +172,14 @@ function scrollToSection(sectionId: string) {
                 color="primary"
                 variant="elevated"
                 class="mb-2 mr-4"
-                prepend-icon="mdi-account"
                 @click="scrollToSection('about')"
               >
+                <v-icon
+                  size="x-large"
+                  class="mr-4"
+                >
+                  mdi-account
+                </v-icon>
                 {{ $t('landingPage.hero.about') }}
               </v-btn>
 
@@ -190,9 +188,14 @@ function scrollToSection(sectionId: string) {
                 variant="elevated"
                 color="secondary"
                 class="mb-2"
-                prepend-icon="mdi-email"
                 @click="scrollToSection('contact')"
               >
+                <v-icon
+                  size="x-large"
+                  class="mr-4"
+                >
+                  mdi-email
+                </v-icon>
                 {{ $t('landingPage.hero.contact') }}
               </v-btn>
             </div>

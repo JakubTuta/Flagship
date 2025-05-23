@@ -1,6 +1,14 @@
 <script setup lang="ts">
+const props = defineProps<{
+  mobile: boolean
+}>()
+
 const { t } = useI18n()
+
 const themeStore = useThemeStore()
+
+const drawerStore = useDrawerStore()
+const { isOpen } = storeToRefs(drawerStore)
 
 const languageStore = useLanguageStore()
 const { currentLang } = storeToRefs(languageStore)
@@ -31,26 +39,30 @@ const navigationCards = computed(() => [
     color: 'accent',
     route: '/resume',
   },
-  {
-    title: t('navigation.contact.title'),
-    icon: 'mdi-email',
-    color: 'info',
-    route: '/contact',
-  },
 ])
+
+function handleNavClick() {
+  if (props.mobile) {
+    drawerStore.closeDrawer()
+  }
+}
 </script>
 
 <template>
   <v-navigation-drawer
+    v-model="isOpen"
     class="d-print-none"
-    expand-on-hover
-    rail
+    :expand-on-hover="!mobile"
+    :rail="!mobile"
+    :temporary="mobile"
+    :permanent="!mobile"
   >
     <v-list>
       <v-list-item
         :title="landingPageCard.title"
         lines="two"
         :to="landingPageCard.route"
+        @click="handleNavClick"
       >
         <template #prepend>
           <v-icon :color="landingPageCard.color">
@@ -69,6 +81,7 @@ const navigationCards = computed(() => [
         :title="card.title"
         lines="two"
         :to="card.route"
+        @click="handleNavClick"
       >
         <template #prepend>
           <v-icon :color="card.color">
