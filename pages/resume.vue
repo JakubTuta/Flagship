@@ -157,7 +157,7 @@ function datePeriod(start: Date, end: Date | null): string {
 
   if (end === null) {
     return locale.value === 'en'
-      ? `${startMonth}.${startYear} - ongoing`
+      ? `${startMonth}.${startYear} - present`
       : `${startMonth}.${startYear} - obecnie`
   }
 
@@ -362,7 +362,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   >
                     <v-card-text>
                       <div class="d-flex justify-space-between align-center mb-2">
-                        <h3 class="text-h6 font-weight-medium">
+                        <h3 class="text-h6 font-weight-medium max-w-75%">
                           {{ edu.institution }}
                         </h3>
 
@@ -409,7 +409,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   >
                     <v-card-text>
                       <div class="d-flex justify-space-between align-center mb-2">
-                        <h3 class="text-h6 font-weight-medium">
+                        <h3 class="text-h6 font-weight-medium max-w-75%">
                           {{ exp.position }}
                         </h3>
 
@@ -473,7 +473,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   >
                     <v-card-text>
                       <div class="d-flex justify-space-between align-center mb-2">
-                        <h3 class="text-h6 font-weight-medium">
+                        <h3 class="text-h6 font-weight-medium max-w-75%">
                           {{ activity.title }}
                         </h3>
 
