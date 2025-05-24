@@ -212,10 +212,6 @@ function calculateDate(date1: Date, date2: Date | null): string {
 </script>
 
 <template>
-  <NavigationDrawer
-    :mobile="mobile"
-  />
-
   <div
     class="cv-container"
     fluid
@@ -233,7 +229,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
       >
         <v-card
           class="cv-card print-stretch"
-          elevation="8"
+          elevation="20"
           :class="{'print-card': isPrintMode}"
         >
           <!-- Header Section -->

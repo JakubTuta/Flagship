@@ -139,10 +139,6 @@ function scrollToSection(sectionId: string) {
 </script>
 
 <template>
-  <NavigationDrawer
-    :mobile="mobile"
-  />
-
   <div class="landing-page">
     <!-- Hero Section -->
     <div class="hero-section align-center flex justify-center pa-0">

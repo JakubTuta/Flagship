@@ -33,6 +33,10 @@ onMounted(() => {
 
       <v-main>
         <NuxtPage />
+
+        <NavigationDrawer
+          :mobile="mobile"
+        />
       </v-main>
     </v-app>
 
