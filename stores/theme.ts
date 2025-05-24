@@ -17,6 +17,8 @@ export const useThemeStore = defineStore('theme', () => {
     else {
       theme.global.name.value = defaultTheme
     }
+
+    return theme.global.name.value
   }
 
   const toggleTheme = () => {
@@ -30,7 +32,6 @@ export const useThemeStore = defineStore('theme', () => {
   const isDark = computed(() => theme.global.name.value === 'dark')
 
   return {
-    theme,
     setTheme,
     getTheme,
     toggleTheme,

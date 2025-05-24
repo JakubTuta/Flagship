@@ -19,7 +19,7 @@ const socialLinks = [
 </script>
 
 <template>
-  <v-footer class="footer pa-8">
+  <v-footer class="footer d-print-none pa-8">
     <v-container>
       <v-row class="justify-center">
         <v-col

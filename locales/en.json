@@ -59,5 +59,58 @@
   },
   "footer": {
     "madeWith": "© 2025 Jakub Tutka. Built with Nuxt & Vuetify."
+  },
+  "resume": {
+    "work": {
+      "waber": {
+        "responsibility1": "Developing and improving the functionality of the web application in accordance with specific specifications in Vue.js, Nuxt and TypeScript technologies",
+        "responsibility2": "Working with the Firebase environment",
+        "responsibility3": "Participation in planning subsequent stages of application development - Draw.io, Figma"
+      },
+      "title": "Professional experience",
+      "responsibilities": "Scope of duties"
+    },
+    "education": {
+      "institution": "Lodz University of Technology",
+      "title": "Education",
+      "field": "Field of study",
+      "specialization": "Specialization",
+      "level": "Level",
+      "lodz": {
+        "field": "Computer Science",
+        "specialization": "Software Engineering",
+        "level": "Engineer"
+      }
+    },
+    "activities": {
+      "innovation": {
+        "title": "\"Innovation\" project of the Lodz University of Technology",
+        "activity1": "Creating a web application for ordering meals for kindergartens and nurseries",
+        "activity2": "Help and support for younger project participants"
+      },
+      "title": "Additional activities"
+    },
+    "interests": {
+      "1": "Programming",
+      "2": "Reading books",
+      "3": "Movies and series",
+      "4": "Cooking",
+      "title": "Interests"
+    },
+    "links": {
+      "github": "GitHub Profile",
+      "linkedin": "LinkedIn Profile",
+      "title": "Links"
+    },
+    "print": "Print CV",
+    "skills": {
+      "title": "Skills",
+      "database": "Databases",
+      "versionControl": "Version control"
+    },
+    "footer": {
+      "text": "I agree to the processing of my personal data for the purposes necessary to implement the recruitment process in accordance with the GDPR."
+    },
+    "lodz": "Lodz"
   }
 }

@@ -59,5 +59,58 @@
   },
   "footer": {
     "madeWith": "© 2025 Jakub Tutka. Stworzone z Nuxt & Vuetify."
+  },
+  "resume": {
+    "work": {
+      "waber": {
+        "responsibility1": "Rozwijanie i udoskonalanie funkcjonalności aplikacji internetowej zgodnie z określonymi specyfikacjami w technologiach Vue.js, Nuxt oraz TypeScript",
+        "responsibility2": "Praca ze środowiskiem Firebase",
+        "responsibility3": "Uczestnictwo w planowaniu kolejnych etapów rozwoju aplikacji – Draw.io, Figma"
+      },
+      "title": "Doświadczenie zawodowe",
+      "responsibilities": "Zakres obowiązków"
+    },
+    "education": {
+      "institution": "Politechnika Łódzka",
+      "title": "Wykształcenie",
+      "field": "Kierunek",
+      "specialization": "Specjalizacja",
+      "level": "Poziom",
+      "lodz": {
+        "field": "Informatyka",
+        "specialization": "Inżynieria oprogramowania",
+        "level": "Inżynier"
+      }
+    },
+    "activities": {
+      "innovation": {
+        "title": "Projekt \"Innowacja\" Politechniki Łódzkiej",
+        "activity1": "Tworzenie aplikacji webowej do zamawiania posiłków dla przedszkoli i żłobków",
+        "activity2": "Pomoc i wspieranie młodszych uczestników projektu"
+      },
+      "title": "Aktywność dodatkowa"
+    },
+    "interests": {
+      "1": "Programowanie",
+      "2": "Czytanie książek",
+      "3": "Filmy i seriale",
+      "4": "Gotowanie",
+      "title": "Zainteresowania"
+    },
+    "links": {
+      "github": "Profil GitHub",
+      "title": "Linki",
+      "linkedin": "Profil LinkedIn"
+    },
+    "print": "Drukuj CV",
+    "skills": {
+      "title": "Umiejętności",
+      "database": "Bazy danych",
+      "versionControl": "Kontrola wersji"
+    },
+    "footer": {
+      "text": "Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z RODO."
+    },
+    "lodz": "Łódź"
   }
 }
