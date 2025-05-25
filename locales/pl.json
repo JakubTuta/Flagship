@@ -1,4 +1,21 @@
 {
+  "seo": {
+    "site": {
+      "title": "Jakub Tutka | Portfolio Developera",
+      "description": "Strona osobista Jakuba Tutka prezentująca projekty programistyczne, blog techniczny, CV oraz informacje kontaktowe. Centralne miejsce dla całej mojej pracy zawodowej i ekspertyzy.",
+      "keywords": "Jakub Tutka, portfolio developera, full stack developer, technical writer, web development, inżynieria oprogramowania, strona osobista"
+    },
+    "pages": {
+      "index": {
+        "title": "Strona główna",
+        "description": "Witamy na mojej osobistej stronie portfolio"
+      },
+      "resume": {
+        "title": "CV",
+        "description": "Zobacz moje doświadczenie zawodowe i kwalifikacje"
+      }
+    }
+  },
   "navigation": {
     "projects": {
       "title": "Projekty",

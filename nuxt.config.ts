@@ -1,16 +1,29 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
+const appName = 'Jakub Tutka | Developer Portfolio'
+const baseUrl = 'https://jakubtutka.com'
+
 export default defineNuxtConfig({
   app: {
     head: {
-      title: 'Jakub Tutka | Developer Portfolio',
+      title: appName,
+      titleTemplate: '%s | Jakub Tutka',
       meta: [
-        { name: 'description', content: 'Personal website of Jakub Tutka showcasing development projects, technical blog, professional resume, and contact information. A central hub for all my professional work and expertise.' },
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { name: 'keywords', content: 'developer, portfolio, projects, blog, resume, CV, contact, Jakub Tutka' },
         { name: 'author', content: 'Jakub Tutka' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
+      // meta: [
+      //   { name: 'description', content: 'Personal website of Jakub Tutka showcasing development projects, technical blog, professional resume, and contact information. A central hub for all my professional work and expertise.' },
+      // ],
     },
+  },
+
+  site: {
+    url: baseUrl,
+    name: appName,
   },
 
   runtimeConfig: {
@@ -71,6 +84,26 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
     defaultLocale: 'en',
     vueI18n: './i18n.config.ts',
+    locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        name: 'English',
+      },
+      {
+        code: 'pl',
+        iso: 'pl-PL',
+        name: 'Polski',
+      },
+    ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
+    // @ts-expect-error @nuxtjs/seo
+    seo: true,
+    baseUrl,
   },
 
   compatibilityDate: '2024-07-18',

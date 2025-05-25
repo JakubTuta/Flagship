@@ -1,0 +1,87 @@
+<script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
+const { t, locale } = useI18n()
+const drawerStore = useDrawerStore()
+const { mobile } = useDisplay()
+
+useSeoMeta({
+  description: t('seo.site.description'),
+  keywords: t('seo.site.keywords'),
+  ogSiteName: t('seo.site.title'),
+  ogLocale: locale.value,
+})
+
+useHead({
+  htmlAttrs: {
+    lang: locale.value,
+  },
+  meta: [
+    {
+      name: 'description',
+      content: t('seo.site.description'),
+    },
+  ],
+})
+
+watch(locale, (newLocale) => {
+  useSeoMeta({
+    description: t('seo.site.description'),
+    keywords: t('seo.site.keywords'),
+    ogSiteName: t('seo.site.title'),
+    ogLocale: newLocale,
+  })
+
+  useHead({
+    htmlAttrs: {
+      lang: newLocale,
+    },
+  })
+})
+</script>
+
+<template>
+  <v-btn
+    v-if="mobile"
+    icon="mdi-menu"
+    rounded="circle"
+    class="floating-btn mobile-menu-btn"
+    elevation="15"
+    @click="drawerStore.toggleDrawer()"
+  />
+
+  <v-main>
+    <slot />
+
+    <NavigationDrawer
+      :mobile="mobile"
+    />
+  </v-main>
+
+  <Footer />
+</template>
+
+<style scoped>
+.mobile-menu-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  background-color: rgb(var(--v-theme-surface));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.floating-btn {
+  animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+</style>

@@ -1,22 +1,47 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { usePageHead } from '~/composables/usePageHead'
+import { useSeo } from '~/composables/useSeo'
 
 const { t, locale } = useI18n()
-const { mobile } = useDisplay()
 const themeStore = useThemeStore()
 const drawerStore = useDrawerStore()
 
+useSeo({
+  useTranslation: true,
+  translationKey: 'seo.pages.resume',
+})
+
+watch(locale, () => {
+  usePageHead({
+    title: t('seo.pages.resume.title'),
+    meta: [
+      {
+        name: 'description',
+        content: t('seo.pages.resume.description'),
+      },
+      {
+        property: 'og:title',
+        content: `${t('seo.pages.resume.title')} | ${t('seo.site.title')}`,
+      },
+      {
+        property: 'og:description',
+        content: t('seo.pages.resume.description'),
+      },
+    ],
+  })
+}, { immediate: true })
+
 const isPrintMode = ref(false)
 
-const personalInfo = {
+const personalInfo = computed(() => ({
   name: 'Jakub Tutka',
   title: 'Web Developer',
   email: 'jakubtutka02@gmail.com',
   phone: '+48 730 166 888',
   location: t('resume.lodz'),
   birthDate: '14.03.2002',
-}
+}))
 
 const education = computed(() => [
   {

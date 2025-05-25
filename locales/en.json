@@ -1,4 +1,21 @@
 {
+  "seo": {
+    "site": {
+      "title": "Jakub Tutka | Developer Portfolio",
+      "description": "Personal website of Jakub Tutka showcasing development projects, technical blog, professional resume, and contact information. A central hub for all my professional work and expertise.",
+      "keywords": "Jakub Tutka, developer portfolio, full stack developer, technical writer, web development, software engineering, personal website"
+    },
+    "pages": {
+      "index": {
+        "title": "Home",
+        "description": "Welcome to my personal portfolio website"
+      },
+      "resume": {
+        "title": "Resume",
+        "description": "View my professional experience and qualifications"
+      }
+    }
+  },
   "navigation": {
     "projects": {
       "title": "Projects",
@@ -111,6 +128,6 @@
     "footer": {
       "text": "I agree to the processing of my personal data for the purposes necessary to implement the recruitment process in accordance with the GDPR."
     },
-    "lodz": "Lodz"
+    "lodz": "Lodz, Poland"
   }
 }

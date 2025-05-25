@@ -1,8 +1,32 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useSeo } from '~/composables/useSeo'
 
-const { mobile } = useDisplay()
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+useSeo({
+  useTranslation: true,
+  translationKey: 'seo.pages.index',
+})
+
+watch(locale, () => {
+  usePageHead({
+    title: t('seo.pages.index.title'),
+    meta: [
+      {
+        name: 'description',
+        content: t('seo.pages.index.description'),
+      },
+      {
+        property: 'og:title',
+        content: `${t('seo.pages.index.title')} | ${t('seo.site.title')}`,
+      },
+      {
+        property: 'og:description',
+        content: t('seo.pages.index.description'),
+      },
+    ],
+  })
+}, { immediate: true })
 
 const navigationCards = computed(() => [
   {
