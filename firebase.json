@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": ".output/public",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -12,5 +12,8 @@
         "function": "nuxtssr"
       }
     ]
+  },
+  "functions": {
+    "source": ".output/server"
   }
 }
