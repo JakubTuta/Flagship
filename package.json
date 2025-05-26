@@ -28,6 +28,7 @@
     "@vueuse/nuxt": "^10.11.1",
     "eslint": "^8.57.1",
     "firebase": "^11.8.1",
+    "firebase-tools": "^14.4.0",
     "nuxt": "^3.17.4",
     "nuxt-seo-utils": "^7.0.12",
     "pinia": "^2.3.1",
