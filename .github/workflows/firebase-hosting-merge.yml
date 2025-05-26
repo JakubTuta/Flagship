@@ -11,18 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Create environment file
+        run: |
           echo "API_KEY=${{ secrets.API_KEY }}" > .env
           echo "AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }}" >> .env
           echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> .env
           echo "STORAGE_BUCKET=${{ secrets.STORAGE_BUCKET }}" >> .env
           echo "MESSAGING_SENDER_ID=${{ secrets.MESSAGING_SENDER_ID }}" >> .env
           echo "APP_ID=${{ secrets.APP_ID }}" >> .env
-      - run: npm install --legacy-peer-deps
-      - run: npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FLAGSHIP_8DE31 }}
-          channelId: live
-          projectId: flagship-8de31
+      
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      
+      - name: Deploy to Firebase
+        run: firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }}
+        env:
+          FIREBASE_PROJECT_ID: flagship-8de31
