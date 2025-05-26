@@ -13,10 +13,8 @@
       }
     ]
   },
-  "functions": [
-    {
-      "source": ".output/server",
-      "codebase": "default"
-    }
-  ]
+  "functions": {
+    "source": ".output/server",
+    "runtime": "nodejs20"
+  }
 }

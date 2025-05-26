@@ -8,33 +8,30 @@
     "pages": {
       "index": {
         "title": "Home",
-        "description": "Welcome to my personal portfolio website"
+        "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer."
       },
       "resume": {
         "title": "Resume",
-        "description": "View my professional experience and qualifications"
+        "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer."
       }
     }
   },
   "navigation": {
     "projects": {
       "title": "Projects",
-      "description": "Explore my development work and technical solutions"
+      "description": "Discover my portfolio of development projects showcasing technical expertise across various technologies. View live demos, source code, and detailed case studies of web applications, software solutions, and innovative digital experiences I've built."
     },
     "blog": {
       "title": "Blog",
-      "description": "Read my thoughts on technology and development"
+      "description": "Read my technical blog featuring insights on software development, programming tutorials, technology trends, and lessons learned from real-world projects. Stay updated with my thoughts on modern development practices and industry innovations."
     },
     "resume": {
       "title": "Resume",
-      "description": "View my professional experience and qualifications"
-    },
-    "contact": {
-      "title": "Contact",
-      "description": "Get in touch for collaborations and opportunities"
+      "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer."
     },
     "home": {
-      "title": "Home page"
+      "title": "Home",
+      "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer."
     }
   },
   "skills": {

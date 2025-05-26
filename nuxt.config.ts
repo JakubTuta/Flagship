@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     baseURL: '/',
     head: {
       title: appName,
-      titleTemplate: '%s | Jakub Tutka',
+      titleTemplate: '%s | Jakub Tutka Portfolio',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -81,6 +81,10 @@ export default defineNuxtConfig({
       gen: 2,
       nodeVersion: '20',
     },
+  },
+
+  experimental: {
+    payloadExtraction: false,
   },
 
   typescript: {

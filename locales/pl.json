@@ -2,39 +2,36 @@
   "seo": {
     "site": {
       "title": "Jakub Tutka | Portfolio Developera",
-      "description": "Strona osobista Jakuba Tutka prezentująca projekty programistyczne, blog techniczny, CV oraz informacje kontaktowe. Centralne miejsce dla całej mojej pracy zawodowej i ekspertyzy.",
-      "keywords": "Jakub Tutka, portfolio developera, full stack developer, technical writer, web development, inżynieria oprogramowania, strona osobista"
+      "description": "Strona osobista Jakuba Tutki prezentująca projekty programistyczne, blog techniczny, CV zawodowe i informacje kontaktowe. Centralne miejsce dla wszystkich moich prac zawodowych i ekspertyzy.",
+      "keywords": "Jakub Tutka, portfolio developera, full stack developer, technical writer, tworzenie stron internetowych, inżynieria oprogramowania, strona osobista"
     },
     "pages": {
       "index": {
         "title": "Strona główna",
-        "description": "Witamy na mojej osobistej stronie portfolio"
+        "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer."
       },
       "resume": {
         "title": "CV",
-        "description": "Zobacz moje doświadczenie zawodowe i kwalifikacje"
+        "description": "Zapoznaj się z moim kompleksowym CV zawodowym obejmującym doświadczenie zawodowe, wykształcenie, umiejętności techniczne i osiągnięcia. Pobierz lub zobacz moje kwalifikacje i drogę kariery jako full stack developer."
       }
     }
   },
   "navigation": {
     "projects": {
       "title": "Projekty",
-      "description": "Poznaj moją pracę programistyczną i rozwiązania techniczne"
+      "description": "Odkryj moje portfolio projektów programistycznych prezentujących wiedzę techniczną w różnych technologiach. Zobacz wersje demonstracyjne, kod źródłowy i szczegółowe studia przypadków aplikacji internetowych, rozwiązań programistycznych i innowacyjnych doświadczeń cyfrowych, które stworzyłem."
     },
     "blog": {
       "title": "Blog",
-      "description": "Przeczytaj moje przemyślenia o technologii i programowaniu"
+      "description": "Przeczytaj mój blog techniczny z wglądem w rozwój oprogramowania, tutoriale programistyczne, trendy technologiczne i lekcje wyniesione z rzeczywistych projektów. Bądź na bieżąco z moimi przemyśleniami na temat nowoczesnych praktyk rozwoju i innowacji branżowych."
     },
     "resume": {
       "title": "CV",
-      "description": "Zobacz moje doświadczenie zawodowe i kwalifikacje"
-    },
-    "contact": {
-      "title": "Kontakt",
-      "description": "Skontaktuj się w sprawie współpracy i możliwości"
+      "description": "Zapoznaj się z moim kompleksowym CV zawodowym obejmującym doświadczenie zawodowe, wykształcenie, umiejętności techniczne i osiągnięcia. Pobierz lub zobacz moje kwalifikacje i drogę kariery jako full stack developer."
     },
     "home": {
-      "title": "Strona główna"
+      "title": "Strona główna",
+      "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer."
     }
   },
   "skills": {
