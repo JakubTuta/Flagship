@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
-import { usePageHead } from '~/composables/usePageHead'
-import { useSeo } from '~/composables/useSeo'
-
 const { t, locale } = useI18n()
 const themeStore = useThemeStore()
 const drawerStore = useDrawerStore()

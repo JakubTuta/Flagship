@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useSeo } from '~/composables/useSeo'
-
 const { t, locale } = useI18n()
 
 useSeo({
