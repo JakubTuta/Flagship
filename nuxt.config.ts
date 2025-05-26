@@ -78,7 +78,7 @@ export default defineNuxtConfig({
   ssr: true,
 
   nitro: {
-    preset: 'node-server',
+    preset: 'firebase',
     firebase: {
       gen: 2,
     },
