@@ -17,9 +17,6 @@ export default defineNuxtConfig({
         { name: 'keywords', content: 'developer, portfolio, projects, blog, resume, CV, contact, Jakub Tutka' },
         { name: 'author', content: 'Jakub Tutka' },
       ],
-      // meta: [
-      //   { name: 'description', content: 'Personal website of Jakub Tutka showcasing development projects, technical blog, professional resume, and contact information. A central hub for all my professional work and expertise.' },
-      // ],
     },
   },
 
@@ -79,14 +76,11 @@ export default defineNuxtConfig({
   ssr: true,
 
   nitro: {
-    preset: 'node-server',
+    preset: 'firebase',
     firebase: {
       gen: 2,
+      nodeVersion: '20',
     },
-  },
-
-  experimental: {
-    payloadExtraction: false,
   },
 
   typescript: {

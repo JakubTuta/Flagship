@@ -5,6 +5,18 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "server"
+      }
     ]
-  }
+  },
+  "functions": [
+    {
+      "source": ".output/server",
+      "codebase": "default"
+    }
+  ]
 }
