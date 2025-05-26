@@ -6,6 +6,7 @@ const baseUrl = 'https://jakubtutka.com'
 
 export default defineNuxtConfig({
   app: {
+    baseURL: '/',
     head: {
       title: appName,
       titleTemplate: '%s | Jakub Tutka',
@@ -82,6 +83,10 @@ export default defineNuxtConfig({
     firebase: {
       gen: 2,
     },
+  },
+
+  experimental: {
+    payloadExtraction: false,
   },
 
   typescript: {
