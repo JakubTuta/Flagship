@@ -80,6 +80,8 @@ export default defineNuxtConfig({
     firebase: {
       gen: 2,
       nodeVersion: '20',
+      // @ts-expect-error nitro preset options
+      region: 'europe-central2',
     },
   },
 

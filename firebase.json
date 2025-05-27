@@ -12,10 +12,12 @@
         "function": "server",
         "region": "europe-central2"
       }
-    ]
+    ],
+    "frameworksBackend": {
+      "region": "europe-west1"
+    }
   },
   "functions": {
-    "predeploy": "bun run build",
     "source": ".output/server",
     "runtime": "nodejs20",
     "region": "europe-central2"
