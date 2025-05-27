@@ -3,16 +3,18 @@
     "site": {
       "title": "Jakub Tutka | Developer Portfolio",
       "description": "Personal website of Jakub Tutka showcasing development projects, technical blog, professional resume, and contact information. A central hub for all my professional work and expertise.",
-      "keywords": "Jakub Tutka, developer portfolio, full stack developer, technical writer, web development, software engineering, personal website"
+      "tags": "Jakub Tutka, developer portfolio, full stack developer, technical writer, web development, software engineering, personal website"
     },
     "pages": {
       "index": {
         "title": "Home",
-        "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer."
+        "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer.",
+        "tags": "home, portfolio, Jakub Tutka, full stack developer, technical writer"
       },
       "resume": {
         "title": "Resume",
-        "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer."
+        "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer.",
+        "tags": "resume, CV, Jakub Tutka, full stack developer, work experience, technical skills"
       }
     }
   },

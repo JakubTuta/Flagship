@@ -3,16 +3,18 @@
     "site": {
       "title": "Jakub Tutka | Portfolio Developera",
       "description": "Strona osobista Jakuba Tutki prezentująca projekty programistyczne, blog techniczny, CV zawodowe i informacje kontaktowe. Centralne miejsce dla wszystkich moich prac zawodowych i ekspertyzy.",
-      "keywords": "Jakub Tutka, portfolio developera, full stack developer, technical writer, tworzenie stron internetowych, inżynieria oprogramowania, strona osobista"
+      "tags": "Jakub Tutka, portfolio developera, full stack developer, technical writer, tworzenie stron internetowych, inżynieria oprogramowania, strona osobista"
     },
     "pages": {
       "index": {
         "title": "Strona główna",
-        "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer."
+        "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer.",
+        "tags": "strona główna, portfolio, Jakub Tutka, full stack developer, technical writer"
       },
       "resume": {
         "title": "CV",
-        "description": "Zapoznaj się z moim kompleksowym CV zawodowym obejmującym doświadczenie zawodowe, wykształcenie, umiejętności techniczne i osiągnięcia. Pobierz lub zobacz moje kwalifikacje i drogę kariery jako full stack developer."
+        "description": "Zapoznaj się z moim kompleksowym CV zawodowym obejmującym doświadczenie zawodowe, wykształcenie, umiejętności techniczne i osiągnięcia. Pobierz lub zobacz moje kwalifikacje i drogę kariery jako full stack developer.",
+        "tags": "CV, resume, Jakub Tutka, full stack developer, doświadczenie zawodowe, umiejętności techniczne"
       }
     }
   },

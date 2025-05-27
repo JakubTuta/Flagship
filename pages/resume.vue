@@ -4,6 +4,7 @@ const themeStore = useThemeStore()
 const drawerStore = useDrawerStore()
 
 useSeo({
+  url: '/resume',
   useTranslation: true,
   translationKey: 'seo.pages.resume',
 })

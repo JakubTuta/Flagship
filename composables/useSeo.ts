@@ -37,6 +37,10 @@ export function useSeo(options: SeoOptions = {}) {
     ? t(`${translationKey}.description`)
     : description || t('seo.site.description')
 
+  const finalTags = useTranslation && translationKey
+    ? t(`${translationKey}.tags`).split(',').map(tag => tag.trim())
+    : tags
+
   useSeoMeta({
     title: finalTitle,
     description: finalDescription,
@@ -48,7 +52,7 @@ export function useSeo(options: SeoOptions = {}) {
     ogLocale: locale.value,
     ...(publishedTime && { 'article:published_time': publishedTime }),
     ...(author && { 'article:author': author }),
-    ...(tags.length && { 'article:tag': tags.join(', ') }),
+    ...(tags.length && { 'article:tag': finalTags.join(', ') }),
   })
 
   const localePath = useLocalePath()

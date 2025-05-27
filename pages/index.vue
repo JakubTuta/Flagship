@@ -2,6 +2,7 @@
 const { t, locale } = useI18n()
 
 useSeo({
+  url: '/',
   useTranslation: true,
   translationKey: 'seo.pages.index',
 })
@@ -179,6 +180,7 @@ function scrollToSection(sectionId: string) {
             >
               <v-img
                 src="~/assets/profile.jpg"
+                lazy-src="~/assets/profile-low.jpg"
                 alt="Profile Picture"
               />
             </v-avatar>
@@ -370,12 +372,14 @@ function scrollToSection(sectionId: string) {
                     activator="parent"
                   >
                     <v-list
+                      bg-color="transparent"
                       rounded="xl"
                       min-width="150"
                     >
                       <v-list-item
                         v-for="item in skill.additional"
                         :key="item"
+                        class="text-subtitle-2"
                       >
                         {{ item }}
                       </v-list-item>

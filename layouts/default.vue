@@ -5,39 +5,35 @@ const { t, locale } = useI18n()
 const drawerStore = useDrawerStore()
 const { mobile } = useDisplay()
 
-useSeoMeta({
+useSeo({
   description: t('seo.site.description'),
-  keywords: t('seo.site.keywords'),
-  ogSiteName: t('seo.site.title'),
-  ogLocale: locale.value,
-})
-
-useHead({
-  htmlAttrs: {
-    lang: locale.value,
-  },
-  meta: [
-    {
-      name: 'description',
-      content: t('seo.site.description'),
-    },
-  ],
+  image: '~/assets/profile.jpg',
+  type: 'website',
+  author: 'Jakub Tutka',
+  tags: t('seo.site.tags').split(',').map(tag => tag.trim()),
 })
 
 watch(locale, (newLocale) => {
-  useSeoMeta({
+  useSeo({
     description: t('seo.site.description'),
-    keywords: t('seo.site.keywords'),
-    ogSiteName: t('seo.site.title'),
-    ogLocale: newLocale,
+    image: '~/assets/profile.jpg',
+    type: 'website',
+    author: 'Jakub Tutka',
+    tags: t('seo.site.tags').split(',').map(tag => tag.trim()),
   })
 
   useHead({
     htmlAttrs: {
       lang: newLocale,
     },
+    meta: [
+      {
+        name: 'description',
+        content: t('seo.site.description'),
+      },
+    ],
   })
-})
+}, { immediate: true })
 </script>
 
 <template>
@@ -53,12 +49,12 @@ watch(locale, (newLocale) => {
   <v-main>
     <slot />
 
-    <NavigationDrawer
+    <LazyNavigationDrawer
       :mobile="mobile"
     />
   </v-main>
 
-  <Footer />
+  <LazyFooter />
 </template>
 
 <style scoped>

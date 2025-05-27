@@ -102,11 +102,19 @@ function handleNavClick() {
         >
           <template #prepend>
             <v-avatar v-if="currentLang === 'pl'">
-              <v-img src="../assets/flags/pl.png" />
+              <v-img
+                src="~/assets/flags/pl.jpg"
+                lazy-src="~/assets/flags/pl-low.jpg"
+                alt="Polish flag"
+              />
             </v-avatar>
 
             <v-avatar v-else-if="currentLang === 'en'">
-              <v-img src="../assets/flags/en.png" />
+              <v-img
+                src="~/assets/flags/en.jpg"
+                lazy-src="~/assets/flags/en-low.jpg"
+                alt="English flag"
+              />
             </v-avatar>
           </template>
         </v-list-item>

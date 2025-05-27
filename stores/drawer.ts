@@ -1,6 +1,6 @@
 export const useDrawerStore = defineStore('drawer', () => {
   // State
-  const isOpen = ref(true)
+  const isOpen = ref(false)
 
   // Actions
   const toggleDrawer = () => {
