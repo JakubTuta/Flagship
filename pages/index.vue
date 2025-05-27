@@ -171,7 +171,7 @@ function scrollToSection(sectionId: string) {
       >
         <v-col
           cols="12"
-          class="d-flex align-center justify-center"
+          class="align-center d-flex justify-center"
         >
           <div class="hero-content text-center">
             <v-avatar
