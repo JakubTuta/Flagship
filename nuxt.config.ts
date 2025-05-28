@@ -85,10 +85,15 @@ export default defineNuxtConfig({
 
   experimental: {
     payloadExtraction: false,
+    renderJsonPayloads: true,
   },
 
   typescript: {
     strict: true,
+  },
+
+  vue: {
+    propsDestructure: true,
   },
 
   i18n: {
