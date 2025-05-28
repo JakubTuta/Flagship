@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const { t, locale } = useI18n()
 const themeStore = useThemeStore()
 const drawerStore = useDrawerStore()
@@ -30,6 +32,8 @@ watch(locale, () => {
 }, { immediate: true })
 
 const isPrintMode = ref(false)
+
+const { mobile } = useDisplay()
 
 const personalInfo = computed(() => ({
   name: 'Jakub Tutka',
@@ -271,7 +275,10 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   {{ personalInfo.name }}
                 </h1>
 
-                <div class="text-h5 text-high-emphasis">
+                <div
+                  class="text-h5 text-high-emphasis"
+                  :class="{'text-center': mobile}"
+                >
                   {{ personalInfo.title }}
                 </div>
               </v-col>
@@ -283,13 +290,17 @@ function calculateDate(date1: Date, date2: Date | null): string {
               >
                 <div
                   class="contact-info"
-                  :class="{'print-contact': isPrintMode}"
+                  :class="{
+                    'print-contact': isPrintMode,
+                    'd-flex justify-end': mobile,
+                  }"
                 >
                   <v-chip
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode}"
+                    :class="{'print-chip': isPrintMode,
+                             'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-email
@@ -301,7 +312,8 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode}"
+                    :class="{'print-chip': isPrintMode,
+                             'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-phone
@@ -313,7 +325,8 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode}"
+                    :class="{'print-chip': isPrintMode,
+                             'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-map-marker
@@ -325,7 +338,8 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode}"
+                    :class="{'print-chip': isPrintMode,
+                             'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-calendar
@@ -340,6 +354,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
               v-if="!isPrintMode"
               color="white"
               variant="outlined"
+              :class="mobile
+                ? 'mt-4'
+                : ''"
               @click="handlePrint"
             >
               <v-icon start>
@@ -385,12 +402,22 @@ function calculateDate(date1: Date, date2: Date | null): string {
                         </h3>
 
                         <v-chip
+                          v-if="!mobile"
                           color="primary"
                           size="small"
                         >
                           {{ datePeriod(edu.startDate, edu.endDate) }}
                         </v-chip>
                       </div>
+
+                      <v-chip
+                        v-if="mobile"
+                        color="primary"
+                        size="small"
+                        class="mb-3"
+                      >
+                        {{ datePeriod(edu.startDate, edu.endDate) }}
+                      </v-chip>
 
                       <div class="text-body-1 mb-1">
                         <strong>{{ t('resume.education.field') }}:</strong> {{ edu.field }}
@@ -432,6 +459,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                         </h3>
 
                         <v-chip
+                          v-if="!mobile"
                           color="success"
                           size="small"
                         >
@@ -444,6 +472,15 @@ function calculateDate(date1: Date, date2: Date | null): string {
                       </div>
 
                       <div class="experience-duration mb-3">
+                        <v-chip
+                          v-if="mobile"
+                          color="success"
+                          size="small"
+                          class="mr-2"
+                        >
+                          {{ datePeriod(exp.startDate, exp.endDate) }}
+                        </v-chip>
+
                         <v-chip
                           color="info"
                           size="small"
@@ -496,6 +533,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                         </h3>
 
                         <v-chip
+                          v-if="!mobile"
                           color="warning"
                           size="small"
                         >
@@ -508,6 +546,15 @@ function calculateDate(date1: Date, date2: Date | null): string {
                       </div>
 
                       <div class="activity-duration mb-3">
+                        <v-chip
+                          v-if="mobile"
+                          color="warning"
+                          size="small"
+                          class="mr-2"
+                        >
+                          {{ datePeriod(activity.startDate, activity.endDate) }}
+                        </v-chip>
+
                         <v-chip
                           color="info"
                           size="small"
@@ -993,7 +1040,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
   }
 
   .skills-container {
-    background: #f9f9f9 !important;
+    background: #ffffff !important;
     border: 1px solid #ddd !important;
     padding: 0.5rem !important;
   }

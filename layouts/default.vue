@@ -41,7 +41,7 @@ watch(locale, (newLocale) => {
     v-if="mobile"
     icon="mdi-menu"
     rounded="circle"
-    class="floating-btn mobile-menu-btn"
+    class="floating-btn mobile-menu-btn d-print-none"
     elevation="15"
     @click="drawerStore.toggleDrawer()"
   />
@@ -49,12 +49,12 @@ watch(locale, (newLocale) => {
   <v-main>
     <slot />
 
-    <NavigationDrawer
+    <LazyNavigationDrawer
       :mobile="mobile"
     />
   </v-main>
 
-  <Footer />
+  <LazyFooter />
 </template>
 
 <style scoped>
