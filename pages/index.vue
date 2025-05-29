@@ -203,7 +203,7 @@ function scrollToSection(sectionId: string) {
               >
                 <v-icon
                   size="x-large"
-                  class="mr-4"
+                  class="mr-2"
                 >
                   mdi-account
                 </v-icon>
@@ -219,7 +219,7 @@ function scrollToSection(sectionId: string) {
               >
                 <v-icon
                   size="x-large"
-                  class="mr-4"
+                  class="mr-2"
                 >
                   mdi-email
                 </v-icon>
