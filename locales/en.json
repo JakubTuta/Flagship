@@ -15,6 +15,11 @@
         "title": "Resume",
         "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer.",
         "tags": "resume, CV, Jakub Tutka, full stack developer, work experience, technical skills"
+      },
+      "projects": {
+        "title": "Projects",
+        "description": "Discover my portfolio of development projects showcasing technical expertise across various technologies. View live demos, source code, and detailed case studies of web applications, software solutions, and innovative digital experiences I've built.",
+        "tags": "projects, portfolio, programming, web applications, software solutions, Jakub Tutka"
       }
     }
   },
@@ -128,5 +133,39 @@
       "text": "I agree to the processing of my personal data for the purposes necessary to implement the recruitment process in accordance with the GDPR."
     },
     "lodz": "Lodz, Poland"
+  },
+  "projects": {
+    "technologies": "Technologies",
+    "viewCode": "Check the code",
+    "liveDemo": "Website",
+    "learned": "What I learned",
+    "categories": {
+      "all": "All"
+    },
+    "hero": {
+      "title": "My Projects",
+      "subtitle": "Explore my collection of web applications, tools, and innovative solutions that showcase my technical skills and passion for development."
+    },
+    "featured": {
+      "title": "Featured Projects",
+      "subtitle": "Highlighting my most significant and impactful work that demonstrates advanced technical capabilities and real-world problem solving."
+    },
+    "all": {
+      "title": "All Projects",
+      "subtitle": "Browse through my complete portfolio of projects, ranging from full-stack applications to experimental prototypes and learning exercises."
+    },
+    "cta": {
+      "title": "Interested in Collaboration?",
+      "subtitle": "Check out my GitHub profile to see more projects, contribute to open source, or get in touch for potential partnerships.",
+      "button": "View GitHub Profile"
+    },
+    "projects": {
+      "leagueRats": {
+        "shortDescription": "Track League of Legends pro players, their accounts, and game statistics in real-time",
+        "description": "LeagueRats is a frontend application that allows users to follow League of Legends professional players and their games. Built with modern web technologies and powered by the Riot Games API, it provides real-time tracking, detailed match history, multiple account support, and secure Firebase integration.",
+        "learned": "Riot Games API Integration, Real-time Data Processing, Deploying Web app to Cloud, Performance Optimization, Managing Docker Containers",
+        "tags": "gaming, esports, league-of-legends, real-time, statistics, tracking, api-integration, firebase, fastapi, docker, professional-gaming, match-history, player-analytics"
+      }
+    }
   }
 }
