@@ -1,41 +1,30 @@
 export const useLanguageStore = defineStore('language', () => {
-  type languages = 'en' | 'pl'
+    type languages = 'en' | 'pl'
 
-  const defaultLang: languages = 'en'
-  const currentLang = ref<languages>(defaultLang)
-  const isHydrated = ref(false)
+    const defaultLang: languages = 'en'
+    const currentLang = ref<languages>(defaultLang)
 
-  const { locale, setLocale } = useI18n()
+    const { locale, setLocale } = useI18n()
 
-  const setLanguage = (lang: languages) => {
-    currentLang.value = lang
-    locale.value = lang
-    setLocale(lang)
-    if (isHydrated.value) {
+    const setLanguage = (lang: languages) => {
+      currentLang.value = lang
+      locale.value = lang
+      setLocale(lang)
       localStorage.setItem('lang', lang)
     }
-  }
 
-  const toggleLanguage = () => {
-    const newLang = currentLang.value === 'pl'
-      ? 'en'
-      : 'pl'
-    setLanguage(newLang)
-  }
-
-  // Initialize after hydration
-  onMounted(() => {
-    isHydrated.value = true
-    const storedLang = localStorage.getItem('lang')
-    if (storedLang && (storedLang === 'en' || storedLang === 'pl')) {
-      setLanguage(storedLang as languages)
+    const toggleLanguage = () => {
+      if (currentLang.value === 'pl') {
+        setLanguage('en')
+      }
+      else {
+        setLanguage('pl')
+      }
     }
-  })
 
-  return {
-    currentLang,
-    setLanguage,
-    toggleLanguage,
-    isHydrated,
-  }
+    return {
+      currentLang,
+      setLanguage,
+      toggleLanguage,
+    }
 })

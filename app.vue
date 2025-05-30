@@ -1,5 +1,17 @@
 <script setup lang="ts">
-useLanguageStore()
+const languageStore = useLanguageStore()
+
+onMounted(() => {
+  const storageLang = localStorage.getItem('lang')
+
+  if (storageLang) {
+    // @ts-expect-error type
+    languageStore.setLanguage(storageLang)
+  }
+  else {
+    languageStore.setLanguage('en')
+  }
+})
 </script>
 
 <template>

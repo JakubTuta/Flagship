@@ -5,8 +5,6 @@ const { t, locale } = useI18n()
 const drawerStore = useDrawerStore()
 const { mobile } = useDisplay()
 
-const isClient = import.meta.client
-
 useSeo({
   description: t('seo.site.description'),
   image: '~/assets/profile.jpg',
@@ -16,9 +14,6 @@ useSeo({
 })
 
 watch(locale, (newLocale) => {
-  if (!isClient)
-    return
-
   useSeo({
     description: t('seo.site.description'),
     image: '~/assets/profile.jpg',
@@ -54,10 +49,35 @@ watch(locale, (newLocale) => {
   <v-main>
     <slot />
 
-    <ClientOnly>
-      <LazyNavigationDrawer :mobile="mobile" />
-    </ClientOnly>
+    <NavigationDrawer
+      :mobile="mobile"
+    />
   </v-main>
 
-  <LazyFooter />
+  <Footer />
 </template>
+
+<style scoped>
+.mobile-menu-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  background-color: rgb(var(--v-theme-surface));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.floating-btn {
+  animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+</style>

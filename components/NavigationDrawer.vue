@@ -41,8 +41,6 @@ const navigationCards = computed(() => [
   },
 ])
 
-const isHydrated = computed(() => themeStore.isHydrated && languageStore.isHydrated)
-
 function handleNavClick() {
   if (props.mobile) {
     drawerStore.closeDrawer()
@@ -94,7 +92,7 @@ function handleNavClick() {
     </v-list>
 
     <template #append>
-      <v-list v-if="isHydrated">
+      <v-list>
         <v-list-item
           lines="two"
           :title="currentLang === 'pl'
@@ -126,6 +124,7 @@ function handleNavClick() {
           :title="themeStore.isDark
             ? 'Dark Mode'
             : 'Light Mode'"
+
           @click="themeStore.toggleTheme()"
         >
           <template #prepend>
