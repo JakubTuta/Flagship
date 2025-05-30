@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const { t, locale } = useI18n()
 
 useSeo({
@@ -27,18 +29,20 @@ watch(locale, () => {
   })
 }, { immediate: true })
 
+const { mobile } = useDisplay()
+
 interface IProject {
   title: string
   value: string
-  shortDescription: string
-  description: string
+  shortDescription: string // max 100 characters
+  description: string // max 300 characters
   url: string
   demoUrl?: string
   featured: boolean
   category: string
-  technologies: string[]
-  learned: string[]
-  tags: string[]
+  technologies: string[] // max 10
+  learned: string[] // max 10
+  tags: string[] // max 10
   image?: string
 }
 
@@ -63,7 +67,29 @@ const projects = computed(() => [
     ],
     learned: t('projects.projects.leagueRats.learned').split(',').map(skill => skill.trim()),
     tags: t('projects.projects.leagueRats.tags').split(',').map(tag => tag.trim()),
-    image: '../assets/projects/league-rats.png',
+    image: '/images/projects/league-rats.png',
+  } as IProject,
+  {
+    title: 'OllamaChat',
+    value: 'ollama-chat',
+    shortDescription: t('projects.projects.ollamaChat.shortDescription'),
+    description: t('projects.projects.ollamaChat.description'),
+    url: 'https://github.com/JakubTuta/chatbot',
+    featured: true,
+    category: 'AI & Machine Learning',
+    technologies: [
+      'Nuxt.js',
+      'Vue.js',
+      'TypeScript',
+      'Python',
+      'Django',
+      'MongoDB',
+      'Docker',
+      'Ollama',
+    ],
+    learned: t('projects.projects.ollamaChat.learned').split(',').map(skill => skill.trim()),
+    tags: t('projects.projects.ollamaChat.tags').split(',').map(tag => tag.trim()),
+    image: '/images/projects/ollama-chat.png',
   } as IProject,
 ] as IProject[])
 
@@ -122,6 +148,7 @@ const filteredProjects = computed(() => {
         >
           <h2 class="section-title mb-4">
             <v-icon
+              v-if="!mobile"
               class="mr-2"
               color="primary"
             >
@@ -137,7 +164,9 @@ const filteredProjects = computed(() => {
       </v-row>
 
       <v-carousel
-        height="600"
+        :height="mobile
+          ? '850'
+          : '600'"
         cycle
         interval="6000"
         show-arrows="hover"
@@ -163,12 +192,20 @@ const filteredProjects = computed(() => {
               >
                 <div class="project-placeholder d-flex align-center fill-height justify-center">
                   <v-icon
+                    v-if="!project.image"
                     size="120"
                     color="primary"
                     class="project-icon"
                   >
                     mdi-code-braces
                   </v-icon>
+
+                  <v-img
+                    v-else
+                    :src="project.image"
+                    alt="Project Image"
+                    class="object-cover"
+                  />
                 </div>
               </v-col>
 
@@ -224,7 +261,9 @@ const filteredProjects = computed(() => {
                       target="_blank"
                       rel="noopener noreferrer"
                       color="primary"
-                      size="large"
+                      :size="mobile
+                        ? 'small'
+                        : 'large'"
                       class="mr-3"
                     >
                       <v-icon start>
@@ -239,7 +278,9 @@ const filteredProjects = computed(() => {
                       target="_blank"
                       rel="noopener noreferrer"
                       color="secondary"
-                      size="large"
+                      :size="mobile
+                        ? 'small'
+                        : 'large'"
                       variant="outlined"
                     >
                       <v-icon start>
@@ -316,11 +357,19 @@ const filteredProjects = computed(() => {
             <div class="project-card-image">
               <div class="project-image-placeholder d-flex align-center justify-center">
                 <v-icon
+                  v-if="!project.image"
                   size="48"
                   color="primary"
                 >
                   mdi-code-braces
                 </v-icon>
+
+                <v-img
+                  v-else
+                  :src="project.image"
+                  alt="Project Image"
+                  class="object-cover"
+                />
               </div>
             </div>
 

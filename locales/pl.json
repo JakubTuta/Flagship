@@ -165,6 +165,12 @@
         "description": "LeagueRats to aplikacja frontendowa pozwalająca użytkownikom śledzić profesjonalnych graczy League of Legends i ich rozgrywki. Zbudowana z wykorzystaniem nowoczesnych technologii webowych i Riot Games API, zapewnia śledzenie w czasie rzeczywistym, szczegółową historię meczów, obsługę wielu kont oraz bezpieczną integrację z Firebase.",
         "learned": "Integracja z API Riot Games, Przetwarzanie Danych w Czasie Rzeczywistym, Wdrażanie Aplikacji Webowej w Chmurze, Optymalizacja Wydajności, Zarządzanie Kontenerami Docker",
         "tags": "gry, esport, league-of-legends, czas-rzeczywisty, statystyki, śledzenie, integracja-api, firebase, fastapi, docker, profesjonalne-gry, historia-meczów, analityka-graczy"
+      },
+      "ollamaChat": {
+        "shortDescription": "Lokalny chatbot AI z Docker & Ollama - prywatna sztuczna inteligencja",
+        "description": "Potężna aplikacja chatbota umożliwiająca lokalne wdrażanie dużych modeli językowych przy użyciu Docker i Ollama. Zawiera przyjazny interfejs Nuxt z backendem Django i bazą MongoDB, zapewniając pełną prywatność i kontrolę nad konwersacjami AI.",
+        "learned": "Lokalne wdrażanie LLM, Konteneryzacja Docker, Integracja modeli AI, Rozwój full-stack, Architektura zorientowana na prywatność, MongoDB z Django, Autentykacja użytkowników, Chat w czasie rzeczywistym",
+        "tags": "AI, Chatbot, Lokalne Wdrożenie, Prywatność, Docker, Full-stack, LLM, Open Source"
       }
     }
   }

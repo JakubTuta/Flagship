@@ -7,7 +7,7 @@ const { mobile } = useDisplay()
 
 useSeo({
   description: t('seo.site.description'),
-  image: '~/assets/profile.jpg',
+  image: '/images/profile.jpg',
   type: 'website',
   author: 'Jakub Tutka',
   tags: t('seo.site.tags').split(',').map(tag => tag.trim()),
@@ -16,7 +16,7 @@ useSeo({
 watch(locale, (newLocale) => {
   useSeo({
     description: t('seo.site.description'),
-    image: '~/assets/profile.jpg',
+    image: '/images/profile.jpg',
     type: 'website',
     author: 'Jakub Tutka',
     tags: t('seo.site.tags').split(',').map(tag => tag.trim()),

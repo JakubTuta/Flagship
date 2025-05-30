@@ -179,8 +179,8 @@ function scrollToSection(sectionId: string) {
               class="hero-avatar mb-6"
             >
               <v-img
-                src="~/assets/profile.jpg"
-                lazy-src="~/assets/profile-low.jpg"
+                src="/images/profile.jpg"
+                lazy-src="/images/profile-low.jpg"
                 alt="Profile Picture"
               />
             </v-avatar>
