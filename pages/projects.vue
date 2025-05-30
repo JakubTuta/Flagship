@@ -39,7 +39,7 @@ interface IProject {
   technologies: string[]
   learned: string[]
   tags: string[]
-  assets: string[]
+  image?: string
 }
 
 const projects = computed(() => [
@@ -63,15 +63,7 @@ const projects = computed(() => [
     ],
     learned: t('projects.projects.leagueRats.learned').split(',').map(skill => skill.trim()),
     tags: t('projects.projects.leagueRats.tags').split(',').map(tag => tag.trim()),
-    assets: [
-      '../assets/profile.jpg',
-      '~/assets/projects/league-rats/1.png',
-      '~/assets/projects/league-rats/2.png',
-      '~/assets/projects/league-rats/3.png',
-      '~/assets/projects/league-rats/4.png',
-      '~/assets/projects/league-rats/5.png',
-      '~/assets/projects/league-rats/6.png',
-    ],
+    image: '../assets/projects/league-rats.png',
   } as IProject,
 ] as IProject[])
 
