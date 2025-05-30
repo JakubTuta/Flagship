@@ -3,22 +3,30 @@ import { useTheme } from 'vuetify'
 export const useThemeStore = defineStore('theme', () => {
   const defaultTheme = 'light'
   const theme = useTheme()
+  const isHydrated = ref(false)
 
   const setTheme = (newTheme: string) => {
     theme.global.name.value = newTheme
-    localStorage.setItem('theme', newTheme)
+    if (isHydrated.value) {
+      localStorage.setItem('theme', newTheme)
+    }
   }
 
   const getTheme = () => {
+    if (!isHydrated.value) {
+      return defaultTheme
+    }
+
     const storedTheme = localStorage.getItem('theme')
     if (storedTheme) {
       theme.global.name.value = storedTheme
-    }
-    else {
-      theme.global.name.value = defaultTheme
+
+      return storedTheme
     }
 
-    return theme.global.name.value
+    theme.global.name.value = defaultTheme
+
+    return defaultTheme
   }
 
   const toggleTheme = () => {
@@ -31,10 +39,17 @@ export const useThemeStore = defineStore('theme', () => {
 
   const isDark = computed(() => theme.global.name.value === 'dark')
 
+  // Initialize after hydration
+  onMounted(() => {
+    isHydrated.value = true
+    getTheme()
+  })
+
   return {
     setTheme,
     getTheme,
     toggleTheme,
     isDark,
+    isHydrated,
   }
 })
