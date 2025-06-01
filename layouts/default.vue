@@ -48,12 +48,12 @@ watch(locale, (newLocale) => {
   <v-main>
     <slot />
 
-    <NavigationDrawer
+    <LazyNavigationDrawer
       :mobile="mobile"
     />
   </v-main>
 
-  <Footer />
+  <LazyFooter />
 </template>
 
 <style scoped>
