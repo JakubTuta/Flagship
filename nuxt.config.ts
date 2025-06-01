@@ -115,8 +115,9 @@ export default defineNuxtConfig({
     ],
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
+      cookieKey: 'tuta-lang',
+      alwaysRedirect: false,
+      fallbackLocale: 'en',
     },
     // @ts-expect-error @nuxtjs/seo
     seo: true,

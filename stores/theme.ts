@@ -2,23 +2,21 @@ import { useTheme } from 'vuetify'
 
 export const useThemeStore = defineStore('theme', () => {
   const defaultTheme = 'light'
+  const key = 'tuta-theme'
+
   const theme = useTheme()
+  const themeCookie = useCookie(key, { default: () => defaultTheme })
 
   const setTheme = (newTheme: string) => {
     theme.global.name.value = newTheme
-    localStorage.setItem('theme', newTheme)
+    themeCookie.value = newTheme
   }
 
   const getTheme = () => {
-    const storedTheme = localStorage.getItem('theme')
-    if (storedTheme) {
-      theme.global.name.value = storedTheme
-    }
-    else {
-      theme.global.name.value = defaultTheme
-    }
+    const storedTheme = themeCookie.value
+    theme.global.name.value = storedTheme
 
-    return theme.global.name.value
+    return storedTheme
   }
 
   const toggleTheme = () => {

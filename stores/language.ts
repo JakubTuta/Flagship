@@ -1,30 +1,49 @@
 export const useLanguageStore = defineStore('language', () => {
-    type languages = 'en' | 'pl'
+  const { locale } = useI18n()
 
-    const defaultLang: languages = 'en'
-    const currentLang = ref<languages>(defaultLang)
+  type languages = 'en' | 'pl'
+  const key = 'tuta-lang'
 
-    const { locale, setLocale } = useI18n()
+  const defaultLang: languages = 'en'
+  const langCookie = useCookie<languages>(key, { default: () => defaultLang })
 
-    const setLanguage = (lang: languages) => {
-      currentLang.value = lang
-      locale.value = lang
-      setLocale(lang)
-      localStorage.setItem('lang', lang)
+  const currentLang = ref<languages>(langCookie.value)
+
+  const getLanguage = () => {
+    return langCookie.value
+  }
+
+  const setLanguage = (lang: languages) => {
+    currentLang.value = lang
+    locale.value = lang
+    langCookie.value = lang
+  }
+
+  const toggleLanguage = () => {
+    if (currentLang.value === 'pl') {
+      setLanguage('en')
     }
-
-    const toggleLanguage = () => {
-      if (currentLang.value === 'pl') {
-        setLanguage('en')
-      }
-      else {
-        setLanguage('pl')
-      }
+    else {
+      setLanguage('pl')
     }
+  }
 
-    return {
-      currentLang,
-      setLanguage,
-      toggleLanguage,
+  const initLanguage = () => {
+    const storedLang = langCookie.value
+    if (storedLang) {
+      currentLang.value = storedLang
+      locale.value = storedLang
     }
+    else {
+      setLanguage(defaultLang)
+    }
+  }
+
+  return {
+    currentLang,
+    getLanguage,
+    setLanguage,
+    toggleLanguage,
+    initLanguage,
+  }
 })

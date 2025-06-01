@@ -14,12 +14,11 @@ useSeo({
 })
 
 watch(locale, (newLocale) => {
-  useSeo({
+  useSeoMeta({
     description: t('seo.site.description'),
-    image: '/images/profile.jpg',
-    type: 'website',
-    author: 'Jakub Tutka',
-    tags: t('seo.site.tags').split(',').map(tag => tag.trim()),
+    ogDescription: t('seo.site.description'),
+    ogLocale: newLocale,
+    keywords: t('seo.site.tags').split(',').map(tag => tag.trim()).join(', '),
   })
 
   useHead({

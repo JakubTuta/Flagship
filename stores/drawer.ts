@@ -1,8 +1,6 @@
 export const useDrawerStore = defineStore('drawer', () => {
-  // State
   const isOpen = ref(false)
 
-  // Actions
   const toggleDrawer = () => {
     isOpen.value = !isOpen.value
   }
@@ -16,9 +14,7 @@ export const useDrawerStore = defineStore('drawer', () => {
   }
 
   return {
-    // State
     isOpen,
-    // Actions
     toggleDrawer,
     openDrawer,
     closeDrawer,
