@@ -40,7 +40,12 @@ const allProjects = computed(() => projects.value)
 
 const selectedCategory = ref('all')
 const categories = computed(() => {
-  const cats = ['all', ...new Set(projects.value.map(p => p.category))]
+  const cats = [
+    'all',
+    t('projects.categories.featured'),
+    t('projects.categories.notFeatured'),
+    ...new Set(projects.value.map(p => p.category)),
+  ]
 
   return cats
 })
@@ -48,6 +53,14 @@ const categories = computed(() => {
 const filteredProjects = computed(() => {
   if (selectedCategory.value === 'all') {
     return allProjects.value
+  }
+
+  if (selectedCategory.value === t('projects.categories.featured')) {
+    return allProjects.value.filter(project => project.featured)
+  }
+
+  if (selectedCategory.value === t('projects.categories.notFeatured')) {
+    return allProjects.value.filter(project => !project.featured)
   }
 
   return allProjects.value.filter(project => project.category === selectedCategory.value)
@@ -540,20 +553,13 @@ const filteredProjects = computed(() => {
                     {{ project.title }}
                   </h3>
 
-                  <v-chip
+                  <v-icon
                     v-if="project.featured"
                     color="warning"
-                    size="x-small"
                     variant="flat"
                   >
-                    <v-icon
-                      start
-                      size="x-small"
-                    >
-                      mdi-star
-                    </v-icon>
-                    Featured
-                  </v-chip>
+                    mdi-star
+                  </v-icon>
                 </div>
 
                 <p class="text-body-2 mb-4">

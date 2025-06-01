@@ -140,7 +140,9 @@
     "liveDemo": "Website",
     "learned": "What I learned",
     "categories": {
-      "all": "All"
+      "all": "All",
+      "featured": "Featured",
+      "notFeatured": "Not featured"
     },
     "hero": {
       "title": "My Projects",

@@ -140,7 +140,9 @@
     "liveDemo": "Strona",
     "learned": "Czego się nauczyłem",
     "categories": {
-      "all": "Wszystkie"
+      "all": "Wszystkie",
+      "featured": "Wyróżnione",
+      "notFeatured": "Nie wyróżnione"
     },
     "hero": {
       "title": "Moje Projekty",
