@@ -413,6 +413,7 @@ const filteredProjects = computed(() => {
               color="primary"
               selected-class="text-primary"
               class="justify-center"
+              mandatory
             >
               <v-chip
                 v-for="category in categories"

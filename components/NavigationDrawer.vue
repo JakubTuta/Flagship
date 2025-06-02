@@ -27,12 +27,12 @@ const navigationCards = computed(() => [
     color: 'primary',
     route: '/projects',
   },
-  {
-    title: t('navigation.blog.title'),
-    icon: 'mdi-post',
-    color: 'secondary',
-    route: '/blog',
-  },
+  // {
+  //   title: t('navigation.blog.title'),
+  //   icon: 'mdi-post',
+  //   color: 'secondary',
+  //   route: '/blog',
+  // },
   {
     title: t('navigation.resume.title'),
     icon: 'mdi-file-document',
