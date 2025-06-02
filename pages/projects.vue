@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import type { IProject } from '~/models/project'
 
 const { t, locale } = useI18n()
 
@@ -28,6 +29,9 @@ watch(locale, () => {
     ],
   })
 }, { immediate: true })
+
+const selectedProject = ref<IProject | null>(null)
+const showProjectDialog = ref(false)
 
 const { mobile } = useDisplay()
 
@@ -65,6 +69,11 @@ const filteredProjects = computed(() => {
 
   return allProjects.value.filter(project => project.category === selectedCategory.value)
 })
+
+function openProjectDetails(project: IProject) {
+  selectedProject.value = project
+  showProjectDialog.value = true
+}
 </script>
 
 <template>
@@ -527,6 +536,7 @@ const filteredProjects = computed(() => {
               class="project-card h-100"
               elevation="4"
               hover
+              @click="openProjectDetails(project)"
             >
               <!-- Project Image/Placeholder -->
               <div class="project-card-image">
@@ -650,6 +660,7 @@ const filteredProjects = computed(() => {
                   variant="outlined"
                   size="small"
                   class="mr-2"
+                  @click.stop
                 >
                   <v-icon start>
                     mdi-github
@@ -665,6 +676,7 @@ const filteredProjects = computed(() => {
                   color="secondary"
                   variant="text"
                   size="small"
+                  @click.stop
                 >
                   <v-icon start>
                     mdi-open-in-new
@@ -727,6 +739,11 @@ const filteredProjects = computed(() => {
       </v-row>
     </v-container>
   </div>
+
+  <project-details
+    v-model:project="selectedProject"
+    v-model:show="showProjectDialog"
+  />
 </template>
 
 <style scoped>

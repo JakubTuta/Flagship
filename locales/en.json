@@ -175,5 +175,8 @@
         "tags": "ai, chatbot, local deployment, privacy, docker, full-stack, llm, open source"
       }
     }
+  },
+  "common": {
+    "close": "Close"
   }
 }
