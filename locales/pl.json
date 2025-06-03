@@ -39,6 +39,11 @@
     "home": {
       "title": "Strona główna",
       "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer."
+    },
+    "admin": {
+      "title": "Panel administratora",
+      "blog": "Blog",
+      "logout": "Wyloguj się"
     }
   },
   "skills": {
@@ -178,5 +183,11 @@
   },
   "common": {
     "close": "Zamknij"
+  },
+  "admin": {
+    "blog": {
+      "published": "Opublikowane",
+      "drafts": "Wersje robocze"
+    }
   }
 }

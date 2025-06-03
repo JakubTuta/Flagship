@@ -2,6 +2,8 @@
 const projectStore = useProjectStore()
 const { projects } = storeToRefs(projectStore)
 
+useAuthStore()
+
 onMounted(() => {
   if (!projects.value.length) {
     projectStore.fetchProjects()

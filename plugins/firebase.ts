@@ -1,4 +1,5 @@
 import { type FirebaseAppSettings, type FirebaseOptions, initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
@@ -22,6 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const firestore = getFirestore(app)
   const storage = getStorage(app)
+  const auth = getAuth(app)
 
   nuxtApp.provide(
     'firestore',
@@ -31,5 +33,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide(
     'storage',
     storage,
+  )
+
+  nuxtApp.provide(
+    'auth',
+    auth,
   )
 })

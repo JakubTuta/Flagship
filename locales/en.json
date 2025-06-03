@@ -39,6 +39,11 @@
     "home": {
       "title": "Home",
       "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer."
+    },
+    "admin": {
+      "title": "Administrator panel",
+      "blog": "Blog",
+      "logout": "Log out"
     }
   },
   "skills": {
@@ -178,5 +183,11 @@
   },
   "common": {
     "close": "Close"
+  },
+  "admin": {
+    "blog": {
+      "published": "Published",
+      "drafts": "Drafts"
+    }
   }
 }
