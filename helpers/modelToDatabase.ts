@@ -44,3 +44,13 @@ export function beforeCreateDoc<T extends object>(
 
   return result
 }
+
+export function removeReferenceField<T extends object>(
+  data: T,
+  referenceField: string | null = null,
+): T {
+  const fieldToRemove = referenceField || 'reference'
+  const { [fieldToRemove]: removed, ...rest } = data as any
+
+  return rest as T
+}

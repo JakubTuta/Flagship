@@ -3,23 +3,40 @@ definePageMeta({ middleware: ['auth'] })
 
 const selectedTab = ref('published')
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const authStore = useAuthStore()
 const { userData } = storeToRefs(authStore)
 
 const blogStore = useBlogStore()
-const { blogs, loading } = storeToRefs(blogStore)
+const { blogs, workingBlogs, loading } = storeToRefs(blogStore)
 
 const tabs = computed(() => [
   { title: t('admin.blog.published'), value: 'published' },
+  { title: t('admin.blog.notPublished'), value: 'not-published' },
   { title: t('admin.blog.drafts'), value: 'drafts' },
 ])
 
 watch(userData, (newUser) => {
   if (newUser && !blogs.value.length)
     blogStore.fetchBlogs(newUser)
+
+  if (newUser && !workingBlogs.value.length)
+    blogStore.fetchWorkingBlogs(newUser)
 }, { immediate: true })
+
+const blogTab = computed(() => {
+  switch (selectedTab.value) {
+    case 'published':
+      return blogs.value.filter(blog => blog.isPublished)
+    case 'not-published':
+      return blogs.value.filter(blog => !blog.isPublished)
+    case 'drafts':
+      return workingBlogs.value
+    default:
+      return []
+  }
+})
 </script>
 
 <template>
@@ -30,7 +47,8 @@ watch(userData, (newUser) => {
           <v-btn
             append-icon="mdi-plus"
             color="primary"
-            to="/admin/blog/create"
+            to="/admin/blog/write"
+            rounded="xl"
           >
             Create New Post
           </v-btn>
@@ -55,13 +73,24 @@ watch(userData, (newUser) => {
       <v-card-text>
         <v-row>
           <v-col
-            v-for="blog in blogs"
-            :key="blog.id"
+            v-for="blog in blogTab"
+            :key="blog.reference!.id"
             cols="6"
             sm="4"
             md="3"
           >
-            {{ blog }}
+            <v-card
+              class="d-flex align-center justify-center"
+              min-height="100"
+              variant="elevated"
+              :to="`/admin/blog/write?blogId=${blog.reference!.id}`"
+            >
+              <v-card-title>
+                {{ typeof blog.title === 'string'
+                  ? blog.title
+                  : blog.title[locale] }}
+              </v-card-title>
+            </v-card>
           </v-col>
         </v-row>
       </v-card-text>

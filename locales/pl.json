@@ -29,7 +29,7 @@
       "description": "Odkryj moje portfolio projektów programistycznych prezentujących wiedzę techniczną w różnych technologiach. Zobacz wersje demonstracyjne, kod źródłowy i szczegółowe studia przypadków aplikacji internetowych, rozwiązań programistycznych i innowacyjnych doświadczeń cyfrowych, które stworzyłem."
     },
     "blog": {
-      "title": "Blog",
+      "title": "Blogi",
       "description": "Przeczytaj mój blog techniczny z wglądem w rozwój oprogramowania, tutoriale programistyczne, trendy technologiczne i lekcje wyniesione z rzeczywistych projektów. Bądź na bieżąco z moimi przemyśleniami na temat nowoczesnych praktyk rozwoju i innowacji branżowych."
     },
     "resume": {
@@ -187,7 +187,30 @@
   "admin": {
     "blog": {
       "published": "Opublikowane",
-      "drafts": "Wersje robocze"
+      "drafts": "Wersje robocze",
+      "create": {
+        "title": "Stwórz Nowy Blog",
+        "titleInput": "Tytuł",
+        "switchToRaw": "Zmień na widok tekstu",
+        "switchToPreview": "Zmień na widok podglądu",
+        "boldTooltip": "Pogrubienie (Ctrl+B)",
+        "italicTooltip": "Kursywa (Ctrl+I)",
+        "underlineTooltip": "Podkreślenie (Ctrl+U)",
+        "inlineCodeTooltip": "Kod",
+        "codeBlockTooltip": "Blok kodu",
+        "raw": "Tekst",
+        "preview": "Podgląd",
+        "contentPlaceholder": "Napisz swojego bloga...",
+        "clear": "Wyczyść",
+        "saveDraft": "Zapisz Wersję Roboczą",
+        "publish": "Opublikuj Blog",
+        "editTitle": "Edytuj Blog",
+        "createTitle": "Napisz Blog",
+        "languageSelect": "Wybierz język",
+        "back": "Wróć",
+        "delete": "Usuń"
+      },
+      "notPublished": "Nie opublikowane"
     }
   }
 }

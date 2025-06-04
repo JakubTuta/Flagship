@@ -29,7 +29,7 @@
       "description": "Discover my portfolio of development projects showcasing technical expertise across various technologies. View live demos, source code, and detailed case studies of web applications, software solutions, and innovative digital experiences I've built."
     },
     "blog": {
-      "title": "Blog",
+      "title": "Blogs",
       "description": "Read my technical blog featuring insights on software development, programming tutorials, technology trends, and lessons learned from real-world projects. Stay updated with my thoughts on modern development practices and industry innovations."
     },
     "resume": {
@@ -187,7 +187,30 @@
   "admin": {
     "blog": {
       "published": "Published",
-      "drafts": "Drafts"
+      "drafts": "Drafts",
+      "create": {
+        "title": "Create New Blog Post",
+        "titleInput": "Title",
+        "switchToRaw": "Switch to Raw Text",
+        "switchToPreview": "Switch to Formatted View",
+        "boldTooltip": "Bold (Ctrl+B)",
+        "italicTooltip": "Italic (Ctrl+I)",
+        "underlineTooltip": "Underline (Ctrl+U)",
+        "inlineCodeTooltip": "Inline Code",
+        "codeBlockTooltip": "Code Block",
+        "raw": "Raw",
+        "preview": "Preview",
+        "contentPlaceholder": "Write your blog content here...",
+        "clear": "Clear",
+        "saveDraft": "Save Draft",
+        "publish": "Publish Blog",
+        "editTitle": "Edit Blog",
+        "createTitle": "Write a Blog",
+        "languageSelect": "Choose language",
+        "back": "Return",
+        "delete": "Delete"
+      },
+      "notPublished": "Not published"
     }
   }
 }

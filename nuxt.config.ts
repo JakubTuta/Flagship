@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID,
       githubToken: process.env.TOKEN_GITHUB,
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     },
   },
 

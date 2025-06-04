@@ -1,6 +1,7 @@
 import type { User } from 'firebase/auth'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { removeReferenceField } from '~/helpers/modelToDatabase'
 import type { IUser } from '~/models/user'
 import { mapIUser } from '~/models/user'
 
@@ -40,9 +41,8 @@ export const useAuthStore = defineStore('auth', () => {
         email: user.email || '',
         username,
       })
-      const { reference, ...userDataWithoutRef } = newUserData
 
-      await setDoc(userRef, userDataWithoutRef)
+      await setDoc(userRef, removeReferenceField(newUserData))
 
       userData.value = mapIUser(newUserData, userRef)
     }
@@ -81,7 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = userCredential.user
       await fetchUserData(user.value)
 
-      router.push('/admin/blog')
+      router.push('/admin/blog/panel')
     }
     catch (error) {
       console.error('Login failed:', error)
@@ -104,7 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       await createUserData(user.value, username)
 
-      router.push('/admin/blog')
+      router.push('/admin/blog/panel')
     }
     catch (error) {
       if (user.value) {
@@ -125,6 +125,7 @@ export const useAuthStore = defineStore('auth', () => {
     (newUser: User | null) => {
       if (newUser) {
         user.value = newUser
+        fetchUserData(newUser)
       }
     },
   )

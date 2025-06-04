@@ -36,6 +36,8 @@ export default defineNuxtPlugin((app) => {
             'background': 'rgb(250, 250, 248)', // Warm white
             'surface': 'rgb(255, 255, 255)', // Pure white for cards
             'surface-variant': 'rgb(235, 235, 235)', // Slightly off-white
+            'surface-variant-light': 'rgb(245, 245, 245)', // Lighter variant for contrast
+            'surface-variant-dark': 'rgb(220, 220, 220)', // Darker variant for contrast
 
             // Text colors
             'on-primary': 'rgb(255, 255, 255)', // White text on primary
@@ -77,6 +79,8 @@ export default defineNuxtPlugin((app) => {
             'background': 'rgb(18, 20, 22)', // Very dark background
             'surface': 'rgb(28, 32, 36)', // Dark surface for cards
             'surface-variant': 'rgb(38, 42, 46)', // Slightly lighter surface
+            'surface-variant-light': 'rgb(48, 52, 56)', // Lighter variant for contrast
+            'surface-variant-dark': 'rgb(24, 28, 32)', // Darker variant for contrast
 
             // Text colors for dark theme
             'on-primary': 'rgb(255, 255, 255)', // White text on primary

@@ -8,7 +8,7 @@ const password = ref('')
 const isShowPassword = ref(false)
 
 function register() {
-  authStore.register(email.value, username.value, password.value)
+  // authStore.register(email.value, username.value, password.value)
 }
 </script>
 
