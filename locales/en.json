@@ -208,7 +208,11 @@
         "createTitle": "Write a Blog",
         "languageSelect": "Choose language",
         "back": "Return",
-        "delete": "Delete"
+        "delete": "Delete",
+        "listTooltip": "Bullet list",
+        "numberedListTooltip": "Numbered list",
+        "headerTooltip": "Header",
+        "subheaderTooltip": "Subheader"
       },
       "notPublished": "Not published"
     }

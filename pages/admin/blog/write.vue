@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DocumentReference } from 'firebase/firestore'
-import type { IBlog } from '~/models/blog'
+import type { IBlog, ITableOfContentsItem } from '~/models/blog'
 import { mapIBlogEncoded } from '~/models/blog'
 
 definePageMeta({ middleware: ['auth'] })
@@ -130,6 +130,34 @@ const toolbarControls = computed(() => [
     action: toggleUnderline,
     isActive: isUnderlineActive.value,
     shortcut: 'u',
+  },
+  {
+    id: 'header',
+    icon: 'mdi-format-header-1',
+    tooltip: t('admin.blog.create.headerTooltip'),
+    action: insertHeader,
+    isActive: false,
+  },
+  {
+    id: 'subheader',
+    icon: 'mdi-format-header-2',
+    tooltip: t('admin.blog.create.subheaderTooltip'),
+    action: insertSubheader,
+    isActive: false,
+  },
+  {
+    id: 'list',
+    icon: 'mdi-format-list-bulleted',
+    tooltip: t('admin.blog.create.listTooltip'),
+    action: insertList,
+    isActive: false,
+  },
+  {
+    id: 'numbered-list',
+    icon: 'mdi-format-list-numbered',
+    tooltip: t('admin.blog.create.numberedListTooltip'),
+    action: insertNumberedList,
+    isActive: false,
   },
   {
     id: 'inline-code',
@@ -347,6 +375,20 @@ function wrapSelectedText(startWrapper: string, endWrapper: string = startWrappe
 // ========================
 // FORMATTING ACTIONS
 // ========================
+function generateRandomId() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
+
+function insertHeader() {
+  const randomId = generateRandomId()
+  wrapSelectedText(`<header id="${randomId}">\n`, '\n</header>')
+}
+
+function insertSubheader() {
+  const randomId = generateRandomId()
+  wrapSelectedText(`<subheader id="${randomId}">\n`, '\n</subheader>')
+}
+
 function toggleBold() {
   wrapSelectedText('**')
 }
@@ -357,6 +399,185 @@ function toggleItalic() {
 
 function toggleUnderline() {
   wrapSelectedText('<u>', '</u>')
+}
+
+function insertList() {
+  const textarea = getTextareaElement()
+  if (!textarea)
+    return
+
+  const start = textarea.selectionStart
+  const beforeText = blogContent.value.slice(0, start)
+  const afterText = blogContent.value.slice(start)
+
+  // Find the current line
+  const lines = beforeText.split('\n')
+  const currentLine = lines[lines.length - 1]
+
+  if (currentLine === '- ') {
+    // Current line only contains '- ', remove it
+    const newBeforeText = lines.slice(0, -1).join('\n')
+    const separator = newBeforeText
+      ? '\n'
+      : ''
+    blogContent.value = newBeforeText + separator + afterText
+
+    nextTick(() => {
+      textarea.focus()
+      const newPosition = newBeforeText.length + (separator
+        ? 1
+        : 0)
+      textarea.setSelectionRange(newPosition, newPosition)
+    })
+  }
+  else if (currentLine.trim() === '') {
+    // Current line is empty, just add '- '
+    insertAtCursor('- ')
+  }
+  else {
+    // Current line has content, add new line with '- '
+    insertAtCursor('\n- ')
+  }
+}
+
+function insertNumberedList() {
+  const textarea = getTextareaElement()
+  if (!textarea)
+    return
+
+  const start = textarea.selectionStart
+  const beforeText = blogContent.value.slice(0, start)
+  const afterText = blogContent.value.slice(start)
+
+  // Find the current line
+  const lines = beforeText.split('\n')
+  const currentLine = lines[lines.length - 1]
+
+  // Check if current line is a numbered list
+  const numberedListMatch = currentLine.match(/^(\d+)\. (.*)$/)
+  const subNumberedListMatch = currentLine.match(/^(\d+)\.(\d+)\. (.*)$/)
+  const emptyNumberedMatch = currentLine.match(/^(\d+)\. $/)
+  const emptySubNumberedMatch = currentLine.match(/^(\d+)\.(\d+)\. $/)
+
+  // 1. Line is not empty and is not a numbered list
+  if (currentLine.trim() !== '' && !numberedListMatch && !subNumberedListMatch && !emptyNumberedMatch && !emptySubNumberedMatch) {
+    insertAtCursor('\n1. ')
+
+    return
+  }
+
+  // 2. Line is empty and previous line is not a numbered list
+  if (currentLine.trim() === '') {
+    const previousLine = lines.length >= 2
+      ? lines[lines.length - 2]
+      : ''
+    const prevNumberedMatch = previousLine.match(/^(\d+)\. /)
+    const prevSubNumberedMatch = previousLine.match(/^(\d+)\.(\d+)\. /)
+
+    if (!prevNumberedMatch && !prevSubNumberedMatch) {
+      insertAtCursor('1. ')
+
+      return
+    }
+  }
+
+  // 3. Line is empty but is a numbered list - cycle through levels
+  if (emptyNumberedMatch) {
+    // Check if there's a previous line to make this a sub-item of
+    const previousLine = lines.length >= 2
+      ? lines[lines.length - 2]
+      : ''
+    const prevNumberedMatch = previousLine.match(/^(\d+)\. /)
+
+    if (prevNumberedMatch) {
+      // Convert to sub-item of previous line (e.g., '3. ' becomes '2.1. ' if previous was '2. content')
+      const prevNum = prevNumberedMatch[1]
+      const newBeforeText = lines.slice(0, -1).join('\n')
+      const separator = newBeforeText
+        ? '\n'
+        : ''
+      blogContent.value = `${newBeforeText + separator}${prevNum}.1. ${afterText}`
+
+      nextTick(() => {
+        textarea.focus()
+        const newPosition = newBeforeText.length + separator.length + `${prevNum}.1. `.length
+        textarea.setSelectionRange(newPosition, newPosition)
+      })
+    }
+    else {
+      // No previous numbered line, use current number for sub-item
+      const mainNum = emptyNumberedMatch[1]
+      const newBeforeText = lines.slice(0, -1).join('\n')
+      const separator = newBeforeText
+        ? '\n'
+        : ''
+      blogContent.value = `${newBeforeText + separator}${mainNum}.1. ${afterText}`
+
+      nextTick(() => {
+        textarea.focus()
+        const newPosition = newBeforeText.length + separator.length + `${mainNum}.1. `.length
+        textarea.setSelectionRange(newPosition, newPosition)
+      })
+    }
+
+    return
+  }
+
+  if (emptySubNumberedMatch) {
+    // From '1.1. ' to empty line
+    const newBeforeText = lines.slice(0, -1).join('\n')
+    const separator = newBeforeText
+      ? '\n'
+      : ''
+    blogContent.value = newBeforeText + separator + afterText
+
+    nextTick(() => {
+      textarea.focus()
+      const newPosition = newBeforeText.length + (separator
+        ? 1
+        : 0)
+      textarea.setSelectionRange(newPosition, newPosition)
+    })
+
+    return
+  }
+
+  // 4. Line is not empty and is a numbered list - add new line with +1 number
+  if (numberedListMatch) {
+    // Main numbered list with content (e.g., "1. some content")
+    const nextNum = Number.parseInt(numberedListMatch[1]) + 1
+    insertAtCursor(`\n${nextNum}. `)
+
+    return
+  }
+
+  if (subNumberedListMatch) {
+    // Sub-numbered list with content (e.g., "1.2. some content")
+    const mainNum = subNumberedListMatch[1]
+    const subNum = Number.parseInt(subNumberedListMatch[2]) + 1
+    insertAtCursor(`\n${mainNum}.${subNum}. `)
+
+    return
+  }
+
+  // Fallback: empty line, previous line is numbered - continue the sequence
+  if (currentLine.trim() === '') {
+    const previousLine = lines.length >= 2
+      ? lines[lines.length - 2]
+      : ''
+    const prevNumberedMatch = previousLine.match(/^(\d+)\. /)
+    const prevSubNumberedMatch = previousLine.match(/^(\d+)\.(\d+)\. /)
+
+    if (prevSubNumberedMatch) {
+      const mainNum = prevSubNumberedMatch[1]
+      const subNum = Number.parseInt(prevSubNumberedMatch[2]) + 1
+      insertAtCursor(`${mainNum}.${subNum}. `)
+    }
+    else if (prevNumberedMatch) {
+      const nextNum = Number.parseInt(prevNumberedMatch[1]) + 1
+      insertAtCursor(`${nextNum}. `)
+    }
+  }
 }
 
 function insertInlineCode() {
@@ -460,6 +681,44 @@ function handleKeydown(event: KeyboardEvent) {
       shortcut.action()
     }
   }
+
+  // Handle Enter key for list continuation
+  if (event.key === 'Enter') {
+    const textarea = getTextareaElement()
+    if (!textarea)
+      return
+
+    const start = textarea.selectionStart
+    const beforeText = blogContent.value.slice(0, start)
+    const lines = beforeText.split('\n')
+    const currentLine = lines[lines.length - 1]
+
+    // Check if current line starts with '- '
+    if (currentLine.trim().startsWith('- ')) {
+      event.preventDefault()
+      insertAtCursor('\n- ')
+
+      return
+    }
+
+    // Check for numbered list patterns
+    const numberedListMatch = currentLine.match(/^(\d+)\. /)
+    const subNumberedListMatch = currentLine.match(/^(\d+)\.(\d+)\. /)
+
+    if (subNumberedListMatch) {
+      // Handle sub-numbered list (e.g., "1.1. ")
+      event.preventDefault()
+      const mainNum = subNumberedListMatch[1]
+      const subNum = Number.parseInt(subNumberedListMatch[2]) + 1
+      insertAtCursor(`\n${mainNum}.${subNum}. `)
+    }
+    else if (numberedListMatch) {
+      // Handle main numbered list (e.g., "1. ")
+      event.preventDefault()
+      const nextNum = Number.parseInt(numberedListMatch[1]) + 1
+      insertAtCursor(`\n${nextNum}. `)
+    }
+  }
 }
 
 // ========================
@@ -491,6 +750,9 @@ const contentBlocks = computed(() => {
     else if (part.trim()) {
       // Regular text content - process inline formatting
       const processedContent = part
+        // Headers and subheaders (must come before other formatting)
+        .replace(/<header id="([^"]+)">(.*?)<\/header>/g, '<h3 id="$1">$2</h3>')
+        .replace(/<subheader id="([^"]+)">(.*?)<\/subheader>/g, '<h4 id="$1">$2</h4>')
         // Bold text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         // Italic text (single * but not part of **)
@@ -499,6 +761,27 @@ const contentBlocks = computed(() => {
         .replace(/<u>(.*?)<\/u>/g, '<u>$1</u>')
         // Inline code - use proper regex to capture only content between backticks
         .replace(/`([^`]+)`/g, '|||INLINE_CODE_START|||$1|||INLINE_CODE_END|||')
+        // Convert numbered sub-list items to HTML (must come before main numbered list)
+        .replace(/^(\d+)\.(\d+)\. (.+)$/gm, '<li style="margin-left: 20px;">$3</li>')
+        // Convert main numbered list items to HTML
+        .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+        // Convert bullet list items to HTML
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        // Wrap consecutive list items in <ol> or <ul> tags
+        .replace(/(<li>.*<\/li>)(\n<li>.*<\/li>)*/g, (match) => {
+          // Check if any line has indented items (sub-numbered lists)
+          if (match.includes('margin-left: 20px')) {
+            return `<ol>${match.replace(/\n/g, '')}</ol>`
+          }
+          // Check if it's a numbered list (original numbered items)
+          else if (match.includes('<li>') && part.match(/^\d+\. /gm)) {
+            return `<ol>${match.replace(/\n/g, '')}</ol>`
+          }
+          // Default to unordered list (bullet points)
+          else {
+            return `<ul>${match.replace(/\n/g, '')}</ul>`
+          }
+        })
         // Line breaks
         .replace(/\n/g, '<br>')
 
@@ -527,10 +810,61 @@ function clearContent() {
   blogContent.value = ''
 }
 
+function generateTableOfContents(content: string): ITableOfContentsItem[] {
+  const tableOfContents: ITableOfContentsItem[] = []
+  let currentHeaderLevel = 0
+  let subHeaderCount = 0
+
+  // Find all header and subheader tags - updated regex to handle multiline content
+  const headerRegex = /<(header|subheader) id="([^"]+)"[^>]*>([^<]*(?:<(?!\/\1>)[^<]*)*)<\/\1>/g
+  const matches = Array.from(content.matchAll(headerRegex))
+
+  for (const match of matches) {
+    const [, tagType, id, titleText] = match
+    const cleanTitle = titleText.trim()
+
+    if (tagType === 'header') {
+      currentHeaderLevel++
+      subHeaderCount = 0 // Reset subheader count for new header
+
+      tableOfContents.push({
+        title: { en: cleanTitle, pl: cleanTitle }, // Will be translated later
+        id,
+        mainLevel: currentHeaderLevel,
+        subLevel: null,
+      })
+    }
+    else if (tagType === 'subheader') {
+      subHeaderCount++
+      const mainLevel = currentHeaderLevel > 0
+        ? currentHeaderLevel
+        : 1
+
+      tableOfContents.push({
+        title: { en: cleanTitle, pl: cleanTitle }, // Will be translated later
+        id,
+        mainLevel,
+        subLevel: subHeaderCount,
+      })
+    }
+  }
+
+  return tableOfContents
+}
+
 async function prepareBlog(isPublished: boolean, reference: DocumentReference | null) {
   const trimmedTitle = blogTitle.value?.trim() || ''
   const translatedTitle = await translateText(trimmedTitle)
   const translatedContent = await translateText(blogContent.value)
+
+  const tableOfContents = generateTableOfContents(blogContent.value)
+
+  const translatedTableOfContents = await Promise.all(
+    tableOfContents.map(async item => ({
+      ...item,
+      title: await translateText(item.title.en),
+    })),
+  )
 
   return mapIBlogEncoded({
     title: translatedTitle,
@@ -538,6 +872,7 @@ async function prepareBlog(isPublished: boolean, reference: DocumentReference | 
     content: translatedContent,
     isPublished,
     author: userData.value?.reference || null,
+    tableOfContents: translatedTableOfContents,
   }, reference)
 }
 

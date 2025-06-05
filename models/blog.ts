@@ -3,6 +3,13 @@ import { Timestamp } from 'firebase/firestore'
 import { decodeWhitespace, encodeWhitespace } from '~/helpers/translateText'
 import type { ITranslatedText } from '~/models/translatedText'
 
+export interface ITableOfContentsItem {
+  title: ITranslatedText
+  id: string
+  mainLevel: number
+  subLevel: number | null
+}
+
 export interface IBlog {
   title: ITranslatedText
   value: string
@@ -14,6 +21,7 @@ export interface IBlog {
   isPublished: boolean
   publishDate: Date | null
   author: DocumentReference | null
+  tableOfContents: ITableOfContentsItem[]
   reference: DocumentReference | null
 }
 
@@ -35,6 +43,7 @@ export function mapIBlogDecoded(data: Partial<IBlog>, reference?: DocumentRefere
       ? null
       : mapDate(data.publishDate),
     author: data.author || null,
+    tableOfContents: data.tableOfContents || [],
     reference: reference || null,
   }
 }
@@ -57,6 +66,7 @@ export function mapIBlogEncoded(data: Partial<IBlog>, reference?: DocumentRefere
       ? null
       : mapDate(data.publishDate),
     author: data.author || null,
+    tableOfContents: data.tableOfContents || [],
     reference: reference || null,
   }
 }

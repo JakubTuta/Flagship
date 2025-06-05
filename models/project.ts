@@ -11,7 +11,6 @@ export interface IProject {
   category: string
   technologies: string[] // max 10
   learned: ITranslatedText[] // max 10
-  tags: ITranslatedText[] // max 10
   image: string | null
 }
 
@@ -27,7 +26,6 @@ export function mapIProject(data: Partial<IProject>): IProject {
     category: data.category || '',
     technologies: data.technologies || [],
     learned: data.learned || [],
-    tags: data.tags || [],
     image: data.image || null,
   }
 }
