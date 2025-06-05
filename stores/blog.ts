@@ -5,6 +5,7 @@ import { mapIBlogDecoded } from '~/models/blog'
 import type { IUser } from '~/models/user'
 
 export const useBlogStore = defineStore('blog', () => {
+  const publishedBlogs = ref<IBlog[]>([])
   const blogs = ref<IBlog[]>([])
   const workingBlogs = ref<IWorkingBlog[]>([])
   const loading = ref(false)
@@ -14,6 +15,7 @@ export const useBlogStore = defineStore('blog', () => {
   const workingBlogsCollection = collection(firestore, 'workingBlogs')
 
   const resetState = () => {
+    publishedBlogs.value = []
     blogs.value = []
     workingBlogs.value = []
     loading.value = false
@@ -28,6 +30,21 @@ export const useBlogStore = defineStore('blog', () => {
     }
     catch (error) {
       console.error('Error fetching blogs:', error)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
+  const fetchPublishedBlogs = async () => {
+    loading.value = true
+
+    try {
+      const response = await getDocs(query(blogsCollection, where('isPublished', '==', true)))
+      publishedBlogs.value = response.docs.map(doc => mapIBlogDecoded(doc.data(), doc.ref))
+    }
+    catch (error) {
+      console.error('Error fetching published blogs:', error)
     }
     finally {
       loading.value = false
@@ -252,11 +269,13 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   return {
+    publishedBlogs,
     blogs,
     workingBlogs,
     loading,
     resetState,
     fetchBlogs,
+    fetchPublishedBlogs,
     fetchWorkingBlogs,
     getBlog,
     deleteBlog,

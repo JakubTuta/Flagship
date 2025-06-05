@@ -1,58 +1,63 @@
 {
   "seo": {
     "site": {
-      "title": "Jakub Tutka | Developer Portfolio",
-      "description": "Personal website of Jakub Tutka showcasing development projects, technical blog, professional resume, and contact information. A central hub for all my professional work and expertise.",
-      "tags": "Jakub Tutka, developer portfolio, full stack developer, technical writer, web development, software engineering, personal website"
+      "title": "Jakub Tutka | Full Stack Developer Portfolio",
+      "description": "I'm Jakub Tutka, a full stack developer and technical writer passionate about creating exceptional web experiences and sharing knowledge with the developer community.",
+      "tags": "Jakub Tutka, full stack developer portfolio, web development, technical writer, software engineer, modern web solutions"
     },
     "pages": {
       "index": {
         "title": "Home",
-        "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer.",
-        "tags": "home, portfolio, Jakub Tutka, full stack developer, technical writer"
+        "description": "Welcome to my portfolio where I showcase my development projects, technical expertise, and professional journey as a full stack developer and technical writer.",
+        "tags": "home, developer portfolio, Jakub Tutka, full stack developer, web development"
       },
       "resume": {
         "title": "Resume",
-        "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer.",
-        "tags": "resume, CV, Jakub Tutka, full stack developer, work experience, technical skills"
+        "description": "Explore my professional background, technical skills, and career journey. From university projects to production applications - discover what I bring to development teams.",
+        "tags": "resume, CV, Jakub Tutka, developer experience, technical skills, career journey"
       },
       "projects": {
         "title": "Projects",
-        "description": "Discover my portfolio of development projects showcasing technical expertise across various technologies. View live demos, source code, and detailed case studies of web applications, software solutions, and innovative digital experiences I've built.",
-        "tags": "projects, portfolio, programming, web applications, software solutions, Jakub Tutka"
+        "description": "Discover my collection of web applications and development projects. Each project demonstrates problem-solving skills, technical expertise, and commitment to quality code.",
+        "tags": "projects, web applications, development portfolio, technical solutions, code examples"
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "I share insights about web development, technical tutorials, and lessons learned from real-world projects. Join me in exploring modern development practices and industry trends.",
+        "tags": "tech blog, development insights, programming tutorials, web development, technical writing"
       }
     }
   },
   "navigation": {
     "projects": {
       "title": "Projects",
-      "description": "Discover my portfolio of development projects showcasing technical expertise across various technologies. View live demos, source code, and detailed case studies of web applications, software solutions, and innovative digital experiences I've built."
+      "description": "Explore my development work showcasing technical skills across various technologies and platforms."
     },
     "blog": {
-      "title": "Blogs",
-      "description": "Read my technical blog featuring insights on software development, programming tutorials, technology trends, and lessons learned from real-world projects. Stay updated with my thoughts on modern development practices and industry innovations."
+      "title": "Blog",
+      "description": "Technical insights, development tutorials, and thoughts on modern web development practices."
     },
     "resume": {
       "title": "Resume",
-      "description": "Explore my comprehensive professional resume including work experience, education, technical skills, and achievements. Download or view my qualifications and career journey as a full stack developer."
+      "description": "My professional experience, technical skills, and educational background in software development."
     },
     "home": {
       "title": "Home",
-      "description": "Welcome to my personal portfolio website. Discover my development projects, technical expertise, and professional journey as a full stack developer and technical writer."
+      "description": "Welcome to my portfolio - discover my work as a full stack developer and technical writer."
     },
     "admin": {
-      "title": "Administrator panel",
+      "title": "Admin Panel",
       "blog": "Blog",
-      "logout": "Log out"
+      "logout": "Logout"
     }
   },
   "skills": {
-    "database": "Database",
+    "database": "Databases",
     "others": "And more..."
   },
   "contact": {
     "email": {
-      "action": "Send email"
+      "action": "Send Email"
     },
     "linkedin": {
       "info": "Connect professionally",
@@ -66,21 +71,21 @@
   "landingPage": {
     "hero": {
       "info": "Full Stack Developer & Technical Writer",
-      "about": "About me",
-      "contact": "Get In Touch"
+      "about": "About Me",
+      "contact": "Get in Touch"
     },
     "about": {
       "title": "What I Do",
-      "subtitle": "Passionate about creating digital experiences and sharing knowledge",
-      "learnMore": "Explore"
+      "subtitle": "I build modern web applications and write about technology to help developers grow",
+      "learnMore": "Learn More"
     },
     "skills": {
       "title": "Technical Skills",
-      "subtitle": "Technologies and tools I work with"
+      "subtitle": "Technologies and tools I use to build reliable, scalable solutions"
     },
     "contact": {
-      "title": "Let's Connect",
-      "subtitle": "Ready to collaborate or just want to say hello?"
+      "title": "Let's Work Together",
+      "subtitle": "Interested in collaboration or have a project in mind? I'd love to hear from you."
     }
   },
   "footer": {
@@ -89,95 +94,95 @@
   "resume": {
     "work": {
       "waber": {
-        "responsibility1": "Developing and improving the functionality of the web application in accordance with specific specifications in Vue.js, Nuxt and TypeScript technologies",
-        "responsibility2": "Working with the Firebase environment",
-        "responsibility3": "Participation in planning subsequent stages of application development - Draw.io, Figma"
+        "responsibility1": "Developing and enhancing web application features using Vue.js, Nuxt, and TypeScript",
+        "responsibility2": "Working with Firebase ecosystem to implement scalable solutions",
+        "responsibility3": "Contributing to application architecture planning using Draw.io and Figma"
       },
-      "title": "Professional experience",
-      "responsibilities": "Scope of duties"
+      "title": "Professional Experience",
+      "responsibilities": "Key Responsibilities"
     },
     "education": {
       "institution": "Lodz University of Technology",
       "title": "Education",
-      "field": "Field of study",
+      "field": "Field of Study",
       "specialization": "Specialization",
-      "level": "Professional title",
+      "level": "Degree",
       "lodz": {
         "field": "Computer Science",
         "specialization": "Software Engineering",
-        "level": "Engineer"
+        "level": "Bachelor's Degree"
       }
     },
     "activities": {
       "innovation": {
-        "title": "\"Innovation\" project of the Lodz University of Technology",
-        "activity1": "Creating a web application for ordering meals for kindergartens and nurseries",
-        "activity2": "Help and support for younger project participants"
+        "title": "\"Innovation\" Project - Lodz University of Technology",
+        "activity1": "Developed a comprehensive web application for meal ordering systems in kindergartens and nurseries",
+        "activity2": "Mentored junior project participants and provided technical guidance"
       },
-      "title": "Additional activities"
+      "title": "Additional Activities"
     },
     "interests": {
-      "1": "Programming",
-      "2": "Reading books",
-      "3": "Movies and series",
-      "4": "Cooking",
-      "title": "Interests"
+      "1": "Software Development",
+      "2": "Continuous Learning",
+      "3": "Technology Trends",
+      "4": "Problem Solving",
+      "title": "Professional Interests"
     },
     "links": {
       "github": "GitHub Profile",
-      "linkedin": "LinkedIn Profile",
-      "title": "Links"
+      "title": "Professional Links",
+      "linkedin": "LinkedIn Profile"
     },
-    "print": "Print CV",
+    "print": "Print Resume",
     "skills": {
-      "title": "Skills",
+      "title": "Technical Skills",
       "database": "Databases",
-      "versionControl": "Version control"
+      "versionControl": "Version Control"
     },
     "footer": {
-      "text": "I agree to the processing of my personal data for the purposes necessary to implement the recruitment process in accordance with the GDPR."
+      "text": "I consent to the processing of my personal data for recruitment purposes in accordance with GDPR regulations."
     },
-    "lodz": "Lodz, Poland"
+    "lodz": "Lodz"
   },
   "projects": {
-    "technologies": "Technologies",
-    "viewCode": "Check the code",
-    "liveDemo": "Website",
-    "learned": "What I learned",
+    "technologies": "Technologies Used",
+    "viewCode": "View Source",
+    "liveDemo": "Live Demo",
+    "learned": "Key Learnings",
     "categories": {
-      "all": "All",
+      "all": "All Projects",
       "featured": "Featured",
-      "notFeatured": "Not featured"
+      "notFeatured": "Other Projects"
     },
     "hero": {
       "title": "My Projects",
-      "subtitle": "Explore my collection of web applications, tools, and innovative solutions that showcase my technical skills and passion for development."
+      "subtitle": "A collection of web applications and development projects that demonstrate my technical skills and problem-solving approach."
     },
     "featured": {
       "title": "Featured Projects",
-      "subtitle": "Highlighting my most significant and impactful work that demonstrates advanced technical capabilities and real-world problem solving."
+      "subtitle": "Highlighted projects that showcase advanced technical implementation and real-world problem solving."
     },
     "all": {
       "title": "All Projects",
-      "subtitle": "Browse through my complete portfolio of projects, ranging from full-stack applications to experimental prototypes and learning exercises."
+      "subtitle": "Complete overview of my development work, from full-scale applications to learning experiments."
     },
     "cta": {
       "title": "Interested in Collaboration?",
-      "subtitle": "Check out my GitHub profile to see more projects, contribute to open source, or get in touch for potential partnerships.",
+      "subtitle": "Check out my GitHub for more projects and code examples, or reach out to discuss potential opportunities.",
       "button": "View GitHub Profile"
     },
     "projects": {
       "leagueRats": {
-        "shortDescription": "Track League of Legends pro players, their accounts, and game statistics in real-time",
-        "description": "LeagueRats is a frontend application that allows users to follow League of Legends professional players and their games. Built with modern web technologies and powered by the Riot Games API, it provides real-time tracking, detailed match history, multiple account support, and secure Firebase integration.",
-        "learned": "Riot Games API Integration, Real-time Data Processing, Deploying Web app to Cloud, Performance Optimization, Managing Docker Containers",
-        "tags": "gaming, esports, league-of-legends, real-time, statistics, tracking, api-integration, firebase, fastapi, docker, professional-gaming, match-history"
+        "shortDescription": "Real-time tracking application for League of Legends professional players and live game statistics",
+        "description": "LeagueRats is a frontend application that enables real-time tracking of professional League of Legends players and their gameplay. Built with modern web technologies and integrated with the Riot Games API, it provides live match tracking, detailed game history, multi-account support, and secure Firebase integration.",
+        "learned": "Riot Games API Integration, Real-Time Data Processing, Cloud Application Deployment, Performance Optimization, Docker Containerization, Gaming Industry Requirements",
+        "tags": "gaming, esports, league-of-legends, real-time, statistics, tracking, api-integration, firebase, fastapi, docker, professional-gaming"
       },
       "ollamaChat": {
-        "shortDescription": "Local AI chatbot with Docker & Ollama - privacy-focused conversational AI",
-        "description": "A powerful chatbot application that enables local deployment of Large Language Models using Docker and Ollama. Features a user-friendly Nuxt frontend with Django backend and MongoDB database, ensuring complete privacy and control over your AI conversations.",
-        "learned": "Local LLM deployment, Docker containerization, AI model integration, Full-stack development, Privacy-focused architecture, MongoDB with Django, User authentication, Real-time chat",
-        "tags": "ai, chatbot, local deployment, privacy, docker, full-stack, llm, open source"
+        "shortDescription": "Local AI chatbot application with Docker & Ollama for privacy-focused conversations",
+        "description": "A powerful chatbot application enabling local deployment of large language models using Docker and Ollama. Features a modern Nuxt frontend with Django backend and MongoDB storage, ensuring complete privacy and control over AI conversations while maintaining professional-grade performance.",
+        "learned": "Local LLM Deployment, Docker Containerization, AI Integration, Full-Stack Architecture, Privacy-First Design, MongoDB with Django, Authentication Systems, Real-Time Communication",
+        "tags": "ai, chatbot, local-deployment, privacy, docker, full-stack, llm, open-source, machine-learning, self-hosted"
       }
     }
   },
@@ -191,8 +196,8 @@
       "create": {
         "title": "Create New Blog Post",
         "titleInput": "Title",
-        "switchToRaw": "Switch to Raw Text",
-        "switchToPreview": "Switch to Formatted View",
+        "switchToRaw": "Switch to Raw View",
+        "switchToPreview": "Switch to Preview",
         "boldTooltip": "Bold (Ctrl+B)",
         "italicTooltip": "Italic (Ctrl+I)",
         "underlineTooltip": "Underline (Ctrl+U)",
@@ -203,18 +208,52 @@
         "contentPlaceholder": "Write your blog content here...",
         "clear": "Clear",
         "saveDraft": "Save Draft",
-        "publish": "Publish Blog",
-        "editTitle": "Edit Blog",
-        "createTitle": "Write a Blog",
-        "languageSelect": "Choose language",
-        "back": "Return",
+        "publish": "Publish Post",
+        "editTitle": "Edit Blog Post",
+        "createTitle": "Create New Post",
+        "languageSelect": "Select Language",
+        "back": "Back",
         "delete": "Delete",
-        "listTooltip": "Bullet list",
-        "numberedListTooltip": "Numbered list",
+        "listTooltip": "Bullet List",
+        "numberedListTooltip": "Numbered List",
         "headerTooltip": "Header",
-        "subheaderTooltip": "Subheader"
+        "subheaderTooltip": "Subheader",
+        "categoryInput": "Category",
+        "featuredCheckbox": "Featured Post"
       },
-      "notPublished": "Not published"
+      "notPublished": "Not Published"
     }
+  },
+  "blog": {
+    "categories": {
+      "frontend": "Frontend Development",
+      "backend": "Backend Development",
+      "fullstack": "Full Stack Development",
+      "web dev": "Web Development",
+      "data bases": "Databases & Data",
+      "cloud": "Cloud Computing",
+      "algorithms": "Algorithms & Data Structures",
+      "devops": "DevOps & Infrastructure",
+      "career": "Career Development",
+      "productivity": "Productivity & Tools",
+      "work-life": "Work-Life Balance",
+      "personal": "Personal Insights",
+      "other": "Other Topics"
+    },
+    "hero": {
+      "title": "Technical Blog",
+      "subtitle": "Insights, tutorials, and lessons learned from web development projects. I share practical knowledge to help fellow developers grow."
+    },
+    "featured": {
+      "title": "Featured Articles",
+      "subtitle": "In-depth articles covering important development topics and real-world project experiences.",
+      "badge": "Featured"
+    },
+    "readMore": "Read More",
+    "recent": {
+      "title": "Recent Posts",
+      "subtitle": "Latest insights and discoveries from my ongoing development work."
+    },
+    "loadMore": "Load More"
   }
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DocumentReference } from 'firebase/firestore'
+import { type TBlogCategory, blogCategoriesValues } from '~/helpers/blogCategories'
 import type { IBlog, ITableOfContentsItem } from '~/models/blog'
 import { mapIBlogEncoded } from '~/models/blog'
 
@@ -19,6 +20,8 @@ const savedWorkingBlog = ref<IWorkingBlog | null>(null)
 const loading = ref(false)
 const currentWorkingBlog = ref<IWorkingBlog | null>(null)
 const autoSaveTimer = ref<NodeJS.Timeout | null>(null)
+const category = ref<TBlogCategory | null>(null)
+const isFeatured = ref(false)
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -381,12 +384,12 @@ function generateRandomId() {
 
 function insertHeader() {
   const randomId = generateRandomId()
-  wrapSelectedText(`<header id="${randomId}">\n`, '\n</header>')
+  wrapSelectedText(`<h2 id="${randomId}">\n`, '\n</h2>')
 }
 
 function insertSubheader() {
   const randomId = generateRandomId()
-  wrapSelectedText(`<subheader id="${randomId}">\n`, '\n</subheader>')
+  wrapSelectedText(`<h3 id="${randomId}">\n`, '\n</h3>')
 }
 
 function toggleBold() {
@@ -830,10 +833,6 @@ const contentBlocks = computed(() => {
     else if (part.trim()) {
       // Regular text content - process inline formatting
       const processedContent = part
-        // Headers and subheaders (must come before line break replacement)
-        // Using [\s\S]*? to match any character including newlines
-        .replace(/<header id="[^"]*">([\s\S]*?)<\/header>/g, '<h2>$1</h2>')
-        .replace(/<subheader id="[^"]*">([\s\S]*?)<\/subheader>/g, '<h3>$1</h3>')
         // Bold text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         // Italic text (single * but not part of **)
@@ -952,12 +951,20 @@ async function prepareBlog(isPublished: boolean, reference: DocumentReference | 
     value: translatedTitle.en.replace(/\s+/g, '-').toLowerCase(),
     content: translatedContent,
     isPublished,
+    featured: isFeatured.value,
+    category: category.value || 'other',
     author: userData.value?.reference || null,
     tableOfContents: translatedTableOfContents,
   }, reference)
 }
 
 async function saveDraft() {
+  if (!blogTitle.value?.trim() || !blogContent.value?.trim() || !category.value) {
+    console.error('Title, content, and category are required to save a draft.')
+
+    return
+  }
+
   loading.value = true
   const reference = savedBlog.value?.reference || savedWorkingBlog.value?.reference || null
   const blog = await prepareBlog(false, reference)
@@ -975,6 +982,12 @@ async function saveDraft() {
 }
 
 async function publishBlog() {
+  if (!blogTitle.value?.trim() || !blogContent.value?.trim() || !category.value) {
+    console.error('Title, content, and category are required to publish the blog.')
+
+    return
+  }
+
   loading.value = true
   const reference = savedBlog.value?.reference || savedWorkingBlog.value?.reference || null
   const blog = await prepareBlog(true, reference)
@@ -1037,13 +1050,30 @@ async function deleteBlog() {
         <v-text-field
           v-model="blogTitle"
           :label="$t('admin.blog.create.titleInput')"
-          class="mb-4"
+          class="mt-2"
           clearable
         />
 
+        <v-row class="ma-0">
+          <v-select
+            v-model="category"
+            :items="blogCategoriesValues(t)"
+            :label="$t('admin.blog.create.categoryInput')"
+            class="max-w-400px"
+            clearable
+          />
+
+          <v-checkbox
+            v-model="isFeatured"
+            :label="$t('admin.blog.create.featuredCheckbox')"
+            color="primary"
+            class="ml-4"
+          />
+        </v-row>
+
         <v-toolbar
           density="compact"
-          class="mb-2"
+          class="mb-2 mt-4"
         >
           <v-btn
             v-for="control in toolbarControls"

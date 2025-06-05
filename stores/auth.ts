@@ -62,6 +62,9 @@ export const useAuthStore = defineStore('auth', () => {
       await auth.signOut()
       user.value = null
 
+      useProjectStore().resetState()
+      useBlogStore().resetState()
+
       router.push('/')
     }
     catch (error) {
@@ -126,6 +129,9 @@ export const useAuthStore = defineStore('auth', () => {
       if (newUser) {
         user.value = newUser
         fetchUserData(newUser)
+      }
+      else {
+        logout()
       }
     },
   )

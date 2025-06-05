@@ -1,44 +1,49 @@
 {
   "seo": {
     "site": {
-      "title": "Jakub Tutka | Portfolio Developera",
-      "description": "Strona osobista Jakuba Tutki prezentująca projekty programistyczne, blog techniczny, CV zawodowe i informacje kontaktowe. Centralne miejsce dla wszystkich moich prac zawodowych i ekspertyzy.",
-      "tags": "Jakub Tutka, portfolio developera, full stack developer, technical writer, tworzenie stron internetowych, inżynieria oprogramowania, strona osobista"
+      "title": "Jakub Tutka | Portfolio Full Stack Developera",
+      "description": "Jestem Jakub Tutka, full stack developer i technical writer, pasjonat tworzenia wyjątkowych aplikacji webowych i dzielenia się wiedzą ze społecznością developerów.",
+      "tags": "Jakub Tutka, portfolio full stack developer, web development, technical writer, inżynier oprogramowania, nowoczesne rozwiązania webowe"
     },
     "pages": {
       "index": {
         "title": "Strona główna",
-        "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer.",
-        "tags": "strona główna, portfolio, Jakub Tutka, full stack developer, technical writer"
+        "description": "Witaj w moim portfolio, gdzie prezentuję projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer.",
+        "tags": "strona główna, portfolio developera, Jakub Tutka, full stack developer, web development"
       },
       "resume": {
         "title": "CV",
-        "description": "Zapoznaj się z moim kompleksowym CV zawodowym obejmującym doświadczenie zawodowe, wykształcenie, umiejętności techniczne i osiągnięcia. Pobierz lub zobacz moje kwalifikacje i drogę kariery jako full stack developer.",
-        "tags": "CV, resume, Jakub Tutka, full stack developer, doświadczenie zawodowe, umiejętności techniczne"
+        "description": "Poznaj moje doświadczenie zawodowe, umiejętności techniczne i drogę kariery. Od projektów uniwersyteckich po aplikacje produkcyjne - zobacz, co wnoszę do zespołów developerskich.",
+        "tags": "CV, resume, Jakub Tutka, doświadczenie developera, umiejętności techniczne, droga kariery"
       },
       "projects": {
         "title": "Projekty",
-        "description": "Odkryj moje portfolio projektów programistycznych prezentujących wiedzę techniczną w różnych technologiach. Zobacz wersje demonstracyjne, kod źródłowy i szczegółowe studia przypadków aplikacji internetowych, rozwiązań programistycznych i innowacyjnych doświadczeń cyfrowych, które stworzyłem.",
-        "tags": "projekty, portfolio, programowanie, aplikacje internetowe, rozwiązania programistyczne, Jakub Tutka"
+        "description": "Odkryj moją kolekcję aplikacji webowych i projektów programistycznych. Każdy projekt pokazuje umiejętności rozwiązywania problemów, wiedzę techniczną i zaangażowanie w jakość kodu.",
+        "tags": "projekty, aplikacje webowe, portfolio programistyczne, rozwiązania techniczne, przykłady kodu"
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "Dzielę się spostrzeżeniami o web developmencie, tutorialami technicznymi i lekcjami z prawdziwych projektów. Dołącz do eksploracji nowoczesnych praktyk programistycznych.",
+        "tags": "blog techniczny, insights o developmencie, tutoriale programistyczne, web development, technical writing"
       }
     }
   },
   "navigation": {
     "projects": {
       "title": "Projekty",
-      "description": "Odkryj moje portfolio projektów programistycznych prezentujących wiedzę techniczną w różnych technologiach. Zobacz wersje demonstracyjne, kod źródłowy i szczegółowe studia przypadków aplikacji internetowych, rozwiązań programistycznych i innowacyjnych doświadczeń cyfrowych, które stworzyłem."
+      "description": "Poznaj moje prace programistyczne prezentujące umiejętności techniczne w różnych technologiach i platformach."
     },
     "blog": {
-      "title": "Blogi",
-      "description": "Przeczytaj mój blog techniczny z wglądem w rozwój oprogramowania, tutoriale programistyczne, trendy technologiczne i lekcje wyniesione z rzeczywistych projektów. Bądź na bieżąco z moimi przemyśleniami na temat nowoczesnych praktyk rozwoju i innowacji branżowych."
+      "title": "Blog",
+      "description": "Spostrzeżenia techniczne, tutoriale programistyczne i przemyślenia o nowoczesnych praktykach web developmentu."
     },
     "resume": {
       "title": "CV",
-      "description": "Zapoznaj się z moim kompleksowym CV zawodowym obejmującym doświadczenie zawodowe, wykształcenie, umiejętności techniczne i osiągnięcia. Pobierz lub zobacz moje kwalifikacje i drogę kariery jako full stack developer."
+      "description": "Moje doświadczenie zawodowe, umiejętności techniczne i wykształcenie w dziedzinie rozwoju oprogramowania."
     },
     "home": {
       "title": "Strona główna",
-      "description": "Witaj na mojej osobistej stronie portfolio. Odkryj moje projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer."
+      "description": "Witaj w moim portfolio - poznaj moją pracę jako full stack developer i technical writer."
     },
     "admin": {
       "title": "Panel administratora",
@@ -47,7 +52,7 @@
     }
   },
   "skills": {
-    "database": "Baza danych",
+    "database": "Bazy danych",
     "others": "I więcej..."
   },
   "contact": {
@@ -67,117 +72,117 @@
     "hero": {
       "info": "Full Stack Developer i Technical Writer",
       "about": "O mnie",
-      "contact": "Skontaktuj się"
+      "contact": "Kontakt"
     },
     "about": {
       "title": "Co robię",
-      "subtitle": "Pasjonat tworzenia cyfrowych doświadczeń i dzielenia się wiedzą",
-      "learnMore": "Poznaj"
+      "subtitle": "Tworzę nowoczesne aplikacje webowe i piszę o technologii, aby pomóc developerom się rozwijać",
+      "learnMore": "Dowiedz się więcej"
     },
     "skills": {
       "title": "Umiejętności techniczne",
-      "subtitle": "Technologie i narzędzia, z którymi pracuję"
+      "subtitle": "Technologie i narzędzia, których używam do tworzenia niezawodnych, skalowalnych rozwiązań"
     },
     "contact": {
-      "title": "Nawiążmy kontakt",
-      "subtitle": "Gotowy na współpracę lub po prostu chcesz się przywitać?"
+      "title": "Współpracujmy",
+      "subtitle": "Zainteresowany współpracą lub masz projekt w planах? Chętnie się z Tobą skontaktuję."
     }
   },
   "footer": {
-    "madeWith": "© 2025 Jakub Tutka. Stworzone z Nuxt & Vuetify."
+    "madeWith": "© 2025 Jakub Tutka. Zbudowane z Nuxt & Vuetify."
   },
   "resume": {
     "work": {
       "waber": {
-        "responsibility1": "Rozwijanie i udoskonalanie funkcjonalności aplikacji internetowej zgodnie z określonymi specyfikacjami w technologiach Vue.js, Nuxt oraz TypeScript",
-        "responsibility2": "Praca ze środowiskiem Firebase",
-        "responsibility3": "Uczestnictwo w planowaniu kolejnych etapów rozwoju aplikacji – Draw.io, Figma"
+        "responsibility1": "Rozwijanie i udoskonalanie funkcjonalności aplikacji webowej przy użyciu Vue.js, Nuxt i TypeScript",
+        "responsibility2": "Praca z ekosystemem Firebase do implementacji skalowalnych rozwiązań",
+        "responsibility3": "Udział w planowaniu architektury aplikacji przy użyciu Draw.io i Figma"
       },
       "title": "Doświadczenie zawodowe",
-      "responsibilities": "Zakres obowiązków"
+      "responsibilities": "Kluczowe obowiązki"
     },
     "education": {
       "institution": "Politechnika Łódzka",
       "title": "Wykształcenie",
-      "field": "Kierunek",
+      "field": "Kierunek studiów",
       "specialization": "Specjalizacja",
-      "level": "Tytuł zawodowy",
+      "level": "Stopień",
       "lodz": {
         "field": "Informatyka",
         "specialization": "Inżynieria oprogramowania",
-        "level": "Inżynier"
+        "level": "Licencjat"
       }
     },
     "activities": {
       "innovation": {
-        "title": "Projekt \"Innowacja\" Politechniki Łódzkiej",
-        "activity1": "Tworzenie aplikacji webowej do zamawiania posiłków dla przedszkoli i żłobków",
-        "activity2": "Pomoc i wspieranie młodszych uczestników projektu"
+        "title": "Projekt \"Innowacja\" - Politechnika Łódzka",
+        "activity1": "Opracowanie kompleksowej aplikacji webowej do systemu zamawiania posiłków w przedszkolach i żłobkach",
+        "activity2": "Mentoring młodszych uczestników projektu i wsparcie techniczne"
       },
-      "title": "Aktywność dodatkowa"
+      "title": "Dodatkowe aktywności"
     },
     "interests": {
-      "1": "Programowanie",
-      "2": "Czytanie książek",
-      "3": "Filmy i seriale",
-      "4": "Gotowanie",
-      "title": "Zainteresowania"
+      "1": "Rozwój oprogramowania",
+      "2": "Ciągłe uczenie się",
+      "3": "Trendy technologiczne",
+      "4": "Rozwiązywanie problemów",
+      "title": "Zainteresowania zawodowe"
     },
     "links": {
       "github": "Profil GitHub",
-      "title": "Linki",
+      "title": "Linki zawodowe",
       "linkedin": "Profil LinkedIn"
     },
     "print": "Drukuj CV",
     "skills": {
-      "title": "Umiejętności",
+      "title": "Umiejętności techniczne",
       "database": "Bazy danych",
       "versionControl": "Kontrola wersji"
     },
     "footer": {
-      "text": "Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z RODO."
+      "text": "Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb rekrutacji zgodnie z przepisami RODO."
     },
     "lodz": "Łódź"
   },
   "projects": {
-    "technologies": "Technologie",
-    "viewCode": "Sprawdź kod",
-    "liveDemo": "Strona",
-    "learned": "Czego się nauczyłem",
+    "technologies": "Użyte technologie",
+    "viewCode": "Zobacz kod",
+    "liveDemo": "Demo na żywo",
+    "learned": "Kluczowe umiejętności",
     "categories": {
-      "all": "Wszystkie",
+      "all": "Wszystkie projekty",
       "featured": "Wyróżnione",
-      "notFeatured": "Nie wyróżnione"
+      "notFeatured": "Inne projekty"
     },
     "hero": {
       "title": "Moje Projekty",
-      "subtitle": "Poznaj moją kolekcję aplikacji webowych, narzędzi i innowacyjnych rozwiązań, które pokazują moje umiejętności techniczne i pasję do programowania."
+      "subtitle": "Kolekcja aplikacji webowych i projektów programistycznych, które demonstrują moje umiejętności techniczne i podejście do rozwiązywania problemów."
     },
     "featured": {
       "title": "Wyróżnione Projekty",
-      "subtitle": "Prezentacja moich najważniejszych i najbardziej wpływowych prac, które demonstrują zaawansowane możliwości techniczne i rozwiązywanie rzeczywistych problemów."
+      "subtitle": "Wybrane projekty prezentujące zaawansowaną implementację techniczną i rozwiązywanie rzeczywistych problemów."
     },
     "all": {
       "title": "Wszystkie Projekty",
-      "subtitle": "Przeglądaj moje kompletne portfolio projektów, od aplikacji full-stack po eksperymentalne prototypy i ćwiczenia edukacyjne."
+      "subtitle": "Kompletny przegląd mojej pracy programistycznej, od pełnowymiarowych aplikacji po eksperymenty edukacyjne."
     },
     "cta": {
-      "title": "Zainteresowany Współpracą?",
-      "subtitle": "Sprawdź mój profil GitHub, aby zobaczyć więcej projektów, przyczynić się do open source lub skontaktować się w sprawie potencjalnej współpracy.",
-      "button": "Zobacz Profil GitHub"
+      "title": "Zainteresowany współpracą?",
+      "subtitle": "Sprawdź mój GitHub po więcej projektów i przykładów kodu, lub skontaktuj się w sprawie potencjalnych możliwości.",
+      "button": "Zobacz profil GitHub"
     },
     "projects": {
       "leagueRats": {
-        "shortDescription": "Śledź profesjonalnych graczy League of Legends, ich konta i statystyki gier w czasie rzeczywistym",
-        "description": "LeagueRats to aplikacja frontendowa pozwalająca użytkownikom śledzić profesjonalnych graczy League of Legends i ich rozgrywki. Zbudowana z wykorzystaniem nowoczesnych technologii webowych i Riot Games API, zapewnia śledzenie w czasie rzeczywistym, szczegółową historię meczów, obsługę wielu kont oraz bezpieczną integrację z Firebase.",
-        "learned": "Integracja z API Riot Games, Przetwarzanie Danych w Czasie Rzeczywistym, Wdrażanie Aplikacji Webowej w Chmurze, Optymalizacja Wydajności, Zarządzanie Kontenerami Docker",
-        "tags": "gry, esport, league-of-legends, czas-rzeczywisty, statystyki, śledzenie, integracja-api, firebase, fastapi, docker, profesjonalne-gry, historia-meczów"
+        "shortDescription": "Aplikacja do śledzenia w czasie rzeczywistym profesjonalnych graczy League of Legends i statystyk gier na żywo",
+        "description": "LeagueRats to aplikacja frontendowa umożliwiająca śledzenie w czasie rzeczywistym profesjonalnych graczy League of Legends i ich rozgrywki. Zbudowana z nowoczesnymi technologiami webowymi i zintegrowana z Riot Games API, zapewnia śledzenie meczów na żywo, szczegółową historię gier, wsparcie wielu kont oraz bezpieczną integrację z Firebase.",
+        "learned": "Integracja z Riot Games API, Przetwarzanie danych w czasie rzeczywistym, Wdrażanie aplikacji w chmurze, Optymalizacja wydajności, Konteneryzacja Docker, Wymagania branży gamingowej",
+        "tags": "gaming, esport, league-of-legends, czas-rzeczywisty, statystyki, śledzenie, integracja-api, firebase, fastapi, docker, profesjonalne-gry"
       },
       "ollamaChat": {
-        "shortDescription": "Lokalny chatbot AI z Docker & Ollama - prywatna sztuczna inteligencja",
-        "description": "Potężna aplikacja chatbota umożliwiająca lokalne wdrażanie dużych modeli językowych przy użyciu Docker i Ollama. Zawiera przyjazny interfejs Nuxt z backendem Django i bazą MongoDB, zapewniając pełną prywatność i kontrolę nad konwersacjami AI.",
-        "learned": "Lokalne wdrażanie LLM, Konteneryzacja Docker, Integracja modeli AI, Rozwój full-stack, Architektura zorientowana na prywatność, MongoDB z Django, Autentykacja użytkowników, Chat w czasie rzeczywistym",
-        "tags": "ai, chatbot, lokalne-wdrożenie, prywatność, docker, full-stack, llm, open-source"
+        "shortDescription": "Lokalna aplikacja chatbota AI z Docker & Ollama dla prywatnych rozmów",
+        "description": "Potężna aplikacja chatbota umożliwiająca lokalne wdrażanie dużych modeli językowych przy użyciu Docker i Ollama. Zawiera nowoczesny frontend Nuxt z backendem Django i przechowywaniem MongoDB, zapewniając pełną prywatność i kontrolę nad rozmowami AI przy zachowaniu profesjonalnej wydajności.",
+        "learned": "Lokalne wdrażanie LLM, Konteneryzacja Docker, Integracja AI, Architektura Full-Stack, Projektowanie z myślą o prywatności, MongoDB z Django, Systemy autentykacji, Komunikacja w czasie rzeczywistym",
+        "tags": "ai, chatbot, lokalne-wdrożenie, prywatność, docker, full-stack, llm, open-source, uczenie-maszynowe, self-hosted"
       }
     }
   },
@@ -187,34 +192,68 @@
   "admin": {
     "blog": {
       "published": "Opublikowane",
-      "drafts": "Wersje robocze",
+      "drafts": "Szkice",
       "create": {
-        "title": "Stwórz Nowy Blog",
+        "title": "Utwórz nowy post na blogu",
         "titleInput": "Tytuł",
-        "switchToRaw": "Zmień na widok tekstu",
-        "switchToPreview": "Zmień na widok podglądu",
+        "switchToRaw": "Przełącz na widok surowy",
+        "switchToPreview": "Przełącz na podgląd",
         "boldTooltip": "Pogrubienie (Ctrl+B)",
         "italicTooltip": "Kursywa (Ctrl+I)",
         "underlineTooltip": "Podkreślenie (Ctrl+U)",
-        "inlineCodeTooltip": "Kod",
+        "inlineCodeTooltip": "Kod w linii",
         "codeBlockTooltip": "Blok kodu",
-        "raw": "Tekst",
+        "raw": "Surowy",
         "preview": "Podgląd",
-        "contentPlaceholder": "Napisz swojego bloga...",
+        "contentPlaceholder": "Napisz treść swojego bloga tutaj...",
         "clear": "Wyczyść",
-        "saveDraft": "Zapisz Wersję Roboczą",
-        "publish": "Opublikuj Blog",
-        "editTitle": "Edytuj Blog",
-        "createTitle": "Napisz Blog",
+        "saveDraft": "Zapisz szkic",
+        "publish": "Opublikuj post",
+        "editTitle": "Edytuj post na blogu",
+        "createTitle": "Utwórz nowy post",
         "languageSelect": "Wybierz język",
-        "back": "Wróć",
+        "back": "Wstecz",
         "delete": "Usuń",
         "listTooltip": "Lista punktowa",
         "numberedListTooltip": "Lista numerowana",
-        "headerTooltip": "Tytuł",
-        "subheaderTooltip": "Podtytuł"
+        "headerTooltip": "Nagłówek",
+        "subheaderTooltip": "Podtytuł",
+        "categoryInput": "Kategoria",
+        "featuredCheckbox": "Wyróżniony post"
       },
       "notPublished": "Nie opublikowane"
     }
+  },
+  "blog": {
+    "categories": {
+      "frontend": "Rozwój Frontend",
+      "backend": "Rozwój Backend",
+      "fullstack": "Rozwój Full Stack",
+      "web dev": "Rozwój Web",
+      "data bases": "Bazy danych i dane",
+      "cloud": "Przetwarzanie w chmurze",
+      "algorithms": "Algorytmy i struktury danych",
+      "devops": "DevOps i infrastruktura",
+      "career": "Rozwój kariery",
+      "productivity": "Produktywność i narzędzia",
+      "work-life": "Równowaga praca-życie",
+      "personal": "Przemyślenia osobiste",
+      "other": "Inne tematy"
+    },
+    "hero": {
+      "title": "Blog Techniczny",
+      "subtitle": "Spostrzeżenia, tutoriale i lekcje wyniesione z projektów web developmentu. Dzielę się praktyczną wiedzą, aby pomóc innym developerom się rozwijać."
+    },
+    "featured": {
+      "title": "Wybrane Artykuły",
+      "subtitle": "Dogłębne artykuły poruszające ważne tematy programistyczne i doświadczenia z rzeczywistych projektów.",
+      "badge": "Wyróżnione"
+    },
+    "readMore": "Czytaj więcej",
+    "recent": {
+      "title": "Najnowsze posty",
+      "subtitle": "Najnowsze spostrzeżenia i odkrycia z mojej bieżącej pracy programistycznej."
+    },
+    "loadMore": "Załaduj więcej"
   }
 }

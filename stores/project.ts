@@ -8,6 +8,11 @@ export const useProjectStore = defineStore('projects', () => {
   const { firestore } = useFirebase()
   const projectsCollection = collection(firestore, 'projects')
 
+  const resetState = () => {
+    projects.value = []
+    loading.value = false
+  }
+
   const fetchProjects = async () => {
     loading.value = true
 
@@ -26,6 +31,7 @@ export const useProjectStore = defineStore('projects', () => {
   return {
     projects,
     loading,
+    resetState,
     fetchProjects,
   }
 })

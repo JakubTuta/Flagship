@@ -22,6 +22,8 @@ export interface IBlog {
   publishDate: Date | null
   author: DocumentReference | null
   tableOfContents: ITableOfContentsItem[]
+  category: TBlogCategory
+  viewCount: number
   reference: DocumentReference | null
 }
 
@@ -44,6 +46,8 @@ export function mapIBlogDecoded(data: Partial<IBlog>, reference?: DocumentRefere
       : mapDate(data.publishDate),
     author: data.author || null,
     tableOfContents: data.tableOfContents || [],
+    category: data.category || 'other',
+    viewCount: data.viewCount || 0,
     reference: reference || null,
   }
 }
@@ -67,6 +71,8 @@ export function mapIBlogEncoded(data: Partial<IBlog>, reference?: DocumentRefere
       : mapDate(data.publishDate),
     author: data.author || null,
     tableOfContents: data.tableOfContents || [],
+    category: data.category || 'other',
+    viewCount: data.viewCount || 0,
     reference: reference || null,
   }
 }
