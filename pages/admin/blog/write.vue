@@ -690,11 +690,33 @@ function handleKeydown(event: KeyboardEvent) {
 
     const start = textarea.selectionStart
     const beforeText = blogContent.value.slice(0, start)
+    const afterText = blogContent.value.slice(start)
     const lines = beforeText.split('\n')
     const currentLine = lines[lines.length - 1]
 
-    // Check if current line starts with '- '
-    if (currentLine.trim().startsWith('- ')) {
+    // Check if current line is empty bullet list item ('- ')
+    if (currentLine === '- ') {
+      event.preventDefault()
+      // Remove the '- ' from current line
+      const newBeforeText = lines.slice(0, -1).join('\n')
+      const separator = newBeforeText
+        ? '\n'
+        : ''
+      blogContent.value = newBeforeText + separator + afterText
+
+      nextTick(() => {
+        textarea.focus()
+        const newPosition = newBeforeText.length + (separator
+          ? 1
+          : 0)
+        textarea.setSelectionRange(newPosition, newPosition)
+      })
+
+      return
+    }
+
+    // Check if current line starts with '- ' and has content
+    if (currentLine.trim().startsWith('- ') && currentLine.trim() !== '- ') {
       event.preventDefault()
       insertAtCursor('\n- ')
 
@@ -702,21 +724,79 @@ function handleKeydown(event: KeyboardEvent) {
     }
 
     // Check for numbered list patterns
-    const numberedListMatch = currentLine.match(/^(\d+)\. /)
-    const subNumberedListMatch = currentLine.match(/^(\d+)\.(\d+)\. /)
+    const numberedListMatch = currentLine.match(/^(\d+)\. (.*)$/)
+    const subNumberedListMatch = currentLine.match(/^(\d+)\.(\d+)\. (.*)$/)
+    const emptyNumberedMatch = currentLine.match(/^(\d+)\. $/)
+    const emptySubNumberedMatch = currentLine.match(/^(\d+)\.(\d+)\. $/)
+
+    // Handle empty numbered list items
+    if (emptyNumberedMatch) {
+      event.preventDefault()
+      const mainNum = emptyNumberedMatch[1]
+      const newBeforeText = lines.slice(0, -1).join('\n')
+      const separator = newBeforeText
+        ? '\n'
+        : ''
+
+      if (mainNum === '1') {
+        // If it's 1., convert to 1.1.
+        blogContent.value = `${newBeforeText}${separator}1.1. ${afterText}`
+
+        nextTick(() => {
+          textarea.focus()
+          const newPosition = newBeforeText.length + separator.length + '1.1. '.length
+          textarea.setSelectionRange(newPosition, newPosition)
+        })
+      }
+      else {
+        // If it's any other number (2., 3., etc.), convert to 1.1.
+        blogContent.value = `${newBeforeText}${separator}1.1. ${afterText}`
+
+        nextTick(() => {
+          textarea.focus()
+          const newPosition = newBeforeText.length + separator.length + '1.1. '.length
+          textarea.setSelectionRange(newPosition, newPosition)
+        })
+      }
+
+      return
+    }
+
+    if (emptySubNumberedMatch) {
+      event.preventDefault()
+      // Remove the empty sub-numbered list item
+      const newBeforeText = lines.slice(0, -1).join('\n')
+      const separator = newBeforeText
+        ? '\n'
+        : ''
+      blogContent.value = newBeforeText + separator + afterText
+
+      nextTick(() => {
+        textarea.focus()
+        const newPosition = newBeforeText.length + (separator
+          ? 1
+          : 0)
+        textarea.setSelectionRange(newPosition, newPosition)
+      })
+
+      return
+    }
+
+    // Handle numbered lists with content
+    if (numberedListMatch) {
+      event.preventDefault()
+      const nextNum = Number.parseInt(numberedListMatch[1]) + 1
+      insertAtCursor(`\n${nextNum}. `)
+
+      return
+    }
 
     if (subNumberedListMatch) {
-      // Handle sub-numbered list (e.g., "1.1. ")
+      // Handle sub-numbered list (e.g., "1.1. some content")
       event.preventDefault()
       const mainNum = subNumberedListMatch[1]
       const subNum = Number.parseInt(subNumberedListMatch[2]) + 1
       insertAtCursor(`\n${mainNum}.${subNum}. `)
-    }
-    else if (numberedListMatch) {
-      // Handle main numbered list (e.g., "1. ")
-      event.preventDefault()
-      const nextNum = Number.parseInt(numberedListMatch[1]) + 1
-      insertAtCursor(`\n${nextNum}. `)
     }
   }
 }
@@ -750,9 +830,10 @@ const contentBlocks = computed(() => {
     else if (part.trim()) {
       // Regular text content - process inline formatting
       const processedContent = part
-        // Headers and subheaders (must come before other formatting)
-        .replace(/<header id="([^"]+)">(.*?)<\/header>/g, '<h3 id="$1">$2</h3>')
-        .replace(/<subheader id="([^"]+)">(.*?)<\/subheader>/g, '<h4 id="$1">$2</h4>')
+        // Headers and subheaders (must come before line break replacement)
+        // Using [\s\S]*? to match any character including newlines
+        .replace(/<header id="[^"]*">([\s\S]*?)<\/header>/g, '<h2>$1</h2>')
+        .replace(/<subheader id="[^"]*">([\s\S]*?)<\/subheader>/g, '<h3>$1</h3>')
         // Bold text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         // Italic text (single * but not part of **)
@@ -782,7 +863,7 @@ const contentBlocks = computed(() => {
             return `<ul>${match.replace(/\n/g, '')}</ul>`
           }
         })
-        // Line breaks
+        // Line breaks (after header processing)
         .replace(/\n/g, '<br>')
 
       blocks.push({
@@ -1023,6 +1104,7 @@ async function deleteBlog() {
             :placeholder="$t('admin.blog.create.contentPlaceholder')"
             rows="15"
             auto-grow
+            class="blog-textarea"
             @keydown="handleKeydown"
             @select="updateSelection"
             @click="updateSelection"
@@ -1164,7 +1246,12 @@ async function deleteBlog() {
 </template>
 
 <style scoped>
-.v-text-field :deep() input {
+.v-text-field :deep(input) {
   font-size: 1.5em;
+}
+
+.blog-textarea :deep(textarea) {
+  font-size: 1.2em !important;
+  line-height: 1.5 !important;
 }
 </style>
