@@ -35,7 +35,7 @@ const navigationCards = computed(() => {
       title: t('navigation.blog.title'),
       icon: 'mdi-post',
       color: 'secondary',
-      route: '/blog',
+      route: '/blogs',
     },
     {
       title: t('navigation.resume.title'),

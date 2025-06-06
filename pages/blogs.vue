@@ -37,7 +37,6 @@ const blogsPerLoad = 5
 const displayedBlogsCount = ref(blogsPerLoad)
 const initialLoad = ref(true)
 
-// Filter and sort state
 const selectedCategory = ref<TBlogCategory | 'all'>('all')
 const sortBy = ref<'date' | 'views'>('date')
 
@@ -51,22 +50,18 @@ onMounted(async () => {
   initialLoad.value = false
 })
 
-// Filter and sort blogs
 const filteredAndSortedBlogs = computed(() => {
   let blogs = [...publishedBlogs.value]
 
-  // Filter by category
   if (selectedCategory.value !== 'all') {
     blogs = blogs.filter(blog => blog.category === selectedCategory.value)
   }
 
-  // Sort blogs
   blogs.sort((a, b) => {
     if (sortBy.value === 'views') {
       return (b.viewCount || 0) - (a.viewCount || 0)
     }
     else {
-      // Sort by date
       const dateA = a.publishDate
         ? new Date(a.publishDate).getTime()
         : 0
@@ -90,7 +85,6 @@ const hasMoreBlogs = computed(() => displayedBlogsCount.value < regularBlogs.val
 const showFeaturedSkeleton = computed(() => loading.value && initialLoad.value)
 const showRegularSkeleton = computed(() => loading.value && initialLoad.value)
 
-// Available categories for filter
 const availableCategories = computed(() => {
   const categories = [...new Set(publishedBlogs.value.map(blog => blog.category))]
 
@@ -112,7 +106,16 @@ function truncateContent(content: string, maxLength: number = 150): string {
   if (content.length <= maxLength)
     return content
 
-  return `${content.substring(0, maxLength).trim()}...`
+  const truncated = content.substring(0, maxLength).trim()
+  const lastSpaceIndex = truncated.lastIndexOf(' ')
+
+  if (lastSpaceIndex === -1) {
+    return content.length > maxLength
+      ? `${truncated}...`
+      : content
+  }
+
+  return `${truncated.substring(0, lastSpaceIndex)}...`
 }
 
 function formatViewCount(count: number): string {
@@ -150,7 +153,6 @@ function loadMoreBlogs() {
   displayedBlogsCount.value += blogsPerLoad
 }
 
-// Reset pagination when filters change
 watch([selectedCategory, sortBy], () => {
   displayedBlogsCount.value = blogsPerLoad
 })
@@ -330,6 +332,7 @@ watch([selectedCategory, sortBy], () => {
             :elevation="isDark
               ? 20
               : 5"
+            :to="`/blog/${blog.value}`"
           >
             <template #prepend>
               <v-avatar
@@ -529,6 +532,7 @@ watch([selectedCategory, sortBy], () => {
             :elevation="isDark
               ? 10
               : 3"
+            :to="`/blog/${blog.value}`"
           >
             <template #prepend>
               <v-avatar

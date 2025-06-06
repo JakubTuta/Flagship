@@ -12,9 +12,6 @@ const isPreviewMode = ref(false)
 const textEditor = ref<HTMLElement | null>(null)
 const selectionStart = ref(0)
 const selectionEnd = ref(0)
-const isBoldActive = ref(false)
-const isItalicActive = ref(false)
-const isUnderlineActive = ref(false)
 const savedBlog = ref<IBlog | null>(null)
 const savedWorkingBlog = ref<IWorkingBlog | null>(null)
 const loading = ref(false)
@@ -101,6 +98,7 @@ watch(savedBlog, (newBlog) => {
     blogTitle.value = newBlog.title[locale.value]
     blogContent.value = newBlog.content[locale.value]
     category.value = newBlog.category as TBlogCategory
+    isFeatured.value = newBlog.featured || false
   }
 })
 
@@ -118,7 +116,6 @@ const toolbarControls = computed(() => [
     icon: 'mdi-format-bold',
     tooltip: t('admin.blog.create.boldTooltip'),
     action: toggleBold,
-    isActive: isBoldActive.value,
     shortcut: 'b',
   },
   {
@@ -126,7 +123,6 @@ const toolbarControls = computed(() => [
     icon: 'mdi-format-italic',
     tooltip: t('admin.blog.create.italicTooltip'),
     action: toggleItalic,
-    isActive: isItalicActive.value,
     shortcut: 'i',
   },
   {
@@ -134,7 +130,6 @@ const toolbarControls = computed(() => [
     icon: 'mdi-format-underline',
     tooltip: t('admin.blog.create.underlineTooltip'),
     action: toggleUnderline,
-    isActive: isUnderlineActive.value,
     shortcut: 'u',
   },
   {
@@ -142,42 +137,42 @@ const toolbarControls = computed(() => [
     icon: 'mdi-format-header-1',
     tooltip: t('admin.blog.create.headerTooltip'),
     action: insertHeader,
-    isActive: false,
   },
   {
     id: 'subheader',
     icon: 'mdi-format-header-2',
     tooltip: t('admin.blog.create.subheaderTooltip'),
     action: insertSubheader,
-    isActive: false,
   },
   {
     id: 'list',
     icon: 'mdi-format-list-bulleted',
     tooltip: t('admin.blog.create.listTooltip'),
     action: insertList,
-    isActive: false,
   },
   {
     id: 'numbered-list',
     icon: 'mdi-format-list-numbered',
     tooltip: t('admin.blog.create.numberedListTooltip'),
     action: insertNumberedList,
-    isActive: false,
   },
   {
     id: 'inline-code',
     icon: 'mdi-code-tags',
     tooltip: t('admin.blog.create.inlineCodeTooltip'),
     action: insertInlineCode,
-    isActive: false,
   },
   {
     id: 'code-block',
     icon: 'mdi-code-block-tags',
     tooltip: t('admin.blog.create.codeBlockTooltip'),
     action: insertCodeBlock,
-    isActive: false,
+  },
+  {
+    id: 'image',
+    icon: 'mdi-image',
+    tooltip: t('admin.blog.create.imageTooltip'),
+    action: insertImage,
   },
 ])
 
@@ -193,9 +188,6 @@ function updateSelection() {
     if (textarea) {
       selectionStart.value = textarea.selectionStart
       selectionEnd.value = textarea.selectionEnd
-      checkBoldState()
-      checkItalicState()
-      checkUnderlineState()
     }
   }
 }
@@ -203,96 +195,6 @@ function updateSelection() {
 function getTextareaElement() {
   // @ts-expect-error HTMLElement
   return textEditor.value?.$el?.querySelector('textarea')
-}
-
-function checkBoldState() {
-  const content = blogContent.value
-  const start = selectionStart.value
-
-  let beforeBold = false
-  let afterBold = false
-
-  // Check for ** before cursor
-  for (let i = start - 1; i >= 1; i--) {
-    if (content.slice(i - 1, i + 1) === '**') {
-      beforeBold = true
-      break
-    }
-    if (content[i] === '\n')
-      break
-  }
-
-  // Check for ** after cursor
-  for (let i = start; i < content.length - 1; i++) {
-    if (content.slice(i, i + 2) === '**') {
-      afterBold = true
-      break
-    }
-    if (content[i] === '\n')
-      break
-  }
-
-  isBoldActive.value = beforeBold && afterBold
-}
-
-function checkItalicState() {
-  const content = blogContent.value
-  const start = selectionStart.value
-
-  let beforeItalic = false
-  let afterItalic = false
-
-  // Check for * before cursor (but not **)
-  for (let i = start - 1; i >= 0; i--) {
-    if (content[i] === '*' && content[i - 1] !== '*' && content[i + 1] !== '*') {
-      beforeItalic = true
-      break
-    }
-    if (content[i] === '\n')
-      break
-  }
-
-  // Check for * after cursor (but not **)
-  for (let i = start; i < content.length; i++) {
-    if (content[i] === '*' && content[i - 1] !== '*' && content[i + 1] !== '*') {
-      afterItalic = true
-      break
-    }
-    if (content[i] === '\n')
-      break
-  }
-
-  isItalicActive.value = beforeItalic && afterItalic
-}
-
-function checkUnderlineState() {
-  const content = blogContent.value
-  const start = selectionStart.value
-
-  let beforeUnderline = false
-  let afterUnderline = false
-
-  // Check for <u> before cursor
-  for (let i = start - 1; i >= 2; i--) {
-    if (content.slice(i - 2, i + 1) === '<u>') {
-      beforeUnderline = true
-      break
-    }
-    if (content[i] === '\n')
-      break
-  }
-
-  // Check for </u> after cursor
-  for (let i = start; i < content.length - 3; i++) {
-    if (content.slice(i, i + 4) === '</u>') {
-      afterUnderline = true
-      break
-    }
-    if (content[i] === '\n')
-      break
-  }
-
-  isUnderlineActive.value = beforeUnderline && afterUnderline
 }
 
 // ========================
@@ -379,32 +281,99 @@ function wrapSelectedText(startWrapper: string, endWrapper: string = startWrappe
 }
 
 // ========================
-// FORMATTING ACTIONS
+// IMAGE HANDLING
 // ========================
-function generateRandomId() {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+function insertImage() {
+  // Create a file input element
+  const fileInput = document.createElement('input')
+  fileInput.type = 'file'
+  fileInput.accept = 'image/*'
+  fileInput.style.display = 'none'
+
+  fileInput.addEventListener('change', async (event) => {
+    const file = (event.target as HTMLInputElement).files?.[0]
+    if (!file)
+      return
+
+    try {
+      // Convert file to base64 string
+      const base64String = await fileToBase64(file)
+
+      // Upload image using blogStore
+      const imageUrl = await blogStore.addImage(base64String)
+
+      // Check if current line is empty
+      const textarea = getTextareaElement()
+      if (!textarea)
+        return
+
+      const start = textarea.selectionStart
+      const beforeText = blogContent.value.slice(0, start)
+      const lines = beforeText.split('\n')
+      const currentLine = lines[lines.length - 1]
+
+      // Create simple image tag with only src
+      const imageTag = `<img src="${imageUrl}">`
+
+      // Insert image tag - add newline before only if current line is not empty
+      if (currentLine.trim() !== '') {
+        insertAtCursor(`\n${imageTag}`)
+      }
+      else {
+        insertAtCursor(imageTag)
+      }
+    }
+    catch (error) {
+      console.error('Error uploading image:', error)
+      // You might want to show a user-friendly error message here
+    }
+  })
+
+  // Trigger file selection
+  document.body.appendChild(fileInput)
+  fileInput.click()
+  document.body.removeChild(fileInput)
 }
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result as string
+      resolve(result)
+    }
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+}
+
+// ========================
+// FORMATTING ACTIONS
+// ========================
 function insertHeader() {
-  const randomId = generateRandomId()
+  const randomId = generateRandomText()
   wrapSelectedText(`<h2 id="${randomId}">\n`, '\n</h2>')
 }
 
 function insertSubheader() {
-  const randomId = generateRandomId()
+  const randomId = generateRandomText()
   wrapSelectedText(`<h3 id="${randomId}">\n`, '\n</h3>')
 }
 
 function toggleBold() {
-  wrapSelectedText('**')
+  wrapSelectedText('<strong>', '</strong>')
 }
 
 function toggleItalic() {
-  wrapSelectedText('*')
+  wrapSelectedText('<em>', '</em>')
 }
 
 function toggleUnderline() {
   wrapSelectedText('<u>', '</u>')
+}
+
+function insertInlineCode() {
+  wrapSelectedText('<code>', '</code>')
 }
 
 function insertList() {
@@ -586,10 +555,6 @@ function insertNumberedList() {
   }
 }
 
-function insertInlineCode() {
-  wrapSelectedText('`')
-}
-
 function insertCodeBlock() {
   const textarea = getTextareaElement()
   if (!textarea)
@@ -738,32 +703,30 @@ function handleKeydown(event: KeyboardEvent) {
     // Handle empty numbered list items
     if (emptyNumberedMatch) {
       event.preventDefault()
-      const mainNum = emptyNumberedMatch[1]
       const newBeforeText = lines.slice(0, -1).join('\n')
       const separator = newBeforeText
         ? '\n'
         : ''
 
-      if (mainNum === '1') {
-        // If it's 1., convert to 1.1.
-        blogContent.value = `${newBeforeText}${separator}1.1. ${afterText}`
-
-        nextTick(() => {
-          textarea.focus()
-          const newPosition = newBeforeText.length + separator.length + '1.1. '.length
-          textarea.setSelectionRange(newPosition, newPosition)
-        })
+      // Find the previous line with content to determine the correct main number
+      let correctMainNum = '1'
+      for (let i = lines.length - 2; i >= 0; i--) {
+        const line = lines[i]
+        const prevNumberedMatch = line.match(/^(\d+)\. /)
+        if (prevNumberedMatch) {
+          correctMainNum = prevNumberedMatch[1]
+          break
+        }
       }
-      else {
-        // If it's any other number (2., 3., etc.), convert to 1.1.
-        blogContent.value = `${newBeforeText}${separator}1.1. ${afterText}`
 
-        nextTick(() => {
-          textarea.focus()
-          const newPosition = newBeforeText.length + separator.length + '1.1. '.length
-          textarea.setSelectionRange(newPosition, newPosition)
-        })
-      }
+      // Convert to sub-item using the correct main number
+      blogContent.value = `${newBeforeText}${separator}${correctMainNum}.1. ${afterText}`
+
+      nextTick(() => {
+        textarea.focus()
+        const newPosition = newBeforeText.length + separator.length + `${correctMainNum}.1. `.length
+        textarea.setSelectionRange(newPosition, newPosition)
+      })
 
       return
     }
@@ -834,16 +797,10 @@ const contentBlocks = computed(() => {
       })
     }
     else if (part.trim()) {
-      // Regular text content - process inline formatting
+      // Regular text content - HTML tags are already in place, just handle inline code
       const processedContent = part
-        // Bold text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        // Italic text (single * but not part of **)
-        .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
-        // Underline text
-        .replace(/<u>(.*?)<\/u>/g, '<u>$1</u>')
-        // Inline code - use proper regex to capture only content between backticks
-        .replace(/`([^`]+)`/g, '|||INLINE_CODE_START|||$1|||INLINE_CODE_END|||')
+        // Handle inline code separately for preview
+        .replace(/<code>([^<]+)<\/code>/g, '|||INLINE_CODE_START|||$1|||INLINE_CODE_END|||')
         // Convert numbered sub-list items to HTML (must come before main numbered list)
         .replace(/^(\d+)\.(\d+)\. (.+)$/gm, '<li style="margin-left: 20px;">$3</li>')
         // Convert main numbered list items to HTML
@@ -865,8 +822,8 @@ const contentBlocks = computed(() => {
             return `<ul>${match.replace(/\n/g, '')}</ul>`
           }
         })
-        // Line breaks (after header processing)
-        .replace(/\n/g, '<br>')
+        // Line breaks (after header processing, but preserve image tags on their own lines)
+        .replace(/\n(?!<img)/g, '<br>')
 
       blocks.push({
         type: 'text',
@@ -899,14 +856,14 @@ function generateTableOfContents(content: string): ITableOfContentsItem[] {
   let subHeaderCount = 0
 
   // Find all header and subheader tags - updated regex to handle multiline content
-  const headerRegex = /<(header|subheader) id="([^"]+)"[^>]*>([^<]*(?:<(?!\/\1>)[^<]*)*)<\/\1>/g
+  const headerRegex = /<(h2|h3) id="([^"]+)"[^>]*>([^<]*(?:<(?!\/\1>)[^<]*)*)<\/\1>/g
   const matches = Array.from(content.matchAll(headerRegex))
 
   for (const match of matches) {
     const [, tagType, id, titleText] = match
     const cleanTitle = titleText.trim()
 
-    if (tagType === 'header') {
+    if (tagType === 'h2') {
       currentHeaderLevel++
       subHeaderCount = 0 // Reset subheader count for new header
 
@@ -917,7 +874,7 @@ function generateTableOfContents(content: string): ITableOfContentsItem[] {
         subLevel: null,
       })
     }
-    else if (tagType === 'subheader') {
+    else if (tagType === 'h3') {
       subHeaderCount++
       const mainLevel = currentHeaderLevel > 0
         ? currentHeaderLevel
@@ -1082,9 +1039,6 @@ async function deleteBlog() {
             v-for="control in toolbarControls"
             :key="control.id"
             icon
-            :color="control.isActive
-              ? 'primary'
-              : ''"
             size="small"
             class="mx-1"
             @click="control.action"

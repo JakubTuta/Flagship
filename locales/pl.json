@@ -219,7 +219,8 @@
         "headerTooltip": "Nagłówek",
         "subheaderTooltip": "Podtytuł",
         "categoryInput": "Kategoria",
-        "featuredCheckbox": "Wyróżniony post"
+        "featuredCheckbox": "Wyróżniony post",
+        "imageTooltip": "Dodaj zdjęcie"
       },
       "notPublished": "Nie opublikowane"
     }
@@ -265,6 +266,15 @@
     "noResults": {
       "title": "Brak blogów z podanej kategorii",
       "subtitle": "Spróbuj inaczej dostosować filtry, albo wróć kiedy indziej"
-    }
+    },
+    "loading": "Ładowanie...",
+    "views": "Wyświetlenia",
+    "notFound": "Nie znaleziono artykułu",
+    "backToBlogs": "Powrót",
+    "anonymous": "Anonimowy",
+    "relatedLinks": "Powiązane linki",
+    "relatedProjects": "Powiązane projekty",
+    "featured1": "Wyróżnione",
+    "tableOfContents": "Spis treści"
   }
 }

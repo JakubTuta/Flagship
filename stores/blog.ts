@@ -10,7 +10,7 @@ export const useBlogStore = defineStore('blog', () => {
   const workingBlogs = ref<IWorkingBlog[]>([])
   const loading = ref(false)
 
-  const { firestore } = useFirebase()
+  const { firestore, storage } = useFirebase()
   const blogsCollection = collection(firestore, 'blogs')
   const workingBlogsCollection = collection(firestore, 'workingBlogs')
 
@@ -112,6 +112,46 @@ export const useBlogStore = defineStore('blog', () => {
     }
   }
 
+  async function getBlogUser(blogId: string | null) {
+    if (!blogId) {
+      console.error('Blog ID is missing.')
+
+      return null
+    }
+
+    const foundBlog = publishedBlogs.value.find(blog => blog.reference?.id === blogId)
+    if (foundBlog) {
+      return foundBlog
+    }
+
+    try {
+      loading.value = true
+
+      const documentRef = doc(blogsCollection, blogId)
+      const document = await getDoc(documentRef)
+      if (!document.exists()) {
+        console.warn(`Blog with id ${blogId} not found.`)
+
+        return null
+      }
+
+      const blog = mapIBlogDecoded(document.data(), document.ref)
+
+      if (blog.isPublished)
+        return blog
+    }
+    catch (error) {
+      console.error('Error fetching blog user by ID:', error)
+
+      return null
+    }
+    finally {
+      loading.value = false
+    }
+
+    return null
+  }
+
   async function deleteBlog(userData: IUser | null, blog: IBlog | null) {
     if (!blog || !userData) {
       console.error('Blog or user data is missing.')
@@ -186,9 +226,11 @@ export const useBlogStore = defineStore('blog', () => {
       await setDoc(docRef, removeReferenceField(blog))
 
       blog.reference = docRef
-      blogs.value.push(blog)
+
+      const decodedBlog = mapIBlogDecoded(blog, docRef)
+      blogs.value.push(decodedBlog)
       if (blog.isPublished) {
-        publishedBlogs.value.push(blog)
+        publishedBlogs.value.push(decodedBlog)
       }
 
       return blog
@@ -212,15 +254,17 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       await updateDoc(blogRef, removeReferenceField(blog) as any)
       const foundBlog = blogs.value.find(b => b.reference?.id === blogRef.id)
+
+      const decodedBlog = mapIBlogDecoded(blog, blogRef)
       if (foundBlog) {
-        Object.assign(foundBlog, blog)
+        Object.assign(foundBlog, decodedBlog)
       }
       else {
-        blog.reference = blogRef
-        blogs.value.push(blog)
+        decodedBlog.reference = blogRef
+        blogs.value.push(decodedBlog)
       }
 
-      return blog
+      return decodedBlog
     }
     catch (error) {
       console.error('Error updating blog:', error)
@@ -271,6 +315,12 @@ export const useBlogStore = defineStore('blog', () => {
     }
   }
 
+  const addImage = (image: string) => {
+    const imageUrl = createAndUploadImage('blogs', image, storage)
+
+    return imageUrl
+  }
+
   return {
     publishedBlogs,
     blogs,
@@ -281,11 +331,13 @@ export const useBlogStore = defineStore('blog', () => {
     fetchPublishedBlogs,
     fetchWorkingBlogs,
     getBlog,
+    getBlogUser,
     deleteBlog,
     getWorkingBlog,
     createBlog,
     updateBlog,
     saveWorkingBlog,
     deleteWorkingBlog,
+    addImage,
   }
 })
