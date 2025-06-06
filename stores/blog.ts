@@ -187,6 +187,9 @@ export const useBlogStore = defineStore('blog', () => {
 
       blog.reference = docRef
       blogs.value.push(blog)
+      if (blog.isPublished) {
+        publishedBlogs.value.push(blog)
+      }
 
       return blog
     }

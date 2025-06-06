@@ -79,7 +79,10 @@ function openProjectDetails(project: IProject) {
 <template>
   <div class="projects-page">
     <!-- Hero Section -->
-    <div class="hero-section">
+    <div
+      class="hero-section d-flex align-center"
+      :class="{'h-100vh': mobile}"
+    >
       <v-container>
         <v-row justify="center">
           <v-col

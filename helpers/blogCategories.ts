@@ -16,6 +16,9 @@ export const blogCategories: string[] = [
   'other',
 ]
 
-export function blogCategoriesValues(t: any): TBlogCategory[] {
-  return blogCategories.map(category => t(`blog.categories.${category}`) as TBlogCategory)
+export function blogCategoriesValues(t: any) {
+  return blogCategories.map(category => ({
+    title: t(`blog.categories.${category}`),
+    value: category,
+  }))
 }

@@ -55,43 +55,43 @@ export default defineNuxtPlugin((app) => {
           dark: true,
           colors: {
             // Primary colors - brighter sage for dark theme
-            'primary': 'rgb(142, 160, 110)', // Lighter sage for dark theme
-            'primary-lighten-1': 'rgb(168, 176, 140)',
-            'primary-lighten-2': 'rgb(194, 201, 170)',
-            'primary-darken-1': 'rgb(118, 133, 91)',
-            'primary-darken-2': 'rgb(94, 106, 73)',
+            'primary': 'rgb(152, 170, 120)', // Brighter sage
+            'primary-lighten-1': 'rgb(178, 186, 150)',
+            'primary-lighten-2': 'rgb(204, 211, 180)',
+            'primary-darken-1': 'rgb(128, 143, 101)',
+            'primary-darken-2': 'rgb(104, 116, 83)',
 
             // Secondary colors - brighter purple for dark theme
-            'secondary': 'rgb(126, 118, 164)', // Lighter purple for dark theme
-            'secondary-lighten-1': 'rgb(151, 144, 184)',
-            'secondary-lighten-2': 'rgb(176, 170, 204)',
-            'secondary-darken-1': 'rgb(101, 94, 131)',
-            'secondary-darken-2': 'rgb(76, 71, 98)',
+            'secondary': 'rgb(136, 128, 174)', // Brighter purple
+            'secondary-lighten-1': 'rgb(161, 154, 194)',
+            'secondary-lighten-2': 'rgb(186, 180, 214)',
+            'secondary-darken-1': 'rgb(111, 104, 141)',
+            'secondary-darken-2': 'rgb(86, 81, 108)',
 
-            // Accent colors - adjusted for dark theme
-            'accent': 'rgb(215, 179, 132)', // Lighter warm brown
-            'info': 'rgb(103, 167, 210)', // Brighter blue
-            'success': 'rgb(119, 182, 148)', // Brighter green
-            'warning': 'rgb(228, 180, 97)', // Brighter orange
-            'error': 'rgb(205, 123, 123)', // Brighter red
+            // Accent colors - brighter for dark theme
+            'accent': 'rgb(225, 189, 142)', // Brighter warm brown
+            'info': 'rgb(113, 177, 220)', // Brighter blue
+            'success': 'rgb(129, 192, 158)', // Brighter green
+            'warning': 'rgb(238, 190, 107)', // Brighter orange
+            'error': 'rgb(215, 133, 133)', // Brighter red
 
-            // Background colors for dark theme
-            'background': 'rgb(18, 20, 22)', // Very dark background
-            'surface': 'rgb(28, 32, 36)', // Dark surface for cards
-            'surface-variant': 'rgb(38, 42, 46)', // Slightly lighter surface
-            'surface-variant-light': 'rgb(48, 52, 56)', // Lighter variant for contrast
-            'surface-variant-dark': 'rgb(24, 28, 32)', // Darker variant for contrast
+            // Background colors - significantly brighter
+            'background': 'rgb(32, 36, 40)', // Much brighter background
+            'surface': 'rgb(48, 54, 60)', // Brighter surface for cards
+            'surface-variant': 'rgb(58, 64, 70)', // Brighter surface variant
+            'surface-variant-light': 'rgb(68, 74, 80)', // Even brighter variant
+            'surface-variant-dark': 'rgb(42, 48, 54)', // Brighter dark variant
 
             // Text colors for dark theme
             'on-primary': 'rgb(255, 255, 255)', // White text on primary
             'on-secondary': 'rgb(255, 255, 255)', // White text on secondary
-            'on-background': 'rgb(230, 230, 230)', // Light text on dark background
-            'on-surface': 'rgb(230, 230, 230)', // Light text on dark surface
-            'on-surface-variant': 'rgb(180, 180, 180)', // Medium light text
+            'on-background': 'rgb(240, 240, 240)', // Brighter text on dark background
+            'on-surface': 'rgb(240, 240, 240)', // Brighter text on dark surface
+            'on-surface-variant': 'rgb(200, 200, 200)', // Brighter medium text
 
             // Transparent variants (for CSS usage)
-            'primary-transparent': 'rgb(142, 160, 110)',
-            'secondary-transparent': 'rgb(126, 118, 164)',
+            'primary-transparent': 'rgb(152, 170, 120)',
+            'secondary-transparent': 'rgb(136, 128, 174)',
           },
         },
       },

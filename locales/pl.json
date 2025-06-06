@@ -254,6 +254,17 @@
       "title": "Najnowsze posty",
       "subtitle": "Najnowsze spostrzeżenia i odkrycia z mojej bieżącej pracy programistycznej."
     },
-    "loadMore": "Załaduj więcej"
+    "loadMore": "Załaduj więcej",
+    "filters": {
+      "allCategories": "Wszystkie kategorie",
+      "category": "Kategoria",
+      "sortByDate": "Sortuj od najnowszych do najstarszych",
+      "sortByViews": "Sortuj od najczęściej czytanych",
+      "sortBy": "Sortowanie"
+    },
+    "noResults": {
+      "title": "Brak blogów z podanej kategorii",
+      "subtitle": "Spróbuj inaczej dostosować filtry, albo wróć kiedy indziej"
+    }
   }
 }

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import type { TBlogCategory } from '~/helpers/blogCategories'
 
 const { t, locale } = useI18n()
+const { isDark } = useThemeStore()
 
 useSeo({
   url: '/blog',
@@ -31,25 +33,69 @@ watch(locale, () => {
 
 const { mobile } = useDisplay()
 
-// Sample data - replace with your actual data fetching
-const loadingMore = ref(false)
-
 const blogsPerLoad = 5
 const displayedBlogsCount = ref(blogsPerLoad)
+const initialLoad = ref(true)
+
+// Filter and sort state
+const selectedCategory = ref<TBlogCategory | 'all'>('all')
+const sortBy = ref<'date' | 'views'>('date')
 
 const blogStore = useBlogStore()
-const { publishedBlogs } = storeToRefs(blogStore)
+const { publishedBlogs, loading } = storeToRefs(blogStore)
 
 onMounted(async () => {
-  if (!publishedBlogs.value.length)
+  if (!publishedBlogs.value.length) {
     await blogStore.fetchPublishedBlogs()
+  }
+  initialLoad.value = false
 })
 
-const featuredBlogs = computed(() => publishedBlogs.value.filter(blog => blog.featured))
-const regularBlogs = computed(() => publishedBlogs.value.filter(blog => !blog.featured))
+// Filter and sort blogs
+const filteredAndSortedBlogs = computed(() => {
+  let blogs = [...publishedBlogs.value]
+
+  // Filter by category
+  if (selectedCategory.value !== 'all') {
+    blogs = blogs.filter(blog => blog.category === selectedCategory.value)
+  }
+
+  // Sort blogs
+  blogs.sort((a, b) => {
+    if (sortBy.value === 'views') {
+      return (b.viewCount || 0) - (a.viewCount || 0)
+    }
+    else {
+      // Sort by date
+      const dateA = a.publishDate
+        ? new Date(a.publishDate).getTime()
+        : 0
+      const dateB = b.publishDate
+        ? new Date(b.publishDate).getTime()
+        : 0
+
+      return dateB - dateA
+    }
+  })
+
+  return blogs
+})
+
+const featuredBlogs = computed(() => filteredAndSortedBlogs.value.filter(blog => blog.featured))
+const regularBlogs = computed(() => filteredAndSortedBlogs.value.filter(blog => !blog.featured))
 const displayedRegularBlogs = computed(() => regularBlogs.value.slice(0, displayedBlogsCount.value))
 
 const hasMoreBlogs = computed(() => displayedBlogsCount.value < regularBlogs.value.length)
+
+const showFeaturedSkeleton = computed(() => loading.value && initialLoad.value)
+const showRegularSkeleton = computed(() => loading.value && initialLoad.value)
+
+// Available categories for filter
+const availableCategories = computed(() => {
+  const categories = [...new Set(publishedBlogs.value.map(blog => blog.category))]
+
+  return categories.sort()
+})
 
 function formatDate(date: Date | null): string {
   if (!date)
@@ -69,19 +115,54 @@ function truncateContent(content: string, maxLength: number = 150): string {
   return `${content.substring(0, maxLength).trim()}...`
 }
 
-async function loadMoreBlogs() {
-  loadingMore.value = true
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 800))
-  displayedBlogsCount.value += blogsPerLoad
-  loadingMore.value = false
+function formatViewCount(count: number): string {
+  if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}k`
+  }
+
+  return count.toString()
 }
+
+function getCategoryColor(category: TBlogCategory): string {
+  const colors: Record<TBlogCategory, string> = {
+    'frontend': 'blue',
+    'backend': 'green',
+    'fullstack': 'purple',
+    'web dev': 'indigo',
+    'data bases': 'orange',
+    'cloud': 'cyan',
+    'algorithms': 'red',
+    'devops': 'teal',
+    'career': 'pink',
+    'productivity': 'amber',
+    'work-life': 'lime',
+    'personal': 'deep-purple',
+    'other': 'grey',
+  }
+
+  return colors[category] || 'grey'
+}
+
+function loadMoreBlogs() {
+  if (!hasMoreBlogs.value)
+    return
+
+  displayedBlogsCount.value += blogsPerLoad
+}
+
+// Reset pagination when filters change
+watch([selectedCategory, sortBy], () => {
+  displayedBlogsCount.value = blogsPerLoad
+})
 </script>
 
 <template>
   <div class="blog-page">
     <!-- Hero Section -->
-    <div class="hero-section">
+    <div
+      class="hero-section d-flex align-center"
+      :class="{'h-100vh': mobile}"
+    >
       <v-container>
         <v-row justify="center">
           <v-col
@@ -101,9 +182,69 @@ async function loadMoreBlogs() {
       </v-container>
     </div>
 
+    <!-- Filters Section -->
+    <v-container class="py-8">
+      <v-row justify="center">
+        <v-col
+          cols="12"
+          md="10"
+        >
+          <v-card
+            class="pa-4"
+            variant="outlined"
+          >
+            <v-row
+              align="center"
+              class="mt-2"
+            >
+              <v-col
+                cols="12"
+                :md="mobile
+                  ? 12
+                  : 6"
+              >
+                <v-select
+                  v-model="selectedCategory"
+                  :items="[
+                    {'title': $t('blog.filters.allCategories'),
+                     'value': 'all'},
+                    ...availableCategories.map(cat => ({
+                      'title': $t(`blog.categories.${cat}`),
+                      'value': cat,
+                    })),
+                  ]"
+                  :label="$t('blog.filters.category')"
+                  prepend-inner-icon="mdi-filter"
+                />
+              </v-col>
+
+              <v-col
+                cols="12"
+                :md="mobile
+                  ? 12
+                  : 6"
+              >
+                <v-select
+                  v-model="sortBy"
+                  :items="[
+                    {'title': $t('blog.filters.sortByDate'),
+                     'value': 'date'},
+                    {'title': $t('blog.filters.sortByViews'),
+                     'value': 'views'},
+                  ]"
+                  :label="$t('blog.filters.sortBy')"
+                  prepend-inner-icon="mdi-sort"
+                />
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <!-- Featured Blogs Section -->
     <v-container
-      v-if="featuredBlogs.length > 0"
+      v-if="featuredBlogs.length > 0 || showFeaturedSkeleton"
       class="py-16"
     >
       <v-row justify="center">
@@ -132,13 +273,63 @@ async function loadMoreBlogs() {
         class="featured-blog-list"
         lines="three"
       >
+        <!-- Featured Blog Skeletons -->
+        <template v-if="showFeaturedSkeleton">
+          <v-list-item
+            v-for="n in 2"
+            :key="`featured-skeleton-${n}`"
+            class="featured-blog-item mb-8 pa-8"
+          >
+            <template #prepend>
+              <v-skeleton-loader
+                :width="mobile
+                  ? 80
+                  : 120"
+                :height="mobile
+                  ? 80
+                  : 120"
+                type="avatar"
+                class="blog-image-avatar"
+              />
+            </template>
+
+            <div class="flex-grow-1">
+              <v-skeleton-loader
+                type="heading"
+                class="mb-2"
+              />
+
+              <v-skeleton-loader
+                type="paragraph"
+                class="mb-3"
+              />
+
+              <div class="d-flex align-center justify-space-between">
+                <v-skeleton-loader
+                  type="text"
+                  width="120"
+                />
+
+                <v-skeleton-loader
+                  type="button"
+                  width="100"
+                />
+              </div>
+            </div>
+          </v-list-item>
+        </template>
+
+        <!-- Actual Featured Blogs -->
         <template
           v-for="(blog, index) in featuredBlogs"
           :key="blog.value"
         >
           <v-list-item
-            class="featured-blog-item mb-4 pa-6"
-            :class="{'mb-8': index === featuredBlogs.length - 1}"
+            class="featured-blog-item blog-item-animate ma-4 mb-8 pa-8"
+            :style="{'animation-delay': `${index * 150}ms`}"
+            :elevation="isDark
+              ? 20
+              : 5"
           >
             <template #prepend>
               <v-avatar
@@ -172,16 +363,14 @@ async function loadMoreBlogs() {
               <v-chip
                 color="warning"
                 size="small"
-                variant="flat"
+                variant="elevated"
                 class="ml-2"
               >
                 <v-icon
-                  start
                   size="small"
                 >
                   mdi-star
                 </v-icon>
-                {{ $t('blog.featured.badge') }}
               </v-chip>
             </v-list-item-title>
 
@@ -190,6 +379,31 @@ async function loadMoreBlogs() {
                 ? 120
                 : 200) }}
             </v-list-item-subtitle>
+
+            <!-- Category and Stats -->
+            <div class="d-flex align-center ga-2 mb-3 flex-wrap">
+              <v-chip
+                :color="getCategoryColor(blog.category)"
+                size="small"
+                variant="flat"
+              >
+                {{ $t(`blog.categories.${blog.category}`) }}
+              </v-chip>
+
+              <v-chip
+                size="small"
+                variant="flat"
+              >
+                <v-icon
+                  start
+                  size="small"
+                  class="mr-1"
+                >
+                  mdi-eye
+                </v-icon>
+                {{ formatViewCount(blog.viewCount || 0) }}
+              </v-chip>
+            </div>
 
             <div class="d-flex align-center justify-space-between flex-wrap">
               <div class="d-flex align-center">
@@ -225,7 +439,7 @@ async function loadMoreBlogs() {
 
           <v-divider
             v-if="index < featuredBlogs.length - 1"
-            class="my-4"
+            class="my-8"
           />
         </template>
       </v-list>
@@ -256,14 +470,65 @@ async function loadMoreBlogs() {
 
       <v-list
         class="regular-blog-list"
-        lines="two"
+        lines="three"
       >
+        <!-- Regular Blog Skeletons -->
+        <template v-if="showRegularSkeleton">
+          <v-list-item
+            v-for="n in blogsPerLoad"
+            :key="`regular-skeleton-${n}`"
+            class="regular-blog-item mb-6 pa-6"
+          >
+            <template #prepend>
+              <v-skeleton-loader
+                :width="mobile
+                  ? 64
+                  : 80"
+                :height="mobile
+                  ? 64
+                  : 80"
+                type="avatar"
+                class="blog-image-avatar"
+              />
+            </template>
+
+            <div class="flex-grow-1">
+              <v-skeleton-loader
+                type="heading"
+                class="mb-1"
+              />
+
+              <v-skeleton-loader
+                type="paragraph"
+                class="mb-2"
+              />
+
+              <div class="d-flex align-center justify-space-between">
+                <v-skeleton-loader
+                  type="text"
+                  width="100"
+                />
+
+                <v-skeleton-loader
+                  type="button"
+                  width="80"
+                />
+              </div>
+            </div>
+          </v-list-item>
+        </template>
+
+        <!-- Actual Regular Blogs -->
         <template
           v-for="(blog, index) in displayedRegularBlogs"
           :key="blog.value"
         >
           <v-list-item
-            class="regular-blog-item mb-2 pa-4"
+            class="regular-blog-item blog-item-animate ma-2 mb-6 pa-6"
+            :style="{'animation-delay': `${(index + featuredBlogs.length) * 150}ms`}"
+            :elevation="isDark
+              ? 10
+              : 3"
           >
             <template #prepend>
               <v-avatar
@@ -302,6 +567,31 @@ async function loadMoreBlogs() {
                 : 140) }}
             </v-list-item-subtitle>
 
+            <!-- Category and Stats -->
+            <div class="d-flex align-center ga-2 mb-2 flex-wrap">
+              <v-chip
+                :color="getCategoryColor(blog.category)"
+                size="x-small"
+                variant="flat"
+              >
+                {{ $t(`blog.categories.${blog.category}`) }}
+              </v-chip>
+
+              <v-chip
+                size="x-small"
+                variant="flat"
+              >
+                <v-icon
+                  start
+                  size="small"
+                  class="mr-1"
+                >
+                  mdi-eye
+                </v-icon>
+                {{ formatViewCount(blog.viewCount || 0) }}
+              </v-chip>
+            </div>
+
             <div class="d-flex align-center justify-space-between">
               <div class="d-flex align-center">
                 <v-icon
@@ -323,7 +613,7 @@ async function loadMoreBlogs() {
                 size="small"
                 class="read-more-btn"
               >
-                {{ $t('blog.readMore', 'Read More') }}
+                {{ $t('blog.readMore') }}
                 <v-icon
                   end
                   size="small"
@@ -336,10 +626,38 @@ async function loadMoreBlogs() {
 
           <v-divider
             v-if="index < displayedRegularBlogs.length - 1"
-            class="my-2"
+            class="my-6"
           />
         </template>
       </v-list>
+
+      <!-- No Results Message -->
+      <v-row
+        v-if="!loading && regularBlogs.length === 0 && featuredBlogs.length === 0"
+        justify="center"
+        class="mt-8"
+      >
+        <v-col
+          cols="12"
+          class="text-center"
+        >
+          <v-icon
+            size="64"
+            color="on-surface-variant"
+            class="mb-4"
+          >
+            mdi-magnify-close
+          </v-icon>
+
+          <h3 class="text-h5 mb-2">
+            {{ $t('blog.noResults.title') }}
+          </h3>
+
+          <p class="text-body-1 text-on-surface-variant">
+            {{ $t('blog.noResults.subtitle') }}
+          </p>
+        </v-col>
+      </v-row>
 
       <!-- Load More Button -->
       <v-row
@@ -352,7 +670,6 @@ async function loadMoreBlogs() {
           class="text-center"
         >
           <v-btn
-            :loading="loadingMore"
             color="primary"
             variant="outlined"
             size="large"
@@ -366,45 +683,6 @@ async function loadMoreBlogs() {
         </v-col>
       </v-row>
     </v-container>
-
-    <!-- Call to Action -->
-    <!--
-      <v-container class="py-16">
-      <v-row justify="center">
-      <v-col
-      cols="12"
-      md="8"
-      class="text-center"
-      >
-      <v-card
-      class="cta-card pa-8"
-      color="primary"
-      variant="flat"
-      >
-      <h3 class="text-h4 font-weight-bold mb-4 text-white">
-      {{ $t('blog.cta.title', 'Stay Updated') }}
-      </h3>
-
-      <p class="text-h6 mb-6 text-white opacity-90">
-      {{ $t('blog.cta.subtitle', 'Get notified when I publish new articles and tutorials.') }}
-      </p>
-
-      <v-btn
-      href="mailto:jakubtutka02@gmail.com?subject=Blog Notifications"
-      color="white"
-      size="large"
-      variant="elevated"
-      >
-      <v-icon start>
-      mdi-email
-      </v-icon>
-      {{ $t('blog.cta.button', 'Subscribe') }}
-      </v-btn>
-      </v-card>
-      </v-col>
-      </v-row>
-      </v-container>
-    -->
   </div>
 </template>
 
@@ -448,11 +726,30 @@ async function loadMoreBlogs() {
   margin: 0 auto;
 }
 
+/* Blog item slide-in animation */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.blog-item-animate {
+  animation: slideInFromLeft 0.6s ease-out forwards;
+  animation-fill-mode: both;
+  opacity: 0;
+}
+
 .featured-blog-list .v-list-item {
   background: rgb(var(--v-theme-surface));
   border-radius: 16px !important;
   transition: all 0.3s ease;
   cursor: pointer;
+  min-height: 180px;
 }
 
 .featured-blog-list .v-list-item:hover {
@@ -465,6 +762,7 @@ async function loadMoreBlogs() {
   border-radius: 12px !important;
   transition: all 0.2s ease;
   cursor: pointer;
+  min-height: 120px;
 }
 
 .regular-blog-list .v-list-item:hover {
@@ -481,11 +779,6 @@ async function loadMoreBlogs() {
   flex-shrink: 0;
 }
 
-.cta-card {
-  border-radius: 16px !important;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%) !important;
-}
-
 /* Responsive adjustments */
 @media (max-width: 960px) {
   .hero-title {
@@ -494,6 +787,14 @@ async function loadMoreBlogs() {
 
   .section-title {
     font-size: 2rem;
+  }
+
+  .featured-blog-list .v-list-item {
+    min-height: 150px;
+  }
+
+  .regular-blog-list .v-list-item {
+    min-height: 100px;
   }
 }
 
@@ -508,7 +809,36 @@ async function loadMoreBlogs() {
 
   .featured-blog-list .v-list-item,
   .regular-blog-list .v-list-item {
-    padding: 1rem !important;
+    padding: 1.5rem !important;
+  }
+
+  .featured-blog-list .v-list-item {
+    min-height: 130px;
+  }
+
+  .regular-blog-list .v-list-item {
+    min-height: 90px;
+  }
+
+  /* Reduce animation distance on mobile */
+  @keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .blog-item-animate {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 </style>

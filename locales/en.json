@@ -254,6 +254,17 @@
       "title": "Recent Posts",
       "subtitle": "Latest insights and discoveries from my ongoing development work."
     },
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "filters": {
+      "allCategories": "All categories",
+      "category": "Category",
+      "sortByDate": "Sort from the latest to the oldest",
+      "sortByViews": "Sort from the most read",
+      "sortBy": "Sorting"
+    },
+    "noResults": {
+      "title": "No blogs from the given category",
+      "subtitle": "Try to adjust the filters differently, or come back another time"
+    }
   }
 }

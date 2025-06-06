@@ -45,6 +45,7 @@ async function autoSaveWorkingBlog() {
       value: trimmedTitle.replace(/\s+/g, '-').toLowerCase(),
       content: blogContent.value,
       author: userData.value?.reference || null,
+      category: category.value || 'other',
       reference: currentWorkingBlog.value?.reference || null,
     })
 
@@ -99,6 +100,7 @@ watch(savedBlog, (newBlog) => {
   if (newBlog) {
     blogTitle.value = newBlog.title[locale.value]
     blogContent.value = newBlog.content[locale.value]
+    category.value = newBlog.category as TBlogCategory
   }
 })
 
@@ -106,6 +108,7 @@ watch(savedWorkingBlog, (newWorkingBlog) => {
   if (newWorkingBlog && !savedBlog.value) {
     blogTitle.value = newWorkingBlog.title
     blogContent.value = newWorkingBlog.content
+    category.value = newWorkingBlog.category as TBlogCategory
   }
 })
 
