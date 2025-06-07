@@ -14,13 +14,17 @@
           "region": "us-central1"
         }
       }
-    ]
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
   },
   "functions": [
     {
       "source": ".output/server",
       "codebase": "default",
-      "runtime": "nodejs20"
+      "runtime": "nodejs20",
+      "memory": "1GB",
+      "timeout": "60s"
     }
   ]
 }
