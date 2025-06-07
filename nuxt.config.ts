@@ -90,6 +90,12 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
   },
 
+  router: {
+    options: {
+      hashMode: false,
+    },
+  },
+
   typescript: {
     strict: true,
   },

@@ -6,6 +6,9 @@ import { getStorage } from 'firebase/storage'
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
 
+  if (!config.public.apiKey)
+    throw new Error('Firebase API key is not defined in runtime config.')
+
   const firebaseOptions: FirebaseOptions = {
     apiKey: config.public.apiKey,
     authDomain: config.public.authDomain,
