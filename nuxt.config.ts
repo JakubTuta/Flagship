@@ -18,7 +18,6 @@ export default defineNuxtConfig({
         { name: 'author', content: 'Jakub Tutka' },
       ],
     },
-    keepalive: true,
   },
 
   site: {
@@ -86,9 +85,37 @@ export default defineNuxtConfig({
     },
   },
 
+  routeRules: {
+    // Static pages - prerendered at build time
+    '/': { prerender: true },
+
+    // Auth
+    '/auth/login': { prerender: true },
+    '/auth/register': { prerender: true },
+    '/auth/logout': { prerender: true },
+
+    '/resume': { prerender: true },
+    '/projects': { prerender: true },
+    '/blogs': { prerender: true },
+
+    // Blog listing page - prerendered
+    '/blog': { prerender: true },
+
+    // Individual blog posts - use ISR for better performance
+    // This will generate pages on first visit and cache them
+    '/blog/**': {
+      isr: 3600, // Cache for 1 hour
+      headers: {
+        'X-Custom-Header': 'Blog Post',
+      },
+    },
+
+    // Admin routes - always server-rendered for security
+    '/admin/**': { ssr: true },
+  },
+
   experimental: {
     payloadExtraction: false,
-    renderJsonPayloads: true,
   },
 
   typescript: {
@@ -97,12 +124,6 @@ export default defineNuxtConfig({
 
   vue: {
     propsDestructure: true,
-  },
-
-  router: {
-    options: {
-      hashMode: false,
-    },
   },
 
   i18n: {
