@@ -98,21 +98,6 @@ export default defineNuxtConfig({
     propsDestructure: true,
   },
 
-  router: {
-    options: {
-      hashMode: false,
-      linkActiveClass: 'router-link-active',
-      linkExactActiveClass: 'router-link-exact-active',
-    },
-  },
-
-  routeRules: {
-    '/auth/**': { ssr: true, prerender: false, index: false },
-    '/projects/**': { ssr: true, prerender: false, index: false },
-    '/blogs/**': { ssr: true, prerender: false, index: false },
-    '/resume': { ssr: true, prerender: false, index: false },
-  },
-
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'en',
