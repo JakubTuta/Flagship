@@ -9,12 +9,18 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "server"
+        "function": {
+          "functionId": "server",
+          "region": "us-central1"
+        }
       }
     ]
   },
-  "functions": {
-    "source": ".output/server",
-    "runtime": "nodejs20"
-  }
+  "functions": [
+    {
+      "source": ".output/server",
+      "codebase": "default",
+      "runtime": "nodejs20"
+    }
+  ]
 }
