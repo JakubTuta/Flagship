@@ -24,6 +24,7 @@ export interface IBlog {
   tableOfContents: ITableOfContentsItem[]
   category: TBlogCategory
   viewCount: number
+  mainLanguage: string | null
   reference: DocumentReference | null
 }
 
@@ -48,6 +49,7 @@ export function mapIBlogDecoded(data: Partial<IBlog>, reference?: DocumentRefere
     tableOfContents: data.tableOfContents || [],
     category: data.category || 'other',
     viewCount: data.viewCount || 0,
+    mainLanguage: data.mainLanguage || null,
     reference: reference || null,
   }
 }
@@ -73,6 +75,7 @@ export function mapIBlogEncoded(data: Partial<IBlog>, reference?: DocumentRefere
     tableOfContents: data.tableOfContents || [],
     category: data.category || 'other',
     viewCount: data.viewCount || 0,
+    mainLanguage: data.mainLanguage || null,
     reference: reference || null,
   }
 }

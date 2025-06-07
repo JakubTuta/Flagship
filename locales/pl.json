@@ -220,7 +220,10 @@
         "subheaderTooltip": "Podtytuł",
         "categoryInput": "Kategoria",
         "featuredCheckbox": "Wyróżniony post",
-        "imageTooltip": "Dodaj zdjęcie"
+        "imageTooltip": "Dodaj zdjęcie",
+        "languageEnglish": "Angielski",
+        "languagePolish": "Polski",
+        "languageInput": "Język"
       },
       "notPublished": "Nie opublikowane"
     }
@@ -275,6 +278,10 @@
     "relatedLinks": "Powiązane linki",
     "relatedProjects": "Powiązane projekty",
     "featured1": "Wyróżnione",
-    "tableOfContents": "Spis treści"
+    "tableOfContents": "Spis treści",
+    "languageWarning": "Zastrzeżenie: Ten tekst został przetłumaczony z {language} przy użyciu sztucznej inteligencji i nie został zweryfikowany przez człowieka. Mogą istnieć różnice między wersją polską a angielską.",
+    "fromPolish": "języka polskiego",
+    "fromEnglish": "języka angielskiego",
+    "fromUnknown": "nieokreślonego języka"
   }
 }

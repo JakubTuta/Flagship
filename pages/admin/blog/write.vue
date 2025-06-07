@@ -19,6 +19,7 @@ const currentWorkingBlog = ref<IWorkingBlog | null>(null)
 const autoSaveTimer = ref<NodeJS.Timeout | null>(null)
 const category = ref<TBlogCategory | null>(null)
 const isFeatured = ref(false)
+const mainLanguage = ref<string | null>(null)
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -43,6 +44,7 @@ async function autoSaveWorkingBlog() {
       content: blogContent.value,
       author: userData.value?.reference || null,
       category: category.value || 'other',
+      mainLanguage: mainLanguage.value || 'en',
       reference: currentWorkingBlog.value?.reference || null,
     })
 
@@ -99,6 +101,7 @@ watch(savedBlog, (newBlog) => {
     blogContent.value = newBlog.content[locale.value]
     category.value = newBlog.category as TBlogCategory
     isFeatured.value = newBlog.featured || false
+    mainLanguage.value = newBlog.mainLanguage || 'pl'
   }
 })
 
@@ -107,6 +110,7 @@ watch(savedWorkingBlog, (newWorkingBlog) => {
     blogTitle.value = newWorkingBlog.title
     blogContent.value = newWorkingBlog.content
     category.value = newWorkingBlog.category as TBlogCategory
+    mainLanguage.value = newWorkingBlog.mainLanguage || 'pl'
   }
 })
 
@@ -1021,6 +1025,22 @@ async function deleteBlog() {
             :label="$t('admin.blog.create.categoryInput')"
             class="max-w-400px"
             clearable
+          />
+
+          <v-select
+            v-model="mainLanguage"
+            :items="[
+              {
+                'title': $t('admin.blog.create.languageEnglish'),
+                'value': 'en',
+              },
+              {
+                'title': $t('admin.blog.create.languagePolish'),
+                'value': 'pl',
+              },
+            ]"
+            :label="$t('admin.blog.create.languageInput')"
+            class="ml-4 max-w-200px"
           />
 
           <v-checkbox

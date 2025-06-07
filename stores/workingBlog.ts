@@ -9,6 +9,7 @@ export interface IWorkingBlog {
   image: string | null
   category: TBlogCategory
   author: DocumentReference | null
+  mainLanguage: string | null
   reference: DocumentReference | null
 }
 
@@ -22,6 +23,7 @@ export function mapIWorkingBlogDecoded(data: Partial<IWorkingBlog>, reference?: 
     image: data.image || null,
     category: data.category || 'other',
     author: data.author || null,
+    mainLanguage: data.mainLanguage || null,
     reference: reference || null,
   }
 }
@@ -36,6 +38,7 @@ export function mapIWorkingBlogEncoded(data: Partial<IWorkingBlog>, reference?: 
     image: data.image || null,
     author: data.author || null,
     category: data.category || 'other',
+    mainLanguage: data.mainLanguage || null,
     reference: reference || null,
   }
 }

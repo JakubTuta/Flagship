@@ -2,7 +2,7 @@
 import type { IBlog } from '~/models/blog'
 
 const route = useRoute()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const selectedBlog = ref<IBlog | null>(null)
 const isLoading = ref(true)
@@ -184,6 +184,15 @@ const processedContent = computed(() => {
 
   return processContent(content)
 })
+
+function getFromLanguage(language: string | null) {
+  if (language === 'pl')
+    return t('blog.fromPolish')
+  else if (language === 'en')
+    return t('blog.fromEnglish')
+  else
+    return t('blog.fromUnknown')
+}
 </script>
 
 <!-- eslint-disable vue/no-v-html -->
@@ -353,6 +362,12 @@ const processedContent = computed(() => {
         class="blog-content-card mb-8"
         elevation="2"
       >
+        <span
+          v-if="selectedBlog.mainLanguage !== locale"
+          class="text-subtitle-1"
+        >
+          {{ $t('blog.languageWarning', {"language": getFromLanguage(selectedBlog.mainLanguage)}) }}
+        </span>
         <!-- Table of Contents -->
         <div
           v-if="selectedBlog.tableOfContents.length > 0"

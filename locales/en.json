@@ -220,7 +220,10 @@
         "subheaderTooltip": "Subheader",
         "categoryInput": "Category",
         "featuredCheckbox": "Featured Post",
-        "imageTooltip": "Add image"
+        "imageTooltip": "Add image",
+        "languageEnglish": "English",
+        "languagePolish": "Polish",
+        "languageInput": "Language"
       },
       "notPublished": "Not Published"
     }
@@ -275,6 +278,10 @@
     "relatedLinks": "Related links",
     "relatedProjects": "Related projects",
     "featured1": "Featured",
-    "tableOfContents": "Table of contents"
+    "tableOfContents": "Table of contents",
+    "languageWarning": "Disclaimer: This text was translated from {language} using AI and has not been human-verified. Differences between the Polish and English versions may exist.",
+    "fromPolish": "Polish",
+    "fromEnglish": "English",
+    "fromUnknown": "Unknown language"
   }
 }
