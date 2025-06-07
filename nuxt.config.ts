@@ -98,9 +98,6 @@ export default defineNuxtConfig({
     '/projects': { prerender: true },
     '/blogs': { prerender: true },
 
-    // Blog listing page - prerendered
-    '/blog': { prerender: true },
-
     // Individual blog posts - use ISR for better performance
     // This will generate pages on first visit and cache them
     '/blog/**': {
