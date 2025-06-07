@@ -9,18 +9,23 @@
     "rewrites": [
       {
         "source": "**",
-        "function": {
-          "functionId": "server",
-          "region": "us-central1"
-        }
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
       }
     ]
   },
-  "functions": [
-    {
-      "source": ".output/server",
-      "codebase": "default",
-      "runtime": "nodejs20"
-    }
-  ]
+  "functions": {
+    "source": ".output/server",
+    "runtime": "nodejs20"
+  }
 }

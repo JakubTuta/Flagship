@@ -18,6 +18,7 @@ export default defineNuxtConfig({
         { name: 'author', content: 'Jakub Tutka' },
       ],
     },
+    keepalive: true,
   },
 
   site: {
@@ -83,25 +84,11 @@ export default defineNuxtConfig({
       gen: 2,
       nodeVersion: '20',
     },
-    experimental: {
-      wasm: true,
-    },
-    rollupConfig: {
-      external: ['firebase-admin', 'firebase-functions'],
-    },
-  },
-
-  router: {
-    options: {
-      strict: false,
-      sensitive: false,
-    },
   },
 
   experimental: {
     payloadExtraction: false,
     renderJsonPayloads: true,
-    watcher: 'chokidar',
   },
 
   typescript: {
@@ -110,6 +97,12 @@ export default defineNuxtConfig({
 
   vue: {
     propsDestructure: true,
+  },
+
+  router: {
+    options: {
+      hashMode: false,
+    },
   },
 
   i18n: {
