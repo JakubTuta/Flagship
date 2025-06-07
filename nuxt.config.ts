@@ -87,7 +87,8 @@ export default defineNuxtConfig({
 
   experimental: {
     payloadExtraction: false,
-    renderJsonPayloads: true,
+    renderJsonPayloads: false,
+    appManifest: false,
   },
 
   typescript: {
