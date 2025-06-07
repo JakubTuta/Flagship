@@ -83,11 +83,25 @@ export default defineNuxtConfig({
       gen: 2,
       nodeVersion: '20',
     },
+    experimental: {
+      wasm: true,
+    },
+    rollupConfig: {
+      external: ['firebase-admin', 'firebase-functions'],
+    },
+  },
+
+  router: {
+    options: {
+      strict: false,
+      sensitive: false,
+    },
   },
 
   experimental: {
     payloadExtraction: false,
     renderJsonPayloads: true,
+    watcher: 'chokidar',
   },
 
   typescript: {
