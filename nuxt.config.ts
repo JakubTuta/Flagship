@@ -90,18 +90,27 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
   },
 
-  router: {
-    options: {
-      hashMode: false,
-    },
-  },
-
   typescript: {
     strict: true,
   },
 
   vue: {
     propsDestructure: true,
+  },
+
+  router: {
+    options: {
+      hashMode: false,
+      linkActiveClass: 'router-link-active',
+      linkExactActiveClass: 'router-link-exact-active',
+    },
+  },
+
+  routeRules: {
+    '/auth/**': { ssr: true, prerender: false, index: false },
+    '/projects/**': { ssr: true, prerender: false, index: false },
+    '/blogs/**': { ssr: true, prerender: false, index: false },
+    '/resume': { ssr: true, prerender: false, index: false },
   },
 
   i18n: {
