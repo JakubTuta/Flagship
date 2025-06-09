@@ -1,5 +1,5 @@
 import type { DocumentReference } from 'firebase/firestore'
-import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import type { IBlog } from '~/models/blog'
 import { mapIBlogDecoded } from '~/models/blog'
 import type { IUser } from '~/models/user'
@@ -84,14 +84,16 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       loading.value = true
 
-      const documentRef = doc(blogsCollection, blogId)
-      const document = await getDoc(documentRef)
-      if (!document.exists()) {
+      const q = query(blogsCollection, where('value', '==', blogId))
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
         console.warn(`Blog with id ${blogId} not found.`)
 
         return null
       }
 
+      const document = querySnapshot.docs[0]
       const blog = mapIBlogDecoded(document.data(), document.ref)
 
       if (userData || blog.isPublished) {
@@ -127,14 +129,16 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       loading.value = true
 
-      const documentRef = doc(blogsCollection, blogId)
-      const document = await getDoc(documentRef)
-      if (!document.exists()) {
+      const q = query(blogsCollection, where('value', '==', blogId))
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
         console.warn(`Blog with id ${blogId} not found.`)
 
         return null
       }
 
+      const document = querySnapshot.docs[0]
       const blog = mapIBlogDecoded(document.data(), document.ref)
 
       if (blog.isPublished)
@@ -194,14 +198,16 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       loading.value = true
 
-      const documentRef = doc(workingBlogsCollection, blogId)
-      const document = await getDoc(documentRef)
-      if (!document.exists()) {
+      const q = query(workingBlogsCollection, where('value', '==', blogId))
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
         console.warn(`Working blog with id ${blogId} not found.`)
 
         return null
       }
 
+      const document = querySnapshot.docs[0]
       const blog = mapIWorkingBlogDecoded(document.data(), document.ref)
 
       workingBlogs.value.push(blog)
@@ -222,9 +228,7 @@ export const useBlogStore = defineStore('blog', () => {
     loading.value = true
 
     try {
-      const docRef = doc(blogsCollection, blog.value)
-      await setDoc(docRef, removeReferenceField(blog))
-
+      const docRef = await addDoc(blogsCollection, removeReferenceField(blog))
       blog.reference = docRef
 
       const decodedBlog = mapIBlogDecoded(blog, docRef)

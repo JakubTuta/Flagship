@@ -31,6 +31,7 @@ CRITICAL FORMATTING RULES:
 - Return the result in this exact JSON format: {"en": "english translation", "pl": "polish translation"}
 - If the text is already in English or Polish, still provide both translations
 - Maintain the exact same structure and all encoded whitespace markers
+- Do NOT change the text in any way other than translating the readable content
 
 The text contains encoded whitespace markers that must be preserved exactly. Only translate the readable text content.
 

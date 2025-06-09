@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import type { IBlog } from '~/models/blog'
+import type { IUser } from '~/models/user'
 
 const route = useRoute()
 const { locale, t } = useI18n()
 
 const selectedBlog = ref<IBlog | null>(null)
 const isLoading = ref(true)
+const author = ref<IUser | null>(null)
 
 const blogStore = useBlogStore()
+const authStore = useAuthStore()
 
 onMounted(async () => {
   try {
     const blogId = route.params.id as string
     selectedBlog.value = await blogStore.getBlogUser(blogId)
-
-    // Increment view count
-    if (selectedBlog.value) {
-      selectedBlog.value.viewCount += 1
-    }
+    author.value = await authStore.getUserDataFromRef(selectedBlog.value?.author || null)
   }
   catch (error) {
     console.error('Error loading blog:', error)
@@ -118,6 +117,16 @@ const contentBlocks = computed(() => {
 
           return `<h3 id="${id}" class="blog-h3">${title}</h3>`
         })
+        // Images - handle both markdown and HTML img tags
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="blog-image" />')
+        .replace(/<img([^>]*)>/g, (match: any, attrs: any) => {
+          if (attrs.includes('class=')) {
+            return match.replace(/class="[^"]*"/, 'class="blog-image"')
+          }
+          else {
+            return `<img${attrs} class="blog-image">`
+          }
+        })
         // Inline code
         .replace(/`([^`]+)`/g, '<code class="blog-inline-code">$1</code>')
         // Unordered lists
@@ -192,6 +201,10 @@ function getFromLanguage(language: string | null) {
     return t('blog.fromEnglish')
   else
     return t('blog.fromUnknown')
+}
+
+function getCategoryTitle(category: string) {
+  return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
 }
 </script>
 
@@ -309,7 +322,7 @@ function getFromLanguage(language: string | null) {
                 </v-icon>
 
                 <span class="text-body-2 text-on-primary">
-                  {{ selectedBlog.author?.id || $t('blog.anonymous') }}
+                  {{ author?.username || $t('blog.anonymous') }}
                 </span>
               </v-col>
 
@@ -350,7 +363,7 @@ function getFromLanguage(language: string | null) {
                 class="ml-4"
                 prepend-icon="mdi-tag"
               >
-                {{ selectedBlog.category }}
+                {{ getCategoryTitle(selectedBlog.category) }}
               </v-chip>
             </v-row>
           </div>
@@ -573,6 +586,16 @@ function getFromLanguage(language: string | null) {
 </template>
 
 <style scoped>
+/* Image Styling */
+:deep(.blog-image) {
+  width: 50% !important;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem auto;
+  display: block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .blog-detail-page {
   max-width: 800px;
   margin: 0 auto;
@@ -852,6 +875,11 @@ function getFromLanguage(language: string | null) {
 
 /* Responsive Design */
 @media (max-width: 600px) {
+  :deep(.blog-image) {
+    max-width: 80% !important;
+    width: 80% !important;
+  }
+
   .blog-title {
     font-size: 2rem;
   }

@@ -1,5 +1,6 @@
 import type { User } from 'firebase/auth'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import type { DocumentReference } from 'firebase/firestore'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { removeReferenceField } from '~/helpers/modelToDatabase'
 import type { IUser } from '~/models/user'
@@ -30,6 +31,27 @@ export const useAuthStore = defineStore('auth', () => {
     finally {
       loading.value = false
     }
+  }
+
+  const getUserDataFromRef = async (userRef: DocumentReference | null) => {
+    if (!userRef)
+      return null
+    loading.value = true
+
+    try {
+      const response = await getDoc(userRef)
+      if (response.exists())
+        return mapIUser(response.data(), response.ref)
+    }
+    catch (error) {
+      console.error('Error fetching user data by ID:', error)
+      throw error
+    }
+    finally {
+      loading.value = false
+    }
+
+    return null
   }
 
   const createUserData = async (user: User, username: string) => {
@@ -143,5 +165,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
+    getUserDataFromRef,
   }
 })
