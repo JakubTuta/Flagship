@@ -223,7 +223,11 @@
         "imageTooltip": "Dodaj zdjęcie",
         "languageEnglish": "Angielski",
         "languagePolish": "Polski",
-        "languageInput": "Język"
+        "languageInput": "Język",
+        "linksInput": "Pomocne linki",
+        "imageInput": "Zdjęcie",
+        "removeImage": "Usuń zdjęcie",
+        "addHeaderImage": "Dodaj zdjęcie"
       },
       "notPublished": "Nie opublikowane"
     }
@@ -242,6 +246,7 @@
       "productivity": "Produktywność i narzędzia",
       "work-life": "Równowaga praca-życie",
       "personal": "Przemyślenia osobiste",
+      "ai-ml": "AI i uczenie maszynowe",
       "other": "Inne tematy"
     },
     "hero": {

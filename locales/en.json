@@ -223,7 +223,11 @@
         "imageTooltip": "Add image",
         "languageEnglish": "English",
         "languagePolish": "Polish",
-        "languageInput": "Language"
+        "languageInput": "Language",
+        "linksInput": "Helpful links",
+        "imageInput": "Image",
+        "removeImage": "Remove image",
+        "addHeaderImage": "Add image"
       },
       "notPublished": "Not Published"
     }
@@ -242,6 +246,7 @@
       "productivity": "Productivity & Tools",
       "work-life": "Work-Life Balance",
       "personal": "Personal Insights",
+      "ai-ml": "AI & Machine Learning",
       "other": "Other Topics"
     },
     "hero": {

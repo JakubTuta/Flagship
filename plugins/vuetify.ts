@@ -1,5 +1,6 @@
 import '@mdi/font/css/materialdesignicons.css'
 import { createVuetify } from 'vuetify'
+import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import 'vuetify/styles'
 
 export default defineNuxtPlugin((app) => {
@@ -99,15 +100,19 @@ export default defineNuxtPlugin((app) => {
     defaults: {
       VTextarea: {
         variant: 'outlined',
+        rounded: 'lg',
       },
       VTextField: {
         variant: 'outlined',
+        rounded: 'lg',
       },
       VAutocomplete: {
         variant: 'outlined',
+        rounded: 'lg',
       },
       VSelect: {
         variant: 'outlined',
+        rounded: 'lg',
       },
       VBtn: {
         variant: 'outlined',
@@ -126,9 +131,16 @@ export default defineNuxtPlugin((app) => {
       VListItem: {
         rounded: 'lg',
       },
+      VCombobox: {
+        variant: 'outlined',
+        rounded: 'lg',
+      },
     },
     display: {
       mobileBreakpoint: 'sm',
+    },
+    components: {
+      VFileUpload,
     },
   })
   app.vueApp.use(vuetify)

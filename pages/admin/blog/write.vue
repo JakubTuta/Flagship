@@ -20,6 +20,8 @@ const autoSaveTimer = ref<NodeJS.Timeout | null>(null)
 const category = ref<TBlogCategory | null>(null)
 const isFeatured = ref(false)
 const mainLanguage = ref<string | null>(null)
+const links = ref<string[]>([])
+const blogImage = ref<string | null>(null)
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -102,6 +104,8 @@ watch(savedBlog, (newBlog) => {
     category.value = newBlog.category as TBlogCategory
     isFeatured.value = newBlog.featured || false
     mainLanguage.value = newBlog.mainLanguage || 'pl'
+    links.value = newBlog.links || []
+    blogImage.value = newBlog.image || null
   }
 })
 
@@ -111,6 +115,8 @@ watch(savedWorkingBlog, (newWorkingBlog) => {
     blogContent.value = newWorkingBlog.content
     category.value = newWorkingBlog.category as TBlogCategory
     mainLanguage.value = newWorkingBlog.mainLanguage || 'pl'
+    links.value = newWorkingBlog.links || []
+    blogImage.value = newWorkingBlog.image || null
   }
 })
 
@@ -287,6 +293,49 @@ function wrapSelectedText(startWrapper: string, endWrapper: string = startWrappe
 // ========================
 // IMAGE HANDLING
 // ========================
+function uploadBlogImage() {
+  const fileInput = document.createElement('input')
+  fileInput.type = 'file'
+  fileInput.accept = 'image/*'
+  fileInput.style.display = 'none'
+
+  fileInput.addEventListener('change', async (event) => {
+    const file = (event.target as HTMLInputElement).files?.[0]
+    if (!file)
+      return
+
+    try {
+      loading.value = true
+
+      // Convert file to base64 string
+      const base64String = await fileToBase64(file)
+
+      // Upload image using blogStore
+      const imageUrl = await blogStore.addImage(base64String)
+
+      // Set as blog header image
+      blogImage.value = imageUrl
+    }
+    catch (error) {
+      console.error('Error uploading blog header image:', error)
+      // You might want to show a user-friendly error message here
+    }
+    finally {
+      loading.value = false
+    }
+  })
+
+  // Trigger file selection
+  document.body.appendChild(fileInput)
+  fileInput.click()
+  document.body.removeChild(fileInput)
+}
+
+// Remove blog header image
+function removeBlogImage() {
+  blogImage.value = null
+}
+
 function insertImage() {
   // Create a file input element
   const fileInput = document.createElement('input')
@@ -919,6 +968,9 @@ async function prepareBlog(isPublished: boolean, reference: DocumentReference | 
     category: category.value || 'other',
     author: userData.value?.reference || null,
     tableOfContents: translatedTableOfContents,
+    links: links.value,
+    image: blogImage.value || null,
+    mainLanguage: mainLanguage.value || 'pl',
   }, reference)
 }
 
@@ -1050,6 +1102,52 @@ async function deleteBlog() {
             class="ml-4"
           />
         </v-row>
+
+        <div class="blog-image-section mb-4">
+          <v-card
+            v-if="blogImage"
+            class="blog-image-preview mb-3"
+            variant="outlined"
+          >
+            <v-img
+              :src="blogImage"
+              height="200"
+              cover
+              class="blog-header-image"
+            >
+              <template #placeholder>
+                <div class="d-flex align-center fill-height justify-center">
+                  <v-progress-circular indeterminate />
+                </div>
+              </template>
+            </v-img>
+
+            <v-card-actions class="pa-2">
+              <v-spacer />
+
+              <v-btn
+                color="error"
+                variant="text"
+                size="small"
+                prepend-icon="mdi-delete"
+                @click="removeBlogImage"
+              >
+                {{ $t('admin.blog.create.removeImage') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+
+          <v-btn
+            v-else
+            color="primary"
+            variant="outlined"
+            prepend-icon="mdi-image-plus"
+            class="mb-3"
+            @click="uploadBlogImage"
+          >
+            {{ $t('admin.blog.create.addHeaderImage') }}
+          </v-btn>
+        </div>
 
         <v-toolbar
           density="compact"
@@ -1201,6 +1299,14 @@ async function deleteBlog() {
             </template>
           </v-card>
         </div>
+
+        <v-combobox
+          v-model="links"
+          :label="$t('admin.blog.create.linksInput')"
+          chips
+          clearable
+          multiple
+        />
       </v-card-text>
 
       <v-card-actions>

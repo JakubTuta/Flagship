@@ -13,6 +13,7 @@ export const blogCategories: string[] = [
   'productivity',
   'work-life',
   'personal',
+  'ai-ml',
   'other',
 ]
 
