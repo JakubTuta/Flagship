@@ -269,7 +269,7 @@ function wrapSelectedText(startWrapper: string, endWrapper: string = startWrappe
     const beforeText = blogContent.value.slice(0, start)
     const afterText = blogContent.value.slice(end)
 
-    // Check if cursor is between empty wrappers (e.g., **|**)
+    // Check if cursor is between empty wrappers
     if (beforeText.endsWith(startWrapper) && afterText.startsWith(endWrapper)) {
       // Remove the empty wrappers
       const newBeforeText = beforeText.slice(0, -startWrapper.length)

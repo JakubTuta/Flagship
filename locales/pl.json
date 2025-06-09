@@ -229,7 +229,8 @@
         "removeImage": "Usuń zdjęcie",
         "addHeaderImage": "Dodaj zdjęcie"
       },
-      "notPublished": "Nie opublikowane"
+      "notPublished": "Nie opublikowane",
+      "createNew": "Stwórz nowy post"
     }
   },
   "blog": {

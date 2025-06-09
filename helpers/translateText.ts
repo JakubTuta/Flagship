@@ -26,7 +26,7 @@ CRITICAL FORMATTING RULES:
 - Do NOT translate any code between triple backticks (\`\`\`) or single backticks (\`)
 - Keep all code blocks exactly as they are
 - PRESERVE ALL ENCODED WHITESPACE: Text contains encoded whitespace markers like |||NEWLINE|||, |||TAB|||, |||SPACES_X||| - keep these EXACTLY as they are
-- PRESERVE ALL MARKDOWN FORMATTING: Keep **bold**, *italic*, <u>underline</u>, and other formatting markers exactly as they are
+- PRESERVE ALL HTML FORMATTING: Keep <strong>, <em>, <u> and other HTML tags exactly as they are
 - Only translate the actual text content, not the formatting or whitespace markers
 - Return the result in this exact JSON format: {"en": "english translation", "pl": "polish translation"}
 - If the text is already in English or Polish, still provide both translations

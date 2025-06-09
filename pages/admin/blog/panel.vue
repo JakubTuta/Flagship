@@ -50,7 +50,7 @@ const blogTab = computed(() => {
             to="/admin/blog/write"
             rounded="xl"
           >
-            Create New Post
+            {{ $t('admin.blog.createNew') }}
           </v-btn>
         </v-row>
 
