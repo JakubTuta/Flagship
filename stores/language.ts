@@ -1,4 +1,3 @@
-/* eslint-disable node/prefer-global/process */
 export const useLanguageStore = defineStore('language', () => {
   const { locale } = useI18n()
 
@@ -6,14 +5,7 @@ export const useLanguageStore = defineStore('language', () => {
   const key = 'tuta-lang'
 
   const defaultLang: languages = 'en'
-
-  // Use httpOnly: false and secure: true for production
-  const langCookie = useCookie<languages>(key, {
-    default: () => defaultLang,
-    httpOnly: false,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  })
+  const langCookie = useCookie<languages>(key, { default: () => defaultLang })
 
   const currentLang = ref<languages>(langCookie.value)
 
@@ -45,6 +37,10 @@ export const useLanguageStore = defineStore('language', () => {
       }
     }
   }
+
+  onMounted(() => {
+    initLanguage()
+  })
 
   return {
     currentLang,

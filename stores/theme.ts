@@ -1,4 +1,3 @@
-/* eslint-disable node/prefer-global/process */
 import { useTheme } from 'vuetify'
 
 export const useThemeStore = defineStore('theme', () => {
@@ -6,14 +5,7 @@ export const useThemeStore = defineStore('theme', () => {
   const key = 'tuta-theme'
 
   const theme = useTheme()
-
-  // Enhanced cookie configuration for production
-  const themeCookie = useCookie(key, {
-    default: () => defaultTheme,
-    httpOnly: false,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  })
+  const themeCookie = useCookie(key, { default: () => defaultTheme })
 
   const setTheme = (newTheme: string) => {
     theme.global.name.value = newTheme
@@ -47,11 +39,14 @@ export const useThemeStore = defineStore('theme', () => {
     }
   }
 
+  onMounted(() => {
+    initTheme()
+  })
+
   return {
     setTheme,
     getTheme,
     toggleTheme,
     isDark,
-    initTheme,
   }
 })
