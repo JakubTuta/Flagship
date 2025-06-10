@@ -1,4 +1,4 @@
-export type TBlogCategory = 'frontend' | 'backend' | 'fullstack' | 'web dev' | 'data bases' | 'cloud' | 'algorithms' | 'devops' | 'career' | 'productivity' | 'work-life' | 'personal' | 'other'
+export type TBlogCategory = 'frontend' | 'backend' | 'fullstack' | 'web dev' | 'data bases' | 'cloud' | 'algorithms' | 'devops' | 'career' | 'productivity' | 'work-life' | 'personal' | 'ai-ml' | 'other'
 
 export const blogCategories: string[] = [
   'frontend',

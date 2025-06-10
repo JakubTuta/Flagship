@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 import type { IBlog } from '~/models/blog'
 import type { IUser } from '~/models/user'
 
 const route = useRoute()
 const { locale, t } = useI18n()
+const { mobile } = useDisplay()
 
 const selectedBlog = ref<IBlog | null>(null)
 const isLoading = ref(true)
@@ -259,22 +261,25 @@ function getCategoryTitle(category: string) {
       class="blog-content"
     >
       <!-- Back Button -->
-      <v-btn
-        to="/blogs"
-        variant="text"
-        color="primary"
-        class="mb-6"
-        prepend-icon="mdi-arrow-left"
-      >
-        {{ $t('blog.backToBlogs') }}
-      </v-btn>
-
+      <div class="d-flex mb-6 justify-end">
+        <v-btn
+          to="/blogs"
+          variant="text"
+          color="primary"
+          prepend-icon="mdi-arrow-left"
+        >
+          {{ $t('blog.backToBlogs') }}
+        </v-btn>
+      </div>
       <!-- Blog Header -->
       <div
         class="blog-header mb-8"
-        :class="selectedBlog.image
-          ? 'blog-header-with-image'
-          : 'blog-header-gradient'"
+        :class="[
+          selectedBlog.image
+            ? 'blog-header-with-image'
+            : 'blog-header-gradient',
+          {'h-80vh': mobile},
+        ]"
         :style="selectedBlog.image
           ? {'backgroundImage': `url(${selectedBlog.image})`}
           : {}"
@@ -345,26 +350,38 @@ function getCategoryTitle(category: string) {
               </v-col>
             </v-row>
 
-            <v-row class="mx-2 mb-6">
+            <v-row
+              class="mx-2 mb-6"
+              dense
+            >
               <!-- Featured Badge -->
-              <v-chip
-                v-if="selectedBlog.featured"
-                color="warning"
-                variant="elevated"
-                prepend-icon="mdi-star"
+              <v-col
+                cols="12"
+                sm="auto"
               >
-                {{ $t('blog.featured1') }}
-              </v-chip>
+                <v-chip
+                  v-if="selectedBlog.featured"
+                  color="warning"
+                  variant="elevated"
+                  prepend-icon="mdi-star"
+                >
+                  {{ $t('blog.featured1') }}
+                </v-chip>
+              </v-col>
 
               <!-- Category Badge -->
-              <v-chip
-                color="surface"
-                variant="elevated"
-                class="ml-4"
-                prepend-icon="mdi-tag"
+              <v-col
+                cols="12"
+                md="auto"
               >
-                {{ getCategoryTitle(selectedBlog.category) }}
-              </v-chip>
+                <v-chip
+                  color="surface"
+                  variant="elevated"
+                  prepend-icon="mdi-tag"
+                >
+                  {{ getCategoryTitle(selectedBlog.category) }}
+                </v-chip>
+              </v-col>
             </v-row>
           </div>
         </div>
@@ -375,12 +392,12 @@ function getCategoryTitle(category: string) {
         class="blog-content-card mb-8"
         elevation="2"
       >
-        <span
+        <div
           v-if="selectedBlog.mainLanguage !== locale"
-          class="text-subtitle-1"
+          class="text-subtitle-1 px-2 py-4"
         >
           {{ $t('blog.languageWarning', {"language": getFromLanguage(selectedBlog.mainLanguage)}) }}
-        </span>
+        </div>
         <!-- Table of Contents -->
         <div
           v-if="selectedBlog.tableOfContents.length > 0"

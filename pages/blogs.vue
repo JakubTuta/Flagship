@@ -103,16 +103,26 @@ function formatDate(date: Date | null): string {
 }
 
 function truncateContent(content: string, maxLength: number = 150): string {
-  if (content.length <= maxLength)
-    return content
+  // Remove any HTML tags from the beginning (like <h2>content</h2>)
+  const htmlTagRegex = /^<[^>]+>.*?<\/[^>]+>/
+  let cleanedContent = content.replace(htmlTagRegex, '').trim()
 
-  const truncated = content.substring(0, maxLength).trim()
+  // Also remove |||NEWLINE||| markers
+  cleanedContent = cleanedContent.replace(/\|\|\|NEWLINE\|\|\|/g, ' ').trim()
+
+  // Remove any remaining HTML tags throughout the content
+  cleanedContent = cleanedContent.replace(/<[^>]+>/g, '').trim()
+
+  if (cleanedContent.length <= maxLength)
+    return cleanedContent
+
+  const truncated = cleanedContent.substring(0, maxLength).trim()
   const lastSpaceIndex = truncated.lastIndexOf(' ')
 
   if (lastSpaceIndex === -1) {
-    return content.length > maxLength
+    return cleanedContent.length > maxLength
       ? `${truncated}...`
-      : content
+      : cleanedContent
   }
 
   return `${truncated.substring(0, lastSpaceIndex)}...`
@@ -140,6 +150,7 @@ function getCategoryColor(category: TBlogCategory): string {
     'productivity': 'amber',
     'work-life': 'lime',
     'personal': 'deep-purple',
+    'ai-ml': 'deep-orange',
     'other': 'grey',
   }
 
@@ -361,9 +372,13 @@ watch([selectedCategory, sortBy], () => {
               </v-avatar>
             </template>
 
-            <v-list-item-title class="text-h5 font-weight-bold mb-2">
+            <v-list-item-title
+              class="text-h5 font-weight-bold mb-2"
+              :class="{'text-wrap': mobile}"
+            >
               {{ blog.title[locale] }}
               <v-chip
+                v-if="!mobile"
                 color="warning"
                 size="small"
                 variant="elevated"
@@ -377,7 +392,10 @@ watch([selectedCategory, sortBy], () => {
               </v-chip>
             </v-list-item-title>
 
-            <v-list-item-subtitle class="text-body-1 mb-3">
+            <v-list-item-subtitle
+              v-if="!mobile"
+              class="text-body-1 mb-3"
+            >
               {{ truncateContent(blog.content[locale], mobile
                 ? 120
                 : 200) }}
@@ -394,11 +412,24 @@ watch([selectedCategory, sortBy], () => {
               </v-chip>
 
               <v-chip
+                v-if="mobile"
+                color="warning"
+                size="small"
+                variant="elevated"
+                class="ml-2"
+              >
+                <v-icon
+                  size="small"
+                >
+                  mdi-star
+                </v-icon>
+              </v-chip>
+
+              <v-chip
                 size="small"
                 variant="flat"
               >
                 <v-icon
-                  start
                   size="small"
                   class="mr-1"
                 >
@@ -561,11 +592,17 @@ watch([selectedCategory, sortBy], () => {
               </v-avatar>
             </template>
 
-            <v-list-item-title class="text-h6 font-weight-medium mb-1">
+            <v-list-item-title
+              class="text-h6 font-weight-medium mb-1"
+              :class="{'text-wrap': mobile}"
+            >
               {{ blog.title[locale] }}
             </v-list-item-title>
 
-            <v-list-item-subtitle class="text-body-2 mb-2">
+            <v-list-item-subtitle
+              v-if="!mobile"
+              class="text-body-2 mb-2"
+            >
               {{ truncateContent(blog.content[locale], mobile
                 ? 100
                 : 140) }}
@@ -586,7 +623,6 @@ watch([selectedCategory, sortBy], () => {
                 variant="flat"
               >
                 <v-icon
-                  start
                   size="small"
                   class="mr-1"
                 >
@@ -679,7 +715,7 @@ watch([selectedCategory, sortBy], () => {
             size="large"
             @click="loadMoreBlogs"
           >
-            <v-icon start>
+            <v-icon>
               mdi-plus
             </v-icon>
             {{ $t('blog.loadMore') }}
@@ -800,6 +836,33 @@ watch([selectedCategory, sortBy], () => {
   .regular-blog-list .v-list-item {
     min-height: 100px;
   }
+
+  /* Ensure titles wrap properly on mobile */
+  .v-list-item-title.text-wrap {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    line-height: 1.3;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+
+  /* Make titles smaller on mobile */
+  .featured-blog-list .v-list-item-title {
+    font-size: 1.25rem !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    line-height: 1.3;
+  }
+
+  .regular-blog-list .v-list-item-title {
+    font-size: 1.1rem !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    line-height: 1.3;
+  }
 }
 
 @media (max-width: 600px) {
@@ -824,6 +887,23 @@ watch([selectedCategory, sortBy], () => {
     min-height: 90px;
   }
 
+  /* Make titles even smaller on very small screens */
+  .featured-blog-list .v-list-item-title {
+    font-size: 1.1rem !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    line-height: 1.3;
+  }
+
+  .regular-blog-list .v-list-item-title {
+    font-size: 1rem !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    line-height: 1.3;
+  }
+
   /* Reduce animation distance on mobile */
   @keyframes slideInFromLeft {
     0% {
@@ -834,6 +914,16 @@ watch([selectedCategory, sortBy], () => {
       transform: translateX(0);
       opacity: 1;
     }
+  }
+}
+
+/* Global title wrapping for mobile */
+@media (max-width: 960px) {
+  .v-list-item-title {
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    display: block !important;
   }
 }
 
