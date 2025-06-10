@@ -27,6 +27,7 @@ jobs:
           echo "APP_ID=${{ secrets.APP_ID }}" >> .env
           echo "TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }}" >> .env
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "NODE_ENV=production" >> .env
       
       - name: Install dependencies
         run: bun install

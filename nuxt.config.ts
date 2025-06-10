@@ -83,6 +83,11 @@ export default defineNuxtConfig({
       gen: 2,
       nodeVersion: '20',
     },
+    storage: {
+      memory: {
+        driver: 'memory',
+      },
+    },
   },
 
   experimental: {
@@ -117,10 +122,11 @@ export default defineNuxtConfig({
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'tuta-lang',
+      cookieSecure: process.env.NODE_ENV === 'production',
       alwaysRedirect: false,
       fallbackLocale: 'en',
     },
-    // @ts-expect-error @nuxtjs/seo
+    // @ts-expect-error seo
     seo: true,
     baseUrl,
   },

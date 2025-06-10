@@ -3,6 +3,8 @@ import type { DocumentReference } from 'firebase/firestore'
 import { type TBlogCategory, blogCategoriesValues } from '~/helpers/blogCategories'
 import type { IBlog, ITableOfContentsItem } from '~/models/blog'
 import { mapIBlogEncoded } from '~/models/blog'
+import type { IWorkingBlog } from '~/models/workingBlog'
+import { mapIWorkingBlogEncoded } from '~/models/workingBlog'
 
 definePageMeta({ middleware: ['auth'] })
 

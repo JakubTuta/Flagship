@@ -3,6 +3,8 @@ import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, 
 import type { IBlog } from '~/models/blog'
 import { mapIBlogDecoded } from '~/models/blog'
 import type { IUser } from '~/models/user'
+import type { IWorkingBlog } from '~/models/workingBlog'
+import { mapIWorkingBlogDecoded } from '~/models/workingBlog'
 
 export const useBlogStore = defineStore('blog', () => {
   const publishedBlogs = ref<IBlog[]>([])

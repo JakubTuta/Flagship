@@ -1,3 +1,4 @@
+/* eslint-disable node/prefer-global/process */
 export const useLanguageStore = defineStore('language', () => {
   const { locale } = useI18n()
 
@@ -5,7 +6,14 @@ export const useLanguageStore = defineStore('language', () => {
   const key = 'tuta-lang'
 
   const defaultLang: languages = 'en'
-  const langCookie = useCookie<languages>(key, { default: () => defaultLang })
+
+  // Use httpOnly: false and secure: true for production
+  const langCookie = useCookie<languages>(key, {
+    default: () => defaultLang,
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  })
 
   const currentLang = ref<languages>(langCookie.value)
 
@@ -28,15 +36,22 @@ export const useLanguageStore = defineStore('language', () => {
     }
   }
 
+  // Initialize on client-side only to prevent hydration mismatch
   const initLanguage = () => {
-    const storedLang = langCookie.value
-    if (storedLang) {
-      currentLang.value = storedLang
-      locale.value = storedLang
+    if (import.meta.client) {
+      const storedLang = langCookie.value
+      if (storedLang && storedLang !== currentLang.value) {
+        currentLang.value = storedLang
+        locale.value = storedLang
+      }
     }
-    else {
-      setLanguage(defaultLang)
-    }
+  }
+
+  // Auto-initialize when store is created on client
+  if (import.meta.client) {
+    onMounted(() => {
+      initLanguage()
+    })
   }
 
   return {
