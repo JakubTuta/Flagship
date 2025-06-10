@@ -39,19 +39,12 @@ export const useThemeStore = defineStore('theme', () => {
 
   // Initialize theme on client-side to prevent hydration mismatch
   const initTheme = () => {
-    if (process.client) {
+    if (import.meta.client) {
       const storedTheme = themeCookie.value
       if (storedTheme && storedTheme !== theme.global.name.value) {
         theme.global.name.value = storedTheme
       }
     }
-  }
-
-  // Auto-initialize when store is created on client
-  if (process.client) {
-    onMounted(() => {
-      initTheme()
-    })
   }
 
   return {

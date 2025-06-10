@@ -6,7 +6,7 @@ const { t, locale } = useI18n()
 const { isDark } = useThemeStore()
 
 useSeo({
-  url: '/blog',
+  url: '/blogs',
   useTranslation: true,
   translationKey: 'seo.pages.blog',
 })

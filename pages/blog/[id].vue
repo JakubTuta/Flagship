@@ -14,6 +14,132 @@ const author = ref<IUser | null>(null)
 const blogStore = useBlogStore()
 const authStore = useAuthStore()
 
+useSeo({
+  url: '/blog',
+  useTranslation: true,
+  translationKey: 'seo.pages.blog',
+})
+
+// Dynamic SEO based on selectedBlog
+const blogTitle = computed(() => {
+  if (!selectedBlog.value)
+    return t('seo.pages.blog.title')
+
+  return selectedBlog.value.title[locale.value]
+})
+
+const blogDescription = computed(() => {
+  if (!selectedBlog.value)
+    return t('seo.pages.blog.description')
+
+  // Try to get description from content (first 160 characters)
+  const content = selectedBlog.value.content[locale.value]
+  if (content) {
+    // Strip HTML tags and get first 160 characters
+    const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
+
+    return plainText.length > 160
+      ? `${plainText.substring(0, 157)}...`
+      : plainText
+  }
+
+  return t('seo.pages.blog.description')
+})
+
+const blogImage = computed(() => {
+  return selectedBlog.value?.image || null
+})
+
+const blogUrl = computed(() => {
+  return `/blog/${route.params.id}`
+})
+
+// Update SEO when blog data changes
+watch([selectedBlog, locale], () => {
+  if (selectedBlog.value) {
+    useSeo({
+      url: blogUrl.value,
+      useTranslation: false, // We're handling translations manually
+    })
+
+    usePageHead({
+      title: `${blogTitle.value} | ${t('seo.site.title')}`,
+      meta: [
+        {
+          name: 'description',
+          content: blogDescription.value,
+        },
+        {
+          name: 'keywords',
+          content: `${getCategoryTitle(selectedBlog.value.category)}, blog, ${author.value?.username || ''}`,
+        },
+        {
+          name: 'author',
+          content: author.value?.username || t('blog.anonymous'),
+        },
+        {
+          property: 'article:published_time',
+          content: selectedBlog.value.publishDate
+            ? new Date(selectedBlog.value.publishDate).toISOString()
+            : '',
+        },
+        {
+          property: 'article:author',
+          content: author.value?.username || t('blog.anonymous'),
+        },
+        {
+          property: 'article:section',
+          content: getCategoryTitle(selectedBlog.value.category),
+        },
+        // Open Graph
+        {
+          property: 'og:title',
+          content: `${blogTitle.value} | ${t('seo.site.title')}`,
+        },
+        {
+          property: 'og:description',
+          content: blogDescription.value,
+        },
+        {
+          property: 'og:type',
+          content: 'article',
+        },
+        {
+          property: 'og:url',
+          content: blogUrl.value,
+        },
+        ...(blogImage.value
+          ? [{
+              property: 'og:image',
+              content: blogImage.value,
+            }]
+          : []),
+        // Twitter Card
+        {
+          name: 'twitter:card',
+          content: blogImage.value
+            ? 'summary_large_image'
+            : 'summary',
+        },
+        {
+          name: 'twitter:title',
+          content: blogTitle.value,
+        },
+        {
+          name: 'twitter:description',
+          content: blogDescription.value,
+        },
+        ...(blogImage.value
+          ? [{
+              name: 'twitter:image',
+              content: blogImage.value,
+            }]
+          : []),
+      ],
+    })
+  }
+}, { immediate: true })
+
 onMounted(async () => {
   try {
     const blogId = route.params.id as string
@@ -40,14 +166,6 @@ function formatDate(date: Date | null) {
   }).format(new Date(date))
 }
 
-// Get translated text helper
-function getTranslatedText(translatedText: any) {
-  if (!translatedText)
-    return ''
-
-  return translatedText[locale.value] || translatedText.en || ''
-}
-
 // Scroll to section
 function scrollToSection(id: string) {
   const element = document.getElementById(id)
@@ -64,7 +182,7 @@ const contentBlocks = computed(() => {
   if (!selectedBlog.value?.content)
     return []
 
-  const content = getTranslatedText(selectedBlog.value.content)
+  const content = selectedBlog.value.content[locale.value]
   if (!content)
     return []
 
@@ -191,7 +309,7 @@ function processContent(content: string) {
 const processedContent = computed(() => {
   if (!selectedBlog.value?.content)
     return ''
-  const content = getTranslatedText(selectedBlog.value.content)
+  const content = selectedBlog.value.content[locale.value]
 
   return processContent(content)
 })
@@ -287,7 +405,7 @@ function getCategoryTitle(category: string) {
         <div class="blog-header-overlay">
           <div class="blog-header-content">
             <h1 class="blog-title mb-4">
-              {{ getTranslatedText(selectedBlog.title) }}
+              {{ selectedBlog.title[locale] }}
             </h1>
 
             <!-- Blog Meta Information -->
@@ -440,7 +558,7 @@ function getCategoryTitle(category: string) {
                       ? `${item.mainLevel}.`
                       : `${item.mainLevel}.${item.subLevel}.` }}
                   </span>
-                  {{ getTranslatedText(item.title) }}
+                  {{ item.title[locale] }}
                 </v-list-item-title>
               </v-list-item>
             </v-list>

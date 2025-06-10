@@ -36,7 +36,6 @@ export const useLanguageStore = defineStore('language', () => {
     }
   }
 
-  // Initialize on client-side only to prevent hydration mismatch
   const initLanguage = () => {
     if (import.meta.client) {
       const storedLang = langCookie.value
@@ -45,13 +44,6 @@ export const useLanguageStore = defineStore('language', () => {
         locale.value = storedLang
       }
     }
-  }
-
-  // Auto-initialize when store is created on client
-  if (import.meta.client) {
-    onMounted(() => {
-      initLanguage()
-    })
   }
 
   return {
