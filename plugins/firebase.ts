@@ -1,9 +1,11 @@
-import { type FirebaseAppSettings, type FirebaseOptions, initializeApp } from 'firebase/app'
+import { getAnalytics, isSupported, logEvent } from 'firebase/analytics'
+import type { FirebaseAppSettings, FirebaseOptions } from 'firebase/app'
+import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   const config = useRuntimeConfig()
 
   if (!config.public.apiKey)
@@ -16,6 +18,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     storageBucket: config.public.storageBucket,
     messagingSenderId: config.public.messagingSenderId,
     appId: config.public.appId,
+    measurementId: config.public.measurementId,
   }
 
   const firebaseConfig: FirebaseAppSettings = {
@@ -28,18 +31,37 @@ export default defineNuxtPlugin((nuxtApp) => {
   const storage = getStorage(app)
   const auth = getAuth(app)
 
-  nuxtApp.provide(
-    'firestore',
-    firestore,
-  )
+  let analytics = null
+  if (import.meta.client) {
+    try {
+      const analyticsSupported = await isSupported()
+      if (analyticsSupported) {
+        analytics = getAnalytics(app)
 
-  nuxtApp.provide(
-    'storage',
-    storage,
-  )
+        const router = useRouter()
+        router.afterEach((to) => {
+          nextTick(() => {
+            // eslint-disable-next-line no-console
+            console.log('Logging page view:', to.path)
+            logEvent(analytics!, 'page_view', {
+              page_title: document.title,
+              page_location: window.location.href,
+              page_path: to.path,
+            })
+          })
+        })
+      }
+      else {
+        console.warn('Firebase Analytics is not supported in this environment')
+      }
+    }
+    catch (error) {
+      console.error('Failed to initialize Firebase Analytics:', error)
+    }
+  }
 
-  nuxtApp.provide(
-    'auth',
-    auth,
-  )
+  nuxtApp.provide('firestore', firestore)
+  nuxtApp.provide('storage', storage)
+  nuxtApp.provide('auth', auth)
+  nuxtApp.provide('analytics', analytics)
 })
