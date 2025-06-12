@@ -20,48 +20,31 @@ useSeo({
   translationKey: 'seo.pages.blog',
 })
 
-// Dynamic SEO based on selectedBlog
-const blogTitle = computed(() => {
-  if (!selectedBlog.value)
-    return t('seo.pages.blog.title')
-
-  return selectedBlog.value.title[locale.value]
-})
+// Computed properties for SEO
+const blogTitle = computed(() => selectedBlog.value?.title[locale.value] || t('seo.pages.blog.title'),
+)
 
 const blogDescription = computed(() => {
   if (!selectedBlog.value)
     return t('seo.pages.blog.description')
 
-  // Try to get description from content (first 160 characters)
   const content = selectedBlog.value.content[locale.value]
-  if (content) {
-    // Strip HTML tags and get first 160 characters
-    const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
+  if (!content)
+    return t('seo.pages.blog.description')
 
-    return plainText.length > 160
-      ? `${plainText.substring(0, 157)}...`
-      : plainText
-  }
+  const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
 
-  return t('seo.pages.blog.description')
+  return plainText.length > 160
+    ? `${plainText.substring(0, 157)}...`
+    : plainText
 })
 
-const blogImage = computed(() => {
-  return selectedBlog.value?.image || null
-})
-
-const blogUrl = computed(() => {
-  return `/blog/${route.params.id}`
-})
+const blogImage = computed(() => selectedBlog.value?.image || null)
+const blogUrl = computed(() => `/blog/${route.params.id}`)
 
 // Update SEO when blog data changes
 watch([selectedBlog, locale], () => {
   if (selectedBlog.value) {
-    useSeo({
-      url: blogUrl.value,
-      useTranslation: false, // We're handling translations manually
-    })
-
     usePageHead({
       title: `${blogTitle.value} | ${t('seo.site.title')}`,
       meta: [
@@ -71,7 +54,8 @@ watch([selectedBlog, locale], () => {
         },
         {
           name: 'keywords',
-          content: `${getCategoryTitle(selectedBlog.value.category)}, blog, ${author.value?.username || ''}`,
+          content: `${getCategoryTitle(selectedBlog.value.category)}, 
+          blog, ${author.value?.username || ''}`,
         },
         {
           name: 'author',
@@ -91,7 +75,6 @@ watch([selectedBlog, locale], () => {
           property: 'article:section',
           content: getCategoryTitle(selectedBlog.value.category),
         },
-        // Open Graph
         {
           property: 'og:title',
           content: `${blogTitle.value} | ${t('seo.site.title')}`,
@@ -109,12 +92,8 @@ watch([selectedBlog, locale], () => {
           content: blogUrl.value,
         },
         ...(blogImage.value
-          ? [{
-              property: 'og:image',
-              content: blogImage.value,
-            }]
+          ? [{ property: 'og:image', content: blogImage.value }]
           : []),
-        // Twitter Card
         {
           name: 'twitter:card',
           content: blogImage.value
@@ -130,10 +109,7 @@ watch([selectedBlog, locale], () => {
           content: blogDescription.value,
         },
         ...(blogImage.value
-          ? [{
-              name: 'twitter:image',
-              content: blogImage.value,
-            }]
+          ? [{ name: 'twitter:image', content: blogImage.value }]
           : []),
       ],
     })
@@ -154,7 +130,7 @@ onMounted(async () => {
   }
 })
 
-// Format date helper
+// Utility functions
 function formatDate(date: Date | null) {
   if (!date)
     return ''
@@ -166,34 +142,40 @@ function formatDate(date: Date | null) {
   }).format(new Date(date))
 }
 
-// Scroll to section
 function scrollToSection(id: string) {
-  const element = document.getElementById(id)
-  if (element) {
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
-  }
+  document.getElementById(id)?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  })
 }
 
-// Parse content into blocks for better rendering
-const contentBlocks = computed(() => {
-  if (!selectedBlog.value?.content)
-    return []
+function copyText(text: string) {
+  navigator.clipboard.writeText(text)
+}
 
-  const content = selectedBlog.value.content[locale.value]
+function getFromLanguage(language: string | null) {
+  const langMap = {
+    pl: 'blog.fromPolish',
+    en: 'blog.fromEnglish',
+  }
+
+  return t(langMap[language as keyof typeof langMap] || 'blog.fromUnknown')
+}
+
+function getCategoryTitle(category: string) {
+  return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
+}
+
+// Simplified content processing - single function that handles everything
+function processContent(content: string): Array<{ type: string, content: string, language?: string }> {
   if (!content)
     return []
 
   const blocks: Array<{ type: string, content: string, language?: string }> = []
-
-  // Split by code blocks first
   const parts = content.split(/(```[\s\S]*?```)/g)
 
-  parts.forEach((part: any) => {
+  parts.forEach((part) => {
     if (part.startsWith('```') && part.endsWith('```')) {
-      // Extract language and content from code block
       const match = part.match(/```(\w+)?\n([\s\S]*?)```/)
       if (match) {
         blocks.push({
@@ -204,128 +186,87 @@ const contentBlocks = computed(() => {
       }
     }
     else if (part.trim()) {
-      // Process regular text content
-      const processedText = part
-        // Bold text
+      let processedText = part
+        // Text formatting
         .replace(/\*\*(.*?)\*\*/g, '<strong class="blog-bold">$1</strong>')
-        // Italic text
         .replace(/\*(.*?)\*/g, '<em class="blog-italic">$1</em>')
-        // Underlined text
         .replace(/__(.*?)__/g, '<u class="blog-underline">$1</u>')
-        // Headers with IDs (preserve existing IDs or generate new ones)
-        .replace(/^# (.*$)/gm, (match: any, title: any) => {
-          const existingId = title.match(/id="([^"]+)"/)
-          if (existingId)
-            return match
-          const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')
+        .replace(/`([^`]+)`/g, '<code class="blog-inline-code">$1</code>')
 
-          return `<h1 id="${id}" class="blog-h1">${title}</h1>`
+        // Images
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="blog-image" />')
+        .replace(/<img([^>]*)>/g, (match, attrs) => {
+          return attrs.includes('class=')
+            ? match.replace(/class="[^"]*"/, 'class="blog-image"')
+            : `<img${attrs} class="blog-image">`
         })
-        .replace(/^## (.*$)/gm, (match: any, title: any) => {
-          const existingId = title.match(/id="([^"]+)"/)
-          if (existingId)
+
+        // Lists
+        .replace(/^- (.*$)/gm, '<li class="blog-list-item">$1</li>')
+        .replace(/^(\d+)\.(\d+)\. (.*$)/gm, '<li class="blog-sublist-item" data-number="$1.$2">$3</li>')
+        .replace(/^(\d+)\. (.*$)/gm, '<li class="blog-numbered-item" data-number="$1">$2</li>')
+        .replace(/(<li class="blog-list-item">.*?<\/li>)(\s*<li class="blog-list-item">.*?<\/li>)*/gs, '<ul class="blog-list">$&</ul>')
+        .replace(/(<li class="blog-numbered-item".*?<\/li>)(\s*<li class="blog-(?:numbered-item|sublist-item)".*?<\/li>)*/gs, '<ol class="blog-numbered-list">$&</ol>')
+
+        // Line breaks
+        .replace(/\n/g, '<br>')
+
+      // Process headers with table of contents numbering
+      if (selectedBlog.value?.tableOfContents) {
+        processedText = processedText
+          .replace(/<h2 id="([^"]+)"[^>]*>(.*?)<\/h2>/gi, (match, id, title) => {
+            const tocItem = selectedBlog.value!.tableOfContents.find(item => item.id === id)
+            const displayTitle = tocItem?.subLevel === null && tocItem
+              ? `${tocItem.mainLevel}. ${tocItem.title[locale.value]}`
+              : title.trim()
+
+            return `<h2 id="${id}" class="blog-h2">${displayTitle}</h2>`
+          })
+          .replace(/<h3 id="([^"]+)"[^>]*>(.*?)<\/h3>/gi, (match, id, title) => {
+            const tocItem = selectedBlog.value!.tableOfContents.find(item => item.id === id)
+            const displayTitle = tocItem?.subLevel !== null && tocItem
+              ? `${tocItem.mainLevel}.${tocItem.subLevel}. ${tocItem.title[locale.value]}`
+              : title.trim()
+
+            return `<h3 id="${id}" class="blog-h3">${displayTitle}</h3>`
+          })
+      }
+
+      // Handle markdown headers (fallback)
+      processedText = processedText
+        .replace(/^# (.*$)/gm, '<h1 class="blog-h1">$1</h1>')
+        .replace(/^## (.*$)/gm, (match, title) => {
+          if (title.includes('<h2'))
             return match
           const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')
 
           return `<h2 id="${id}" class="blog-h2">${title}</h2>`
         })
-        .replace(/^### (.*$)/gm, (match: any, title: any) => {
-          const existingId = title.match(/id="([^"]+)"/)
-          if (existingId)
+        .replace(/^### (.*$)/gm, (match, title) => {
+          if (title.includes('<h3'))
             return match
           const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')
 
           return `<h3 id="${id}" class="blog-h3">${title}</h3>`
         })
-        // Images - handle both markdown and HTML img tags
-        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="blog-image" />')
-        .replace(/<img([^>]*)>/g, (match: any, attrs: any) => {
-          if (attrs.includes('class=')) {
-            return match.replace(/class="[^"]*"/, 'class="blog-image"')
-          }
-          else {
-            return `<img${attrs} class="blog-image">`
-          }
-        })
-        // Inline code
-        .replace(/`([^`]+)`/g, '<code class="blog-inline-code">$1</code>')
-        // Unordered lists
-        .replace(/^- (.*$)/gm, '<li class="blog-list-item">$1</li>')
-        // Numbered lists with sub-levels
-        .replace(/^(\d+)\.(\d+)\. (.*$)/gm, '<li class="blog-sublist-item" data-number="$1.$2">$3</li>')
-        .replace(/^(\d+)\. (.*$)/gm, '<li class="blog-numbered-item" data-number="$1">$2</li>')
-        // Wrap consecutive list items
-        .replace(/(<li class="blog-list-item">.*?<\/li>)(\s*<li class="blog-list-item">.*?<\/li>)*/gs, '<ul class="blog-list">$&</ul>')
-        .replace(/(<li class="blog-numbered-item".*?<\/li>)(\s*<li class="blog-(?:numbered-item|sublist-item)".*?<\/li>)*/gs, '<ol class="blog-numbered-list">$&</ol>')
-        // Line breaks
-        .replace(/\n/g, '<br>')
 
-      blocks.push({
-        type: 'text',
-        content: processedText,
-      })
+      blocks.push({ type: 'text', content: processedText })
     }
   })
 
   return blocks
-})
-
-function copyText(text: string) {
-  navigator.clipboard.writeText(text)
 }
 
-// Fallback for simple content processing (if needed)
-function processContent(content: string) {
-  if (!content)
-    return ''
-
-  return content
-    // Bold text
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="blog-bold">$1</strong>')
-    // Italic text
-    .replace(/\*(.*?)\*/g, '<em class="blog-italic">$1</em>')
-    // Underlined text
-    .replace(/__(.*?)__/g, '<u class="blog-underline">$1</u>')
-    // Headers
-    .replace(/^# (.*$)/gm, '<h1 class="blog-h1">$1</h1>')
-    .replace(/^## (.*$)/gm, '<h2 class="blog-h2">$1</h2>')
-    .replace(/^### (.*$)/gm, '<h3 class="blog-h3">$1</h3>')
-    // Inline code
-    .replace(/`([^`]+)`/g, '<code class="blog-inline-code">$1</code>')
-    // Code blocks
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="blog-code-block"><code class="language-$1">$2</code></pre>')
-    // Unordered lists
-    .replace(/^- (.*$)/gm, '<li class="blog-list-item">$1</li>')
-    // Numbered lists with sub-levels
-    .replace(/^(\d+)\.(\d+)\. (.*$)/gm, '<li class="blog-sublist-item" data-number="$1.$2">$3</li>')
-    .replace(/^(\d+)\. (.*$)/gm, '<li class="blog-numbered-item" data-number="$1">$2</li>')
-    // Wrap consecutive list items
-    .replace(/(<li class="blog-list-item">.*?<\/li>)(\s*<li class="blog-list-item">.*?<\/li>)*/gs, '<ul class="blog-list">$&</ul>')
-    .replace(/(<li class="blog-numbered-item".*?<\/li>)(\s*<li class="blog-(?:numbered-item|sublist-item)".*?<\/li>)*/gs, '<ol class="blog-numbered-list">$&</ol>')
-    // Line breaks
-    .replace(/\n/g, '<br>')
-}
-
-const processedContent = computed(() => {
+// Single computed property for processed content
+const contentBlocks = computed(() => {
   if (!selectedBlog.value?.content)
-    return ''
+    return []
   const content = selectedBlog.value.content[locale.value]
 
-  return processContent(content)
+  return content
+    ? processContent(content)
+    : []
 })
-
-function getFromLanguage(language: string | null) {
-  if (language === 'pl')
-    return t('blog.fromPolish')
-  else if (language === 'en')
-    return t('blog.fromEnglish')
-  else
-    return t('blog.fromUnknown')
-}
-
-function getCategoryTitle(category: string) {
-  return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
-}
 </script>
 
 <!-- eslint-disable vue/no-v-html -->
@@ -389,6 +330,7 @@ function getCategoryTitle(category: string) {
           {{ $t('blog.backToBlogs') }}
         </v-btn>
       </div>
+
       <!-- Blog Header -->
       <div
         class="blog-header mb-8"
@@ -426,9 +368,7 @@ function getCategoryTitle(category: string) {
                   mdi-calendar
                 </v-icon>
 
-                <span class="text-body-2 text-on-primary">
-                  {{ formatDate(selectedBlog.publishDate) }}
-                </span>
+                <span class="text-body-2 text-on-primary">{{ formatDate(selectedBlog.publishDate) }}</span>
               </v-col>
 
               <v-col
@@ -444,9 +384,7 @@ function getCategoryTitle(category: string) {
                   mdi-account
                 </v-icon>
 
-                <span class="text-body-2 text-on-primary">
-                  {{ author?.username || $t('blog.anonymous') }}
-                </span>
+                <span class="text-body-2 text-on-primary">{{ author?.username || $t('blog.anonymous') }}</span>
               </v-col>
 
               <v-col
@@ -462,9 +400,7 @@ function getCategoryTitle(category: string) {
                   mdi-eye
                 </v-icon>
 
-                <span class="text-body-2 text-on-primary">
-                  {{ selectedBlog.viewCount }} {{ $t('blog.views') }}
-                </span>
+                <span class="text-body-2 text-on-primary">{{ selectedBlog.viewCount }} {{ $t('blog.views') }}</span>
               </v-col>
             </v-row>
 
@@ -486,7 +422,6 @@ function getCategoryTitle(category: string) {
                   {{ $t('blog.featured1') }}
                 </v-chip>
               </v-col>
-
               <!-- Category Badge -->
               <v-col
                 cols="12"
@@ -505,17 +440,19 @@ function getCategoryTitle(category: string) {
         </div>
       </div>
 
-      <!-- Blog Content with Enhanced Code Block Rendering -->
+      <!-- Blog Content Card -->
       <v-card
         class="blog-content-card mb-8"
         elevation="2"
       >
+        <!-- Language Warning -->
         <div
           v-if="selectedBlog.mainLanguage !== locale"
           class="text-subtitle-1 px-2 py-4"
         >
           {{ $t('blog.languageWarning', {"language": getFromLanguage(selectedBlog.mainLanguage)}) }}
         </div>
+
         <!-- Table of Contents -->
         <div
           v-if="selectedBlog.tableOfContents.length > 0"
@@ -540,18 +477,14 @@ function getCategoryTitle(category: string) {
                 v-for="item in selectedBlog.tableOfContents"
                 :key="item.id"
                 class="toc-item"
-                :class="{
-                  'toc-main': item.subLevel === null,
-                  'toc-sub': item.subLevel !== null,
-                }"
+                :class="{'toc-main': item.subLevel === null,
+                         'toc-sub': item.subLevel !== null}"
                 @click="scrollToSection(item.id)"
               >
                 <v-list-item-title
                   class="toc-title"
-                  :class="{
-                    'text-primary': item.subLevel === null,
-                    'text-secondary': item.subLevel !== null,
-                  }"
+                  :class="{'text-primary': item.subLevel === null,
+                           'text-secondary': item.subLevel !== null}"
                 >
                   <span class="toc-number">
                     {{ item.subLevel === null
@@ -567,50 +500,30 @@ function getCategoryTitle(category: string) {
           <v-divider class="mb-0" />
         </div>
 
+        <!-- Blog Content -->
         <v-card-text class="pa-8">
           <div class="blog-text">
             <template
               v-for="(block, index) in contentBlocks"
               :key="index"
             >
-              <!-- Enhanced Code blocks -->
+              <!-- Code blocks -->
               <v-card
                 v-if="block.type === 'code-block'"
                 class="blog-code-block-card mb-4 max-w-1000px"
                 variant="outlined"
               >
                 <v-card-title
-                  v-if="block.language"
                   class="d-flex justify-space-between align-center px-3 py-2"
                   style="font-size: 0.9em;"
                 >
-                  <span class="text-caption font-weight-medium text-uppercase">
+                  <span
+                    v-if="block.language"
+                    class="text-caption font-weight-medium text-uppercase"
+                  >
                     {{ block.language }}
                   </span>
 
-                  <v-btn
-                    icon="mdi-content-copy"
-                    variant="text"
-                    size="x-small"
-                    density="comfortable"
-                    @click="copyText(block.content)"
-                  >
-                    <v-icon size="16">
-                      mdi-content-copy
-                    </v-icon>
-
-                    <v-tooltip
-                      text="Copy code"
-                      location="top"
-                      activator="parent"
-                    />
-                  </v-btn>
-                </v-card-title>
-
-                <v-card-title
-                  v-else
-                  class="d-flex align-center justify-end px-3 py-2"
-                >
                   <v-btn
                     icon="mdi-content-copy"
                     variant="text"
@@ -644,20 +557,13 @@ function getCategoryTitle(category: string) {
                 v-html="block.content"
               />
             </template>
-
-            <!-- Fallback to old system if no blocks -->
-            <div
-              v-if="contentBlocks.length === 0"
-              class="blog-text-content"
-              v-html="processedContent"
-            />
           </div>
         </v-card-text>
       </v-card>
 
       <!-- Links Section -->
       <v-card
-        v-if="selectedBlog.links && selectedBlog.links.length > 0"
+        v-if="selectedBlog.links?.length"
         class="blog-links mb-8"
         variant="outlined"
       >
@@ -692,7 +598,7 @@ function getCategoryTitle(category: string) {
 
       <!-- Related Projects -->
       <v-card
-        v-if="selectedBlog.projects && selectedBlog.projects.length > 0"
+        v-if="selectedBlog.projects?.length"
         class="blog-projects"
         variant="outlined"
       >
@@ -721,7 +627,7 @@ function getCategoryTitle(category: string) {
 </template>
 
 <style scoped>
-/* Image Styling */
+/* All existing styles remain the same */
 :deep(.blog-image) {
   width: 50% !important;
   height: auto;
@@ -736,7 +642,6 @@ function getCategoryTitle(category: string) {
   margin: 0 auto;
 }
 
-/* Table of Contents Styling */
 .table-of-contents {
   background: rgb(var(--v-theme-surface-variant));
   border-radius: 16px 16px 0 0;
@@ -778,7 +683,6 @@ function getCategoryTitle(category: string) {
   display: inline-block;
 }
 
-/* Blog Header Styling */
 .blog-header {
   position: relative;
   border-radius: 20px;
@@ -835,23 +739,17 @@ function getCategoryTitle(category: string) {
   color: rgba(var(--v-theme-on-primary-rgb), 0.9);
 }
 
-.blog-summary {
-  border-left: 4px solid rgb(var(--v-theme-primary));
-}
-
 .blog-content-card {
   border-radius: 16px !important;
   overflow: hidden;
 }
 
-/* Blog Content Styling */
 .blog-text {
   font-size: 1.125rem;
   line-height: 1.7;
   color: rgb(var(--v-theme-on-surface));
 }
 
-/* Enhanced Code Block Styling */
 :deep(.blog-code-block-card) {
   border-radius: 12px !important;
   overflow: hidden;
@@ -871,7 +769,6 @@ function getCategoryTitle(category: string) {
   overflow-x: auto;
 }
 
-/* Typography Styles */
 :deep(.blog-h1) {
   font-size: 2rem;
   font-weight: 500;
@@ -883,18 +780,18 @@ function getCategoryTitle(category: string) {
 }
 
 :deep(.blog-h2) {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 500;
   margin: 1.5rem 0 0.75rem 0;
-  color: rgb(var(--v-theme-secondary));
+  color: rgb(var(--v-theme-primary));
   scroll-margin-top: 100px;
 }
 
 :deep(.blog-h3) {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 500;
   margin: 1.25rem 0 0.5rem 0;
-  color: rgb(var(--v-theme-on-surface));
+  color: rgb(var(--v-theme-secondary));
   scroll-margin-top: 100px;
 }
 
@@ -914,7 +811,6 @@ function getCategoryTitle(category: string) {
   text-underline-offset: 2px;
 }
 
-/* Code Styling */
 :deep(.blog-inline-code) {
   background: rgba(var(--v-theme-primary), 0.1);
   color: rgb(var(--v-theme-primary));
@@ -926,23 +822,6 @@ function getCategoryTitle(category: string) {
   border: 1px solid rgba(var(--v-theme-primary), 0.2);
 }
 
-:deep(.blog-code-block) {
-  background: rgb(var(--v-theme-surface-variant));
-  border: 1px solid rgb(var(--v-theme-surface-variant-dark));
-  border-radius: 8px;
-  padding: 1rem;
-  margin: 1rem 0;
-  overflow-x: auto;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-}
-
-:deep(.blog-code-block code) {
-  color: rgb(var(--v-theme-on-surface));
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-/* List Styling */
 :deep(.blog-list) {
   margin: 1rem 0;
   padding-left: 0;
@@ -1008,7 +887,6 @@ function getCategoryTitle(category: string) {
   min-width: 2.5rem;
 }
 
-/* Responsive Design */
 @media (max-width: 600px) {
   :deep(.blog-image) {
     max-width: 80% !important;
