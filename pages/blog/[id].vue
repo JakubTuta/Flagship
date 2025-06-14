@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import BlogContent from '~/components/BlogContent.vue'
 import type { IBlog } from '~/models/blog'
 import type { IUser } from '~/models/user'
 
@@ -120,6 +121,12 @@ onMounted(async () => {
   try {
     const blogId = route.params.id as string
     selectedBlog.value = await blogStore.getBlogUser(blogId)
+
+    if (selectedBlog.value) {
+      blogStore.addView(selectedBlog.value)
+      selectedBlog.value.viewCount += 1
+    }
+
     author.value = await authStore.getUserDataFromRef(selectedBlog.value?.author || null)
   }
   catch (error) {
@@ -142,134 +149,11 @@ function formatDate(date: Date | null) {
   }).format(new Date(date))
 }
 
-function scrollToSection(id: string) {
-  document.getElementById(id)?.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start',
-  })
-}
-
-function copyText(text: string) {
-  navigator.clipboard.writeText(text)
-}
-
-function getFromLanguage(language: string | null) {
-  const langMap = {
-    pl: 'blog.fromPolish',
-    en: 'blog.fromEnglish',
-  }
-
-  return t(langMap[language as keyof typeof langMap] || 'blog.fromUnknown')
-}
-
 function getCategoryTitle(category: string) {
   return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
 }
-
-// Simplified content processing - single function that handles everything
-function processContent(content: string): Array<{ type: string, content: string, language?: string }> {
-  if (!content)
-    return []
-
-  const blocks: Array<{ type: string, content: string, language?: string }> = []
-  const parts = content.split(/(```[\s\S]*?```)/g)
-
-  parts.forEach((part) => {
-    if (part.startsWith('```') && part.endsWith('```')) {
-      const match = part.match(/```(\w+)?\n([\s\S]*?)```/)
-      if (match) {
-        blocks.push({
-          type: 'code-block',
-          language: match[1] || '',
-          content: match[2] || '',
-        })
-      }
-    }
-    else if (part.trim()) {
-      let processedText = part
-        // Text formatting
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="blog-bold">$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em class="blog-italic">$1</em>')
-        .replace(/__(.*?)__/g, '<u class="blog-underline">$1</u>')
-        .replace(/`([^`]+)`/g, '<code class="blog-inline-code">$1</code>')
-
-        // Images
-        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="blog-image" />')
-        .replace(/<img([^>]*)>/g, (match, attrs) => {
-          return attrs.includes('class=')
-            ? match.replace(/class="[^"]*"/, 'class="blog-image"')
-            : `<img${attrs} class="blog-image">`
-        })
-
-        // Lists
-        .replace(/^- (.*$)/gm, '<li class="blog-list-item">$1</li>')
-        .replace(/^(\d+)\.(\d+)\. (.*$)/gm, '<li class="blog-sublist-item" data-number="$1.$2">$3</li>')
-        .replace(/^(\d+)\. (.*$)/gm, '<li class="blog-numbered-item" data-number="$1">$2</li>')
-        .replace(/(<li class="blog-list-item">.*?<\/li>)(\s*<li class="blog-list-item">.*?<\/li>)*/gs, '<ul class="blog-list">$&</ul>')
-        .replace(/(<li class="blog-numbered-item".*?<\/li>)(\s*<li class="blog-(?:numbered-item|sublist-item)".*?<\/li>)*/gs, '<ol class="blog-numbered-list">$&</ol>')
-
-        // Line breaks
-        .replace(/\n/g, '<br>')
-
-      // Process headers with table of contents numbering
-      if (selectedBlog.value?.tableOfContents) {
-        processedText = processedText
-          .replace(/<h2 id="([^"]+)"[^>]*>(.*?)<\/h2>/gi, (match, id, title) => {
-            const tocItem = selectedBlog.value!.tableOfContents.find(item => item.id === id)
-            const displayTitle = tocItem?.subLevel === null && tocItem
-              ? `${tocItem.mainLevel}. ${tocItem.title[locale.value]}`
-              : title.trim()
-
-            return `<h2 id="${id}" class="blog-h2">${displayTitle}</h2>`
-          })
-          .replace(/<h3 id="([^"]+)"[^>]*>(.*?)<\/h3>/gi, (match, id, title) => {
-            const tocItem = selectedBlog.value!.tableOfContents.find(item => item.id === id)
-            const displayTitle = tocItem?.subLevel !== null && tocItem
-              ? `${tocItem.mainLevel}.${tocItem.subLevel}. ${tocItem.title[locale.value]}`
-              : title.trim()
-
-            return `<h3 id="${id}" class="blog-h3">${displayTitle}</h3>`
-          })
-      }
-
-      // Handle markdown headers (fallback)
-      processedText = processedText
-        .replace(/^# (.*$)/gm, '<h1 class="blog-h1">$1</h1>')
-        .replace(/^## (.*$)/gm, (match, title) => {
-          if (title.includes('<h2'))
-            return match
-          const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')
-
-          return `<h2 id="${id}" class="blog-h2">${title}</h2>`
-        })
-        .replace(/^### (.*$)/gm, (match, title) => {
-          if (title.includes('<h3'))
-            return match
-          const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')
-
-          return `<h3 id="${id}" class="blog-h3">${title}</h3>`
-        })
-
-      blocks.push({ type: 'text', content: processedText })
-    }
-  })
-
-  return blocks
-}
-
-// Single computed property for processed content
-const contentBlocks = computed(() => {
-  if (!selectedBlog.value?.content)
-    return []
-  const content = selectedBlog.value.content[locale.value]
-
-  return content
-    ? processContent(content)
-    : []
-})
 </script>
 
-<!-- eslint-disable vue/no-v-html -->
 <template>
   <v-container class="blog-detail-page py-8">
     <!-- Loading State -->
@@ -445,120 +329,11 @@ const contentBlocks = computed(() => {
         class="blog-content-card mb-8"
         elevation="2"
       >
-        <!-- Language Warning -->
-        <div
-          v-if="selectedBlog.mainLanguage !== locale"
-          class="text-subtitle-1 px-2 py-4"
-        >
-          {{ $t('blog.languageWarning', {"language": getFromLanguage(selectedBlog.mainLanguage)}) }}
-        </div>
-
-        <!-- Table of Contents -->
-        <div
-          v-if="selectedBlog.tableOfContents.length > 0"
-          class="table-of-contents"
-        >
-          <v-card-title class="pb-2">
-            <v-icon class="mr-2">
-              mdi-format-list-bulleted
-            </v-icon>
-            {{ $t('blog.tableOfContents') }}
-          </v-card-title>
-
-          <v-divider class="mb-4" />
-
-          <v-card-text class="pt-0">
-            <v-list
-              density="compact"
-              bg-color="transparent"
-              class="toc-list"
-            >
-              <v-list-item
-                v-for="item in selectedBlog.tableOfContents"
-                :key="item.id"
-                class="toc-item"
-                :class="{'toc-main': item.subLevel === null,
-                         'toc-sub': item.subLevel !== null}"
-                @click="scrollToSection(item.id)"
-              >
-                <v-list-item-title
-                  class="toc-title"
-                  :class="{'text-primary': item.subLevel === null,
-                           'text-secondary': item.subLevel !== null}"
-                >
-                  <span class="toc-number">
-                    {{ item.subLevel === null
-                      ? `${item.mainLevel}.`
-                      : `${item.mainLevel}.${item.subLevel}.` }}
-                  </span>
-                  {{ item.title[locale] }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-
-          <v-divider class="mb-0" />
-        </div>
-
-        <!-- Blog Content -->
-        <v-card-text class="pa-8">
-          <div class="blog-text">
-            <template
-              v-for="(block, index) in contentBlocks"
-              :key="index"
-            >
-              <!-- Code blocks -->
-              <v-card
-                v-if="block.type === 'code-block'"
-                class="blog-code-block-card mb-4 max-w-1000px"
-                variant="outlined"
-              >
-                <v-card-title
-                  class="d-flex justify-space-between align-center px-3 py-2"
-                  style="font-size: 0.9em;"
-                >
-                  <span
-                    v-if="block.language"
-                    class="text-caption font-weight-medium text-uppercase"
-                  >
-                    {{ block.language }}
-                  </span>
-
-                  <v-btn
-                    icon="mdi-content-copy"
-                    variant="text"
-                    size="x-small"
-                    density="comfortable"
-                    @click="copyText(block.content)"
-                  >
-                    <v-icon size="16">
-                      mdi-content-copy
-                    </v-icon>
-
-                    <v-tooltip
-                      text="Copy code"
-                      location="top"
-                      activator="parent"
-                    />
-                  </v-btn>
-                </v-card-title>
-
-                <v-divider />
-
-                <v-card-text class="pa-3">
-                  <pre class="blog-code-content"><code>{{ block.content }}</code></pre>
-                </v-card-text>
-              </v-card>
-
-              <!-- Regular text content -->
-              <div
-                v-else-if="block.type === 'text'"
-                class="blog-text-content"
-                v-html="block.content"
-              />
-            </template>
-          </div>
-        </v-card-text>
+        <BlogContent
+          :blog-content="selectedBlog.content[locale]"
+          :table-of-contents="selectedBlog.tableOfContents"
+          :main-language="selectedBlog.mainLanguage || undefined"
+        />
       </v-card>
 
       <!-- Links Section -->

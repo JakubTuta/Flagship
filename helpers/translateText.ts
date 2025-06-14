@@ -22,7 +22,7 @@ export function decodeWhitespace(text: string): string {
 function getTemplate(text: string) {
   return `You are a translation assistant. Translate the given text to English and Polish only.
 
-CRITICAL FORMATTING RULES:
+CRITICAL RULES:
 - Do NOT translate any code between triple backticks (\`\`\`) or single backticks (\`)
 - Keep all code blocks exactly as they are
 - PRESERVE ALL ENCODED WHITESPACE: Text contains encoded whitespace markers like |||NEWLINE|||, |||TAB|||, |||SPACES_X||| - keep these EXACTLY as they are
@@ -32,6 +32,8 @@ CRITICAL FORMATTING RULES:
 - If the text is already in English or Polish, still provide both translations
 - Maintain the exact same structure and all encoded whitespace markers
 - Do NOT change the text in any way other than translating the readable content
+- Do NOT add any additional explanations or comments
+- Do NOT translate file paths, URLs, or code snippets
 
 The text contains encoded whitespace markers that must be preserved exactly. Only translate the readable text content.
 
@@ -56,7 +58,7 @@ export async function translateText(text: string | null): Promise<ITranslatedTex
   if (!apiKey) {
     console.error('GEMINI_API_KEY is not set in the environment variables.')
 
-    return { pl: '', en: '' }
+    return { pl: text, en: text }
   }
 
   try {
@@ -88,7 +90,7 @@ export async function translateText(text: string | null): Promise<ITranslatedTex
     if (!response || !response.text) {
       console.error('No response text received from the translation API.')
 
-      return { pl: '', en: '' }
+      return { pl: text, en: text }
     }
 
     const result = JSON.parse(response.text) as ITranslatedText
@@ -102,6 +104,6 @@ export async function translateText(text: string | null): Promise<ITranslatedTex
   catch (error) {
     console.error('Error translating text:', error)
 
-    return { pl: '', en: '' }
+    return { pl: text, en: text }
   }
 }

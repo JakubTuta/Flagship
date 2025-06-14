@@ -41,8 +41,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         const router = useRouter()
         router.afterEach((to) => {
           nextTick(() => {
-            // eslint-disable-next-line no-console
-            console.log('Logging page view:', to.path)
             logEvent(analytics!, 'page_view', {
               page_title: document.title,
               page_location: window.location.href,

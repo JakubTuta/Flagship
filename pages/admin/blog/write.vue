@@ -825,77 +825,8 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
-// ========================
-// PREVIEW FUNCTIONALITY
-// ========================
-const contentBlocks = computed(() => {
-  const content = blogContent.value
-  const blocks: Array<{ type: string, content: string, title?: string }> = []
-
-  // Split content by code blocks first
-  const parts = content.split(/(```[\s\S]*?```)/g)
-
-  parts.forEach((part) => {
-    if (part.startsWith('```') && part.endsWith('```')) {
-      // This is a code block
-      const lines = part.slice(3, -3).split('\n')
-      const firstLine = lines[0] || ''
-      const title = firstLine.trim()
-      const codeContent = lines.slice(title
-        ? 1
-        : 0).join('\n')
-
-      blocks.push({
-        type: 'code-block',
-        title: title || undefined,
-        content: codeContent,
-      })
-    }
-    else if (part.trim()) {
-      // Regular text content - HTML tags are already in place, just handle inline code
-      const processedContent = part
-        // Handle inline code separately for preview
-        .replace(/<code>([^<]+)<\/code>/g, '|||INLINE_CODE_START|||$1|||INLINE_CODE_END|||')
-        // Convert numbered sub-list items to HTML (must come before main numbered list)
-        .replace(/^(\d+)\.(\d+)\. (.+)$/gm, '<li style="margin-left: 20px;">$3</li>')
-        // Convert main numbered list items to HTML
-        .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
-        // Convert bullet list items to HTML
-        .replace(/^- (.+)$/gm, '<li>$1</li>')
-        // Wrap consecutive list items in <ol> or <ul> tags
-        .replace(/(<li>.*<\/li>)(\n<li>.*<\/li>)*/g, (match) => {
-          // Check if any line has indented items (sub-numbered lists)
-          if (match.includes('margin-left: 20px')) {
-            return `<ol>${match.replace(/\n/g, '')}</ol>`
-          }
-          // Check if it's a numbered list (original numbered items)
-          else if (match.includes('<li>') && part.match(/^\d+\. /gm)) {
-            return `<ol>${match.replace(/\n/g, '')}</ol>`
-          }
-          // Default to unordered list (bullet points)
-          else {
-            return `<ul>${match.replace(/\n/g, '')}</ul>`
-          }
-        })
-        // Line breaks (after header processing, but preserve image tags on their own lines)
-        .replace(/\n(?!<img)/g, '<br>')
-
-      blocks.push({
-        type: 'text',
-        content: processedContent,
-      })
-    }
-  })
-
-  return blocks
-})
-
 function togglePreviewMode() {
   isPreviewMode.value = !isPreviewMode.value
-}
-
-function copyText(text: string) {
-  navigator.clipboard.writeText(text)
 }
 
 // ========================
@@ -961,9 +892,11 @@ async function prepareBlog(isPublished: boolean, reference: DocumentReference | 
     })),
   )
 
+  const value = savedBlog.value?.value || savedWorkingBlog.value?.value || translatedTitle.en.replace(/\s+/g, '-').toLowerCase()
+
   return mapIBlogEncoded({
     title: translatedTitle,
-    value: translatedTitle.en.replace(/\s+/g, '-').toLowerCase(),
+    value,
     content: translatedContent,
     isPublished,
     featured: isFeatured.value,
@@ -1218,89 +1151,15 @@ async function deleteBlog() {
           />
         </div>
 
-        <div v-else>
-          <v-card
-            class="pa-4"
-          >
-            <template
-              v-for="(block, index) in contentBlocks"
-              :key="index"
-            >
-              <!-- Code blocks -->
-              <v-card
-                v-if="block.type === 'code-block'"
-                class="ma-2"
-                color="surface-variant-light"
-                max-width="1000"
-              >
-                <v-card-title
-                  style="font-size: 0.9em;"
-                  class="d-flex justify-space-between align-center"
-                >
-                  <div>
-                    {{ block.title }}
-                  </div>
-
-                  <v-btn
-                    icon="mdi-content-copy"
-                    variant="text"
-                    size="x-small"
-                    rounded="circle"
-                    @click="copyText(block.content)"
-                  />
-                </v-card-title>
-
-                <v-divider v-if="block.title" />
-
-                <v-card-text
-                  class="pa-3"
-                  style="white-space: pre-wrap;"
-                >
-                  {{ block.content }}
-                </v-card-text>
-              </v-card>
-
-              <!-- Text content -->
-              <div
-                v-else-if="block.type === 'text'"
-                class="mb-2"
-              >
-                <template
-                  v-for="(part, partIndex) in block.content.split('|||INLINE_CODE_START|||')"
-                  :key="partIndex"
-                >
-                  <template v-if="part.includes('|||INLINE_CODE_END|||')">
-                    <template
-                      v-for="(subPart, subIndex) in part.split('|||INLINE_CODE_END|||')"
-                      :key="subIndex"
-                    >
-                      <v-card
-                        v-if="subIndex === 0"
-                        variant="flat"
-                        density="compact"
-                        color="surface-variant-light"
-                        class="d-inline-block mx-1 px-2"
-                        style="font-family: monospace; font-size: 0.9em; font-style: italic; width: fit-content;"
-                      >
-                        {{ subPart }}
-                      </v-card>
-
-                      <span
-                        v-else
-                        v-html="subPart"
-                      />
-                    </template>
-                  </template>
-
-                  <span
-                    v-else
-                    v-html="part"
-                  />
-                </template>
-              </div>
-            </template>
-          </v-card>
-        </div>
+        <v-card
+          v-else
+          class="blog-content-card mb-8"
+          elevation="2"
+        >
+          <BlogContent
+            :blog-content="blogContent"
+          />
+        </v-card>
 
         <v-combobox
           v-model="links"

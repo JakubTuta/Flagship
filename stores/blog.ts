@@ -1,5 +1,5 @@
 import type { DocumentReference } from 'firebase/firestore'
-import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import type { IBlog } from '~/models/blog'
 import { mapIBlogDecoded } from '~/models/blog'
 import type { IUser } from '~/models/user'
@@ -327,6 +327,17 @@ export const useBlogStore = defineStore('blog', () => {
     return imageUrl
   }
 
+  const addView = (blog: IBlog) => {
+    try {
+      updateDoc(blog.reference!, {
+        viewCount: increment(1),
+      })
+    }
+    catch (error) {
+      console.error('Error adding view to blog:', error)
+    }
+  }
+
   return {
     publishedBlogs,
     blogs,
@@ -345,5 +356,6 @@ export const useBlogStore = defineStore('blog', () => {
     saveWorkingBlog,
     deleteWorkingBlog,
     addImage,
+    addView,
   }
 })
