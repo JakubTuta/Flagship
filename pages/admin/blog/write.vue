@@ -21,7 +21,7 @@ const currentWorkingBlog = ref<IWorkingBlog | null>(null)
 const autoSaveTimer = ref<NodeJS.Timeout | null>(null)
 const category = ref<TBlogCategory | null>(null)
 const isFeatured = ref(false)
-const mainLanguage = ref<string | null>(null)
+const mainLanguage = ref<'pl' | 'en' | null>('pl')
 const links = ref<string[]>([])
 const blogImage = ref<string | null>(null)
 
@@ -880,15 +880,15 @@ function generateTableOfContents(content: string): ITableOfContentsItem[] {
 
 async function prepareBlog(isPublished: boolean, reference: DocumentReference | null) {
   const trimmedTitle = blogTitle.value?.trim() || ''
-  const translatedTitle = await translateText(trimmedTitle)
-  const translatedContent = await translateText(blogContent.value)
+  const translatedTitle = await translateText(trimmedTitle, mainLanguage.value)
+  const translatedContent = await translateText(blogContent.value, mainLanguage.value)
 
   const tableOfContents = generateTableOfContents(blogContent.value)
 
   const translatedTableOfContents = await Promise.all(
     tableOfContents.map(async item => ({
       ...item,
-      title: await translateText(item.title.en),
+      title: await translateText(item.title.en, mainLanguage.value),
     })),
   )
 

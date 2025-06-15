@@ -24,7 +24,7 @@ export interface IBlog {
   tableOfContents: ITableOfContentsItem[]
   category: TBlogCategory
   viewCount: number
-  mainLanguage: string | null
+  mainLanguage: 'pl' | 'en' | null
   reference: DocumentReference | null
 }
 

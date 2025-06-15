@@ -9,7 +9,7 @@ export interface IWorkingBlog {
   image: string | null
   category: TBlogCategory
   author: DocumentReference | null
-  mainLanguage: string | null
+  mainLanguage: 'pl' | 'en' | null
   reference: DocumentReference | null
 }
 

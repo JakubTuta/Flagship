@@ -122,10 +122,12 @@ onMounted(async () => {
     const blogId = route.params.id as string
     selectedBlog.value = await blogStore.getBlogUser(blogId)
 
-    if (selectedBlog.value) {
-      blogStore.addView(selectedBlog.value)
-      selectedBlog.value.viewCount += 1
-    }
+    setTimeout(() => {
+      if (selectedBlog.value) {
+        blogStore.addView(selectedBlog.value)
+        selectedBlog.value.viewCount += 1
+      }
+    }, 1000 * 60)
 
     author.value = await authStore.getUserDataFromRef(selectedBlog.value?.author || null)
   }
