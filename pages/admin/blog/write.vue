@@ -34,6 +34,10 @@ const { userData } = storeToRefs(authStore)
 
 const blogStore = useBlogStore()
 
+// Scroll detection for smart toolbar
+const isToolbarFixed = ref(false)
+const toolbarContainer = ref<HTMLElement | null>(null)
+
 // Auto-save function
 async function autoSaveWorkingBlog() {
   const trimmedTitle = blogTitle.value?.trim() || ''
@@ -82,12 +86,34 @@ function stopAutoSave() {
 // Start auto-save when component mounts
 onMounted(() => {
   startAutoSave()
+  setupScrollListener()
 })
 
 // Stop auto-save when component unmounts
 onUnmounted(() => {
   stopAutoSave()
+  removeScrollListener()
 })
+
+// Scroll listener setup
+function setupScrollListener() {
+  window.addEventListener('scroll', handleScroll)
+  handleScroll() // Check initial position
+}
+
+function removeScrollListener() {
+  window.removeEventListener('scroll', handleScroll)
+}
+
+function handleScroll() {
+  if (!toolbarContainer.value)
+    return
+
+  const containerRect = toolbarContainer.value.getBoundingClientRect()
+  const isContainerVisible = containerRect.top >= 0
+
+  isToolbarFixed.value = !isContainerVisible
+}
 
 watch(userData, async (newUser) => {
   const param = route.query.blogId as string
@@ -185,6 +211,18 @@ const toolbarControls = computed(() => [
     icon: 'mdi-image',
     tooltip: t('admin.blog.create.imageTooltip'),
     action: insertImage,
+  },
+  {
+    id: 'link',
+    icon: 'mdi-link',
+    tooltip: t('admin.blog.create.linkTooltip'),
+    action: insertLink,
+  },
+  {
+    id: 'table',
+    icon: 'mdi-table',
+    tooltip: t('admin.blog.create.tableTooltip'),
+    action: insertTable,
   },
 ])
 
@@ -429,6 +467,44 @@ function toggleUnderline() {
 
 function insertInlineCode() {
   wrapSelectedText('<code>', '</code>')
+}
+
+function insertLink() {
+  wrapSelectedText('<a href="">', '</a>')
+}
+
+function insertTable() {
+  const tableHtml = `<table>
+  <thead>
+    <tr>
+      <th>Header 1</th>
+      <th>Header 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cell 1</td>
+      <td>Cell 2</td>
+    </tr>
+  </tbody>
+</table>`
+
+  const textarea = getTextareaElement()
+  if (!textarea)
+    return
+
+  const start = textarea.selectionStart
+  const beforeText = blogContent.value.slice(0, start)
+  const lines = beforeText.split('\n')
+  const currentLine = lines[lines.length - 1]
+
+  // Insert table - add newline before only if current line is not empty
+  if (currentLine.trim() !== '') {
+    insertAtCursor(`\n${tableHtml}\n`)
+  }
+  else {
+    insertAtCursor(`${tableHtml}\n`)
+  }
 }
 
 function insertList() {
@@ -1084,57 +1160,125 @@ async function deleteBlog() {
           </v-btn>
         </div>
 
-        <v-toolbar
-          density="compact"
-          class="mb-2 mt-4"
+        <!-- Toolbar Container -->
+        <div
+          ref="toolbarContainer"
+          class="toolbar-container"
         >
-          <v-btn
-            v-for="control in toolbarControls"
-            :key="control.id"
-            icon
-            size="small"
-            class="mx-1"
-            @click="control.action"
+          <v-toolbar
+            density="compact"
+            class="smart-toolbar"
+            color="surface"
+            elevation="2"
           >
-            <v-icon>
-              {{ control.icon }}
-            </v-icon>
+            <v-btn
+              v-for="control in toolbarControls"
+              :key="control.id"
+              icon
+              size="small"
+              class="mx-1"
+              @click="control.action"
+            >
+              <v-icon>
+                {{ control.icon }}
+              </v-icon>
 
-            <v-tooltip
-              :text="control.tooltip"
-              location="top"
-              activator="parent"
-            />
-          </v-btn>
+              <v-tooltip
+                :text="control.tooltip"
+                location="bottom"
+                activator="parent"
+              />
+            </v-btn>
 
-          <v-spacer />
+            <v-spacer />
 
-          <v-btn
-            :color="isPreviewMode
-              ? 'success'
-              : 'primary'"
-            class="mr-4"
-            size="small"
-            @click="togglePreviewMode"
-          >
-            <v-icon class="mr-1">
+            <v-btn
+              :color="isPreviewMode
+                ? 'success'
+                : 'primary'"
+              class="mr-4"
+              size="small"
+              @click="togglePreviewMode"
+            >
+              <v-icon class="mr-1">
+                {{ isPreviewMode
+                  ? 'mdi-text'
+                  : 'mdi-eye' }}
+              </v-icon>
               {{ isPreviewMode
-                ? 'mdi-text'
-                : 'mdi-eye' }}
-            </v-icon>
-            {{ isPreviewMode
-              ? $t('admin.blog.create.raw')
-              : $t('admin.blog.create.preview') }}
+                ? $t('admin.blog.create.raw')
+                : $t('admin.blog.create.preview') }}
 
-            <v-tooltip
-              :text="isPreviewMode
-                ? $t('admin.blog.create.switchToRaw')
-                : $t('admin.blog.create.switchToPreview')"
-              location="top"
-              activator="parent"
-            />
-          </v-btn>
-        </v-toolbar>
+              <v-tooltip
+                :text="isPreviewMode
+                  ? $t('admin.blog.create.switchToRaw')
+                  : $t('admin.blog.create.switchToPreview')"
+                location="bottom"
+                activator="parent"
+              />
+            </v-btn>
+          </v-toolbar>
+        </div>
+
+        <!-- Fixed Toolbar (shown when original is out of view) -->
+        <div
+          v-if="isToolbarFixed"
+          class="fixed-toolbar-wrapper"
+        >
+          <v-toolbar
+            density="compact"
+            class="fixed-toolbar"
+            color="surface"
+            elevation="4"
+          >
+            <v-btn
+              v-for="control in toolbarControls"
+              :key="control.id"
+              icon
+              size="small"
+              class="mx-1"
+              @click="control.action"
+            >
+              <v-icon>
+                {{ control.icon }}
+              </v-icon>
+
+              <v-tooltip
+                :text="control.tooltip"
+                location="bottom"
+                activator="parent"
+              />
+            </v-btn>
+
+            <v-spacer />
+
+            <v-btn
+              :color="isPreviewMode
+                ? 'success'
+                : 'primary'"
+              class="mr-4"
+              size="small"
+              @click="togglePreviewMode"
+            >
+              <v-icon class="mr-1">
+                {{ isPreviewMode
+                  ? 'mdi-text'
+                  : 'mdi-eye' }}
+              </v-icon>
+              {{ isPreviewMode
+                ? $t('admin.blog.create.raw')
+                : $t('admin.blog.create.preview') }}
+
+              <v-tooltip
+                :text="isPreviewMode
+                  ? $t('admin.blog.create.switchToRaw')
+                  : $t('admin.blog.create.switchToPreview')"
+                location="bottom"
+                activator="parent"
+              />
+            </v-btn>
+          </v-toolbar>
+        </div>
 
         <!-- Text Editor / Preview -->
         <div v-if="!isPreviewMode">
@@ -1220,6 +1364,30 @@ async function deleteBlog() {
 </template>
 
 <style scoped>
+.toolbar-container {
+  margin: 1rem 0 0.5rem 0;
+}
+
+.smart-toolbar {
+  border-radius: 8px;
+}
+
+.fixed-toolbar-wrapper {
+  position: fixed;
+  top: 64px; /* Adjust based on your app bar height */
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 16px;
+}
+
+.fixed-toolbar {
+  border-radius: 8px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .v-text-field :deep(input) {
   font-size: 1.5em;
 }

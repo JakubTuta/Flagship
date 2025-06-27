@@ -59,6 +59,15 @@ function processContent(content: string): Array<{ type: string, content: string,
         .replace(/__(.*?)__/g, '<u class="blog-underline">$1</u>')
         .replace(/`([^`]+)`/g, '<code class="blog-inline-code">$1</code>')
 
+      // Links - enhanced to handle various link formats
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="blog-link" target="_blank" rel="noopener noreferrer">$1</a>')
+        .replace(/<a([^>]+)>/g, (match, attrs) => {
+          // Add blog-link class to existing anchor tags if they don't have it
+          return attrs.includes('class=')
+            ? match.replace(/class="([^"]*)"/, 'class="$1 blog-link"')
+            : `<a${attrs} class="blog-link">`
+        })
+
       // Images
         .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="blog-image" />')
         .replace(/<img([^>]*)>/g, (match, attrs) => {
@@ -66,6 +75,13 @@ function processContent(content: string): Array<{ type: string, content: string,
             ? match.replace(/class="[^"]*"/, 'class="blog-image"')
             : `<img${attrs} class="blog-image">`
         })
+
+      // Tables - enhance table formatting
+        .replace(/<table([^>]*)>/g, '<table$1 class="blog-table">')
+        .replace(/<th([^>]*)>/g, '<th$1 class="blog-th">')
+        .replace(/<td([^>]*)>/g, '<td$1 class="blog-td">')
+        .replace(/<thead([^>]*)>/g, '<thead$1 class="blog-thead">')
+        .replace(/<tbody([^>]*)>/g, '<tbody$1 class="blog-tbody">')
 
       // Lists
         .replace(/^- (.*$)/gm, '<li class="blog-list-item">$1</li>')
@@ -317,23 +333,112 @@ const contentBlocks = computed(() => {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
+  /* Enhanced Code Block Styles */
   :deep(.blog-code-block-card) {
     border-radius: 12px !important;
     overflow: hidden;
     margin: 1.5rem 0;
+    background: rgba(var(--v-theme-surface-variant-dark), 0.3) !important;
+    border: 1px solid rgba(var(--v-theme-primary), 0.15) !important;
   }
 
   :deep(.blog-code-content) {
-    background: transparent;
+    background: rgba(var(--v-theme-surface-variant-dark), 0.5);
     margin: 0;
-    padding: 0;
+    padding: 1rem;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    /* Enhanced font stack for better code readability */
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
     color: rgb(var(--v-theme-on-surface));
     overflow-x: auto;
+    border-radius: 8px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    /* Better text rendering for code */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Link Styles */
+  :deep(.blog-link) {
+    color: rgb(var(--v-theme-primary));
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(var(--v-theme-primary), 0.3);
+    padding-bottom: 1px;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  :deep(.blog-link:hover) {
+    color: rgb(var(--v-theme-primary-darken-1));
+    border-bottom-color: rgb(var(--v-theme-primary));
+    background: rgba(var(--v-theme-primary), 0.05);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin: 0 -2px;
+  }
+
+  :deep(.blog-link:visited) {
+    color: rgb(var(--v-theme-secondary));
+    border-bottom-color: rgba(var(--v-theme-secondary), 0.3);
+  }
+
+  :deep(.blog-link:visited:hover) {
+    color: rgb(var(--v-theme-secondary-darken-1));
+    border-bottom-color: rgb(var(--v-theme-secondary));
+    background: rgba(var(--v-theme-secondary), 0.05);
+  }
+
+  /* Table Styles */
+  :deep(.blog-table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: rgb(var(--v-theme-surface));
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(var(--v-theme-primary), 0.15);
+  }
+
+  :deep(.blog-thead) {
+    background: rgba(var(--v-theme-primary), 0.1);
+  }
+
+  :deep(.blog-th) {
+    padding: 1rem;
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-weight: 600 !important;
+    color: rgb(var(--v-theme-primary));
+    border-bottom: 2px solid rgba(var(--v-theme-primary), 0.2);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  :deep(.blog-td) {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid rgba(var(--v-theme-surface-variant), 0.5);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  :deep(.blog-tbody tr:hover) {
+    background: rgba(var(--v-theme-primary), 0.03);
+  }
+
+  :deep(.blog-tbody tr:nth-child(even)) {
+    background: rgba(var(--v-theme-surface-variant), 0.3);
+  }
+
+  :deep(.blog-tbody tr:nth-child(even):hover) {
+    background: rgba(var(--v-theme-primary), 0.05);
   }
 
   :deep(.blog-h1) {
@@ -383,10 +488,11 @@ const contentBlocks = computed(() => {
     color: rgb(var(--v-theme-primary));
     padding: 0.15rem 0.4rem;
     border-radius: 6px;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Monaco', 'Consolas', monospace;
     font-size: 0.85em;
     font-weight: 500;
     border: 1px solid rgba(var(--v-theme-primary), 0.2);
+    letter-spacing: 0.02em;
   }
 
   :deep(.blog-list) {
@@ -487,6 +593,24 @@ const contentBlocks = computed(() => {
 
     :deep(.blog-code-block-card) {
       margin: 1rem 0;
+    }
+
+    :deep(.blog-code-content) {
+      font-size: 0.8rem;
+      padding: 0.75rem;
+    }
+
+    :deep(.blog-table) {
+      font-size: 0.875rem;
+    }
+
+    :deep(.blog-th) {
+      padding: 0.75rem 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    :deep(.blog-td) {
+      padding: 0.625rem 0.5rem;
     }
   }
 </style>

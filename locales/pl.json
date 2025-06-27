@@ -221,6 +221,8 @@
         "categoryInput": "Kategoria",
         "featuredCheckbox": "Wyróżniony post",
         "imageTooltip": "Dodaj zdjęcie",
+        "linkTooltip": "Dodaj link",
+        "tableTooltip": "Dodaj tabelę",
         "languageEnglish": "Angielski",
         "languagePolish": "Polski",
         "languageInput": "Język",
