@@ -8,6 +8,7 @@ export const useLanguageStore = defineStore('language', () => {
   const langCookie = useCookie<languages>(key, { default: () => defaultLang })
 
   const currentLang = ref<languages>(langCookie.value)
+  locale.value = langCookie.value
 
   const getLanguage = () => {
     return langCookie.value
@@ -28,25 +29,10 @@ export const useLanguageStore = defineStore('language', () => {
     }
   }
 
-  const initLanguage = () => {
-    if (import.meta.client) {
-      const storedLang = langCookie.value
-      if (storedLang && storedLang !== currentLang.value) {
-        currentLang.value = storedLang
-        locale.value = storedLang
-      }
-    }
-  }
-
-  onMounted(() => {
-    initLanguage()
-  })
-
   return {
     currentLang,
     getLanguage,
     setLanguage,
     toggleLanguage,
-    initLanguage,
   }
 })

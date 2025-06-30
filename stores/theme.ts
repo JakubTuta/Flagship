@@ -7,16 +7,15 @@ export const useThemeStore = defineStore('theme', () => {
   const theme = useTheme()
   const themeCookie = useCookie(key, { default: () => defaultTheme })
 
+  theme.global.name.value = themeCookie.value
+
   const setTheme = (newTheme: string) => {
     theme.global.name.value = newTheme
     themeCookie.value = newTheme
   }
 
   const getTheme = () => {
-    const storedTheme = themeCookie.value
-    theme.global.name.value = storedTheme
-
-    return storedTheme
+    return themeCookie.value
   }
 
   const toggleTheme = () => {
@@ -28,20 +27,6 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const isDark = computed(() => theme.global.name.value === 'dark')
-
-  // Initialize theme on client-side to prevent hydration mismatch
-  const initTheme = () => {
-    if (import.meta.client) {
-      const storedTheme = themeCookie.value
-      if (storedTheme && storedTheme !== theme.global.name.value) {
-        theme.global.name.value = storedTheme
-      }
-    }
-  }
-
-  onMounted(() => {
-    initTheme()
-  })
 
   return {
     setTheme,
