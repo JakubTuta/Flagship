@@ -5,7 +5,13 @@ export const useThemeStore = defineStore('theme', () => {
   const key = 'tuta-theme'
 
   const theme = useTheme()
-  const themeCookie = useCookie(key, { default: () => defaultTheme })
+  const themeCookie = useCookie(key, {
+    default: () => defaultTheme,
+    httpOnly: false,
+    secure: true,
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  })
 
   theme.global.name.value = themeCookie.value
 

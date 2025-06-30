@@ -5,7 +5,13 @@ export const useLanguageStore = defineStore('language', () => {
   const key = 'tuta-lang'
 
   const defaultLang: languages = 'en'
-  const langCookie = useCookie<languages>(key, { default: () => defaultLang })
+  const langCookie = useCookie<languages>(key, {
+    default: () => defaultLang,
+    httpOnly: false,
+    secure: true,
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  })
 
   const currentLang = ref<languages>(langCookie.value)
   locale.value = langCookie.value
