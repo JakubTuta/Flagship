@@ -90,7 +90,18 @@ function processContent(content: string): Array<{ type: string, content: string,
         .replace(/(<li class="blog-list-item">.*?<\/li>)(\s*<li class="blog-list-item">.*?<\/li>)*/gs, '<ul class="blog-list">$&</ul>')
         .replace(/(<li class="blog-numbered-item".*?<\/li>)(\s*<li class="blog-(?:numbered-item|sublist-item)".*?<\/li>)*/gs, '<ol class="blog-numbered-list">$&</ol>')
 
-      // Line breaks
+      // Process tables to remove internal newlines that would become <br> tags
+        .replace(/(<table[\s\S]*?<\/table>)/g, (match) => {
+          // Remove newlines within table structure but preserve the table content
+          return match.replace(/\n\s*/g, ' ').replace(/\s+/g, ' ')
+        })
+
+      // Clean up extra whitespace around tables before converting newlines
+        .replace(/\n+(<table[\s\S]*?<\/table>)\n+/g, '\n$1\n')
+        .replace(/^(<table[\s\S]*?<\/table>)\n+/g, '$1\n')
+        .replace(/\n+(<table[\s\S]*?<\/table>)$/g, '\n$1')
+
+      // Line breaks (convert remaining newlines to <br>, but not within HTML tags)
         .replace(/\n/g, '<br>')
 
       // Process headers with table of contents numbering
@@ -398,12 +409,23 @@ const contentBlocks = computed(() => {
   :deep(.blog-table) {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     background: rgb(var(--v-theme-surface));
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(var(--v-theme-primary), 0.15);
+    display: table; /* Ensure proper table display */
+  }
+
+  /* Remove extra spacing around tables */
+  :deep(br + .blog-table),
+  :deep(.blog-table + br) {
+    margin-top: 0;
+  }
+
+  :deep(.blog-table + br + br) {
+    display: none;
   }
 
   :deep(.blog-thead) {
