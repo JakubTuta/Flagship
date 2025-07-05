@@ -416,6 +416,7 @@ const contentBlocks = computed(() => {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(var(--v-theme-primary), 0.15);
     display: table; /* Ensure proper table display */
+    margin-top: 2rem;
   }
 
   /* Remove extra spacing around tables */
