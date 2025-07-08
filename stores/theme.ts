@@ -13,15 +13,17 @@ export const useThemeStore = defineStore('theme', () => {
     maxAge: 60 * 60 * 24 * 365, // 1 year
   })
 
-  theme.global.name.value = themeCookie.value
+  const currentTheme = useState(key, () => themeCookie.value)
+  theme.global.name.value = currentTheme.value
 
   const setTheme = (newTheme: string) => {
+    currentTheme.value = newTheme
     theme.global.name.value = newTheme
     themeCookie.value = newTheme
   }
 
   const getTheme = () => {
-    return themeCookie.value
+    return currentTheme.value
   }
 
   const toggleTheme = () => {

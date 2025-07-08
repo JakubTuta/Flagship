@@ -13,11 +13,11 @@ export const useLanguageStore = defineStore('language', () => {
     maxAge: 60 * 60 * 24 * 365, // 1 year
   })
 
-  const currentLang = ref<languages>(langCookie.value)
-  locale.value = langCookie.value
+  const currentLang = useState<languages>(key, () => langCookie.value)
+  locale.value = currentLang.value
 
   const getLanguage = () => {
-    return langCookie.value
+    return currentLang.value
   }
 
   const setLanguage = (lang: languages) => {
