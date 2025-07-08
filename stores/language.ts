@@ -1,5 +1,4 @@
 const key = 'tuta-lang'
-const langState = () => useState<'en' | 'pl'>(key, () => useCookie(key).value || 'en')
 
 export const useLanguageStore = defineStore('language', () => {
   const { locale } = useI18n()
@@ -14,7 +13,7 @@ export const useLanguageStore = defineStore('language', () => {
     maxAge: 60 * 60 * 24 * 365, // 1 year
   })
 
-  const currentLang = langState()
+  const currentLang = useState<'en' | 'pl'>(key)
   locale.value = currentLang.value
 
   const getLanguage = () => {

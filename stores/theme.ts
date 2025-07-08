@@ -1,7 +1,6 @@
 import { useTheme } from 'vuetify'
 
 const key = 'tuta-theme'
-const themeState = () => useState(key, () => useCookie(key).value || 'light')
 
 export const useThemeStore = defineStore('theme', () => {
   const defaultTheme = 'light'
@@ -15,7 +14,7 @@ export const useThemeStore = defineStore('theme', () => {
     maxAge: 60 * 60 * 24 * 365, // 1 year
   })
 
-  const currentTheme = themeState()
+  const currentTheme = useState(key)
   theme.global.name.value = currentTheme.value
 
   const setTheme = (newTheme: string) => {
