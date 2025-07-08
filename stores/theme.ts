@@ -1,28 +1,21 @@
 import { useTheme } from 'vuetify'
 
 export const useThemeStore = defineStore('theme', () => {
-  const key = 'tuta-theme'
-  const defaultTheme = 'light'
-
+  // The `useColorMode` composable from @nuxtjs/color-mode is the source of truth.
+  const colorMode = useColorMode()
   const vuetifyTheme = useTheme()
-  const themeCookie = useCookie(key, { default: () => defaultTheme })
 
-  // Initialize theme on client-side
-  if (process.client) {
-    vuetifyTheme.global.name.value = themeCookie.value
-  }
-
-  const setTheme = (newTheme: string) => {
-    vuetifyTheme.global.name.value = newTheme
-    themeCookie.value = newTheme
-  }
+  // Keep Vuetify's theme in sync with the color mode module.
+  watch(colorMode, (newColorMode) => {
+    vuetifyTheme.global.name.value = newColorMode.value
+  }, { immediate: true })
 
   const toggleTheme = () => {
-    const newTheme = vuetifyTheme.global.name.value === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
+    // The module handles persistence and state changes.
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
   }
 
-  const isDark = computed(() => vuetifyTheme.global.name.value === 'dark')
+  const isDark = computed(() => colorMode.value === 'dark')
 
   return {
     toggleTheme,

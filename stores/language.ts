@@ -1,27 +1,21 @@
 export const useLanguageStore = defineStore('language', () => {
+  // The `useI18n` composable is the source of truth. The module handles persistence.
   const { locale } = useI18n()
   type Language = 'en' | 'pl'
 
-  const key = 'tuta-lang'
-  const defaultLang: Language = 'en'
-  
-  const langCookie = useCookie<Language>(key, { default: () => defaultLang })
-
-  // Initialize language on client-side
-  if (process.client) {
-    locale.value = langCookie.value
-  }
-
-  const currentLang = computed(() => locale.value as Language)
+  const currentLang = computed({
+    get: () => locale.value as Language,
+    set: (lang: Language) => {
+      locale.value = lang
+    },
+  })
 
   const setLanguage = (lang: Language) => {
-    locale.value = lang
-    langCookie.value = lang
+    currentLang.value = lang
   }
 
   const toggleLanguage = () => {
-    const newLang = locale.value === 'pl' ? 'en' : 'pl'
-    setLanguage(newLang)
+    currentLang.value = currentLang.value === 'pl' ? 'en' : 'pl'
   }
 
   return {
