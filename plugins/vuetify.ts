@@ -4,10 +4,12 @@ import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import 'vuetify/styles'
 
 export default defineNuxtPlugin((app) => {
+  const colorMode = useColorMode()
+
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: 'dark',
+      defaultTheme: colorMode.value,
       themes: {
         light: {
           dark: false,
