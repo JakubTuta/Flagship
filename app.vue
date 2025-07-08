@@ -1,15 +1,4 @@
 <script setup lang="ts">
-if (import.meta.server) {
-  const themeCookie = useCookie('tuta-theme')
-  if (themeCookie.value) {
-    useColorMode().preference = themeCookie.value
-  }
-
-  const langCookie = useCookie('tuta-lang')
-  if (langCookie.value) {
-    useI18n().locale.value = langCookie.value as 'pl' | 'en'
-  }
-}
 
 const projectStore = useProjectStore()
 const { projects } = storeToRefs(projectStore)
