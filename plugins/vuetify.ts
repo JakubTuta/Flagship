@@ -9,6 +9,7 @@ export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     ssr: true,
     theme: {
+      // The initial theme will be determined by the color mode module
       defaultTheme: colorMode.value,
       themes: {
         light: {
@@ -145,5 +146,11 @@ export default defineNuxtPlugin((app) => {
       VFileUpload,
     },
   })
+
+  // Watch for changes in the color mode and update Vuetify's theme
+  watch(colorMode, (newColorMode) => {
+    vuetify.theme.global.name.value = newColorMode.value
+  })
+
   app.vueApp.use(vuetify)
 })
