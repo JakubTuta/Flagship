@@ -12,17 +12,18 @@ export const useLanguageStore = defineStore('language', () => {
   const currentLang = computed(() => locale.value as Language)
 
   const toggleLanguage = () => {
-    const newLang = locale.value === 'pl' ? 'en' : 'pl'
+    const newLang = locale.value === 'pl'
+      ? 'en'
+      : 'pl'
     setLanguage(newLang)
   }
 
-  // This hook runs only on the client, after the app has mounted.
   onMounted(() => {
-    // We let the server render with the default, then apply the user's
-    // preference on the client.
-    if (langCookie.value) {
-      setLanguage(langCookie.value)
-    }
+    setTimeout(() => {
+      if (langCookie.value) {
+        setLanguage(langCookie.value)
+      }
+    }, 0)
   })
 
   return {
