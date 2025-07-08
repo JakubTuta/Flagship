@@ -1,20 +1,28 @@
 import { useTheme } from 'vuetify'
 
 export const useThemeStore = defineStore('theme', () => {
-  const colorMode = useColorMode()
+  const key = 'tuta-theme'
+  const defaultTheme = 'light'
+
   const vuetifyTheme = useTheme()
+  const themeCookie = useCookie(key, { default: () => defaultTheme })
 
-  const currentTheme = computed(() => colorMode.value)
-
-  watch(currentTheme, (newValue) => {
-    vuetifyTheme.global.name.value = newValue
-  }, { immediate: true })
-
-  const toggleTheme = () => {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  // Initialize theme on client-side
+  if (process.client) {
+    vuetifyTheme.global.name.value = themeCookie.value
   }
 
-  const isDark = computed(() => currentTheme.value === 'dark')
+  const setTheme = (newTheme: string) => {
+    vuetifyTheme.global.name.value = newTheme
+    themeCookie.value = newTheme
+  }
+
+  const toggleTheme = () => {
+    const newTheme = vuetifyTheme.global.name.value === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+  }
+
+  const isDark = computed(() => vuetifyTheme.global.name.value === 'dark')
 
   return {
     toggleTheme,
