@@ -1,43 +1,25 @@
-const key = 'tuta-lang'
-
 export const useLanguageStore = defineStore('language', () => {
   const { locale } = useI18n()
+
   type languages = 'en' | 'pl'
 
-  const defaultLang: languages = 'en'
-  const langCookie = useCookie<languages>(key, {
-    default: () => defaultLang,
-    httpOnly: false,
-    secure: true,
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 365, // 1 year
+  const currentLang = computed({
+    get: () => locale.value as languages,
+    set: (lang: languages) => {
+      locale.value = lang
+    },
   })
-
-  const currentLang = useState<'en' | 'pl'>(key)
-  locale.value = currentLang.value
-
-  const getLanguage = () => {
-    return currentLang.value
-  }
 
   const setLanguage = (lang: languages) => {
     currentLang.value = lang
-    locale.value = lang
-    langCookie.value = lang
   }
 
   const toggleLanguage = () => {
-    if (currentLang.value === 'pl') {
-      setLanguage('en')
-    }
-    else {
-      setLanguage('pl')
-    }
+    currentLang.value = currentLang.value === 'pl' ? 'en' : 'pl'
   }
 
   return {
     currentLang,
-    getLanguage,
     setLanguage,
     toggleLanguage,
   }
