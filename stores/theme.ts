@@ -1,19 +1,10 @@
 import { useTheme } from 'vuetify'
 
 export const useThemeStore = defineStore('theme', () => {
-  type themes = 'light' | 'dark'
-
   const vuetifyTheme = useTheme()
-  const themeCookie = useCookie<themes>('tuta-theme', {
-    default: () => 'light',
-    // eslint-disable-next-line node/prefer-global/process
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    httpOnly: false,
-    maxAge: 60 * 60 * 24 * 365,
-  })
+  const themeCookie = useCookie('tuta-theme')
 
-  const setTheme = (newTheme: themes) => {
+  const setTheme = (newTheme: string) => {
     vuetifyTheme.global.name.value = newTheme
     themeCookie.value = newTheme
   }

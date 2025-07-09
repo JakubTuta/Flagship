@@ -1,22 +1,15 @@
 export const useLanguageStore = defineStore('language', () => {
   const { locale } = useI18n()
-  type Language = 'en' | 'pl'
+  type Languages = 'en' | 'pl'
 
-  const langCookie = useCookie<Language>('tuta-lang', {
-    default: () => 'en',
-    // eslint-disable-next-line node/prefer-global/process
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    httpOnly: false,
-    maxAge: 60 * 60 * 24 * 365,
-  })
+  const langCookie = useCookie('tuta-lang')
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = (lang: Languages) => {
     locale.value = lang
     langCookie.value = lang
   }
 
-  const currentLang = computed(() => locale.value as Language)
+  const currentLang = computed(() => locale.value as Languages)
 
   const toggleLanguage = () => {
     const newLang = locale.value === 'pl'
@@ -25,18 +18,15 @@ export const useLanguageStore = defineStore('language', () => {
     setLanguage(newLang)
   }
 
-  const initializeLanguage = () => {
-    if (langCookie.value && langCookie.value !== locale.value) {
-      locale.value = langCookie.value
+  onMounted(() => {
+    if (langCookie.value) {
+      setLanguage(langCookie.value as Languages)
     }
-  }
-
-  initializeLanguage()
+  })
 
   return {
     currentLang,
     setLanguage,
     toggleLanguage,
-    initializeLanguage,
   }
 })
