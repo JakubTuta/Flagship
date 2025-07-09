@@ -126,10 +126,12 @@ export default defineNuxtConfig({
       useCookie: true,
       cookieKey: 'tuta-lang',
       cookieSecure: process.env.NODE_ENV === 'production',
+      // @ts-expect-error done
+      cookieSameSite: 'lax',
       alwaysRedirect: false,
       fallbackLocale: 'en',
+      redirectOn: 'root',
     },
-    // @ts-expect-error seo
     seo: true,
     baseUrl,
   },

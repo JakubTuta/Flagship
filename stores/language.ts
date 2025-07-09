@@ -1,9 +1,7 @@
 export const useLanguageStore = defineStore('language', () => {
   const { locale } = useI18n()
   type Language = 'en' | 'pl'
-  console.log('useLanguageStore')
-  // eslint-disable-next-line node/prefer-global/process
-  console.log(process.env.NODE_ENV)
+
   const langCookie = useCookie<Language>('tuta-lang', {
     default: () => 'en',
     // eslint-disable-next-line node/prefer-global/process
