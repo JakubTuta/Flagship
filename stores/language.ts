@@ -18,6 +18,11 @@ export const useLanguageStore = defineStore('language', () => {
     setLanguage(newLang)
   }
 
+  onMounted(() => {
+    if (langCookie.value)
+      setLanguage(langCookie.value as Languages)
+  })
+
   return {
     currentLang,
     setLanguage,
