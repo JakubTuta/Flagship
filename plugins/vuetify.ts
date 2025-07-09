@@ -9,7 +9,6 @@ export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      // The initial theme will be determined by the color mode module
       defaultTheme: colorMode.value,
       themes: {
         light: {

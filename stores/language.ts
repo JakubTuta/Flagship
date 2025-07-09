@@ -1,7 +1,7 @@
 export const useLanguageStore = defineStore('language', () => {
-  const { locale } = useI18n()
   type Languages = 'en' | 'pl'
 
+  const { locale } = useI18n()
   const langCookie = useCookie('tuta-lang')
 
   const setLanguage = (lang: Languages) => {
@@ -17,12 +17,6 @@ export const useLanguageStore = defineStore('language', () => {
       : 'pl'
     setLanguage(newLang)
   }
-
-  onMounted(() => {
-    if (langCookie.value) {
-      setLanguage(langCookie.value as Languages)
-    }
-  })
 
   return {
     currentLang,

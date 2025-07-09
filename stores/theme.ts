@@ -18,12 +18,6 @@ export const useThemeStore = defineStore('theme', () => {
 
   const isDark = computed(() => vuetifyTheme.global.name.value === 'dark')
 
-  onMounted(() => {
-    if (themeCookie.value) {
-      setTheme(themeCookie.value)
-    }
-  })
-
   return {
     setTheme,
     toggleTheme,
