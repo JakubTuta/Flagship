@@ -9,6 +9,8 @@ const { publishedBlogs } = storeToRefs(blogStore)
 useAuthStore()
 
 onMounted(() => {
+  useThemeStore().initializeTheme()
+
   if (!projects.value.length) {
     projectStore.fetchProjects()
   }

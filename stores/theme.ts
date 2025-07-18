@@ -10,11 +10,12 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const toggleTheme = () => {
-    const newTheme = vuetifyTheme.global.name.value === 'light'
-      ? 'dark'
-      : 'light'
-    setTheme(newTheme)
+    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    localStorage.setItem('theme', theme.global.name.value)
   }
+
+  return { initializeTheme, toggleTheme }
+})
 
   const isDark = computed(() => vuetifyTheme.global.name.value === 'dark')
 
