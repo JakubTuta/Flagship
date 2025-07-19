@@ -106,10 +106,6 @@ export default defineNuxtConfig({
     propsDestructure: true,
   },
 
-  colorMode: {
-    classSuffix: ''
-  },
-
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'en',

@@ -3,13 +3,13 @@ import { createVuetify } from 'vuetify'
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import 'vuetify/styles'
 
-export default defineNuxtPlugin((app) => {
+export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
 
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: colorMode.value,
+      defaultTheme: colorMode.preference,
       themes: {
         light: {
           dark: false,
@@ -146,5 +146,9 @@ export default defineNuxtPlugin((app) => {
     },
   })
 
-  app.vueApp.use(vuetify)
+  nuxtApp.vueApp.use(vuetify)
+
+  watch(colorMode, (newColorMode) => {
+    vuetify.theme.global.name.value = newColorMode.value
+  })
 })
