@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const colorMode = useColorMode()
 
 const projectStore = useProjectStore()
 const { projects } = storeToRefs(projectStore)
@@ -21,7 +20,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app :theme="colorMode.value">
+  <v-app>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

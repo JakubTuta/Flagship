@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
 
   const vuetify = createVuetify({
-    ssr: true,
+    ssr: false,
     theme: {
       defaultTheme: colorMode.preference,
       themes: {
