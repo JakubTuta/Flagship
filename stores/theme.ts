@@ -18,7 +18,14 @@ export const useThemeStore = defineStore('theme', () => {
     setTheme(newTheme)
   }
 
-  const isDark = computed(() => colorMode.value === 'dark')
+  // Safe computed property that handles undefined colorMode.value
+  const isDark = computed(() => {
+    const theme = colorMode.value
+    
+    return theme
+      ? theme === 'dark'
+      : false
+  })
 
   onMounted(() => {
     if (typeof localStorage !== 'undefined') {

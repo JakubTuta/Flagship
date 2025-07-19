@@ -148,12 +148,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  vuetify.theme.global.name.value = colorMode.value || 'light'
+  // Set initial theme with safe fallback
+  const initialTheme = colorMode.value || 'light'
+  vuetify.theme.global.name.value = initialTheme
 
+  // Watch for colorMode changes and update Vuetify theme
   if (typeof window !== 'undefined') {
-    watch(colorMode, (newTheme) => {
-      if (newTheme && vuetify.theme.global.name.value !== newTheme) {
-        vuetify.theme.global.name.value = newTheme
+    watch(() => colorMode.value, (newTheme) => {
+      const safeTheme = newTheme || 'light'
+      if (vuetify.theme.global.name.value !== safeTheme) {
+        vuetify.theme.global.name.value = safeTheme
       }
     }, { immediate: true })
   }
