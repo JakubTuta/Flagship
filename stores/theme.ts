@@ -1,24 +1,25 @@
 export const useThemeStore = defineStore('theme', () => {
-  const customTheme = useCustomTheme()
+  const colorMode = useColorMode()
 
   const setTheme = (newTheme: 'light' | 'dark') => {
-    customTheme.setTheme(newTheme)
+    colorMode.value = newTheme
   }
 
   const toggleTheme = () => {
-    customTheme.toggleTheme()
+    colorMode.value = colorMode.value === 'dark'
+      ? 'light'
+      : 'dark'
   }
 
-  const isDark = computed(() => customTheme.isDark.value)
+  const isDark = computed(() => colorMode.value === 'dark')
 
-  const getTheme = () => {
-    return customTheme.currentTheme.value
-  }
+  onMounted(() => {
+    setTheme(colorMode.value as 'light' | 'dark')
+  })
 
   return {
     setTheme,
     toggleTheme,
     isDark,
-    getTheme,
   }
 })

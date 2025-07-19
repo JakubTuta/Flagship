@@ -128,7 +128,7 @@ function openProjectDetails(project: IProject) {
 
       <!-- Featured Project Loading Skeleton -->
       <v-card
-        class="featured-project-loading-card fill-height mb-8"
+        class="fill-height featured-project-loading-card mb-8"
         elevation="12"
       >
         <v-row
