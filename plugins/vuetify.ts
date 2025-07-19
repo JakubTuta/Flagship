@@ -4,15 +4,10 @@ import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import 'vuetify/styles'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  // Get theme from cookie for SSR consistency
-  const themeCookie = useCookie('tuta-theme', {
-    default: () => 'light',
-  })
-
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: themeCookie.value as string,
+      defaultTheme: 'light', // Always start with light theme on server
       themes: {
         light: {
           dark: false,
@@ -151,11 +146,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  // Set initial theme
-  const initialTheme = themeCookie.value as string || 'light'
+  // Always start with light theme
+  const initialTheme = 'light'
   vuetify.theme.global.name.value = initialTheme
 
-  // Watch for theme changes from the theme store
+  // Watch for theme changes from the theme store (client-side only)
   if (typeof window !== 'undefined') {
     // Use nextTick to ensure the theme store is available
     nextTick(() => {

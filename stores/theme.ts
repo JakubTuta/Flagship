@@ -1,19 +1,11 @@
 export const useThemeStore = defineStore('theme', () => {
   type Themes = 'light' | 'dark'
 
-  const themeCookie = useCookie('tuta-theme', {
-    default: () => 'light',
-    httpOnly: false,
-    secure: false,
-    sameSite: 'lax',
-  })
-
   const clientTheme = ref<Themes>('light')
   const isHydrated = ref(false)
 
   const setTheme = (theme: Themes) => {
     clientTheme.value = theme
-    themeCookie.value = theme
 
     // Update HTML attributes directly
     if (typeof window !== 'undefined') {
@@ -45,8 +37,9 @@ export const useThemeStore = defineStore('theme', () => {
   const currentTheme = computed(() => clientTheme.value)
 
   onMounted(() => {
-    let savedTheme = themeCookie.value as Themes
-
+    // Start with default, then load from localStorage if available
+    let savedTheme: Themes = 'light' // Default value
+    
     // Check localStorage for preference
     if (typeof localStorage !== 'undefined') {
       const localTheme = localStorage.getItem('tuta-theme')

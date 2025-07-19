@@ -3,21 +3,12 @@ export const useLanguageStore = defineStore('language', () => {
 
   const { locale } = useI18n()
 
-  const langCookie = useCookie('tuta-lang', {
-    default: () => 'en',
-    httpOnly: false,
-    secure: false,
-    sameSite: 'lax',
-  })
-
   const clientLang = ref<Languages>('en')
   const isHydrated = ref(false)
 
   const setLanguage = (lang: Languages) => {
     clientLang.value = lang
     locale.value = lang
-
-    langCookie.value = lang
 
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.setItem('tuta-lang', lang)
@@ -34,7 +25,8 @@ export const useLanguageStore = defineStore('language', () => {
   }
 
   onMounted(() => {
-    let savedLang = langCookie.value as Languages
+    // Start with default, then load from localStorage if available
+    let savedLang: Languages = 'en' // Default value
 
     if (typeof localStorage !== 'undefined') {
       const localLang = localStorage.getItem('tuta-lang')
