@@ -149,6 +149,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(vuetify)
 
   watch(colorMode, (newColorMode) => {
-    vuetify.theme.global.name.value = newColorMode.value
+    nextTick(() => vuetify.theme.global.name.value = newColorMode.value)
   })
 })
