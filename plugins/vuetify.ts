@@ -146,7 +146,6 @@ export default defineNuxtPlugin((app) => {
     },
   })
 
-  // Watch for changes in the color mode and update Vuetify's theme
   watch(colorMode, (newColorMode) => {
     vuetify.theme.global.name.value = newColorMode
   })

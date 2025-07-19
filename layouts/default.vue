@@ -36,14 +36,16 @@ watch(locale, (newLocale) => {
 </script>
 
 <template>
-  <v-btn
-    v-if="mobile"
-    icon="mdi-menu"
-    rounded="circle"
-    class="floating-btn mobile-menu-btn d-print-none"
-    elevation="15"
-    @click="drawerStore.toggleDrawer()"
-  />
+  <client-only>
+    <v-btn
+      v-if="mobile"
+      icon="mdi-menu"
+      rounded="circle"
+      class="floating-btn mobile-menu-btn d-print-none"
+      elevation="15"
+      @click="drawerStore.toggleDrawer()"
+    />
+  </client-only>
 
   <v-main>
     <slot />
