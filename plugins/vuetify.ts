@@ -9,7 +9,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: colorMode.value,
+      defaultTheme: 'light',
       themes: {
         light: {
           dark: false,
@@ -147,4 +147,13 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   nuxtApp.vueApp.use(vuetify)
+
+  if (import.meta.client) {
+    watch(colorMode, (newTheme) => {
+      vuetify.theme.global.name.value = newTheme
+    }, { immediate: true })
+  }
+  else {
+    vuetify.theme.global.name.value = colorMode.value
+  }
 })
