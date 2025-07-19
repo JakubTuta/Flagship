@@ -112,6 +112,15 @@ export default defineNuxtConfig({
     propsDestructure: true,
   },
 
+  colorMode: {
+    preference: 'system',
+    fallback: 'light',
+    storageKey: 'tuta-theme',
+    classPrefix: '',
+    classSuffix: '-mode',
+    dataValue: 'theme',
+  },
+
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'en',
