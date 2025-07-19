@@ -148,12 +148,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  if (import.meta.client) {
+  vuetify.theme.global.name.value = colorMode.value || 'light'
+
+  if (typeof window !== 'undefined') {
     watch(colorMode, (newTheme) => {
-      vuetify.theme.global.name.value = newTheme
+      if (newTheme && vuetify.theme.global.name.value !== newTheme) {
+        vuetify.theme.global.name.value = newTheme
+      }
     }, { immediate: true })
-  }
-  else {
-    vuetify.theme.global.name.value = colorMode.value
   }
 })
