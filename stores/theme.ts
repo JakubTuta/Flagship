@@ -1,49 +1,61 @@
 export const useThemeStore = defineStore('theme', () => {
+  // Use cookie for SSR compatibility but with client-side override
+  const themeCookie = useCookie('tuta-theme', {
+    default: () => 'light',
+    httpOnly: false,
+    secure: false,
+    sameSite: 'lax',
+  })
+
   const colorMode = useColorMode()
   
-  // Use reactive state that starts with default value for SSR
-  const theme = ref<'light' | 'dark'>('light')
+  // Client-side reactive state
+  const clientTheme = ref<'light' | 'dark'>('light')
+  const isHydrated = ref(false)
 
   const setTheme = (newTheme: 'light' | 'dark') => {
-    theme.value = newTheme
+    clientTheme.value = newTheme
     colorMode.value = newTheme
     
-    // Only access localStorage on client side
-    if (import.meta.client) {
+    // Update cookie for SSR
+    themeCookie.value = newTheme
+    
+    // Also save to localStorage for client persistence
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.setItem('tuta-theme', newTheme)
     }
   }
 
   const toggleTheme = () => {
-    const newTheme = theme.value === 'dark'
+    const newTheme = clientTheme.value === 'dark'
       ? 'light'
       : 'dark'
     setTheme(newTheme)
   }
 
-  const isDark = computed(() => theme.value === 'dark')
+  const isDark = computed(() => clientTheme.value === 'dark')
 
-  // Initialize theme from localStorage on client side only
+  // Initialize theme on client side
   onMounted(() => {
-    if (import.meta.client) {
-      const savedTheme = localStorage.getItem('tuta-theme')
-      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-        setTheme(savedTheme)
-      }
-      else {
-        // Fallback to system preference if no saved theme
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        setTheme(prefersDark
-          ? 'dark'
-          : 'light')
+    // First check localStorage, then fallback to cookie
+    let savedTheme = themeCookie.value as 'light' | 'dark'
+    
+    if (typeof localStorage !== 'undefined') {
+      const localTheme = localStorage.getItem('tuta-theme')
+      if (localTheme && (localTheme === 'light' || localTheme === 'dark')) {
+        savedTheme = localTheme
       }
     }
+
+    clientTheme.value = savedTheme
+    colorMode.value = savedTheme
+    isHydrated.value = true
   })
 
   return {
     setTheme,
     toggleTheme,
     isDark,
-    theme: readonly(theme),
+    isHydrated: readonly(isHydrated),
   }
 })

@@ -3,50 +3,61 @@ export const useLanguageStore = defineStore('language', () => {
 
   const { locale } = useI18n()
   
-  // Use reactive state that starts with default value for SSR
-  const currentLanguage = ref<Languages>('en')
+  // Use cookie for SSR compatibility but with client-side override
+  const langCookie = useCookie('tuta-lang', {
+    default: () => 'en',
+    httpOnly: false,
+    secure: false,
+    sameSite: 'lax',
+  })
+  
+  // Client-side reactive state
+  const clientLang = ref<Languages>('en')
+  const isHydrated = ref(false)
 
   const setLanguage = (lang: Languages) => {
-    currentLanguage.value = lang
+    clientLang.value = lang
     locale.value = lang
     
-    // Only access localStorage on client side
-    if (import.meta.client) {
+    // Update cookie for SSR
+    langCookie.value = lang
+    
+    // Also save to localStorage for client persistence
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.setItem('tuta-lang', lang)
     }
   }
 
-  const currentLang = computed(() => currentLanguage.value)
+  const currentLang = computed(() => clientLang.value)
 
   const toggleLanguage = () => {
-    const newLang = currentLanguage.value === 'pl'
+    const newLang = clientLang.value === 'pl'
       ? 'en'
       : 'pl'
     setLanguage(newLang)
   }
 
-  // Initialize language from localStorage on client side only
+  // Initialize language on client side
   onMounted(() => {
-    if (import.meta.client) {
-      const savedLang = localStorage.getItem('tuta-lang')
-      if (savedLang && (savedLang === 'en' || savedLang === 'pl')) {
-        setLanguage(savedLang)
-      }
-      else {
-        // Fallback to browser language detection
-        const browserLang = navigator.language.toLowerCase()
-        const detectedLang = browserLang.startsWith('pl')
-          ? 'pl'
-          : 'en'
-        setLanguage(detectedLang)
+    // First check localStorage, then fallback to cookie
+    let savedLang = langCookie.value as Languages
+    
+    if (typeof localStorage !== 'undefined') {
+      const localLang = localStorage.getItem('tuta-lang')
+      if (localLang && (localLang === 'en' || localLang === 'pl')) {
+        savedLang = localLang as Languages
       }
     }
+
+    clientLang.value = savedLang
+    locale.value = savedLang
+    isHydrated.value = true
   })
 
   return {
     currentLang,
     setLanguage,
     toggleLanguage,
-    currentLanguage: readonly(currentLanguage),
+    isHydrated: readonly(isHydrated),
   }
 })

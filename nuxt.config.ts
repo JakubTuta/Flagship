@@ -113,7 +113,7 @@ export default defineNuxtConfig({
     preference: 'system',
     fallback: 'light',
     storageKey: 'tuta-theme',
-    storage: 'localStorage',
+    storage: 'cookie',
     classPrefix: '',
     classSuffix: '-mode',
     dataValue: 'theme',
