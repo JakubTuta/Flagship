@@ -106,6 +106,16 @@ export default defineNuxtConfig({
     propsDestructure: true,
   },
 
+  colorMode: {
+    preference: 'system',
+    fallback: 'light',
+    cookie: {
+      name: 'tuta-theme',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    },
+  },
+
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'en',

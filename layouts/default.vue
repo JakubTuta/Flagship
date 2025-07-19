@@ -48,11 +48,9 @@ watch(locale, (newLocale) => {
   <v-main>
     <slot />
 
-    <client-only>
-      <LazyNavigationDrawer
-        :mobile="mobile"
-      />
-    </client-only>
+    <LazyNavigationDrawer
+      :mobile="mobile"
+    />
   </v-main>
 
   <LazyFooter />
