@@ -1,11 +1,4 @@
 <script setup lang="ts">
-const colorMode = useColorMode()
-
-useHead({
-  htmlAttrs: {
-    class: computed(() => `v-theme--${colorMode.value}`),
-  },
-})
 
 const projectStore = useProjectStore()
 const { projects } = storeToRefs(projectStore)
