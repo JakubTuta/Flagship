@@ -1,26 +1,42 @@
 export const useThemeStore = defineStore('theme', () => {
   const colorMode = useColorMode()
-  const themeCookie = useCookie('tuta-theme', {
-    default: () => 'light',
-  })
+  
+  // Use reactive state that starts with default value for SSR
+  const theme = ref<'light' | 'dark'>('light')
 
   const setTheme = (newTheme: 'light' | 'dark') => {
+    theme.value = newTheme
     colorMode.value = newTheme
-    themeCookie.value = newTheme
+    
+    // Only access localStorage on client side
+    if (import.meta.client) {
+      localStorage.setItem('tuta-theme', newTheme)
+    }
   }
 
   const toggleTheme = () => {
-    const newTheme = colorMode.value === 'dark'
+    const newTheme = theme.value === 'dark'
       ? 'light'
       : 'dark'
     setTheme(newTheme)
   }
 
-  const isDark = computed(() => colorMode.value === 'dark')
+  const isDark = computed(() => theme.value === 'dark')
 
+  // Initialize theme from localStorage on client side only
   onMounted(() => {
-    if (themeCookie.value) {
-      setTheme(themeCookie.value as 'light' | 'dark')
+    if (import.meta.client) {
+      const savedTheme = localStorage.getItem('tuta-theme')
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setTheme(savedTheme)
+      }
+      else {
+        // Fallback to system preference if no saved theme
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        setTheme(prefersDark
+          ? 'dark'
+          : 'light')
+      }
     }
   })
 
@@ -28,5 +44,6 @@ export const useThemeStore = defineStore('theme', () => {
     setTheme,
     toggleTheme,
     isDark,
+    theme: readonly(theme),
   }
 })

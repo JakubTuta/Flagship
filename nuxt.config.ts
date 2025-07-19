@@ -53,6 +53,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
+    '@nuxtjs/color-mode',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
@@ -112,6 +113,7 @@ export default defineNuxtConfig({
     preference: 'system',
     fallback: 'light',
     storageKey: 'tuta-theme',
+    storage: 'localStorage',
     classPrefix: '',
     classSuffix: '-mode',
     dataValue: 'theme',
@@ -134,16 +136,11 @@ export default defineNuxtConfig({
       },
     ],
     detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'tuta-lang',
-      cookieSecure: process.env.NODE_ENV === 'production',
-      // @ts-expect-error done
-      cookieSameSite: 'lax',
+      useCookie: false,
       alwaysRedirect: false,
       fallbackLocale: 'en',
       redirectOn: 'root',
     },
-    seo: true,
     baseUrl,
   },
 
