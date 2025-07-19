@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ITableOfContentsItem } from '~/models/blog';
+import type { ITableOfContentsItem } from '~/models/blog'
 
 const props = defineProps<{
   blogContent: string
@@ -241,7 +241,7 @@ const contentBlocks = computed(() => {
             >
               <span
                 v-if="block.language"
-                class="text-caption font-weight-medium text-uppercase"
+                class="font-weight-medium text-caption text-uppercase"
               >
                 {{ block.language }}
               </span>

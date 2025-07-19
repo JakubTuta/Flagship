@@ -109,11 +109,7 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'system',
     fallback: 'light',
-    cookie: {
-      name: 'tuta-theme',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    },
+    storageKey: 'tuta-theme',
   },
 
   i18n: {

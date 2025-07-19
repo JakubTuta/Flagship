@@ -6,10 +6,19 @@ import 'vuetify/styles'
 export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
 
+  // Ensure we always have a valid theme for Vuetify
+  const getValidTheme = () => {
+    const value = colorMode.value
+
+    return (value === 'dark' || value === 'light')
+      ? value
+      : 'light'
+  }
+
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: colorMode.preference,
+      defaultTheme: getValidTheme(),
       themes: {
         light: {
           dark: false,
@@ -148,7 +157,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  watch(colorMode, (newColorMode) => {
-    nextTick(() => vuetify.theme.global.name.value = newColorMode.value)
+  watch(colorMode, (_newColorMode) => {
+    nextTick(() => vuetify.theme.global.name.value = getValidTheme())
   }, { immediate: true })
 })

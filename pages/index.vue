@@ -164,7 +164,7 @@ function scrollToSection(sectionId: string) {
 <template>
   <div class="landing-page">
     <!-- Hero Section -->
-    <div class="hero-section align-center flex justify-center pa-0">
+    <div class="align-center hero-section flex justify-center pa-0">
       <v-row
         no-gutters
         class="fill-height"

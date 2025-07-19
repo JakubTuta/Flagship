@@ -173,7 +173,7 @@ watch([selectedCategory, sortBy], () => {
   <div class="blog-page">
     <!-- Hero Section -->
     <div
-      class="hero-section d-flex align-center"
+      class="d-flex align-center hero-section"
       :class="{'h-100vh': mobile}"
     >
       <v-container>

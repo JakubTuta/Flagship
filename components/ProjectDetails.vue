@@ -27,7 +27,7 @@ function closeDialog() {
     >
       <!-- Image on top -->
       <div class="project-image-section">
-        <div class="project-placeholder d-flex align-center justify-center">
+        <div class="d-flex align-center project-placeholder justify-center">
           <v-icon
             v-if="!project.image"
             :size="mobile
@@ -53,7 +53,7 @@ function closeDialog() {
 
       <!-- Header with project info -->
       <v-card-title class="d-flex align-center pa-4">
-        <div class="text-h5 font-weight-bold mt-1">
+        <div class="font-weight-bold text-h5 mt-1">
           {{ project.title }}
         </div>
 

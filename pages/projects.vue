@@ -128,7 +128,7 @@ function openProjectDetails(project: IProject) {
 
       <!-- Featured Project Loading Skeleton -->
       <v-card
-        class="featured-project-loading-card fill-height mb-8"
+        class="fill-height featured-project-loading-card mb-8"
         elevation="12"
       >
         <v-row
@@ -252,7 +252,7 @@ function openProjectDetails(project: IProject) {
           :key="project.value"
         >
           <v-card
-            class="featured-project-card fill-height"
+            class="fill-height featured-project-card"
             elevation="12"
           >
             <v-row
@@ -299,7 +299,7 @@ function openProjectDetails(project: IProject) {
                     </v-chip>
                   </div>
 
-                  <h3 class="text-h4 font-weight-bold mb-3">
+                  <h3 class="font-weight-bold text-h4 mb-3">
                     {{ project.title }}
                   </h3>
 
@@ -543,7 +543,7 @@ function openProjectDetails(project: IProject) {
             >
               <!-- Project Image/Placeholder -->
               <div class="project-card-image">
-                <div class="project-image-placeholder d-flex align-center justify-center">
+                <div class="d-flex align-center project-image-placeholder justify-center">
                   <v-icon
                     v-if="!project.image"
                     size="48"

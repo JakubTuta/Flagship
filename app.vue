@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const projectStore = useProjectStore()
 const { projects } = storeToRefs(projectStore)
 

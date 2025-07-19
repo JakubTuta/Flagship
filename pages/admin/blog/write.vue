@@ -1308,8 +1308,9 @@ async function deleteBlog() {
         <v-combobox
           v-model="links"
           :label="$t('admin.blog.create.linksInput')"
-          chips
+
           clearable
+          chips
           multiple
         />
       </v-card-text>

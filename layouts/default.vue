@@ -40,7 +40,7 @@ watch(locale, (newLocale) => {
     v-if="mobile"
     icon="mdi-menu"
     rounded="circle"
-    class="floating-btn mobile-menu-btn d-print-none"
+    class="d-print-none floating-btn mobile-menu-btn"
     elevation="15"
     @click="drawerStore.toggleDrawer()"
   />

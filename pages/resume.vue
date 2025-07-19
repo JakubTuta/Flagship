@@ -269,7 +269,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 md="8"
               >
                 <h1
-                  class="display-1 font-weight-bold mb-2"
+                  class="font-weight-bold display-1 mb-2"
                   :class="{'print-title': isPrintMode}"
                 >
                   {{ personalInfo.name }}
@@ -449,7 +449,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <v-card
                     v-for="(exp, index) in workExperience"
                     :key="index"
-                    class="experience-card print-item-card mb-4"
+                    class="print-item-card experience-card mb-4"
                     variant="outlined"
                   >
                     <v-card-text>
@@ -523,7 +523,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <v-card
                     v-for="(activity, index) in additionalActivities"
                     :key="index"
-                    class="activity-card print-item-card mb-4"
+                    class="print-item-card activity-card mb-4"
                     variant="outlined"
                   >
                     <v-card-text>
@@ -707,7 +707,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
           <!-- Footer -->
           <v-divider />
 
-          <v-card-text class="footer-section print-section pa-4 text-center">
+          <v-card-text class="print-section footer-section pa-4 text-center">
             <div class="text-caption text-medium-emphasis">
               <v-icon
                 size="small"
