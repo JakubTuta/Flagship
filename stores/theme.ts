@@ -1,61 +1,72 @@
 export const useThemeStore = defineStore('theme', () => {
-  const colorMode = useColorMode()
+  type Themes = 'light' | 'dark'
+
+  const themeCookie = useCookie('tuta-theme', {
+    default: () => 'light',
+    httpOnly: false,
+    secure: false,
+    sameSite: 'lax',
+  })
+
+  const clientTheme = ref<Themes>('light')
   const isHydrated = ref(false)
 
-  const setTheme = (newTheme: 'light' | 'dark') => {
-    // Only update colorMode.preference - let @nuxtjs/color-mode handle the rest
-    colorMode.preference = newTheme
-    
-    // Save to localStorage for extra persistence
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      localStorage.setItem('tuta-theme', newTheme)
+  const setTheme = (theme: Themes) => {
+    clientTheme.value = theme
+    themeCookie.value = theme
+
+    // Update HTML attributes directly
+    if (typeof window !== 'undefined') {
+      const html = document.documentElement
+      
+      // Set data-theme attribute
+      html.setAttribute('data-theme', theme)
+      
+      // Set theme classes
+      html.classList.remove('light-mode', 'dark-mode')
+      html.classList.add(`${theme}-mode`)
+      
+      // Save to localStorage
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('tuta-theme', theme)
+      }
     }
   }
 
   const toggleTheme = () => {
-    // Use preference as source of truth, fallback to value
-    const currentTheme = colorMode.preference || colorMode.value || 'light'
-    const newTheme = currentTheme === 'dark'
+    const newTheme = clientTheme.value === 'dark'
       ? 'light'
       : 'dark'
-    
     setTheme(newTheme)
   }
 
-  // Safe computed property that handles undefined colorMode.value
-  const isDark = computed(() => {
-    // Check preference first, then value, then default to false
-    const theme = colorMode.preference || colorMode.value
-    
-    return theme
-      ? theme === 'dark'
-      : false
-  })
+  const isDark = computed(() => clientTheme.value === 'dark')
+
+  const currentTheme = computed(() => clientTheme.value)
 
   onMounted(() => {
-    // Sync localStorage with colorMode preference if needed
+    let savedTheme = themeCookie.value as Themes
+
+    // Check localStorage for preference
     if (typeof localStorage !== 'undefined') {
       const localTheme = localStorage.getItem('tuta-theme')
-      
       if (localTheme && (localTheme === 'light' || localTheme === 'dark')) {
-        // Only update if different from current preference
-        if (colorMode.preference !== localTheme) {
-          colorMode.preference = localTheme
-        }
-      }
-      else if (colorMode.preference) {
-        // Save current preference to localStorage
-        localStorage.setItem('tuta-theme', colorMode.preference)
+        savedTheme = localTheme as Themes
       }
     }
 
+    // Apply the theme immediately
+    clientTheme.value = savedTheme
+    setTheme(savedTheme)
+    
     isHydrated.value = true
   })
 
   return {
+    currentTheme,
+    isDark,
     setTheme,
     toggleTheme,
-    isDark,
     isHydrated: readonly(isHydrated),
   }
 })

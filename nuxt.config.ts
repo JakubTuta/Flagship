@@ -50,7 +50,6 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
-    '@nuxtjs/color-mode',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
@@ -104,19 +103,6 @@ export default defineNuxtConfig({
 
   vue: {
     propsDestructure: true,
-  },
-
-  colorMode: {
-    preference: 'light', // Set a definitive default
-    fallback: 'light',
-    storageKey: 'tuta-theme',
-    storage: 'cookie', // Keep using cookie for SSR compatibility
-    classPrefix: '',
-    classSuffix: '-mode',
-    dataValue: 'theme',
-    hid: 'nuxt-color-mode-script',
-    globalName: '__NUXT_COLOR_MODE__',
-    componentName: 'ColorScheme',
   },
 
   i18n: {

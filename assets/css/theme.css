@@ -35,9 +35,3 @@ html:not(.light-mode):not(.dark-mode):not([data-theme]) {
   background: rgb(32, 36, 40) !important;
   color: rgb(240, 240, 240) !important;
 }
-
-/* Override any Vuetify background defaults */
-.v-application__wrap {
-  min-height: 100vh !important;
-  background: inherit !important;
-}

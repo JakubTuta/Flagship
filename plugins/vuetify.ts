@@ -4,22 +4,15 @@ import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import 'vuetify/styles'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const colorMode = useColorMode()
-
-  // Ensure theme is set properly for SSR
-  const getTheme = () => {
-    // During SSR, colorMode.value might be undefined, use preference or default
-    if (typeof window === 'undefined') {
-      return colorMode.preference || 'light'
-    }
-    
-    return colorMode.value || colorMode.preference || 'light'
-  }
+  // Get theme from cookie for SSR consistency
+  const themeCookie = useCookie('tuta-theme', {
+    default: () => 'light',
+  })
 
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: getTheme(),
+      defaultTheme: themeCookie.value as string,
       themes: {
         light: {
           dark: false,
@@ -158,28 +151,21 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  // Set initial theme with safe fallback
-  const initialTheme = getTheme()
+  // Set initial theme
+  const initialTheme = themeCookie.value as string || 'light'
   vuetify.theme.global.name.value = initialTheme
 
-  // Watch for colorMode changes and update Vuetify theme
+  // Watch for theme changes from the theme store
   if (typeof window !== 'undefined') {
-    // Use nextTick to ensure DOM is ready
+    // Use nextTick to ensure the theme store is available
     nextTick(() => {
-      watch(() => colorMode.value, (newTheme) => {
-        const safeTheme = newTheme || colorMode.preference || 'light'
-        
-        if (vuetify.theme.global.name.value !== safeTheme) {
-          vuetify.theme.global.name.value = safeTheme
+      const themeStore = useThemeStore()
+      
+      watch(() => themeStore.currentTheme, (newTheme) => {
+        if (vuetify.theme.global.name.value !== newTheme) {
+          vuetify.theme.global.name.value = newTheme
         }
       }, { immediate: true })
-
-      // Also watch preference changes
-      watch(() => colorMode.preference, (newPreference) => {
-        if (newPreference && !colorMode.value) {
-          vuetify.theme.global.name.value = newPreference
-        }
-      })
     })
   }
 })
