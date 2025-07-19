@@ -23,10 +23,7 @@ export default defineNuxtConfig({
     },
   },
 
-  site: {
-    url: baseUrl,
-    name: appName,
-  },
+  css: ['~/assets/css/theme.css'],
 
   runtimeConfig: {
     public: {
@@ -110,10 +107,10 @@ export default defineNuxtConfig({
   },
 
   colorMode: {
-    preference: 'system',
+    preference: 'light', // Set a definitive default
     fallback: 'light',
     storageKey: 'tuta-theme',
-    storage: 'cookie',
+    storage: 'cookie', // Keep using cookie for SSR compatibility
     classPrefix: '',
     classSuffix: '-mode',
     dataValue: 'theme',
