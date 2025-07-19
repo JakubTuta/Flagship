@@ -73,6 +73,10 @@ export default defineNuxtConfig({
     ],
   },
 
+  css: [
+    '@/assets/theme-hydration.css',
+  ],
+
   vite: {
     vue: {
       template: {

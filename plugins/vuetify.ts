@@ -6,22 +6,18 @@ import 'vuetify/styles'
 export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
 
-  const getSSRSafeTheme = () => {
+  const getInitialTheme = () => {
     if (import.meta.server) {
       return 'light'
     }
 
-    const value = colorMode.value
-
-    return (value === 'dark' || value === 'light')
-      ? value
-      : 'light'
+    return 'light'
   }
 
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: getSSRSafeTheme(),
+      defaultTheme: getInitialTheme(),
       themes: {
         light: {
           dark: false,
@@ -161,6 +157,15 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(vuetify)
 
   if (import.meta.client) {
+    onMounted(() => {
+      nextTick(() => {
+        const actualTheme = colorMode.value === 'dark'
+          ? 'dark'
+          : 'light'
+        vuetify.theme.global.name.value = actualTheme
+      })
+    })
+
     watch(colorMode, (_newColorMode) => {
       nextTick(() => {
         const newTheme = colorMode.value === 'dark'
@@ -168,13 +173,6 @@ export default defineNuxtPlugin((nuxtApp) => {
           : 'light'
         vuetify.theme.global.name.value = newTheme
       })
-    }, { immediate: true })
-  }
-  else {
-    watch(colorMode, (_newColorMode) => {
-      nextTick(() => {
-        vuetify.theme.global.name.value = getSSRSafeTheme()
-      })
-    }, { immediate: true })
+    }, { immediate: false })
   }
 })
