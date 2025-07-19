@@ -52,7 +52,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
-    '@nuxtjs/color-mode',
     '@nuxtjs/i18n',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
@@ -111,15 +110,6 @@ export default defineNuxtConfig({
 
   vue: {
     propsDestructure: true,
-  },
-
-  colorMode: {
-    preference: 'system',
-    fallback: 'light',
-    storageKey: 'tuta-theme',
-    classPrefix: '',
-    classSuffix: '-mode',
-    dataValue: 'theme',
   },
 
   i18n: {

@@ -19,9 +19,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </v-app>
+  <ThemeWrapper>
+    <v-app>
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </v-app>
+  </ThemeWrapper>
 </template>
