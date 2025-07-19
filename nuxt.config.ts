@@ -114,6 +114,9 @@ export default defineNuxtConfig({
     classPrefix: '',
     classSuffix: '-mode',
     dataValue: 'theme',
+    hid: 'nuxt-color-mode-script',
+    globalName: '__NUXT_COLOR_MODE__',
+    componentName: 'ColorScheme',
   },
 
   i18n: {

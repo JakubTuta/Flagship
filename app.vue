@@ -5,6 +5,8 @@ const { projects } = storeToRefs(projectStore)
 const blogStore = useBlogStore()
 const { publishedBlogs } = storeToRefs(blogStore)
 
+const colorMode = useColorMode()
+
 useAuthStore()
 
 onMounted(() => {
@@ -16,10 +18,20 @@ onMounted(() => {
     blogStore.fetchPublishedBlogs()
   }
 })
+
+// Provide theme class for v-app
+const themeClass = computed(() => {
+  const theme = colorMode.value || 'light'
+  
+  return `v-theme--${theme}`
+})
 </script>
 
 <template>
-  <v-app>
+  <v-app
+    :theme="colorMode.value || 'light'"
+    :class="themeClass"
+  >
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

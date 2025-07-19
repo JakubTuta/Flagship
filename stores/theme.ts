@@ -3,31 +3,29 @@ export const useThemeStore = defineStore('theme', () => {
   const isHydrated = ref(false)
 
   const setTheme = (newTheme: 'light' | 'dark') => {
-    // Update the color mode preference - this should trigger the @nuxtjs/color-mode
+    // Only update colorMode.preference - let @nuxtjs/color-mode handle the rest
     colorMode.preference = newTheme
     
-    // For immediate visual feedback, also set the value directly
-    if (isHydrated.value) {
-      colorMode.value = newTheme
-    }
-
-    // Save to localStorage for client persistence
+    // Save to localStorage for extra persistence
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.setItem('tuta-theme', newTheme)
     }
   }
 
   const toggleTheme = () => {
-    const currentTheme = colorMode.value || 'light'
+    // Use preference as source of truth, fallback to value
+    const currentTheme = colorMode.preference || colorMode.value || 'light'
     const newTheme = currentTheme === 'dark'
       ? 'light'
       : 'dark'
+    
     setTheme(newTheme)
   }
 
   // Safe computed property that handles undefined colorMode.value
   const isDark = computed(() => {
-    const theme = colorMode.value
+    // Check preference first, then value, then default to false
+    const theme = colorMode.preference || colorMode.value
     
     return theme
       ? theme === 'dark'
@@ -35,15 +33,19 @@ export const useThemeStore = defineStore('theme', () => {
   })
 
   onMounted(() => {
-    // Check if we have a localStorage preference
+    // Sync localStorage with colorMode preference if needed
     if (typeof localStorage !== 'undefined') {
       const localTheme = localStorage.getItem('tuta-theme')
+      
       if (localTheme && (localTheme === 'light' || localTheme === 'dark')) {
-        // Update both preference and value for immediate effect
-        if (colorMode.value !== localTheme) {
+        // Only update if different from current preference
+        if (colorMode.preference !== localTheme) {
           colorMode.preference = localTheme
-          colorMode.value = localTheme
         }
+      }
+      else if (colorMode.preference) {
+        // Save current preference to localStorage
+        localStorage.setItem('tuta-theme', colorMode.preference)
       }
     }
 

@@ -4,24 +4,40 @@ html {
 }
 
 /* Light mode styles */
-html.light-mode {
-  background-color: rgb(250, 250, 248);
+html.light-mode,
+html[data-theme="light"] {
+  background-color: rgb(250, 250, 248) !important;
 }
 
 /* Dark mode styles */
-html.dark-mode {
-  background-color: rgb(32, 36, 40);
-}
-
-/* Fallback for when no theme class is applied yet */
-html:not([data-theme]) {
-  background-color: rgb(250, 250, 248);
-}
-
-html[data-theme="light"] {
-  background-color: rgb(250, 250, 248);
-}
-
+html.dark-mode,
 html[data-theme="dark"] {
-  background-color: rgb(32, 36, 40);
+  background-color: rgb(32, 36, 40) !important;
+}
+
+/* Fallback for when no theme class is applied yet (default to light) */
+html:not(.light-mode):not(.dark-mode):not([data-theme]) {
+  background-color: rgb(250, 250, 248) !important;
+}
+
+/* Ensure v-app inherits the theme background */
+.v-application {
+  background: inherit !important;
+}
+
+/* Ensure proper theme classes for Vuetify components */
+.v-theme--light {
+  background: rgb(250, 250, 248) !important;
+  color: rgb(33, 37, 41) !important;
+}
+
+.v-theme--dark {
+  background: rgb(32, 36, 40) !important;
+  color: rgb(240, 240, 240) !important;
+}
+
+/* Override any Vuetify background defaults */
+.v-application__wrap {
+  min-height: 100vh !important;
+  background: inherit !important;
 }

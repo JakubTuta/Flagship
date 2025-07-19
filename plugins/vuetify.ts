@@ -6,10 +6,20 @@ import 'vuetify/styles'
 export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
 
+  // Ensure theme is set properly for SSR
+  const getTheme = () => {
+    // During SSR, colorMode.value might be undefined, use preference or default
+    if (typeof window === 'undefined') {
+      return colorMode.preference || 'light'
+    }
+    
+    return colorMode.value || colorMode.preference || 'light'
+  }
+
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: colorMode.value,
+      defaultTheme: getTheme(),
       themes: {
         light: {
           dark: false,
@@ -149,16 +159,27 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(vuetify)
 
   // Set initial theme with safe fallback
-  const initialTheme = colorMode.value || 'light'
+  const initialTheme = getTheme()
   vuetify.theme.global.name.value = initialTheme
 
   // Watch for colorMode changes and update Vuetify theme
   if (typeof window !== 'undefined') {
-    watch(() => colorMode.value, (newTheme) => {
-      const safeTheme = newTheme || 'light'
-      if (vuetify.theme.global.name.value !== safeTheme) {
-        vuetify.theme.global.name.value = safeTheme
-      }
-    }, { immediate: true })
+    // Use nextTick to ensure DOM is ready
+    nextTick(() => {
+      watch(() => colorMode.value, (newTheme) => {
+        const safeTheme = newTheme || colorMode.preference || 'light'
+        
+        if (vuetify.theme.global.name.value !== safeTheme) {
+          vuetify.theme.global.name.value = safeTheme
+        }
+      }, { immediate: true })
+
+      // Also watch preference changes
+      watch(() => colorMode.preference, (newPreference) => {
+        if (newPreference && !colorMode.value) {
+          vuetify.theme.global.name.value = newPreference
+        }
+      })
+    })
   }
 })
