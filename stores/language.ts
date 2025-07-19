@@ -25,8 +25,7 @@ export const useLanguageStore = defineStore('language', () => {
   }
 
   onMounted(() => {
-    // Start with default, then load from localStorage if available
-    let savedLang: Languages = 'en' // Default value
+    let savedLang: Languages = 'en'
 
     if (typeof localStorage !== 'undefined') {
       const localLang = localStorage.getItem('tuta-lang')

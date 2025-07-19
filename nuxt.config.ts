@@ -23,8 +23,6 @@ export default defineNuxtConfig({
     },
   },
 
-  css: ['~/assets/css/theme.css'],
-
   runtimeConfig: {
     public: {
       // Firebase configuration

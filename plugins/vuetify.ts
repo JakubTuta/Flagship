@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: 'light', // Always start with light theme on server
+      defaultTheme: 'light',
       themes: {
         light: {
           dark: false,
@@ -146,16 +146,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  // Always start with light theme
   const initialTheme = 'light'
   vuetify.theme.global.name.value = initialTheme
 
-  // Watch for theme changes from the theme store (client-side only)
   if (typeof window !== 'undefined') {
-    // Use nextTick to ensure the theme store is available
     nextTick(() => {
       const themeStore = useThemeStore()
-      
+
       watch(() => themeStore.currentTheme, (newTheme) => {
         if (vuetify.theme.global.name.value !== newTheme) {
           vuetify.theme.global.name.value = newTheme

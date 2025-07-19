@@ -19,7 +19,6 @@ onMounted(() => {
   }
 })
 
-// Provide theme for v-app
 const currentTheme = computed(() => themeStore.currentTheme)
 const themeClass = computed(() => `v-theme--${themeStore.currentTheme}`)
 </script>
