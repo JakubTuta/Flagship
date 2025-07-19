@@ -16,6 +16,9 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { name: 'keywords', content: 'developer, portfolio, projects, blog, resume, CV, contact, Jakub Tutka' },
         { name: 'author', content: 'Jakub Tutka' },
+        { name: 'color-scheme', content: 'light dark' },
+        { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#202428', media: '(prefers-color-scheme: dark)' },
       ],
     },
   },
@@ -110,6 +113,9 @@ export default defineNuxtConfig({
     preference: 'system',
     fallback: 'light',
     storageKey: 'tuta-theme',
+    classPrefix: '',
+    classSuffix: '-mode',
+    dataValue: 'theme',
   },
 
   i18n: {

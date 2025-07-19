@@ -80,7 +80,7 @@ function openProjectDetails(project: IProject) {
   <div class="projects-page">
     <!-- Hero Section -->
     <div
-      class="hero-section d-flex align-center"
+      class="d-flex align-center hero-section"
       :class="{'h-100vh': mobile}"
     >
       <v-container>
@@ -128,7 +128,7 @@ function openProjectDetails(project: IProject) {
 
       <!-- Featured Project Loading Skeleton -->
       <v-card
-        class="fill-height featured-project-loading-card mb-8"
+        class="featured-project-loading-card fill-height mb-8"
         elevation="12"
       >
         <v-row
