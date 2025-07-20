@@ -1,75 +1,53 @@
-# Nuxt Minimal Starter
+# Jakub Tutka | Developer Portfolio
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern, feature-rich personal portfolio website built with Nuxt.js and Vuetify.
 
-## Setup
+**Live Demo:** [jakubtutka.com](https://jakubtutka.com/)
 
-Make sure to install dependencies:
+## 🚀 About The Project
 
-```bash
-# npm
-npm install
+This project is a personal portfolio website designed to showcase my skills, experience, and projects. It features a clean and modern design, with a focus on user experience, performance, and SEO. The website is fully responsive and works seamlessly on all devices.
 
-# pnpm
-pnpm install
+## ✨ Key Features
 
-# yarn
-yarn install
+*   **Home Page:** A brief introduction to my skills and experience.
+*   **Resume:** A detailed overview of my work experience and education.
+*   **Projects Showcase:** A collection of my latest projects with descriptions and links.
+*   **Blog:** A personal blog where I write about IT-related topics.
+*   **SSR (Server-Side Rendering):** For improved performance and SEO.
+*   **SEO Optimized:** With meta tags, structured data, and a sitemap.
+*   **i18n:** Internationalization support for multiple languages.
 
-# bun
-bun install
-```
+## 🛠️ Getting Started
 
-## Development Server
+To get a local copy up and running, follow these simple steps.
 
-Start the development server on `http://localhost:3000`:
+### Prerequisites
 
-```bash
-# npm
-npm run dev
+*   [Node.js](https://nodejs.org/en/) (v20.x or later)
+*   [pnpm](https://pnpm.io/installation) (optional)
 
-# pnpm
-pnpm dev
+### Installation
 
-# yarn
-yarn dev
+1.  Clone the repo
+    ```sh
+    git clone https://github.com/JakubTutka/Flagship.git
+    ```
+2.  Install NPM packages
+    ```sh
+    npm install
+    ```
+3.  Start the development server
+    ```sh
+    npm run dev
+    ```
 
-# bun
-bun run dev
-```
+## 💻 Technologies Used
 
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+*   [Nuxt.js](https://nuxt.com/)
+*   [Vuetify](https://vuetifyjs.com/en/)
+*   [Pinia](https://pinia.vuejs.org/)
+*   [i18n](https://v8.i18n.nuxtjs.org/)
+*   [UnoCSS](https://unocss.dev/)
+*   [Firebase](https://firebase.google.com/)
+*   [TypeScript](https://www.typescriptlang.org/)
