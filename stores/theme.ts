@@ -32,6 +32,10 @@ export const useThemeStore = defineStore('theme', () => {
 
   const currentTheme = computed(() => clientTheme.value)
 
+  const getTheme = () => {
+    return clientTheme.value
+  }
+
   onMounted(() => {
     let savedTheme: Themes = 'light'
 
@@ -53,6 +57,7 @@ export const useThemeStore = defineStore('theme', () => {
     isDark,
     setTheme,
     toggleTheme,
+    getTheme,
     isHydrated: readonly(isHydrated),
   }
 })

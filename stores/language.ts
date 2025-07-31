@@ -32,6 +32,12 @@ export const useLanguageStore = defineStore('language', () => {
       if (localLang && (localLang === 'en' || localLang === 'pl')) {
         savedLang = localLang as Languages
       }
+      else if (typeof navigator !== 'undefined') {
+        const browserLang = navigator.language || navigator.languages?.[0] || ''
+        if (browserLang.toLowerCase().startsWith('pl')) {
+          savedLang = 'pl'
+        }
+      }
     }
 
     clientLang.value = savedLang
