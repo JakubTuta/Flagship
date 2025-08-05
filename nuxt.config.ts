@@ -47,17 +47,22 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
-    '@unocss/nuxt',
+    [
+      '@unocss/nuxt',
+      {
+        // Ensure proper initialization in CI
+        uno: true,
+        preflight: true,
+        autoImport: true,
+        components: false, // Prevent component conflicts
+      },
+    ],
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
       })
     },
   ],
-
-  unocss: {
-    preflight: true,
-  },
 
   imports: {
     autoImport: true,
