@@ -46,8 +46,9 @@ export const useThemeStore = defineStore('theme', () => {
       }
     }
 
-    clientTheme.value = savedTheme
-    setTheme(savedTheme)
+    nextTick(() => {
+      setTheme(savedTheme)
+    })
 
     isHydrated.value = true
   })

@@ -40,8 +40,10 @@ export const useLanguageStore = defineStore('language', () => {
       }
     }
 
-    clientLang.value = savedLang
-    locale.value = savedLang
+    nextTick(() => {
+      setLanguage(savedLang)
+    })
+
     isHydrated.value = true
   })
 
