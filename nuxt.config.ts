@@ -47,6 +47,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
+    '@unocss/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
@@ -55,7 +56,7 @@ export default defineNuxtConfig({
   ],
 
   css: [
-    '@/assets/css/utilities.css',
+    '@unocss/reset/tailwind.css',
   ],
 
   vite: {
