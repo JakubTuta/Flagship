@@ -26,3 +26,5 @@ logs
 *lock*
 .vscode
 .firebase
+
+.github/copilot-instructions.md

@@ -47,22 +47,24 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
-    [
-      '@unocss/nuxt',
-      {
-        // Ensure proper initialization in CI
-        uno: true,
-        preflight: true,
-        autoImport: true,
-        components: false, // Prevent component conflicts
-      },
-    ],
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
       })
     },
   ],
+
+  css: [
+    '@/assets/css/utilities.css',
+  ],
+
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
+    },
+  },
 
   imports: {
     autoImport: true,
@@ -74,14 +76,6 @@ export default defineNuxtConfig({
       'helpers/**',
       'utils/**',
     ],
-  },
-
-  vite: {
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
-    },
   },
 
   ssr: true,
