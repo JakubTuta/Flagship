@@ -45,15 +45,19 @@ export default defineNuxtConfig({
 
   modules: [
     '@vueuse/nuxt',
-    '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
+    '@unocss/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
       })
     },
   ],
+
+  unocss: {
+    preflight: true,
+  },
 
   imports: {
     autoImport: true,
