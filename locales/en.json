@@ -152,7 +152,8 @@
     "categories": {
       "all": "All Projects",
       "featured": "Featured",
-      "notFeatured": "Other Projects"
+      "notFeatured": "Other Projects",
+      "withDemo": "Available online"
     },
     "hero": {
       "title": "My Projects",

@@ -152,7 +152,8 @@
     "categories": {
       "all": "Wszystkie projekty",
       "featured": "Wyróżnione",
-      "notFeatured": "Inne projekty"
+      "notFeatured": "Inne projekty",
+      "withDemo": "Dostępne online"
     },
     "hero": {
       "title": "Moje Projekty",

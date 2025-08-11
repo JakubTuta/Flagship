@@ -48,6 +48,7 @@ const categories = computed(() => {
     'all',
     t('projects.categories.featured'),
     t('projects.categories.notFeatured'),
+    t('projects.categories.withDemo'),
     ...new Set(projects.value.map(p => p.category)),
   ]
 
@@ -65,6 +66,10 @@ const filteredProjects = computed(() => {
 
   if (selectedCategory.value === t('projects.categories.notFeatured')) {
     return allProjects.value.filter(project => !project.featured)
+  }
+
+  if (selectedCategory.value === t('projects.categories.withDemo')) {
+    return allProjects.value.filter(project => project.demoUrl)
   }
 
   return allProjects.value.filter(project => project.category === selectedCategory.value)
