@@ -1,14 +1,13 @@
 export const useLanguageStore = defineStore('language', () => {
   type Languages = 'en' | 'pl'
 
-  const { locale } = useI18n()
-
   const clientLang = ref<Languages>('en')
   const isHydrated = ref(false)
 
   const setLanguage = (lang: Languages) => {
     clientLang.value = lang
-    locale.value = lang
+    const { $i18n } = useNuxtApp()
+    $i18n.locale.value = lang
 
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.setItem('tuta-lang', lang)

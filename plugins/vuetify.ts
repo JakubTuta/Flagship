@@ -147,7 +147,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(vuetify)
 
   const initialTheme = 'light'
-  vuetify.theme.global.name.value = initialTheme
+  vuetify.theme.change(initialTheme)
 
   if (typeof window !== 'undefined') {
     nextTick(() => {
@@ -155,7 +155,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       watch(() => themeStore.currentTheme, (newTheme) => {
         if (vuetify.theme.global.name.value !== newTheme) {
-          vuetify.theme.global.name.value = newTheme
+          vuetify.theme.change(newTheme)
         }
       }, { immediate: true })
     })

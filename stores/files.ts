@@ -19,7 +19,6 @@ export const useFilesStore = defineStore('files', () => {
 
   // Composables
   const { storage, auth } = useFirebase()
-  const { t } = useI18n()
 
   // Getters
   const sortedFiles = computed(() => {
@@ -76,7 +75,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: false,
-        message: t('files.list.error'),
+        message: useNuxtApp().$i18n.t('files.list.error'),
       }
     }
     finally {
@@ -114,7 +113,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: true,
-        message: t('files.upload.success'),
+        message: useNuxtApp().$i18n.t('files.upload.success'),
       }
     }
     catch (error) {
@@ -122,7 +121,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: false,
-        message: t('files.upload.error'),
+        message: useNuxtApp().$i18n.t('files.upload.error'),
       }
     }
     finally {
@@ -143,7 +142,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: true,
-        message: t('files.download.success'),
+        message: useNuxtApp().$i18n.t('files.download.success'),
       }
     }
     catch (error) {
@@ -151,7 +150,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: false,
-        message: t('files.download.error'),
+        message: useNuxtApp().$i18n.t('files.download.error'),
       }
     }
   }
@@ -168,7 +167,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: true,
-        message: t('files.delete.success'),
+        message: useNuxtApp().$i18n.t('files.delete.success'),
       }
     }
     catch (error) {
@@ -176,7 +175,7 @@ export const useFilesStore = defineStore('files', () => {
 
       return {
         success: false,
-        message: t('files.delete.error'),
+        message: useNuxtApp().$i18n.t('files.delete.error'),
       }
     }
     finally {
