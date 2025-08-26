@@ -15,12 +15,17 @@ export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
 
   const fetchUserData = async (user: User) => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
       const response = await getDoc(doc(firestore, 'users', user.uid))
       if (response.exists())
-        userData.value = mapIUser(response.data(), response.ref)
+        userData.value = mapIUser(response.data() as any, response.ref)
       else
         userData.value = null
     }
@@ -36,12 +41,18 @@ export const useAuthStore = defineStore('auth', () => {
   const getUserDataFromRef = async (userRef: DocumentReference | null) => {
     if (!userRef)
       return null
+
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
+    }
+
     loading.value = true
 
     try {
       const response = await getDoc(userRef)
       if (response.exists())
-        return mapIUser(response.data(), response.ref)
+        return mapIUser(response.data() as any, response.ref)
     }
     catch (error) {
       console.error('Error fetching user data by ID:', error)
@@ -55,6 +66,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const createUserData = async (user: User, username: string) => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
@@ -78,6 +94,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const logout = async () => {
+    // Skip on server side or if auth is not available
+    if (!auth || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
@@ -101,6 +122,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = async (email: string, password: string) => {
+    // Skip on server side or if auth is not available
+    if (!auth || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
@@ -120,6 +146,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const register = async (email: string, username: string, password: string) => {
+    // Skip on server side or if auth is not available
+    if (!auth || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
@@ -147,18 +178,21 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  onAuthStateChanged(
-    auth,
-    (newUser: User | null) => {
-      if (newUser) {
-        user.value = newUser
-        fetchUserData(newUser)
-      }
-      else {
-        logout()
-      }
-    },
-  )
+  // Only set up auth state listener on client side
+  if (import.meta.client && auth) {
+    onAuthStateChanged(
+      auth,
+      (newUser: User | null) => {
+        if (newUser) {
+          user.value = newUser
+          fetchUserData(newUser)
+        }
+        else {
+          logout()
+        }
+      },
+    )
+  }
 
   return {
     user,

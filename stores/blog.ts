@@ -13,8 +13,6 @@ export const useBlogStore = defineStore('blog', () => {
   const loading = ref(false)
 
   const { firestore, storage } = useFirebase()
-  const blogsCollection = collection(firestore, 'blogs')
-  const workingBlogsCollection = collection(firestore, 'workingBlogs')
 
   const resetState = () => {
     publishedBlogs.value = []
@@ -24,9 +22,15 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const fetchBlogs = async (user: IUser) => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
+      const blogsCollection = collection(firestore, 'blogs')
       const response = await getDocs(query(blogsCollection, where('author', '==', user.reference)))
       blogs.value = response.docs.map(doc => mapIBlogDecoded(doc.data(), doc.ref))
     }
@@ -39,9 +43,15 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const fetchPublishedBlogs = async () => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
+      const blogsCollection = collection(firestore, 'blogs')
       const response = await getDocs(query(blogsCollection, where('isPublished', '==', true)))
       publishedBlogs.value = response.docs.map(doc => mapIBlogDecoded(doc.data(), doc.ref))
     }
@@ -54,9 +64,15 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const fetchWorkingBlogs = async (user: IUser) => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
+      const workingBlogsCollection = collection(firestore, 'workingBlogs')
       const response = await getDocs(query(workingBlogsCollection, where('author', '==', user.reference)))
       workingBlogs.value = response.docs.map(doc => mapIWorkingBlogDecoded(doc.data(), doc.ref))
     }
@@ -75,6 +91,11 @@ export const useBlogStore = defineStore('blog', () => {
       return null
     }
 
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
+    }
+
     const foundBlog = blogs.value.find(blog => blog.reference?.id === blogId)
     if (foundBlog) {
       if (userData || foundBlog.isPublished)
@@ -86,6 +107,7 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       loading.value = true
 
+      const blogsCollection = collection(firestore, 'blogs')
       const q = query(blogsCollection, where('value', '==', blogId))
       const querySnapshot = await getDocs(q)
 
@@ -96,7 +118,7 @@ export const useBlogStore = defineStore('blog', () => {
       }
 
       const document = querySnapshot.docs[0]
-      const blog = mapIBlogDecoded(document.data(), document.ref)
+      const blog = mapIBlogDecoded(document.data() as any, document.ref)
 
       if (userData || blog.isPublished) {
         blogs.value.push(blog)
@@ -123,6 +145,11 @@ export const useBlogStore = defineStore('blog', () => {
       return null
     }
 
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
+    }
+
     const foundBlog = publishedBlogs.value.find(blog => blog.reference?.id === blogId)
     if (foundBlog) {
       return foundBlog
@@ -131,6 +158,7 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       loading.value = true
 
+      const blogsCollection = collection(firestore, 'blogs')
       const q = query(blogsCollection, where('value', '==', blogId))
       const querySnapshot = await getDocs(q)
 
@@ -141,7 +169,7 @@ export const useBlogStore = defineStore('blog', () => {
       }
 
       const document = querySnapshot.docs[0]
-      const blog = mapIBlogDecoded(document.data(), document.ref)
+      const blog = mapIBlogDecoded(document.data() as any, document.ref)
 
       if (blog.isPublished)
         return blog
@@ -192,6 +220,11 @@ export const useBlogStore = defineStore('blog', () => {
       return null
     }
 
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
+    }
+
     const foundBlog = workingBlogs.value.find(blog => blog.reference?.id === blogId)
     if (foundBlog) {
       return foundBlog
@@ -200,6 +233,7 @@ export const useBlogStore = defineStore('blog', () => {
     try {
       loading.value = true
 
+      const workingBlogsCollection = collection(firestore, 'workingBlogs')
       const q = query(workingBlogsCollection, where('value', '==', blogId))
       const querySnapshot = await getDocs(q)
 
@@ -210,7 +244,7 @@ export const useBlogStore = defineStore('blog', () => {
       }
 
       const document = querySnapshot.docs[0]
-      const blog = mapIWorkingBlogDecoded(document.data(), document.ref)
+      const blog = mapIWorkingBlogDecoded(document.data() as any, document.ref)
 
       workingBlogs.value.push(blog)
 
@@ -227,9 +261,15 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const createBlog = async (blog: IBlog) => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
+    }
+
     loading.value = true
 
     try {
+      const blogsCollection = collection(firestore, 'blogs')
       const docRef = await addDoc(blogsCollection, removeReferenceField(blog))
       blog.reference = docRef
 
@@ -281,11 +321,17 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const saveWorkingBlog = async (blog: IWorkingBlog) => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     try {
       if (blog.reference) {
         await updateDoc(blog.reference, removeReferenceField(blog) as any)
       }
       else {
+        const workingBlogsCollection = collection(firestore, 'workingBlogs')
         const docRef = doc(workingBlogsCollection, blog.value)
         await setDoc(docRef, removeReferenceField(blog))
         blog.reference = docRef
@@ -322,6 +368,11 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const addImage = (image: string) => {
+    // Skip on server side or if storage is not available
+    if (!storage || import.meta.server) {
+      return null
+    }
+
     const imageUrl = createAndUploadImage('blogs', image, storage)
 
     return imageUrl

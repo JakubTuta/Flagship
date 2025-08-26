@@ -11,6 +11,11 @@ export const useResumeStore = defineStore('resume', () => {
   const authStore = useAuthStore()
 
   const fetchResume = async () => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
@@ -19,7 +24,7 @@ export const useResumeStore = defineStore('resume', () => {
 
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0]
-        resume.value = mapIResumeDecoded(doc.data(), doc.ref)
+        resume.value = mapIResumeDecoded(doc.data() as any, doc.ref)
       }
       else {
         resume.value = null
@@ -37,6 +42,11 @@ export const useResumeStore = defineStore('resume', () => {
   const createResume = async (resumeData: Partial<IResume>) => {
     if (!authStore.userData?.reference) {
       throw new Error('User not authenticated')
+    }
+
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
     }
 
     loading.value = true
@@ -64,6 +74,11 @@ export const useResumeStore = defineStore('resume', () => {
   const updateResume = async (resumeData: Partial<IResume>) => {
     if (!authStore.userData?.reference || !resume.value?.reference) {
       throw new Error('User not authenticated or resume not found')
+    }
+
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return null
     }
 
     loading.value = true

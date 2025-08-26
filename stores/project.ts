@@ -6,7 +6,6 @@ export const useProjectStore = defineStore('projects', () => {
   const loading = ref(false)
 
   const { firestore } = useFirebase()
-  const projectsCollection = collection(firestore, 'projects')
 
   const resetState = () => {
     projects.value = []
@@ -14,9 +13,15 @@ export const useProjectStore = defineStore('projects', () => {
   }
 
   const fetchProjects = async () => {
+    // Skip on server side or if firestore is not available
+    if (!firestore || import.meta.server) {
+      return
+    }
+
     loading.value = true
 
     try {
+      const projectsCollection = collection(firestore, 'projects')
       const response = await getDocs(projectsCollection)
       projects.value = response.docs.map(doc => mapIProject(doc.data()))
     }

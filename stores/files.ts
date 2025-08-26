@@ -33,6 +33,10 @@ export const useFilesStore = defineStore('files', () => {
 
   // Actions
   const getUserStoragePath = (): string => {
+    if (!auth) {
+      throw new Error('Auth not available')
+    }
+
     const user = auth.currentUser
     if (!user) {
       throw new Error('User not authenticated')
@@ -46,6 +50,11 @@ export const useFilesStore = defineStore('files', () => {
   }
 
   const loadFiles = async (): Promise<{ success: boolean, message?: string }> => {
+    // Skip on server side or if storage is not available
+    if (!storage || import.meta.server) {
+      return { success: false, message: 'Storage not available' }
+    }
+
     loadingFiles.value = true
 
     try {
@@ -86,6 +95,11 @@ export const useFilesStore = defineStore('files', () => {
   const uploadFiles = async (): Promise<{ success: boolean, message: string }> => {
     if (!selectedFiles.value || selectedFiles.value.length === 0) {
       return { success: false, message: 'No files selected' }
+    }
+
+    // Skip on server side or if storage is not available
+    if (!storage || import.meta.server) {
+      return { success: false, message: 'Storage not available' }
     }
 
     uploading.value = true
@@ -156,6 +170,11 @@ export const useFilesStore = defineStore('files', () => {
   }
 
   const deleteFile = async (file: IFileItem): Promise<{ success: boolean, message: string }> => {
+    // Skip on server side or if storage is not available
+    if (!storage || import.meta.server) {
+      return { success: false, message: 'Storage not available' }
+    }
+
     deleting.value = true
 
     try {
