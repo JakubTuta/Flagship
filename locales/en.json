@@ -25,6 +25,11 @@
         "title": "Blog",
         "description": "I share insights about web development, technical tutorials, and lessons learned from real-world projects. Join me in exploring modern development practices and industry trends.",
         "tags": "tech blog, development insights, programming tutorials, web development, technical writing"
+      },
+      "files": {
+        "title": "Files",
+        "description": "Secure file management system for authenticated users. Upload, download, and manage your personal files with cloud storage.",
+        "tags": "files, storage, upload, download, personal files, cloud storage, file management"
       }
     }
   },
@@ -44,6 +49,10 @@
     "home": {
       "title": "Home",
       "description": "Welcome to my portfolio - discover my work as a full stack developer and technical writer."
+    },
+    "files": {
+      "title": "Files",
+      "description": "Manage your personal files with secure cloud storage."
     },
     "admin": {
       "title": "Admin Panel",
@@ -188,7 +197,9 @@
     }
   },
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "admin": {
     "blog": {
@@ -292,5 +303,33 @@
     "fromPolish": "Polish",
     "fromEnglish": "English",
     "fromUnknown": "Unknown language"
+  },
+  "files": {
+    "title": "Files",
+    "upload": {
+      "title": "Upload Files",
+      "selectFiles": "Select files to upload",
+      "button": "Upload Files",
+      "success": "Files uploaded successfully!",
+      "error": "Failed to upload files. Please try again."
+    },
+    "list": {
+      "title": "Your Files",
+      "empty": {
+        "title": "No files yet",
+        "subtitle": "Upload your first file to get started"
+      },
+      "error": "Failed to load files. Please try again."
+    },
+    "download": {
+      "success": "File downloaded successfully!",
+      "error": "Failed to download file. Please try again."
+    },
+    "delete": {
+      "title": "Delete File",
+      "message": "Are you sure you want to delete '{fileName}'? This action cannot be undone.",
+      "success": "File deleted successfully!",
+      "error": "Failed to delete file. Please try again."
+    }
   }
 }

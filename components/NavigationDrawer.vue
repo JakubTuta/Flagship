@@ -46,26 +46,34 @@ const navigationCards = computed(() => {
   ]
 
   if (user.value) {
-    baseRoutes.push({
-      title: t('navigation.admin.title'),
-      icon: 'mdi-shield-account',
-      color: 'error',
-      subGroup: true,
-      items: [
-        {
-          title: t('navigation.admin.blog'),
-          icon: 'mdi-post',
-          color: 'error',
-          route: '/admin/blog/panel',
-        },
-        {
-          title: t('navigation.admin.logout'),
-          icon: 'mdi-logout',
-          color: 'error',
-          route: '/auth/logout',
-        },
-      ],
-    })
+    baseRoutes.push(
+      {
+        title: t('navigation.admin.title'),
+        icon: 'mdi-shield-account',
+        color: 'error',
+        subGroup: true,
+        items: [
+          {
+            title: t('navigation.admin.blog'),
+            icon: 'mdi-post',
+            color: 'error',
+            route: '/admin/blog/panel',
+          },
+          {
+            title: t('navigation.files.title'),
+            icon: 'mdi-folder',
+            color: 'warning',
+            route: '/admin/files',
+          },
+          {
+            title: t('navigation.admin.logout'),
+            icon: 'mdi-logout',
+            color: 'error',
+            route: '/auth/logout',
+          },
+        ],
+      },
+    )
   }
 
   return baseRoutes

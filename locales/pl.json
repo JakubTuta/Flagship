@@ -25,6 +25,11 @@
         "title": "Blog",
         "description": "Dzielę się spostrzeżeniami o web developmencie, tutorialami technicznymi i lekcjami z prawdziwych projektów. Dołącz do eksploracji nowoczesnych praktyk programistycznych.",
         "tags": "blog techniczny, insights o developmencie, tutoriale programistyczne, web development, technical writing"
+      },
+      "files": {
+        "title": "Pliki",
+        "description": "Bezpieczny system zarządzania plikami dla uwierzytelnionych użytkowników. Wgrywaj, pobieraj i zarządzaj swoimi plikami osobistymi w chmurze.",
+        "tags": "pliki, przechowywanie, wgrywanie, pobieranie, pliki osobiste, chmura, zarządzanie plikami"
       }
     }
   },
@@ -44,6 +49,10 @@
     "home": {
       "title": "Strona główna",
       "description": "Witaj w moim portfolio - poznaj moją pracę jako full stack developer i technical writer."
+    },
+    "files": {
+      "title": "Pliki",
+      "description": "Zarządzaj swoimi plikami osobistymi z bezpieczną chmurą."
     },
     "admin": {
       "title": "Panel administratora",
@@ -188,7 +197,9 @@
     }
   },
   "common": {
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "cancel": "Anuluj",
+    "delete": "Usuń"
   },
   "admin": {
     "blog": {
@@ -292,5 +303,33 @@
     "fromPolish": "języka polskiego",
     "fromEnglish": "języka angielskiego",
     "fromUnknown": "nieokreślonego języka"
+  },
+  "files": {
+    "title": "Pliki",
+    "upload": {
+      "title": "Wgraj Pliki",
+      "selectFiles": "Wybierz pliki do wgrania",
+      "button": "Wgraj Pliki",
+      "success": "Pliki zostały pomyślnie wgrane!",
+      "error": "Nie udało się wgrać plików. Spróbuj ponownie."
+    },
+    "list": {
+      "title": "Twoje Pliki",
+      "empty": {
+        "title": "Brak plików",
+        "subtitle": "Wgraj swój pierwszy plik, aby rozpocząć"
+      },
+      "error": "Nie udało się załadować plików. Spróbuj ponownie."
+    },
+    "download": {
+      "success": "Plik został pomyślnie pobrany!",
+      "error": "Nie udało się pobrać pliku. Spróbuj ponownie."
+    },
+    "delete": {
+      "title": "Usuń Plik",
+      "message": "Czy na pewno chcesz usunąć '{fileName}'? Ta akcja nie może zostać cofnięta.",
+      "success": "Plik został pomyślnie usunięty!",
+      "error": "Nie udało się usunąć pliku. Spróbuj ponownie."
+    }
   }
 }
