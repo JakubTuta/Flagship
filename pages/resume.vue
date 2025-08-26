@@ -4,6 +4,8 @@ import { useDisplay } from 'vuetify'
 const { t, locale } = useI18n()
 const themeStore = useThemeStore()
 const drawerStore = useDrawerStore()
+const resumeStore = useResumeStore()
+const { resume } = storeToRefs(resumeStore)
 
 useSeo({
   url: '/resume',
@@ -35,57 +37,57 @@ const isPrintMode = ref(false)
 
 const { mobile } = useDisplay()
 
-const personalInfo = computed(() => ({
+const fallbackPersonalInfo = {
   name: 'Jakub Tutka',
-  title: 'Web Developer',
+  title: { en: 'Web Developer', pl: 'Programista Web' },
   email: 'jakubtutka02@gmail.com',
   phone: '+48 730 166 888',
-  location: t('resume.lodz'),
+  location: { en: 'Łódź, Poland', pl: 'Łódź, Polska' },
   birthDate: '14.03.2002',
-}))
+}
 
-const education = computed(() => [
+const fallbackEducation = [
   {
-    institution: t('resume.education.institution'),
+    institution: { en: 'Łódź University of Technology', pl: 'Politechnika Łódzka' },
     startDate: new Date('2021-10-01'),
     endDate: null,
-    field: t('resume.education.lodz.field'),
-    specialization: t('resume.education.lodz.specialization'),
-    level: t('resume.education.lodz.level'),
+    field: { en: 'Computer Science', pl: 'Informatyka' },
+    specialization: { en: 'Software Engineering', pl: 'Inżynieria Oprogramowania' },
+    level: { en: 'Bachelor\'s Degree', pl: 'Licencjat' },
   },
-])
+]
 
-const workExperience = computed(() => [
+const fallbackWorkExperience = [
   {
-    position: 'Web Developer',
+    position: { en: 'Web Developer', pl: 'Programista Web' },
     company: 'Waber Sp. z o.o.',
     startDate: new Date('2023-07-01'),
     endDate: null,
     responsibilities: [
-      t('resume.work.waber.responsibility1'),
-      t('resume.work.waber.responsibility2'),
-      t('resume.work.waber.responsibility3'),
+      { en: 'Developing web applications using Vue.js and Nuxt', pl: 'Tworzenie aplikacji webowych z użyciem Vue.js i Nuxt' },
+      { en: 'Implementing responsive design and modern UI/UX', pl: 'Implementacja responsywnego designu i nowoczesnego UI/UX' },
+      { en: 'Collaborating with backend developers and designers', pl: 'Współpraca z programistami backend i designerami' },
     ],
   },
-])
+]
 
-const additionalActivities = computed(() => [
+const fallbackAdditionalActivities = [
   {
-    title: t('resume.activities.innovation.title'),
+    title: { en: 'Innovation Incubator Program', pl: 'Program Inkubatora Innowacji' },
     project: 'KanapkaMan',
     startDate: new Date('2023-03-01'),
     endDate: new Date('2025-02-01'),
     activities: [
-      t('resume.activities.innovation.activity1'),
-      t('resume.activities.innovation.activity2'),
+      { en: 'Developing a food delivery mobile application', pl: 'Tworzenie aplikacji mobilnej do dostawy jedzenia' },
+      { en: 'Leading a team of developers and managing project timeline', pl: 'Kierowanie zespołem programistów i zarządzanie harmonogramem projektu' },
     ],
   },
-])
+]
 
-const skills = computed(() => [
+const fallbackSkills = [
   {
-    title: 'Frontend',
-    value: [
+    title: { en: 'Frontend', pl: 'Frontend' },
+    skills: [
       { name: 'Vue.js', color: 'success' },
       { name: 'Nuxt', color: 'primary' },
       { name: 'JavaScript', color: 'warning' },
@@ -93,8 +95,8 @@ const skills = computed(() => [
     ],
   },
   {
-    title: 'Backend',
-    value: [
+    title: { en: 'Backend', pl: 'Backend' },
+    skills: [
       { name: 'Python', color: 'info' },
       { name: 'Django', color: 'success' },
       { name: 'FastAPI', color: 'accent' },
@@ -103,8 +105,8 @@ const skills = computed(() => [
     ],
   },
   {
-    title: 'Cloud & DevOps',
-    value: [
+    title: { en: 'Cloud & DevOps', pl: 'Chmura i DevOps' },
+    skills: [
       { name: 'Google Cloud', color: 'error' },
       { name: 'Docker', color: 'primary' },
       { name: 'Firebase', color: 'success' },
@@ -113,43 +115,60 @@ const skills = computed(() => [
     ],
   },
   {
-    title: t('resume.skills.database'),
-    value: [
+    title: { en: 'Database', pl: 'Bazy Danych' },
+    skills: [
       { name: 'MongoDB', color: 'success' },
       { name: 'PostgreSQL', color: 'info' },
       { name: 'Firestore', color: 'primary' },
     ],
   },
   {
-    title: t('resume.skills.versionControl'),
-    value: [
+    title: { en: 'Version Control', pl: 'Kontrola Wersji' },
+    skills: [
       { name: 'GitHub', color: 'secondary' },
       { name: 'GitLab', color: 'accent' },
     ],
   },
-])
+]
 
-const interests = computed(() => [
-  { name: t('resume.interests.1'), icon: 'mdi-code-braces', color: 'primary' },
-  { name: t('resume.interests.2'), icon: 'mdi-book-open', color: 'secondary' },
-  { name: t('resume.interests.3'), icon: 'mdi-movie', color: 'accent' },
-  { name: t('resume.interests.4'), icon: 'mdi-chef-hat', color: 'warning' },
-])
+const fallbackInterests = [
+  { name: { en: 'Programming', pl: 'Programowanie' }, icon: 'mdi-code-braces', color: 'primary' },
+  { name: { en: 'Reading', pl: 'Czytanie' }, icon: 'mdi-book-open', color: 'secondary' },
+  { name: { en: 'Movies', pl: 'Filmy' }, icon: 'mdi-movie', color: 'accent' },
+  { name: { en: 'Cooking', pl: 'Gotowanie' }, icon: 'mdi-chef-hat', color: 'warning' },
+]
 
-const links = [
+const fallbackLinks = [
   {
-    name: t('resume.links.github'),
+    name: { en: 'GitHub', pl: 'GitHub' },
     url: 'https://github.com/JakubTuta',
     icon: 'mdi-github',
     color: 'secondary',
   },
   {
-    name: t('resume.links.linkedin'),
+    name: { en: 'LinkedIn', pl: 'LinkedIn' },
     url: 'https://www.linkedin.com/in/jakub-tutka-077b55352/',
     icon: 'mdi-linkedin',
     color: 'primary',
   },
 ]
+
+const personalInfo = computed(() => resume.value?.personalInfo || fallbackPersonalInfo)
+const education = computed(() => resume.value?.education || fallbackEducation)
+const workExperience = computed(() => resume.value?.workExperience || fallbackWorkExperience)
+const additionalActivities = computed(() => resume.value?.additionalActivities || fallbackAdditionalActivities)
+const skills = computed(() => resume.value?.skills || fallbackSkills)
+const interests = computed(() => resume.value?.interests || fallbackInterests)
+const links = computed(() => resume.value?.links || fallbackLinks)
+
+function getTranslatedText(text: { en: string, pl: string } | string) {
+  if (typeof text === 'string')
+    return text
+
+  return locale.value === 'en'
+    ? text.en
+    : text.pl
+}
 
 async function handlePrint() {
   const originalTheme = themeStore.getTheme()
@@ -279,7 +298,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   class="text-h5 text-high-emphasis"
                   :class="{'text-center': mobile}"
                 >
-                  {{ personalInfo.title }}
+                  {{ getTranslatedText(personalInfo.title) }}
                 </div>
               </v-col>
 
@@ -331,7 +350,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     <v-icon start>
                       mdi-map-marker
                     </v-icon>
-                    {{ personalInfo.location }}
+                    {{ getTranslatedText(personalInfo.location) }}
                   </v-chip>
 
                   <v-chip
@@ -398,7 +417,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     <v-card-text>
                       <div class="d-flex justify-space-between align-center mb-2">
                         <h3 class="text-h6 font-weight-medium max-w-75%">
-                          {{ edu.institution }}
+                          {{ getTranslatedText(edu.institution) }}
                         </h3>
 
                         <v-chip
@@ -420,15 +439,15 @@ function calculateDate(date1: Date, date2: Date | null): string {
                       </v-chip>
 
                       <div class="text-body-1 mb-1">
-                        <strong>{{ t('resume.education.field') }}:</strong> {{ edu.field }}
+                        <strong>{{ t('resume.education.field') }}:</strong> {{ getTranslatedText(edu.field) }}
                       </div>
 
                       <div class="text-body-1 mb-1">
-                        <strong>{{ t('resume.education.specialization') }}:</strong> {{ edu.specialization }}
+                        <strong>{{ t('resume.education.specialization') }}:</strong> {{ getTranslatedText(edu.specialization) }}
                       </div>
 
                       <div class="text-body-1">
-                        <strong>{{ t('resume.education.level') }}:</strong> {{ edu.level }}
+                        <strong>{{ t('resume.education.level') }}:</strong> {{ getTranslatedText(edu.level) }}
                       </div>
                     </v-card-text>
                   </v-card>
@@ -455,7 +474,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     <v-card-text>
                       <div class="d-flex justify-space-between align-center mb-2">
                         <h3 class="text-h6 font-weight-medium max-w-75%">
-                          {{ exp.position }}
+                          {{ getTranslatedText(exp.position) }}
                         </h3>
 
                         <v-chip
@@ -500,7 +519,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                             v-for="(responsibility, respIndex) in exp.responsibilities"
                             :key="respIndex"
                           >
-                            {{ responsibility }}
+                            {{ getTranslatedText(responsibility) }}
                           </li>
                         </ul>
                       </div>
@@ -529,7 +548,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     <v-card-text>
                       <div class="d-flex justify-space-between align-center mb-2">
                         <h3 class="text-h6 font-weight-medium max-w-75%">
-                          {{ activity.title }}
+                          {{ getTranslatedText(activity.title) }}
                         </h3>
 
                         <v-chip
@@ -570,7 +589,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                             v-for="(act, actIndex) in activity.activities"
                             :key="actIndex"
                           >
-                            {{ act }}
+                            {{ getTranslatedText(act) }}
                           </li>
                         </ul>
                       </div>
@@ -600,16 +619,16 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <div class="skills-container print-skills">
                     <div
                       v-for="skillCategory in skills"
-                      :key="skillCategory.title"
+                      :key="getTranslatedText(skillCategory.title)"
                       class="skill-category print-skill-category mb-4"
                     >
                       <h4 class="text-subtitle-1 font-weight-medium mb-2">
-                        {{ skillCategory.title }}
+                        {{ getTranslatedText(skillCategory.title) }}
                       </h4>
 
                       <div class="skill-chips">
                         <v-chip
-                          v-for="skill in skillCategory.value"
+                          v-for="skill in skillCategory.skills"
                           :key="skill.name"
                           class="ma-1"
                           :color="skill.color"
@@ -637,7 +656,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <div class="interests-container">
                     <v-chip
                       v-for="interest in interests"
-                      :key="interest.name"
+                      :key="getTranslatedText(interest.name)"
                       class="ma-1"
                       :color="interest.color"
                       variant="outlined"
@@ -645,7 +664,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                       <v-icon start>
                         {{ interest.icon }}
                       </v-icon>
-                      {{ interest.name }}
+                      {{ getTranslatedText(interest.name) }}
                     </v-chip>
                   </div>
                 </section>
@@ -666,7 +685,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
 
                   <template
                     v-for="link in links"
-                    :key="link.name"
+                    :key="getTranslatedText(link.name)"
                   >
                     <!-- Show button on screen -->
                     <v-btn
@@ -682,7 +701,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                       <v-icon start>
                         {{ link.icon }}
                       </v-icon>
-                      {{ link.name }}
+                      {{ getTranslatedText(link.name) }}
                     </v-btn>
 
                     <!-- Show text with link for print -->
@@ -696,7 +715,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                       >
                         {{ link.icon }}
                       </v-icon>
-                      {{ link.name }}: {{ link.url }}
+                      {{ getTranslatedText(link.name) }}: {{ link.url }}
                     </div>
                   </template>
                 </section>
@@ -715,7 +734,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
               >
                 mdi-shield-check
               </v-icon>
-              {{ t('resume.footer.text') }}
+              {{ resume?.footerText
+                ? getTranslatedText(resume.footerText)
+                : t('resume.footer.text') }}
             </div>
           </v-card-text>
         </v-card>

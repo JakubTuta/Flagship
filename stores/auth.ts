@@ -86,6 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       useProjectStore().resetState()
       useBlogStore().resetState()
+      useResumeStore().resetState()
 
       router.push('/')
     }
