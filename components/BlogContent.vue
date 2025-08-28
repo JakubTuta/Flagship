@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ITableOfContentsItem } from '~/models/blog'
+import type { ITableOfContentsItem } from '~/models/blog';
 
 const props = defineProps<{
   blogContent: string
@@ -77,7 +77,8 @@ function processContent(content: string): Array<{ type: string, content: string,
         })
 
       // Tables - enhance table formatting
-        .replace(/<table([^>]*)>/g, '<table$1 class="blog-table">')
+        .replace(/<table([^>]*)>/g, '<div class="blog-table-wrapper"><table$1 class="blog-table">')
+        .replace(/<\/table>/g, '</table></div>')
         .replace(/<th([^>]*)>/g, '<th$1 class="blog-th">')
         .replace(/<td([^>]*)>/g, '<td$1 class="blog-td">')
         .replace(/<thead([^>]*)>/g, '<thead$1 class="blog-thead">')
@@ -91,15 +92,15 @@ function processContent(content: string): Array<{ type: string, content: string,
         .replace(/(<li class="blog-numbered-item".*?<\/li>)(\s*<li class="blog-(?:numbered-item|sublist-item)".*?<\/li>)*/gs, '<ol class="blog-numbered-list">$&</ol>')
 
       // Process tables to remove internal newlines that would become <br> tags
-        .replace(/(<table[\s\S]*?<\/table>)/g, (match) => {
+        .replace(/(<div class="blog-table-wrapper"><table[\s\S]*?<\/table><\/div>)/g, (match) => {
           // Remove newlines within table structure but preserve the table content
           return match.replace(/\n\s*/g, ' ').replace(/\s+/g, ' ')
         })
 
       // Clean up extra whitespace around tables before converting newlines
-        .replace(/\n+(<table[\s\S]*?<\/table>)\n+/g, '\n$1\n')
-        .replace(/^(<table[\s\S]*?<\/table>)\n+/g, '$1\n')
-        .replace(/\n+(<table[\s\S]*?<\/table>)$/g, '\n$1')
+        .replace(/\n+(<div class="blog-table-wrapper"><table[\s\S]*?<\/table><\/div>)\n+/g, '\n$1\n')
+        .replace(/^(<div class="blog-table-wrapper"><table[\s\S]*?<\/table><\/div>)\n+/g, '$1\n')
+        .replace(/\n+(<div class="blog-table-wrapper"><table[\s\S]*?<\/table><\/div>)$/g, '\n$1')
 
       // Line breaks (convert remaining newlines to <br>, but not within HTML tags)
         .replace(/\n/g, '<br>')
@@ -165,7 +166,7 @@ const contentBlocks = computed(() => {
     <!-- Language Warning -->
     <div
       v-if="mainLanguage !== undefined && mainLanguage !== locale"
-      class="text-subtitle-1 px-2 py-4"
+      class="text-subtitle-1 text-warning px-2 py-4"
     >
       {{ $t('blog.languageWarning', {"language": getFromLanguage(mainLanguage)}) }}
     </div>
@@ -417,15 +418,56 @@ const contentBlocks = computed(() => {
     border: 1px solid rgba(var(--v-theme-primary), 0.15);
     display: table; /* Ensure proper table display */
     margin-top: 2rem;
+    min-width: 100%;
+  }
+
+  /* Table wrapper for horizontal scrolling */
+  :deep(.blog-table-wrapper) {
+    overflow-x: auto;
+    margin: 1rem 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgb(var(--v-theme-surface));
+    border: 1px solid rgba(var(--v-theme-primary), 0.15);
+    /* Webkit scrollbar styling for better UX */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--v-theme-primary), 0.3) transparent;
+  }
+
+  :deep(.blog-table-wrapper::-webkit-scrollbar) {
+    height: 8px;
+  }
+
+  :deep(.blog-table-wrapper::-webkit-scrollbar-track) {
+    background: rgba(var(--v-theme-surface-variant), 0.3);
+    border-radius: 4px;
+  }
+
+  :deep(.blog-table-wrapper::-webkit-scrollbar-thumb) {
+    background: rgba(var(--v-theme-primary), 0.3);
+    border-radius: 4px;
+  }
+
+  :deep(.blog-table-wrapper::-webkit-scrollbar-thumb:hover) {
+    background: rgba(var(--v-theme-primary), 0.5);
+  }
+
+  :deep(.blog-table-wrapper .blog-table) {
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    min-width: max-content; /* Allow table to expand based on content */
+    width: max-content; /* Ensure table can be wider than container */
   }
 
   /* Remove extra spacing around tables */
-  :deep(br + .blog-table),
-  :deep(.blog-table + br) {
+  :deep(br + .blog-table-wrapper),
+  :deep(.blog-table-wrapper + br) {
     margin-top: 0;
   }
 
-  :deep(.blog-table + br + br) {
+  :deep(.blog-table-wrapper + br + br) {
     display: none;
   }
 
@@ -443,6 +485,9 @@ const contentBlocks = computed(() => {
     font-size: 0.95rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    min-width: 120px; /* Ensure minimum column width */
+    min-height: 60px; /* Add minimum height for more spacious look */
+    white-space: nowrap; /* Prevent header text wrapping */
   }
 
   :deep(.blog-td) {
@@ -450,6 +495,8 @@ const contentBlocks = computed(() => {
     border-bottom: 1px solid rgba(var(--v-theme-surface-variant), 0.5);
     vertical-align: top;
     line-height: 1.5;
+    min-width: 120px; /* Ensure minimum column width */
+    min-height: 50px; /* Add minimum height for more spacious look */
   }
 
   :deep(.blog-tbody tr:hover) {
@@ -627,13 +674,32 @@ const contentBlocks = computed(() => {
       font-size: 0.875rem;
     }
 
+    :deep(.blog-table-wrapper) {
+      margin: 0.75rem 0;
+      /* Show scroll hint on mobile */
+      position: relative;
+    }
+
+    :deep(.blog-table-wrapper::after) {
+      content: '← Scroll to see more →';
+      position: absolute;
+      bottom: -1.5rem;
+      right: 0;
+      font-size: 0.75rem;
+      color: rgba(var(--v-theme-on-surface), 0.6);
+      font-style: italic;
+      pointer-events: none;
+    }
+
     :deep(.blog-th) {
       padding: 0.75rem 0.5rem;
       font-size: 0.85rem;
+      min-height: 48px; /* Slightly smaller min-height for mobile */
     }
 
     :deep(.blog-td) {
       padding: 0.625rem 0.5rem;
+      min-height: 40px; /* Slightly smaller min-height for mobile */
     }
   }
 </style>

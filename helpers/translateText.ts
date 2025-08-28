@@ -1,6 +1,59 @@
 import { GoogleGenAI, Type } from '@google/genai'
 import type { ITranslatedText } from '~/models/translatedText'
 
+export async function fetchLatestGeminiFlashModel(client: GoogleGenAI): Promise<string | null> {
+  try {
+    const modelList = await client.models.list()
+    const models = []
+
+    for await (const model of modelList) {
+      models.push(model)
+    }
+
+    const pattern = /^models\/gemini-([\d.]+)-(flash)$/
+
+    const matchingModels = models
+      .map((model) => {
+        const match = model.name?.match(pattern)
+
+        return match
+          ? { model, version: match[1], type: match[2] }
+          : null
+      })
+      .filter(Boolean) as Array<{ model: any, version: string, type: string }>
+
+    if (matchingModels.length === 0) {
+      return null
+    }
+
+    const latestModel = matchingModels.reduce((latest, current) => {
+      const latestVersionParts = latest.version.split('.').map(Number)
+      const currentVersionParts = current.version.split('.').map(Number)
+
+      for (let i = 0; i < Math.max(latestVersionParts.length, currentVersionParts.length); i++) {
+        const latestPart = latestVersionParts[i] || 0
+        const currentPart = currentVersionParts[i] || 0
+
+        if (currentPart > latestPart) {
+          return current
+        }
+        else if (currentPart < latestPart) {
+          return latest
+        }
+      }
+
+      return latest
+    })
+
+    return latestModel.model.name
+  }
+  catch (error) {
+    console.error('Error fetching latest Gemini Flash model:', error)
+
+    return null
+  }
+}
+
 // Encode whitespace characters to preserve them
 export function encodeWhitespace(text: string): string {
   return text
@@ -122,6 +175,10 @@ export async function translateText(text: string | null, textLanguage: 'pl' | 'e
 
     const ai = new GoogleGenAI({ apiKey })
 
+    // Get the latest Gemini Flash model
+    const latestModel = await fetchLatestGeminiFlashModel(ai)
+    const modelToUse = latestModel || 'gemini-2.5-flash' // fallback to hardcoded model
+
     // Determine response schema based on textLanguage
     let responseSchema
     if (textLanguage === 'pl') {
@@ -162,7 +219,7 @@ export async function translateText(text: string | null, textLanguage: 'pl' | 'e
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-preview-04-17',
+      model: modelToUse,
       contents: getTemplate(encodedText, textLanguage),
       config: {
         responseMimeType: 'application/json',
