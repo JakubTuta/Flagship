@@ -105,6 +105,16 @@ export default defineNuxtConfig({
         // Individual blog routes (/blog/[id]) will be discovered through crawling
         // from the links on the /blogs page
       ],
+      ignore: [
+        // Exclude admin routes from prerendering (require authentication)
+        '/admin/**',
+        '/admin',
+        '/admin/files',
+        '/admin/blog/panel',
+        '/admin/blog/write',
+        // Exclude auth routes from prerendering
+        '/auth/**',
+      ],
     },
   },
 
