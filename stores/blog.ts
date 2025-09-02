@@ -12,8 +12,6 @@ export const useBlogStore = defineStore('blog', () => {
   const workingBlogs = ref<IWorkingBlog[]>([])
   const loading = ref(false)
 
-  const { firestore, storage } = useFirebase()
-
   const resetState = () => {
     publishedBlogs.value = []
     blogs.value = []
@@ -22,6 +20,8 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const fetchBlogs = async (user: IUser) => {
+    const { firestore } = useFirebase()
+
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return
@@ -43,6 +43,8 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const fetchPublishedBlogs = async () => {
+    const { firestore } = useFirebase()
+
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return
@@ -64,6 +66,8 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const fetchWorkingBlogs = async (user: IUser) => {
+    const { firestore } = useFirebase()
+
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return
@@ -90,6 +94,8 @@ export const useBlogStore = defineStore('blog', () => {
 
       return null
     }
+
+    const { firestore } = useFirebase()
 
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
@@ -144,6 +150,8 @@ export const useBlogStore = defineStore('blog', () => {
 
       return null
     }
+
+    const { firestore } = useFirebase()
 
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
@@ -220,6 +228,8 @@ export const useBlogStore = defineStore('blog', () => {
       return null
     }
 
+    const { firestore } = useFirebase()
+
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return null
@@ -261,6 +271,8 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const createBlog = async (blog: IBlog) => {
+    const { firestore } = useFirebase()
+
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return null
@@ -321,6 +333,8 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const saveWorkingBlog = async (blog: IWorkingBlog) => {
+    const { firestore } = useFirebase()
+
     // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return
@@ -368,6 +382,8 @@ export const useBlogStore = defineStore('blog', () => {
   }
 
   const addImage = (image: string) => {
+    const { storage } = useFirebase()
+
     // Skip on server side or if storage is not available
     if (!storage || import.meta.server) {
       return null

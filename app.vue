@@ -13,6 +13,8 @@ const themeStore = useThemeStore()
 useAuthStore()
 
 onMounted(() => {
+  themeStore.initialize()
+
   if (!projects.value.length) {
     projectStore.fetchProjects()
   }

@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     clientEmail: process.env.CLIENT_EMAIL,
     privateKey: process.env.PRIVATE_KEY,
     public: {
-      // Firebase configuration
+      // Firebase configuration (available on both server and client)
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
       projectId: process.env.PROJECT_ID,
@@ -101,8 +101,9 @@ export default defineNuxtConfig({
       // Enable crawling for blog pages
       crawlLinks: true,
       routes: [
-        '/blogs',
-        // Blog routes will be discovered through crawling
+        '/blogs', // Blog listing page - contains links to individual blogs
+        // Individual blog routes (/blog/[id]) will be discovered through crawling
+        // from the links on the /blogs page
       ],
     },
   },

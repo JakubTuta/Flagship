@@ -146,18 +146,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
-  const initialTheme = 'light'
-  vuetify.theme.change(initialTheme)
+  if (import.meta.client) {
+    const themeStore = useThemeStore()
 
-  if (typeof window !== 'undefined') {
-    nextTick(() => {
-      const themeStore = useThemeStore()
-
-      watch(() => themeStore.currentTheme, (newTheme) => {
-        if (vuetify.theme.global.name.value !== newTheme) {
-          vuetify.theme.change(newTheme)
-        }
-      }, { immediate: true })
-    })
+    watch(() => themeStore.currentTheme, (newTheme) => {
+      vuetify.theme.change(newTheme)
+    }, { immediate: true })
   }
 })

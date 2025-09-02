@@ -50,6 +50,6 @@ export const useLanguageStore = defineStore('language', () => {
     currentLang,
     setLanguage,
     toggleLanguage,
-    isHydrated: readonly(isHydrated),
+    isHydrated,
   }
 })
