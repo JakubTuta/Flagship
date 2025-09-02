@@ -24,6 +24,10 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // Private keys (only available on the server-side)
+    projectId: process.env.PROJECT_ID,
+    clientEmail: process.env.CLIENT_EMAIL,
+    privateKey: process.env.PRIVATE_KEY,
     public: {
       // Firebase configuration
       apiKey: process.env.API_KEY,
@@ -36,6 +40,7 @@ export default defineNuxtConfig({
       // Other public configuration
       githubToken: process.env.TOKEN_GITHUB,
       GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+      siteUrl: baseUrl,
     },
   },
 
@@ -91,6 +96,14 @@ export default defineNuxtConfig({
       memory: {
         driver: 'memory',
       },
+    },
+    prerender: {
+      // Enable crawling for blog pages
+      crawlLinks: true,
+      routes: [
+        '/blogs',
+        // Blog routes will be discovered through crawling
+      ],
     },
   },
 

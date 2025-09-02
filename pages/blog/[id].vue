@@ -7,129 +7,167 @@ import type { IUser } from '~/models/user'
 const route = useRoute()
 const { locale, t } = useI18n()
 const { mobile } = useDisplay()
+const config = useRuntimeConfig()
+
+const blogStore = useBlogStore()
+const authStore = useAuthStore()
+
+// Fetch published blogs to ensure we have data
+const { pending: blogsPending } = useLazyAsyncData('published-blogs', async () => {
+  await blogStore.fetchPublishedBlogs()
+
+  return blogStore.publishedBlogs
+})
 
 const selectedBlog = ref<IBlog | null>(null)
 const isLoading = ref(true)
 const author = ref<IUser | null>(null)
 
-const blogStore = useBlogStore()
-const authStore = useAuthStore()
+// Try to get blog data from store first (for faster loading)
+const preloadedBlog = computed(() => {
+  const blogId = route.params.id as string
 
-useSeo({
-  url: '/blog',
-  useTranslation: true,
-  translationKey: 'seo.pages.blog',
+  return blogStore.publishedBlogs.find(blog => blog.value === blogId) || null
 })
 
-// Computed properties for SEO
-const blogTitle = computed(() => selectedBlog.value?.title[locale.value] || t('seo.pages.blog.title'),
-)
+// Utility function
+function getCategoryTitle(category: string) {
+  return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
+}
+
+// Set up SEO with blog data if available
+const blogTitle = computed(() => {
+  const blog = selectedBlog.value || preloadedBlog.value
+  if (blog?.title) {
+    return blog.title[locale.value] || blog.title.en || blog.title.pl || t('seo.pages.blog.title')
+  }
+
+  return t('seo.pages.blog.title')
+})
 
 const blogDescription = computed(() => {
-  if (!selectedBlog.value)
-    return t('seo.pages.blog.description')
+  const blog = selectedBlog.value || preloadedBlog.value
+  if (blog?.content) {
+    const content = blog.content[locale.value] || blog.content.en || blog.content.pl
+    if (content) {
+      const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
 
-  const content = selectedBlog.value.content[locale.value]
-  if (!content)
-    return t('seo.pages.blog.description')
+      return plainText.length > 160
+        ? `${plainText.substring(0, 157)}...`
+        : plainText
+    }
+  }
 
-  const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
-
-  return plainText.length > 160
-    ? `${plainText.substring(0, 157)}...`
-    : plainText
+  return t('seo.pages.blog.description')
 })
 
-const blogImage = computed(() => selectedBlog.value?.image || null)
-const blogUrl = computed(() => `/blog/${route.params.id}`)
+const blogImage = computed(() => {
+  const blog = selectedBlog.value || preloadedBlog.value
 
-// Update SEO when blog data changes
-watch([selectedBlog, locale], () => {
-  if (selectedBlog.value) {
-    usePageHead({
-      title: `${blogTitle.value} | ${t('seo.site.title')}`,
-      meta: [
-        {
-          name: 'description',
-          content: blogDescription.value,
-        },
-        {
-          name: 'keywords',
-          content: `${getCategoryTitle(selectedBlog.value.category)}, 
-          blog, ${author.value?.username || ''}`,
-        },
-        {
-          name: 'author',
-          content: author.value?.username || t('blog.anonymous'),
-        },
-        {
+  // Prefer the specific blog image, fallback to profile image for now
+  return blog?.image || `${config.public.siteUrl}/images/profile.jpg`
+})
+
+const blogUrl = computed(() => `${config.public.siteUrl}/blog/${route.params.id}`)
+
+const categoryTitle = computed(() => {
+  const blog = selectedBlog.value || preloadedBlog.value
+
+  return blog?.category
+    ? getCategoryTitle(blog.category)
+    : 'blog'
+})
+
+const authorName = computed(() => {
+  return author.value?.username || t('blog.anonymous')
+})
+
+const publishedTime = computed(() => {
+  const blog = selectedBlog.value || preloadedBlog.value
+
+  return blog?.publishDate
+    ? new Date(blog.publishDate).toISOString()
+    : undefined
+})
+
+// Set SEO meta tags
+useSeoMeta({
+  title: () => `${blogTitle.value} | ${t('seo.site.title')}`,
+  description: () => blogDescription.value,
+  ogTitle: () => `${blogTitle.value} | ${t('seo.site.title')}`,
+  ogDescription: () => blogDescription.value,
+  ogImage: () => blogImage.value,
+  ogUrl: () => blogUrl.value,
+  ogType: 'article',
+  ogLocale: () => locale.value,
+  twitterCard: () => ((selectedBlog.value || preloadedBlog.value)?.image
+    ? 'summary_large_image'
+    : 'summary'),
+  twitterTitle: () => blogTitle.value,
+  twitterDescription: () => blogDescription.value,
+  twitterImage: () => blogImage.value,
+})
+
+// Set additional meta tags including article-specific ones
+useHead({
+  meta: computed(() => [
+    {
+      name: 'keywords',
+      content: `${categoryTitle.value}, blog, ${authorName.value}`,
+    },
+    {
+      name: 'author',
+      content: authorName.value,
+    },
+    {
+      property: 'article:author',
+      content: authorName.value,
+    },
+    {
+      property: 'article:section',
+      content: categoryTitle.value,
+    },
+    ...(publishedTime.value
+      ? [{
           property: 'article:published_time',
-          content: selectedBlog.value.publishDate
-            ? new Date(selectedBlog.value.publishDate).toISOString()
-            : '',
-        },
-        {
-          property: 'article:author',
-          content: author.value?.username || t('blog.anonymous'),
-        },
-        {
-          property: 'article:section',
-          content: getCategoryTitle(selectedBlog.value.category),
-        },
-        {
-          property: 'og:title',
-          content: `${blogTitle.value} | ${t('seo.site.title')}`,
-        },
-        {
-          property: 'og:description',
-          content: blogDescription.value,
-        },
-        {
-          property: 'og:type',
-          content: 'article',
-        },
-        {
-          property: 'og:url',
-          content: blogUrl.value,
-        },
-        ...(blogImage.value
-          ? [{ property: 'og:image', content: blogImage.value }]
-          : []),
-        {
-          name: 'twitter:card',
-          content: blogImage.value
-            ? 'summary_large_image'
-            : 'summary',
-        },
-        {
-          name: 'twitter:title',
-          content: blogTitle.value,
-        },
-        {
-          name: 'twitter:description',
-          content: blogDescription.value,
-        },
-        ...(blogImage.value
-          ? [{ name: 'twitter:image', content: blogImage.value }]
-          : []),
-      ],
-    })
-  }
-}, { immediate: true })
+          content: publishedTime.value,
+        }]
+      : []),
+  ]),
+  link: [
+    { rel: 'canonical', href: () => blogUrl.value },
+  ],
+})
 
 onMounted(async () => {
   try {
-    const blogId = route.params.id as string
-    selectedBlog.value = await blogStore.getBlogUser(blogId)
+    // Wait for blogs to be loaded if they're still pending
+    await until(() => !blogsPending.value).toBe(true)
 
-    setTimeout(() => {
+    // If we already have the blog from store, use it
+    if (preloadedBlog.value) {
+      selectedBlog.value = preloadedBlog.value
+      author.value = await authStore.getUserDataFromRef(selectedBlog.value.author || null)
+    }
+    else {
+      // Otherwise fetch it
+      const blogId = route.params.id as string
+      selectedBlog.value = await blogStore.getBlogUser(blogId)
+
       if (selectedBlog.value) {
-        blogStore.addView(selectedBlog.value)
-        selectedBlog.value.viewCount += 1
+        author.value = await authStore.getUserDataFromRef(selectedBlog.value.author || null)
       }
-    }, 1000 * 60)
+    }
 
-    author.value = await authStore.getUserDataFromRef(selectedBlog.value?.author || null)
+    // Add view after 1 minute
+    if (selectedBlog.value) {
+      setTimeout(() => {
+        if (selectedBlog.value) {
+          blogStore.addView(selectedBlog.value)
+          selectedBlog.value.viewCount += 1
+        }
+      }, 1000 * 60)
+    }
   }
   catch (error) {
     console.error('Error loading blog:', error)
@@ -140,19 +178,19 @@ onMounted(async () => {
 })
 
 // Utility functions
-function formatDate(date: Date | null) {
+function formatDate(date: Date | string | null) {
   if (!date)
     return ''
+
+  const dateObj = typeof date === 'string'
+    ? new Date(date)
+    : date
 
   return new Intl.DateTimeFormat(locale.value, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(new Date(date))
-}
-
-function getCategoryTitle(category: string) {
-  return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
+  }).format(dateObj)
 }
 </script>
 
