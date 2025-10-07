@@ -39,47 +39,48 @@ const { mobile } = useDisplay()
 
 const fallbackPersonalInfo = {
   name: 'Jakub Tutka',
-  title: { en: 'Web Developer', pl: 'Programista Web' },
+  title: { en: 'Back-end Python Developer', pl: 'Programista Python Back-end' },
   email: 'jakubtutka02@gmail.com',
   phone: '+48 730 166 888',
-  location: { en: 'Łódź, Poland', pl: 'Łódź, Polska' },
+  location: { en: 'Lodz, Poland', pl: 'Łódź, Polska' },
   birthDate: '14.03.2002',
 }
 
 const fallbackEducation = [
   {
-    institution: { en: 'Łódź University of Technology', pl: 'Politechnika Łódzka' },
+    institution: { en: 'Lodz University of Technology', pl: 'Politechnika Łódzka' },
     startDate: new Date('2021-10-01'),
     endDate: null,
     field: { en: 'Computer Science', pl: 'Informatyka' },
     specialization: { en: 'Software Engineering', pl: 'Inżynieria Oprogramowania' },
-    level: { en: 'Bachelor\'s Degree', pl: 'Licencjat' },
+    level: { en: 'Bachelor\'s Degree', pl: 'Inżynier' },
   },
 ]
 
 const fallbackWorkExperience = [
   {
-    position: { en: 'Web Developer', pl: 'Programista Web' },
+    position: { en: 'Full-stack developer', pl: 'Programista Full-stack' },
     company: 'Waber Sp. z o.o.',
     startDate: new Date('2023-07-01'),
     endDate: null,
     responsibilities: [
-      { en: 'Developing web applications using Vue.js and Nuxt', pl: 'Tworzenie aplikacji webowych z użyciem Vue.js i Nuxt' },
+      { en: 'Designing, developing, and maintaining web applications using Vue.js and Nuxt.js', pl: 'Projektowanie, rozwijanie i utrzymywanie aplikacji webowych z użyciem Vue.js i Nuxt.js' },
       { en: 'Implementing responsive design and modern UI/UX', pl: 'Implementacja responsywnego designu i nowoczesnego UI/UX' },
-      { en: 'Collaborating with backend developers and designers', pl: 'Współpraca z programistami backend i designerami' },
+      { en: 'Creating cloud functions in GCP Cloud Run', pl: 'Tworzenie funkcji cloudowych w GCP Cloud Run' },
+      { en: 'Optimizing CRUD operations on Firebase Firestore', pl: 'Optymalizacja operacji CRUD na Firebase Firestore' },
     ],
   },
 ]
 
 const fallbackAdditionalActivities = [
   {
-    title: { en: 'Innovation Incubator Program', pl: 'Program Inkubatora Innowacji' },
+    title: { en: 'Project "Innovation"', pl: 'Projekt "Innowacja"' },
     project: 'KanapkaMan',
     startDate: new Date('2023-03-01'),
     endDate: new Date('2025-02-01'),
     activities: [
-      { en: 'Developing a food delivery mobile application', pl: 'Tworzenie aplikacji mobilnej do dostawy jedzenia' },
-      { en: 'Leading a team of developers and managing project timeline', pl: 'Kierowanie zespołem programistów i zarządzanie harmonogramem projektu' },
+      { en: 'Developing a front-end web application for food delivery', pl: 'Tworzenie frontendowej aplikacji internetowej do dostawy jedzenia' },
+      { en: 'Collaborating with the IT team on application design and development', pl: 'Współpraca w zespole informatycznym przy projektowaniu i tworzeniu aplikacji' },
     ],
   },
 ]
@@ -89,7 +90,7 @@ const fallbackSkills = [
     title: { en: 'Frontend', pl: 'Frontend' },
     skills: [
       { name: 'Vue.js', color: 'success' },
-      { name: 'Nuxt', color: 'primary' },
+      { name: 'Nuxt.js', color: 'primary' },
       { name: 'JavaScript', color: 'warning' },
       { name: 'TypeScript', color: 'info' },
     ],
@@ -100,14 +101,13 @@ const fallbackSkills = [
       { name: 'Python', color: 'info' },
       { name: 'Django', color: 'success' },
       { name: 'FastAPI', color: 'accent' },
-      { name: 'Node.js', color: 'primary' },
-      { name: 'Express.js', color: 'warning' },
+      { name: 'Flask', color: 'primary' },
     ],
   },
   {
     title: { en: 'Cloud & DevOps', pl: 'Chmura i DevOps' },
     skills: [
-      { name: 'Google Cloud', color: 'error' },
+      { name: 'Google Cloud Platform', color: 'error' },
       { name: 'Docker', color: 'primary' },
       { name: 'Firebase', color: 'success' },
       { name: 'GitLab CI', color: 'info' },
@@ -120,6 +120,7 @@ const fallbackSkills = [
       { name: 'MongoDB', color: 'success' },
       { name: 'PostgreSQL', color: 'info' },
       { name: 'Firestore', color: 'primary' },
+      { name: 'Redis', color: 'accent' },
     ],
   },
   {
@@ -129,13 +130,19 @@ const fallbackSkills = [
       { name: 'GitLab', color: 'accent' },
     ],
   },
+  {
+    title: { en: 'Application Observability', pl: 'Obserwowalność Aplikacji' },
+    skills: [
+      { name: 'Sentry', color: 'secondary' },
+    ],
+  },
 ]
 
 const fallbackInterests = [
   { name: { en: 'Programming', pl: 'Programowanie' }, icon: 'mdi-code-braces', color: 'primary' },
-  { name: { en: 'Reading', pl: 'Czytanie' }, icon: 'mdi-book-open', color: 'secondary' },
-  { name: { en: 'Movies', pl: 'Filmy' }, icon: 'mdi-movie', color: 'accent' },
-  { name: { en: 'Cooking', pl: 'Gotowanie' }, icon: 'mdi-chef-hat', color: 'warning' },
+  { name: { en: 'Reading books', pl: 'Czytanie książek' }, icon: 'mdi-book-open', color: 'secondary' },
+  { name: { en: 'Movies & TV shows', pl: 'Filmy i seriale' }, icon: 'mdi-movie', color: 'accent' },
+  { name: { en: 'Volleyball', pl: 'Siatkówka' }, icon: 'mdi-volleyball', color: 'info' },
 ]
 
 const fallbackLinks = [
@@ -150,6 +157,12 @@ const fallbackLinks = [
     url: 'https://www.linkedin.com/in/jakub-tutka-077b55352/',
     icon: 'mdi-linkedin',
     color: 'primary',
+  },
+  {
+    name: { en: 'Portfolio', pl: 'Portfolio' },
+    url: 'https://jakubtutka.com',
+    icon: 'mdi-web',
+    color: 'accent',
   },
 ]
 
