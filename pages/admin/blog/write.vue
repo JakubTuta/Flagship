@@ -46,9 +46,14 @@ async function autoSaveWorkingBlog() {
   }
 
   try {
+    const sanitizedValue = trimmedTitle
+      .replace(/[^a-z0-9\s]/gi, '')
+      .replace(/\s+/g, '-')
+      .toLowerCase()
+
     const workingBlog = mapIWorkingBlogEncoded({
       title: trimmedTitle,
-      value: trimmedTitle.replace(/\s+/g, '-').toLowerCase(),
+      value: sanitizedValue,
       content: blogContent.value,
       author: userData.value?.reference || null,
       category: category.value || 'other',

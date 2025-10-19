@@ -26,6 +26,8 @@ onMounted(() => {
   if (!resume.value) {
     resumeStore.fetchResume()
   }
+
+  resumeStore.fetchResumePdfs()
 })
 
 const currentTheme = computed(() => themeStore.currentTheme)

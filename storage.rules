@@ -6,18 +6,24 @@ service firebase.storage {
       allow read: if true;
       allow write, delete: if request.auth != null;
     }
-    
+
     // Allow public read access to project images
     match /projects/{allPaths=**} {
       allow read: if true;
       allow write, delete: if request.auth != null;
     }
-    
+
+    // Allow public read access to resume PDFs
+    match /resume/{allPaths=**} {
+      allow read: if true;
+      allow write, delete: if request.auth != null;
+    }
+
     // Allow users to access only their own files
     match /users/{userId}/{allPaths=**} {
       allow read, write, delete: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Deny all other access
     match /{allPaths=**} {
       allow read, write: if false;

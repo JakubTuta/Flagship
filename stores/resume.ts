@@ -1,4 +1,5 @@
 import { collection, doc, getDocs, query, setDoc, updateDoc } from 'firebase/firestore'
+import { getDownloadURL, ref as storageRef } from 'firebase/storage'
 import { beforeCreateDoc, beforeUpdateDoc, removeReferenceField } from '~/helpers/modelToDatabase'
 import type { IResume } from '~/models/resume'
 import { mapIResume, mapIResumeDecoded, mapIResumeEncoded } from '~/models/resume'
@@ -6,8 +7,10 @@ import { mapIResume, mapIResumeDecoded, mapIResumeEncoded } from '~/models/resum
 export const useResumeStore = defineStore('resume', () => {
   const resume = ref<IResume | null>(null)
   const loading = ref(false)
+  const resumePdfUrls = ref<{ en: string | null, pl: string | null }>({ en: null, pl: null })
+  const loadingPdfs = ref(false)
 
-  const { firestore } = useFirebase()
+  const { firestore, storage } = useFirebase()
   const authStore = useAuthStore()
 
   const fetchResume = async () => {
@@ -102,15 +105,73 @@ export const useResumeStore = defineStore('resume', () => {
     }
   }
 
+  const fetchResumePdfs = async () => {
+    if (!storage || import.meta.server) {
+      return
+    }
+
+    loadingPdfs.value = true
+
+    try {
+      const enPdfRef = storageRef(storage, 'resume/resume_en.pdf')
+      const plPdfRef = storageRef(storage, 'resume/resume_pl.pdf')
+
+      const [enUrl, plUrl] = await Promise.all([
+        getDownloadURL(enPdfRef).catch((error) => {
+          console.error('Error fetching EN PDF:', error)
+
+          return null
+        }),
+        getDownloadURL(plPdfRef).catch((error) => {
+          console.error('Error fetching PL PDF:', error)
+
+          return null
+        }),
+      ])
+
+      resumePdfUrls.value = { en: enUrl, pl: plUrl }
+    }
+    catch (error) {
+      console.error('Error fetching resume PDFs:', error)
+    }
+    finally {
+      loadingPdfs.value = false
+    }
+  }
+
+  const downloadResumePdf = (locale: 'en' | 'pl') => {
+    const url = resumePdfUrls.value[locale]
+
+    if (!url) {
+      console.error(`Resume PDF for locale ${locale} not found`)
+
+      return
+    }
+
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `resume_${locale}.pdf`
+    link.target = '_blank'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const resetState = () => {
     resume.value = null
     loading.value = false
+    resumePdfUrls.value = { en: null, pl: null }
+    loadingPdfs.value = false
   }
 
   return {
     resume,
     loading,
+    resumePdfUrls,
+    loadingPdfs,
     fetchResume,
+    fetchResumePdfs,
+    downloadResumePdf,
     createResume,
     updateResume,
     resetState,

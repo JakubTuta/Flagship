@@ -2,8 +2,6 @@
 import { useDisplay } from 'vuetify'
 
 const { t, locale } = useI18n()
-const themeStore = useThemeStore()
-const drawerStore = useDrawerStore()
 const resumeStore = useResumeStore()
 const { resume } = storeToRefs(resumeStore)
 
@@ -32,8 +30,6 @@ watch(locale, () => {
     ],
   })
 }, { immediate: true })
-
-const isPrintMode = ref(false)
 
 const { mobile } = useDisplay()
 
@@ -183,30 +179,9 @@ function getTranslatedText(text: { en: string, pl: string } | string) {
     : text.pl
 }
 
-async function handlePrint() {
-  const originalTheme = themeStore.getTheme()
-
-  try {
-    themeStore.setTheme('light')
-    drawerStore.closeDrawer()
-
-    isPrintMode.value = true
-
-    await nextTick()
-
-    setTimeout(() => {
-      window.print()
-
-      isPrintMode.value = false
-      themeStore.setTheme(originalTheme)
-      drawerStore.openDrawer()
-    }, 200)
-  }
-  catch (error) {
-    console.error('Print error:', error)
-    isPrintMode.value = false
-    themeStore.setTheme(originalTheme)
-  }
+function handlePrint() {
+  const currentLocale = locale.value as 'en' | 'pl'
+  resumeStore.downloadResumePdf(currentLocale)
 }
 
 function datePeriod(start: Date, end: Date | null): string {
@@ -270,40 +245,25 @@ function calculateDate(date1: Date, date2: Date | null): string {
 </script>
 
 <template>
-  <div
-    class="cv-container"
-    fluid
-    :class="{'print-mode': isPrintMode}"
-  >
-    <v-row
-      justify="center"
-      class="print-full-width"
-    >
+  <div class="cv-container">
+    <v-row justify="center">
       <v-col
         cols="12"
         lg="8"
         xl="6"
-        class="print-full-width-col"
       >
         <v-card
-          class="cv-card print-stretch"
+          class="cv-card"
           elevation="20"
-          :class="{'print-card': isPrintMode}"
         >
           <!-- Header Section -->
-          <v-card-title
-            class="header-section print-section pa-8"
-            :class="{'print-header': isPrintMode}"
-          >
+          <v-card-title class="header-section pa-8">
             <v-row align="center">
               <v-col
                 cols="12"
                 md="8"
               >
-                <h1
-                  class="font-weight-bold display-1 mb-2"
-                  :class="{'print-title': isPrintMode}"
-                >
+                <h1 class="font-weight-bold display-1 mb-2">
                   {{ personalInfo.name }}
                 </h1>
 
@@ -322,17 +282,13 @@ function calculateDate(date1: Date, date2: Date | null): string {
               >
                 <div
                   class="contact-info"
-                  :class="{
-                    'print-contact': isPrintMode,
-                    'd-flex justify-end': mobile,
-                  }"
+                  :class="{'d-flex justify-end': mobile}"
                 >
                   <v-chip
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode,
-                             'w-70%': mobile}"
+                    :class="{'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-email
@@ -344,8 +300,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode,
-                             'w-70%': mobile}"
+                    :class="{'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-phone
@@ -357,8 +312,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode,
-                             'w-70%': mobile}"
+                    :class="{'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-map-marker
@@ -370,8 +324,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     class="ma-1"
                     color="primary"
                     variant="elevated"
-                    :class="{'print-chip': isPrintMode,
-                             'w-70%': mobile}"
+                    :class="{'w-70%': mobile}"
                   >
                     <v-icon start>
                       mdi-calendar
@@ -381,9 +334,8 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 </div>
               </v-col>
             </v-row>
-            <!-- Print Button - Only visible on screen -->
+            <!-- Download PDF Button -->
             <v-btn
-              v-if="!isPrintMode"
               color="white"
               variant="outlined"
               :class="mobile
@@ -392,7 +344,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
               @click="handlePrint"
             >
               <v-icon start>
-                mdi-printer
+                mdi-download
               </v-icon>
               {{ t('resume.print') }}
             </v-btn>
@@ -401,16 +353,15 @@ function calculateDate(date1: Date, date2: Date | null): string {
           <v-divider />
 
           <!-- Main Content -->
-          <v-card-text class="print-content pa-8">
-            <v-row class="print-row">
+          <v-card-text class="pa-8">
+            <v-row>
               <!-- Left Column -->
               <v-col
                 cols="12"
                 md="8"
-                class="print-left-col"
               >
                 <!-- Education Section -->
-                <section class="print-section mb-8">
+                <section class="mb-8">
                   <h2 class="section-title mb-4">
                     <v-icon
                       class="mr-2"
@@ -424,7 +375,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <v-card
                     v-for="(edu, index) in education"
                     :key="index"
-                    class="education-card print-item-card mb-4"
+                    class="education-card mb-4"
                     variant="outlined"
                   >
                     <v-card-text>
@@ -467,7 +418,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 </section>
 
                 <!-- Experience Section -->
-                <section class="print-section mb-8">
+                <section class="mb-8">
                   <h2 class="section-title mb-4">
                     <v-icon
                       class="mr-2"
@@ -481,7 +432,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <v-card
                     v-for="(exp, index) in workExperience"
                     :key="index"
-                    class="print-item-card experience-card mb-4"
+                    class="experience-card mb-4"
                     variant="outlined"
                   >
                     <v-card-text>
@@ -541,7 +492,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 </section>
 
                 <!-- Additional Activities Section -->
-                <section class="print-section mb-8">
+                <section class="mb-8">
                   <h2 class="section-title mb-4">
                     <v-icon
                       class="mr-2"
@@ -555,7 +506,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                   <v-card
                     v-for="(activity, index) in additionalActivities"
                     :key="index"
-                    class="print-item-card activity-card mb-4"
+                    class="activity-card mb-4"
                     variant="outlined"
                   >
                     <v-card-text>
@@ -615,10 +566,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
               <v-col
                 cols="12"
                 md="4"
-                class="print-right-col"
               >
                 <!-- Skills Section -->
-                <section class="print-section mb-8">
+                <section class="mb-8">
                   <h2 class="section-title mb-4">
                     <v-icon
                       class="mr-2"
@@ -629,11 +579,11 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     {{ t('resume.skills.title') }}
                   </h2>
 
-                  <div class="skills-container print-skills">
+                  <div class="skills-container">
                     <div
                       v-for="skillCategory in skills"
                       :key="getTranslatedText(skillCategory.title)"
-                      class="skill-category print-skill-category mb-4"
+                      class="skill-category mb-4"
                     >
                       <h4 class="text-subtitle-1 font-weight-medium mb-2">
                         {{ getTranslatedText(skillCategory.title) }}
@@ -655,7 +605,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 </section>
 
                 <!-- Interests Section -->
-                <section class="print-section mb-8">
+                <section class="mb-8">
                   <h2 class="section-title mb-4">
                     <v-icon
                       class="mr-2"
@@ -683,9 +633,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 </section>
 
                 <!-- Links Section -->
-                <section
-                  class="print-section mb-4"
-                >
+                <section class="mb-4">
                   <h2 class="section-title mb-4">
                     <v-icon
                       class="mr-2"
@@ -696,41 +644,22 @@ function calculateDate(date1: Date, date2: Date | null): string {
                     {{ t('resume.links.title') }}
                   </h2>
 
-                  <template
+                  <v-btn
                     v-for="link in links"
                     :key="getTranslatedText(link.name)"
+                    :href="link.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :color="link.color"
+                    variant="outlined"
+                    block
+                    class="mb-2"
                   >
-                    <!-- Show button on screen -->
-                    <v-btn
-                      v-if="!isPrintMode"
-                      :href="link.url"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      :color="link.color"
-                      variant="outlined"
-                      block
-                      class="mb-2"
-                    >
-                      <v-icon start>
-                        {{ link.icon }}
-                      </v-icon>
-                      {{ getTranslatedText(link.name) }}
-                    </v-btn>
-
-                    <!-- Show text with link for print -->
-                    <div
-                      v-if="isPrintMode"
-                      class="print-link mb-2"
-                    >
-                      <v-icon
-                        start
-                        size="small"
-                      >
-                        {{ link.icon }}
-                      </v-icon>
-                      {{ getTranslatedText(link.name) }}: {{ link.url }}
-                    </div>
-                  </template>
+                    <v-icon start>
+                      {{ link.icon }}
+                    </v-icon>
+                    {{ getTranslatedText(link.name) }}
+                  </v-btn>
                 </section>
               </v-col>
             </v-row>
@@ -739,7 +668,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
           <!-- Footer -->
           <v-divider />
 
-          <v-card-text class="print-section footer-section pa-4 text-center">
+          <v-card-text class="footer-section pa-4 text-center">
             <div class="text-caption text-medium-emphasis">
               <v-icon
                 size="small"
@@ -865,44 +794,6 @@ function calculateDate(date1: Date, date2: Date | null): string {
   color: rgb(var(--v-theme-on-surface-variant));
 }
 
-/* Print Mode Styles */
-.print-mode {
-  background: white !important;
-  padding: 0 !important;
-  min-height: auto !important;
-}
-
-.print-card {
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
-}
-
-.print-header {
-  background: white !important;
-  color: black !important;
-  padding: 1rem !important;
-  border-radius: 0 !important;
-  border-bottom: 2px solid #333 !important;
-}
-
-.print-title {
-  font-size: 1.8rem !important;
-  color: black !important;
-}
-
-.print-contact .print-chip {
-  font-size: 0.75rem !important;
-  margin: 0.2rem !important;
-  background: white !important;
-  color: black !important;
-  border: 1px solid #333 !important;
-}
-
-.print-contact .print-chip .v-icon {
-  font-size: 1rem !important;
-}
-
 /* Responsive adjustments */
 @media (max-width: 960px) {
   .contact-info {
@@ -928,211 +819,6 @@ function calculateDate(date1: Date, date2: Date | null): string {
 
   .contact-info .v-chip {
     font-size: 0.75rem;
-  }
-}
-
-/* Enhanced Print Media Query */
-@media print {
-  /* Reset margins and fill entire page */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  @page {
-    size: A4;
-    margin: 0.5in;
-  }
-
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .cv-container {
-    background: white !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    min-height: auto !important;
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  .print-full-width {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  .print-full-width-col {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    flex-basis: 100% !important;
-    width: 100% !important;
-  }
-
-  .print-stretch,
-  .cv-card {
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    margin: 0 !important;
-    background: white !important;
-    width: 100% !important;
-    max-width: none !important;
-    height: auto !important;
-  }
-
-  .print-content {
-    padding: 0.5rem !important;
-    margin: 0 !important;
-  }
-
-  .print-row {
-    margin: 0 !important;
-    width: 100% !important;
-  }
-
-  .print-left-col {
-    padding: 0 0.25rem 0 0 !important;
-    margin: 0 !important;
-  }
-
-  .print-right-col {
-    padding: 0 0 0 0.25rem !important;
-    margin: 0 !important;
-  }
-
-  /* Prevent section breaks */
-  .print-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    display: block !important;
-    overflow: visible !important;
-  }
-
-  .print-item-card {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  .print-skills {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .print-skill-category {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Header styles */
-  .header-section {
-    background: white !important;
-    color: black !important;
-    padding: 0.5rem !important;
-    border-radius: 0 !important;
-    border-bottom: 2px solid #333 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .header-section .display-1 {
-    font-size: 1.5rem !important;
-    color: black !important;
-  }
-
-  .contact-info .v-chip {
-    font-size: 0.7rem !important;
-    margin: 0.1rem !important;
-    background: white !important;
-    color: black !important;
-    border: 1px solid #333 !important;
-  }
-
-  .contact-info .v-icon {
-    font-size: 0.9rem !important;
-  }
-
-  .section-title {
-    color: #333 !important;
-    font-size: 1.1rem !important;
-    border-bottom: 1px solid #333 !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  .section-title .v-icon {
-    color: #333 !important;
-  }
-
-  .v-card {
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-    background: white !important;
-  }
-
-  .skills-container {
-    background: #ffffff !important;
-    border: 1px solid #ddd !important;
-    padding: 0.5rem !important;
-  }
-
-  .skill-category h4 {
-    color: black !important;
-    font-size: 0.9rem !important;
-  }
-
-  .v-chip {
-    font-size: 0.7rem !important;
-    margin: 0.1rem !important;
-    background: white !important;
-    color: black !important;
-    border: 1px solid #333 !important;
-  }
-
-  .v-btn {
-    background: white !important;
-    color: black !important;
-    border: 1px solid #333 !important;
-    font-size: 0.8rem !important;
-  }
-
-  .footer-section {
-    background: #f9f9f9 !important;
-    color: black !important;
-    font-size: 0.7rem !important;
-  }
-
-  .text-body-1 {
-    font-size: 0.85rem !important;
-    color: black !important;
-  }
-
-  .text-h6 {
-    font-size: 1rem !important;
-    color: black !important;
-  }
-
-  .text-subtitle-1 {
-    font-size: 0.9rem !important;
-    color: black !important;
-  }
-
-  /* Hide print button in print mode */
-  .print-button {
-    display: none !important;
-  }
-
-  /* Ensure proper page breaks */
-  .cv-card {
-    page-break-inside: avoid;
-  }
-
-  .section {
-    page-break-inside: avoid;
-    break-inside: avoid;
   }
 }
 </style>
