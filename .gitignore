@@ -28,4 +28,5 @@ logs
 .firebase
 
 .github/copilot-instructions.md
-CLAUDE.md
+BLOG_WRITING_GUIDE.md
+example_blogs/

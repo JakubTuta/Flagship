@@ -917,6 +917,11 @@ function clearContent() {
   blogContent.value = ''
 }
 
+function stripHtmlTags(text: string): string {
+  // Remove all HTML tags from text
+  return text.replace(/<[^>]*>/g, '').trim()
+}
+
 function generateTableOfContents(content: string): ITableOfContentsItem[] {
   const tableOfContents: ITableOfContentsItem[] = []
   let currentHeaderLevel = 0
@@ -928,7 +933,8 @@ function generateTableOfContents(content: string): ITableOfContentsItem[] {
 
   for (const match of matches) {
     const [, tagType, id, titleText] = match
-    const cleanTitle = titleText.trim()
+    // Strip HTML tags from title text for clean TOC display
+    const cleanTitle = stripHtmlTags(titleText)
 
     if (tagType === 'h2') {
       currentHeaderLevel++

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t, locale } = useI18n()
+const config = useRuntimeConfig()
 
 useSeo({
   url: '/',
@@ -7,25 +8,30 @@ useSeo({
   translationKey: 'seo.pages.index',
 })
 
-watch(locale, () => {
-  usePageHead({
-    title: t('seo.pages.index.title'),
-    meta: [
-      {
-        name: 'description',
-        content: t('seo.pages.index.description'),
-      },
-      {
-        property: 'og:title',
-        content: `${t('seo.pages.index.title')} | ${t('seo.site.title')}`,
-      },
-      {
-        property: 'og:description',
-        content: t('seo.pages.index.description'),
-      },
-    ],
-  })
-}, { immediate: true })
+const pageUrl = computed(() => `${config.public.siteUrl}/`)
+const ogImage = computed(() => `${config.public.siteUrl}/images/profile.jpg`)
+
+// Comprehensive SEO metadata
+useSeoMeta({
+  title: () => `${t('seo.pages.index.title')} | ${t('seo.site.title')}`,
+  description: () => t('seo.pages.index.description'),
+  ogTitle: () => `${t('seo.pages.index.title')} | ${t('seo.site.title')}`,
+  ogDescription: () => t('seo.pages.index.description'),
+  ogImage: () => ogImage.value,
+  ogUrl: () => pageUrl.value,
+  ogType: 'website',
+  ogLocale: () => locale.value,
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => t('seo.pages.index.title'),
+  twitterDescription: () => t('seo.pages.index.description'),
+  twitterImage: () => ogImage.value,
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: () => pageUrl.value },
+  ],
+})
 
 const navigationCards = computed(() => [
   {

@@ -2,6 +2,7 @@
 import { useDisplay } from 'vuetify'
 
 const { t, locale } = useI18n()
+const config = useRuntimeConfig()
 const resumeStore = useResumeStore()
 const { resume } = storeToRefs(resumeStore)
 
@@ -11,25 +12,30 @@ useSeo({
   translationKey: 'seo.pages.resume',
 })
 
-watch(locale, () => {
-  usePageHead({
-    title: t('seo.pages.resume.title'),
-    meta: [
-      {
-        name: 'description',
-        content: t('seo.pages.resume.description'),
-      },
-      {
-        property: 'og:title',
-        content: `${t('seo.pages.resume.title')} | ${t('seo.site.title')}`,
-      },
-      {
-        property: 'og:description',
-        content: t('seo.pages.resume.description'),
-      },
-    ],
-  })
-}, { immediate: true })
+const pageUrl = computed(() => `${config.public.siteUrl}/resume`)
+const ogImage = computed(() => `${config.public.siteUrl}/images/profile.jpg`)
+
+// Comprehensive SEO metadata
+useSeoMeta({
+  title: () => `${t('seo.pages.resume.title')} | ${t('seo.site.title')}`,
+  description: () => t('seo.pages.resume.description'),
+  ogTitle: () => `${t('seo.pages.resume.title')} | ${t('seo.site.title')}`,
+  ogDescription: () => t('seo.pages.resume.description'),
+  ogImage: () => ogImage.value,
+  ogUrl: () => pageUrl.value,
+  ogType: 'profile',
+  ogLocale: () => locale.value,
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => t('seo.pages.resume.title'),
+  twitterDescription: () => t('seo.pages.resume.description'),
+  twitterImage: () => ogImage.value,
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: () => pageUrl.value },
+  ],
+})
 
 const { mobile } = useDisplay()
 
