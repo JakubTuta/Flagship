@@ -62,7 +62,9 @@
   },
   "skills": {
     "database": "Bazy danych",
-    "others": "I więcej..."
+    "others": "I więcej...",
+    "containerizationAndOrchestration": "Konteneryzacja i Orkiestracja",
+    "versionControl": "Kontrola wersji"
   },
   "contact": {
     "email": {
@@ -79,7 +81,7 @@
   },
   "landingPage": {
     "hero": {
-      "info": "Full Stack Developer i Technical Writer",
+      "info": "Back End Developer i Techniczny Blogger",
       "about": "O mnie",
       "contact": "Kontakt"
     },

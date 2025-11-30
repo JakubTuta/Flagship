@@ -59,19 +59,6 @@ const navigationCards = computed(() => [
 
 const skills = computed(() => [
   {
-    name: 'Vue.js',
-    icon: 'mdi-vuejs',
-    color: 'success',
-    additional: [
-      'Nuxt',
-    ],
-  },
-  {
-    name: 'TypeScript',
-    icon: 'mdi-language-typescript',
-    color: 'info',
-  },
-  {
     name: 'Python',
     icon: 'mdi-language-python',
     color: 'success',
@@ -82,9 +69,26 @@ const skills = computed(() => [
     ],
   },
   {
-    name: 'Docker',
+    name: 'Vue.js',
+    icon: 'mdi-vuejs',
+    color: 'success',
+    additional: [
+      'Nuxt.js',
+    ],
+  },
+  {
+    name: 'TypeScript',
+    icon: 'mdi-language-typescript',
+    color: 'info',
+  },
+  {
+    name: t('skills.containerizationAndOrchestration'),
     icon: 'mdi-docker',
     color: 'info',
+    additional: [
+      'Docker',
+      'Kubernetes',
+    ],
   },
   {
     name: t('skills.database'),
@@ -94,13 +98,15 @@ const skills = computed(() => [
       'PostgreSQL',
       'MongoDB',
       'Firestore',
+      'Redis',
     ],
   },
   {
-    name: 'Git',
+    name: t('skills.versionControl'),
     icon: 'mdi-git',
     color: 'error',
     additional: [
+      'Git',
       'GitHub',
       'GitLab',
     ],
@@ -117,16 +123,13 @@ const skills = computed(() => [
       'Firebase',
     ],
   },
-
   {
     name: t('skills.others'),
     icon: 'mdi-plus',
     color: 'primary',
     additional: [
-      'HTML5',
-      'CSS3',
+      'VPS',
       'JavaScript',
-      'Vuetify',
       'Figma',
     ],
   },
