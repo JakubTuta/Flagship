@@ -60,6 +60,12 @@ const navigationCards = computed(() => {
             route: '/admin/blog/panel',
           },
           {
+            title: t('navigation.admin.projects'),
+            icon: 'mdi-code-braces',
+            color: 'success',
+            route: '/admin/project/create',
+          },
+          {
             title: t('navigation.files.title'),
             icon: 'mdi-folder',
             color: 'warning',

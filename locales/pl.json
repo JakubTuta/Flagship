@@ -57,6 +57,7 @@
     "admin": {
       "title": "Panel administratora",
       "blog": "Blog",
+      "projects": "Projekty",
       "logout": "Wyloguj się"
     }
   },
