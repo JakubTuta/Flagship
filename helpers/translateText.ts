@@ -175,10 +175,6 @@ export async function translateText(text: string | null, textLanguage: 'pl' | 'e
 
     const ai = new GoogleGenAI({ apiKey })
 
-    // Get the latest Gemini Flash model
-    const latestModel = await fetchLatestGeminiFlashModel(ai)
-    const modelToUse = latestModel || 'gemini-2.5-flash' // fallback to hardcoded model
-
     // Determine response schema based on textLanguage
     let responseSchema
     if (textLanguage === 'pl') {
@@ -218,14 +214,35 @@ export async function translateText(text: string | null, textLanguage: 'pl' | 'e
       }
     }
 
-    const response = await ai.models.generateContent({
-      model: modelToUse,
-      contents: getTemplate(encodedText, textLanguage),
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema,
-      },
-    })
+    let response
+
+    // Try gemini-3-pro-preview first
+    try {
+      response = await ai.models.generateContent({
+        model: 'gemini-3-pro-preview',
+        contents: getTemplate(encodedText, textLanguage),
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema,
+        },
+      })
+    }
+    catch (proError) {
+      console.error('Error with gemini-3-pro-preview, falling back to flash model:', proError)
+
+      // Fallback to latest Gemini Flash model
+      const latestModel = await fetchLatestGeminiFlashModel(ai)
+      const modelToUse = latestModel || 'gemini-2.5-flash'
+
+      response = await ai.models.generateContent({
+        model: modelToUse,
+        contents: getTemplate(encodedText, textLanguage),
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema,
+        },
+      })
+    }
 
     if (!response || !response.text) {
       console.error('No response text received from the translation API.')
