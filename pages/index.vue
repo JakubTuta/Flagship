@@ -1,37 +1,40 @@
 <script setup lang="ts">
-const { t, locale } = useI18n()
-const config = useRuntimeConfig()
+const { t } = useI18n()
 
+// Enhanced SEO with all modern best practices
 useSeo({
-  url: '/',
   useTranslation: true,
   translationKey: 'seo.pages.index',
+  type: 'website',
+  image: '/images/profile.jpg',
+  imageAlt: 'Jakub Tutka - Full-stack Developer Profile',
 })
 
-const pageUrl = computed(() => `${config.public.siteUrl}/`)
-const ogImage = computed(() => `${config.public.siteUrl}/images/profile.jpg`)
+// Add structured data for better search engine understanding
+const { addWebSite, addOrganization, addBreadcrumbs } = useStructuredData()
 
-// Comprehensive SEO metadata
-useSeoMeta({
-  title: () => `${t('seo.pages.index.title')} | ${t('seo.site.title')}`,
-  description: () => t('seo.pages.index.description'),
-  ogTitle: () => `${t('seo.pages.index.title')} | ${t('seo.site.title')}`,
-  ogDescription: () => t('seo.pages.index.description'),
-  ogImage: () => ogImage.value,
-  ogUrl: () => pageUrl.value,
-  ogType: 'website',
-  ogLocale: () => locale.value,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => t('seo.pages.index.title'),
-  twitterDescription: () => t('seo.pages.index.description'),
-  twitterImage: () => ogImage.value,
+// Add WebSite schema with search functionality
+addWebSite({
+  name: 'Jakub Tutka Portfolio',
+  description: t('seo.pages.index.description'),
+  hasSearch: true,
 })
 
-useHead({
-  link: [
-    { rel: 'canonical', href: () => pageUrl.value },
+// Add Organization schema
+addOrganization({
+  name: 'Jakub Tutka',
+  description: t('seo.pages.index.description'),
+  logo: '/images/profile.jpg',
+  socialLinks: [
+    'https://github.com/JakubTuta',
+    'https://www.linkedin.com/in/jakub-tutka-077b55352/',
   ],
 })
+
+// Add breadcrumbs for navigation
+addBreadcrumbs([
+  { name: 'Home', item: '/' },
+])
 
 const navigationCards = computed(() => [
   {

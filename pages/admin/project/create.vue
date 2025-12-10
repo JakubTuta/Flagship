@@ -243,19 +243,19 @@ async function saveProject() {
                     label="Paste JSON data here"
                     variant="outlined"
                     rows="8"
-                    placeholder='{
-  "title": "Project Name",
-  "value": "project-name",
-  "shortDescription": { "en": "...", "pl": "..." },
-  "description": { "en": "...", "pl": "..." },
-  "url": "https://github.com/...",
-  "demoUrl": "https://...",
-  "featured": false,
-  "category": "Web Development",
-  "technologies": ["Vue", "TypeScript"],
-  "learned": [{ "en": "...", "pl": "..." }],
-  "image": "https://..."
-}'
+                    placeholder="{
+  &quot;title&quot;: &quot;Project Name&quot;,
+  &quot;value&quot;: &quot;project-name&quot;,
+  &quot;shortDescription&quot;: { &quot;en&quot;: &quot;...&quot;, &quot;pl&quot;: &quot;...&quot; },
+  &quot;description&quot;: { &quot;en&quot;: &quot;...&quot;, &quot;pl&quot;: &quot;...&quot; },
+  &quot;url&quot;: &quot;https://github.com/...&quot;,
+  &quot;demoUrl&quot;: &quot;https://...&quot;,
+  &quot;featured&quot;: false,
+  &quot;category&quot;: &quot;Web Development&quot;,
+  &quot;technologies&quot;: [&quot;Vue&quot;, &quot;TypeScript&quot;],
+  &quot;learned&quot;: [{ &quot;en&quot;: &quot;...&quot;, &quot;pl&quot;: &quot;...&quot; }],
+  &quot;image&quot;: &quot;https://...&quot;
+}"
                   />
 
                   <v-alert

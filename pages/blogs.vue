@@ -2,40 +2,26 @@
 import { useDisplay } from 'vuetify'
 import type { TBlogCategory } from '~/helpers/blogCategories'
 
-const { t, locale } = useI18n()
-const config = useRuntimeConfig()
+const { locale } = useI18n()
 const { isDark } = useThemeStore()
 
+// Enhanced SEO for blog listing page
 useSeo({
-  url: '/blogs',
   useTranslation: true,
   translationKey: 'seo.pages.blog',
+  type: 'website',
+  image: '/images/profile.jpg',
+  imageAlt: 'Jakub Tutka Blog - Development Insights',
 })
 
-const pageUrl = computed(() => `${config.public.siteUrl}/blogs`)
-const ogImage = computed(() => `${config.public.siteUrl}/images/profile.jpg`)
+// Add structured data
+const { addBreadcrumbs, addItemList } = useStructuredData()
 
-// Comprehensive SEO metadata
-useSeoMeta({
-  title: () => `${t('seo.pages.blog.title')} | ${t('seo.site.title')}`,
-  description: () => t('seo.pages.blog.description'),
-  ogTitle: () => `${t('seo.pages.blog.title')} | ${t('seo.site.title')}`,
-  ogDescription: () => t('seo.pages.blog.description'),
-  ogImage: () => ogImage.value,
-  ogUrl: () => pageUrl.value,
-  ogType: 'website',
-  ogLocale: () => locale.value,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => t('seo.pages.blog.title'),
-  twitterDescription: () => t('seo.pages.blog.description'),
-  twitterImage: () => ogImage.value,
-})
-
-useHead({
-  link: [
-    { rel: 'canonical', href: () => pageUrl.value },
-  ],
-})
+// Breadcrumbs
+addBreadcrumbs([
+  { name: 'Home', item: '/' },
+  { name: 'Blog', item: '/blogs' },
+])
 
 const { mobile } = useDisplay()
 
@@ -54,6 +40,16 @@ onMounted(async () => {
     await blogStore.fetchPublishedBlogs()
   }
   initialLoad.value = false
+
+  // Add ItemList structured data for blog posts (improves SEO)
+  if (publishedBlogs.value.length > 0) {
+    addItemList(
+      publishedBlogs.value.slice(0, 10).map(blog => ({
+        name: blog.title[locale.value] || blog.title.en,
+        url: `/blog/${blog.value}`,
+      })),
+    )
+  }
 })
 
 const filteredAndSortedBlogs = computed(() => {

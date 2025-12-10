@@ -2,40 +2,42 @@
 import { useDisplay } from 'vuetify'
 
 const { t, locale } = useI18n()
-const config = useRuntimeConfig()
 const resumeStore = useResumeStore()
 const { resume } = storeToRefs(resumeStore)
 
+// Enhanced SEO for resume/CV page
 useSeo({
-  url: '/resume',
   useTranslation: true,
   translationKey: 'seo.pages.resume',
+  type: 'profile',
+  image: '/images/profile.jpg',
+  imageAlt: 'Jakub Tutka Resume - Full-stack Developer CV',
 })
 
-const pageUrl = computed(() => `${config.public.siteUrl}/resume`)
-const ogImage = computed(() => `${config.public.siteUrl}/images/profile.jpg`)
+// Add structured data for Person (professional profile)
+const { addPerson, addBreadcrumbs } = useStructuredData()
 
-// Comprehensive SEO metadata
-useSeoMeta({
-  title: () => `${t('seo.pages.resume.title')} | ${t('seo.site.title')}`,
-  description: () => t('seo.pages.resume.description'),
-  ogTitle: () => `${t('seo.pages.resume.title')} | ${t('seo.site.title')}`,
-  ogDescription: () => t('seo.pages.resume.description'),
-  ogImage: () => ogImage.value,
-  ogUrl: () => pageUrl.value,
-  ogType: 'profile',
-  ogLocale: () => locale.value,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => t('seo.pages.resume.title'),
-  twitterDescription: () => t('seo.pages.resume.description'),
-  twitterImage: () => ogImage.value,
-})
-
-useHead({
-  link: [
-    { rel: 'canonical', href: () => pageUrl.value },
+// Add Person schema for professional profile
+addPerson({
+  name: 'Jakub Tutka',
+  jobTitle: locale.value === 'en'
+    ? 'Full-stack Developer'
+    : 'Programista Full-stack',
+  email: 'jakubtutka02@gmail.com',
+  image: '/images/profile.jpg',
+  description: t('seo.pages.resume.description'),
+  socialLinks: [
+    'https://github.com/JakubTuta',
+    'https://www.linkedin.com/in/jakub-tutka-077b55352/',
+    'https://jakubtutka.com',
   ],
 })
+
+// Breadcrumbs
+addBreadcrumbs([
+  { name: 'Home', item: '/' },
+  { name: 'Resume', item: '/resume' },
+])
 
 const { mobile } = useDisplay()
 

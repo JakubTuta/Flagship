@@ -114,9 +114,10 @@ onMounted(() => {
           <v-file-input
             :model-value="selectedFiles"
             :label="$t('files.upload.selectFiles')"
-            multiple
+
             chips
             show-size
+            multiple
             prepend-icon="mdi-cloud-upload"
             :loading="uploading"
             :disabled="uploading"

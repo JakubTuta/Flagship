@@ -12,13 +12,22 @@ export default defineNuxtConfig({
       titleTemplate: '%s | Jakub Tutka Portfolio',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { name: 'keywords', content: 'developer, portfolio, projects, blog, resume, CV, contact, Jakub Tutka' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+        { name: 'format-detection', content: 'telephone=no' },
+        { name: 'keywords', content: 'developer, portfolio, projects, blog, resume, CV, contact, Jakub Tutka, full-stack developer, Python, Vue.js, Nuxt.js' },
         { name: 'author', content: 'Jakub Tutka' },
         { name: 'color-scheme', content: 'light dark' },
         { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#202428', media: '(prefers-color-scheme: dark)' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+        { name: 'apple-mobile-web-app-title', content: 'Jakub Tutka' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/images/profile.jpg' },
+        { rel: 'manifest', href: '/manifest.json' },
       ],
     },
   },
@@ -53,6 +62,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/i18n',
     '@unocss/nuxt',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }))
@@ -154,6 +165,65 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
     baseUrl,
+  },
+
+  // Sitemap configuration for SEO
+  sitemap: {
+    hostname: baseUrl,
+    gzip: true,
+    exclude: [
+      '/admin/**',
+      '/auth/**',
+    ],
+    defaults: {
+      changefreq: 'weekly',
+      priority: 0.8,
+    },
+    urls: async () => {
+      // Static routes
+      const staticRoutes = [
+        {
+          url: '/',
+          changefreq: 'daily',
+          priority: 1.0,
+        },
+        {
+          url: '/blogs',
+          changefreq: 'daily',
+          priority: 0.9,
+        },
+        {
+          url: '/projects',
+          changefreq: 'weekly',
+          priority: 0.9,
+        },
+        {
+          url: '/resume',
+          changefreq: 'monthly',
+          priority: 0.8,
+        },
+      ]
+
+      // Fetch dynamic blog routes from Firebase
+      try {
+        const blogRoutes = await $fetch('/api/blogs/sitemap')
+
+        return [...staticRoutes, ...blogRoutes]
+      }
+      catch (error) {
+        console.error('Failed to fetch blog routes for sitemap:', error)
+
+        return staticRoutes
+      }
+    },
+  },
+
+  // Robots.txt configuration
+  robots: {
+    UserAgent: '*',
+    Allow: '/',
+    Disallow: ['/admin', '/auth'],
+    Sitemap: `${baseUrl}/sitemap.xml`,
   },
 
   compatibilityDate: '2024-07-18',

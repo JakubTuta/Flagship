@@ -35,16 +35,7 @@ function getCategoryTitle(category: string) {
   return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
 }
 
-// Set up SEO with blog data if available
-const blogTitle = computed(() => {
-  const blog = selectedBlog.value || preloadedBlog.value
-  if (blog?.title) {
-    return blog.title[locale.value] || blog.title.en || blog.title.pl || t('seo.pages.blog.title')
-  }
-
-  return t('seo.pages.blog.title')
-})
-
+// Utility computed for blog description
 const blogDescription = computed(() => {
   const blog = selectedBlog.value || preloadedBlog.value
   if (blog?.content) {
@@ -61,83 +52,66 @@ const blogDescription = computed(() => {
   return t('seo.pages.blog.description')
 })
 
-const blogImage = computed(() => {
-  const blog = selectedBlog.value || preloadedBlog.value
+// Add structured data for Article/BlogPosting
+const { addArticle, addBreadcrumbs } = useStructuredData()
 
-  // Prefer the specific blog image, fallback to profile image for now
-  return blog?.image || `${config.public.siteUrl}/images/profile.jpg`
-})
+// Watch for blog data and set up SEO + structured data
+watch(() => selectedBlog.value || preloadedBlog.value, (currentBlog) => {
+  if (!currentBlog)
+    return
 
-const blogUrl = computed(() => `${config.public.siteUrl}/blog/${route.params.id}`)
+  // Set comprehensive SEO meta tags
+  useSeo({
+    title: currentBlog.title[locale.value] || currentBlog.title.en,
+    description: blogDescription.value,
+    image: currentBlog.image || '/images/profile.jpg',
+    imageAlt: `${currentBlog.title[locale.value]} - Blog post cover image`,
+    type: 'article',
+    publishedTime: currentBlog.publishDate
+      ? new Date(currentBlog.publishDate).toISOString()
+      : undefined,
+    modifiedTime: currentBlog.publishDate
+      ? new Date(currentBlog.publishDate).toISOString()
+      : undefined,
+    author: author.value?.username || 'Jakub Tutka',
+    tags: currentBlog.category
+      ? [getCategoryTitle(currentBlog.category), 'blog', 'development']
+      : [],
+    twitterCard: currentBlog.image
+      ? 'summary_large_image'
+      : 'summary',
+  })
+}, { immediate: true })
 
-const categoryTitle = computed(() => {
-  const blog = selectedBlog.value || preloadedBlog.value
+// Watch for blog data and add structured data when available
+watch(() => selectedBlog.value, (newBlog) => {
+  if (newBlog) {
+    // Add Article structured data
+    addArticle({
+      type: 'BlogPosting',
+      headline: newBlog.title[locale.value] || newBlog.title.en,
+      description: blogDescription.value,
+      image: newBlog.image || `${config.public.siteUrl}/images/profile.jpg`,
+      datePublished: newBlog.publishDate
+        ? new Date(newBlog.publishDate).toISOString()
+        : undefined,
+      dateModified: newBlog.publishDate
+        ? new Date(newBlog.publishDate).toISOString()
+        : undefined,
+      authorName: author.value?.username || 'Jakub Tutka',
+      authorUrl: config.public.siteUrl,
+      category: categoryTitle.value,
+      keywords: [categoryTitle.value, 'development', 'programming'],
+    })
 
-  return blog?.category
-    ? getCategoryTitle(blog.category)
-    : 'blog'
-})
-
-const authorName = computed(() => {
-  return author.value?.username || t('blog.anonymous')
-})
-
-const publishedTime = computed(() => {
-  const blog = selectedBlog.value || preloadedBlog.value
-
-  return blog?.publishDate
-    ? new Date(blog.publishDate).toISOString()
-    : undefined
-})
-
-// Set SEO meta tags
-useSeoMeta({
-  title: () => `${blogTitle.value} | ${t('seo.site.title')}`,
-  description: () => blogDescription.value,
-  ogTitle: () => `${blogTitle.value} | ${t('seo.site.title')}`,
-  ogDescription: () => blogDescription.value,
-  ogImage: () => blogImage.value,
-  ogUrl: () => blogUrl.value,
-  ogType: 'article',
-  ogLocale: () => locale.value,
-  twitterCard: () => ((selectedBlog.value || preloadedBlog.value)?.image
-    ? 'summary_large_image'
-    : 'summary'),
-  twitterTitle: () => blogTitle.value,
-  twitterDescription: () => blogDescription.value,
-  twitterImage: () => blogImage.value,
-})
-
-// Set additional meta tags including article-specific ones
-useHead({
-  meta: computed(() => [
-    {
-      name: 'keywords',
-      content: `${categoryTitle.value}, blog, ${authorName.value}`,
-    },
-    {
-      name: 'author',
-      content: authorName.value,
-    },
-    {
-      property: 'article:author',
-      content: authorName.value,
-    },
-    {
-      property: 'article:section',
-      content: categoryTitle.value,
-    },
-    ...(publishedTime.value
-      ? [{
-          property: 'article:published_time',
-          content: publishedTime.value,
-        }]
-      : []),
-  ]),
-  link: [
-    { rel: 'canonical', href: () => blogUrl.value },
-  ],
-})
+    // Add breadcrumbs
+    addBreadcrumbs([
+      { name: 'Home', item: '/' },
+      { name: 'Blog', item: '/blogs' },
+      { name: newBlog.title[locale.value] || newBlog.title.en },
+    ])
+  }
+}, { immediate: true })
 
 onMounted(async () => {
   try {

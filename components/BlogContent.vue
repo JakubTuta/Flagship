@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ITableOfContentsItem } from '~/models/blog';
+import type { ITableOfContentsItem } from '~/models/blog'
 
 const props = defineProps<{
   blogContent: string

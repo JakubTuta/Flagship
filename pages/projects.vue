@@ -3,38 +3,24 @@ import { useDisplay } from 'vuetify'
 import type { IProject } from '~/models/project'
 
 const { t, locale } = useI18n()
-const config = useRuntimeConfig()
 
+// Enhanced SEO for projects page
 useSeo({
-  url: '/projects',
   useTranslation: true,
   translationKey: 'seo.pages.projects',
+  type: 'website',
+  image: '/images/profile.jpg',
+  imageAlt: 'Jakub Tutka Projects Portfolio',
 })
 
-const pageUrl = computed(() => `${config.public.siteUrl}/projects`)
-const ogImage = computed(() => `${config.public.siteUrl}/images/profile.jpg`)
+// Add structured data
+const { addBreadcrumbs } = useStructuredData()
 
-// Comprehensive SEO metadata
-useSeoMeta({
-  title: () => `${t('seo.pages.projects.title')} | ${t('seo.site.title')}`,
-  description: () => t('seo.pages.projects.description'),
-  ogTitle: () => `${t('seo.pages.projects.title')} | ${t('seo.site.title')}`,
-  ogDescription: () => t('seo.pages.projects.description'),
-  ogImage: () => ogImage.value,
-  ogUrl: () => pageUrl.value,
-  ogType: 'website',
-  ogLocale: () => locale.value,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => t('seo.pages.projects.title'),
-  twitterDescription: () => t('seo.pages.projects.description'),
-  twitterImage: () => ogImage.value,
-})
-
-useHead({
-  link: [
-    { rel: 'canonical', href: () => pageUrl.value },
-  ],
-})
+// Breadcrumbs for better navigation
+addBreadcrumbs([
+  { name: 'Home', item: '/' },
+  { name: 'Projects', item: '/projects' },
+])
 
 const selectedProject = ref<IProject | null>(null)
 const showProjectDialog = ref(false)
