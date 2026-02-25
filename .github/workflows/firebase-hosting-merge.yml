@@ -49,7 +49,7 @@ jobs:
           NITRO_PRESET: firebase
 
       - name: Install functions dependencies
-        run: cd .output/server && npm install
+        run: cd .output/server && bun install
 
       - name: Install Firebase CLI
         run: bun add -g firebase-tools

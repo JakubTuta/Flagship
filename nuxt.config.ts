@@ -181,43 +181,31 @@ export default defineNuxtConfig({
       changefreq: 'weekly',
       priority: 0.8,
     },
-    urls: async () => {
-      // Static routes
-      const staticRoutes = [
-        {
-          url: '/',
-          changefreq: 'daily',
-          priority: 1.0,
-        },
-        {
-          url: '/blogs',
-          changefreq: 'daily',
-          priority: 0.9,
-        },
-        {
-          url: '/projects',
-          changefreq: 'weekly',
-          priority: 0.9,
-        },
-        {
-          url: '/resume',
-          changefreq: 'monthly',
-          priority: 0.8,
-        },
-      ]
-
-      // Fetch dynamic blog routes from Firebase
-      try {
-        const blogRoutes = await $fetch('/api/blogs/sitemap')
-
-        return [...staticRoutes, ...blogRoutes]
-      }
-      catch (error) {
-        console.error('Failed to fetch blog routes for sitemap:', error)
-
-        return staticRoutes
-      }
-    },
+    urls: [
+      {
+        url: '/',
+        changefreq: 'daily',
+        priority: 1.0,
+      },
+      {
+        url: '/blogs',
+        changefreq: 'daily',
+        priority: 0.9,
+      },
+      {
+        url: '/projects',
+        changefreq: 'weekly',
+        priority: 0.9,
+      },
+      {
+        url: '/resume',
+        changefreq: 'monthly',
+        priority: 0.8,
+      },
+    ],
+    sources: [
+      '/api/blogs/sitemap',
+    ],
   },
 
   // Robots.txt configuration
