@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { useDisplay } from 'vuetify'
+﻿<script setup lang="ts">
 import type { IProject } from '~/models/project'
 
 const { t, locale } = useI18n()
@@ -24,8 +23,6 @@ addBreadcrumbs([
 
 const selectedProject = ref<IProject | null>(null)
 const showProjectDialog = ref(false)
-
-const { mobile } = useDisplay()
 
 const projectStore = useProjectStore()
 const { projects, loading } = storeToRefs(projectStore)
@@ -75,18 +72,24 @@ function openProjectDetails(project: IProject) {
 
 <template>
   <div class="projects-page">
-    <!-- Hero Section -->
-    <div
-      class="d-flex align-center hero-section"
-      :class="{'h-100vh': mobile}"
-    >
-      <v-container>
-        <v-row justify="center">
+    <!-- Hero -->
+    <div class="projects-hero">
+      <div class="projects-hero-pattern" />
+
+      <v-container class="projects-hero-content py-16">
+        <v-row
+          justify="center"
+          align="center"
+        >
           <v-col
             cols="12"
             md="8"
             class="text-center"
           >
+            <p class="hero-eyebrow mb-2">
+              {{ $t('projects.hero.title') }}
+            </p>
+
             <h1 class="hero-title mb-4">
               {{ $t('projects.hero.title') }}
             </h1>
@@ -94,252 +97,188 @@ function openProjectDetails(project: IProject) {
             <p class="hero-subtitle mb-8">
               {{ $t('projects.hero.subtitle') }}
             </p>
+
+            <div
+              v-if="!loading"
+              class="d-flex flex-wrap justify-center gap-4"
+            >
+              <div class="stat-pill">
+                <span class="stat-number">{{ allProjects.length }}</span>
+
+                <span class="stat-label">{{ $t('projects.all.title') }}</span>
+              </div>
+
+              <div class="stat-pill">
+                <span class="stat-number">{{ featuredProjects.length }}</span>
+
+                <span class="stat-label">{{ $t('projects.featured.title') }}</span>
+              </div>
+            </div>
           </v-col>
         </v-row>
       </v-container>
     </div>
 
-    <!-- Loading State for Featured Projects -->
+    <!-- Featured Projects -->
     <v-container
       v-if="loading"
       class="py-16"
     >
-      <v-row justify="center">
-        <v-col
-          cols="12"
-          class="mb-8 text-center"
-        >
-          <v-skeleton-loader
-            type="heading"
-            class="mx-auto mb-4"
-            width="300"
-          />
-
-          <v-skeleton-loader
-            type="subtitle"
-            class="mx-auto"
-            width="400"
-          />
-        </v-col>
-      </v-row>
-
-      <!-- Featured Project Loading Skeleton -->
-      <v-card
-        class="fill-height featured-project-loading-card mb-8"
-        elevation="12"
+      <!-- skeleton -->
+      <div
+        class="section-header mx-auto mb-8"
+        style="max-width: 240px;"
       >
-        <v-row
-          no-gutters
-          class="fill-height"
-        >
-          <v-col
-            cols="12"
-            md="6"
-            class="project-image-section"
-          >
-            <v-skeleton-loader
-              type="image"
-              class="fill-height"
-              :height="mobile
-                ? '400'
-                : '600'"
-            />
-          </v-col>
+        <v-skeleton-loader type="heading" />
+      </div>
 
-          <v-col
-            cols="12"
-            md="6"
-            class="d-flex align-center"
-          >
-            <v-card-text class="pa-8">
-              <v-skeleton-loader
-                type="chip"
-                class="mb-4"
-                width="80"
-              />
-
-              <v-skeleton-loader
-                type="heading"
-                class="mb-3"
-                width="300"
-              />
-
-              <v-skeleton-loader
-                type="subtitle"
-                class="mb-4"
-                width="250"
-              />
-
-              <v-skeleton-loader
-                type="paragraph"
-                class="mb-6"
-              />
-
-              <v-skeleton-loader
-                type="text"
-                class="mb-2"
-                width="120"
-              />
-
-              <div class="d-flex mb-6 flex-wrap gap-2">
-                <v-skeleton-loader
-                  v-for="i in 4"
-                  :key="i"
-                  type="chip"
-                  width="60"
-                />
-              </div>
-
-              <div class="d-flex gap-3">
-                <v-skeleton-loader
-                  type="button"
-                  width="140"
-                />
-
-                <v-skeleton-loader
-                  type="button"
-                  width="120"
-                />
-              </div>
-            </v-card-text>
-          </v-col>
-        </v-row>
-      </v-card>
+      <v-skeleton-loader
+        type="image"
+        height="500"
+        class="rounded-xl"
+      />
     </v-container>
 
-    <!-- Featured Projects Carousel -->
     <v-container
       v-else-if="featuredProjects.length > 0"
       class="py-16"
     >
-      <v-row justify="center">
-        <v-col
-          cols="12"
-          class="mb-8 text-center"
-        >
-          <h2 class="section-title mb-4">
-            <v-icon
-              v-if="!mobile"
-              class="mr-2"
-              color="primary"
-            >
-              mdi-star
-            </v-icon>
-            {{ $t('projects.featured.title') }}
-          </h2>
+      <!-- Section header -->
+      <div class="d-flex align-center mb-2 justify-center">
+        <div class="section-header">
+          <v-icon
+            color="primary"
+            size="20"
+            class="mr-2"
+          >
+            mdi-star
+          </v-icon>
 
-          <p class="section-subtitle">
-            {{ $t('projects.featured.subtitle') }}
-          </p>
-        </v-col>
-      </v-row>
+          <span class="section-label">{{ $t('projects.featured.title') }}</span>
+        </div>
+      </div>
+
+      <p class="text-body-2 text-medium-emphasis mb-8 text-center">
+        {{ $t('projects.featured.subtitle') }}
+      </p>
 
       <v-carousel
-        :height="mobile
-          ? '850'
-          : '600'"
+        height="520"
         cycle
-        interval="6000"
+        interval="10000"
         show-arrows="hover"
         hide-delimiters
-        class="featured-carousel mt-4"
+        class="featured-carousel"
       >
         <v-carousel-item
           v-for="project in featuredProjects"
           :key="project.value"
         >
           <v-card
-            class="fill-height featured-project-card"
-            elevation="12"
+            class="featured-card fill-height"
+            elevation="0"
           >
             <v-row
               no-gutters
               class="fill-height"
             >
+              <!-- Image column -->
               <v-col
                 cols="12"
-                md="6"
-                class="project-image-section"
+                md="5"
+                class="featured-image-col"
               >
-                <div class="project-placeholder d-flex align-center fill-height justify-center">
+                <v-img
+                  v-if="project.image"
+                  :src="project.image"
+                  :alt="project.title"
+                  contain
+                  height="100%"
+                  class="fill-height"
+                />
+
+                <div
+                  v-else
+                  class="fill-height d-flex align-center featured-placeholder justify-center"
+                >
                   <v-icon
-                    v-if="!project.image"
-                    size="120"
-                    color="primary"
-                    class="project-icon"
+                    size="96"
+                    class="placeholder-icon"
                   >
                     mdi-code-braces
                   </v-icon>
-
-                  <v-img
-                    v-else
-                    :src="project.image"
-                    alt="Project Image"
-                    class="object-cover"
-                  />
                 </div>
               </v-col>
 
+              <!-- Content column -->
               <v-col
                 cols="12"
-                md="6"
+                md="7"
                 class="d-flex align-center"
               >
-                <v-card-text class="pa-8">
-                  <div class="d-flex align-center mb-4">
+                <div class="w-100 pa-8">
+                  <div class="d-flex align-center mb-4 gap-2">
                     <v-chip
-                      color="accent"
+                      color="primary"
                       size="small"
-                      variant="outlined"
+                      variant="tonal"
                     >
                       {{ project.category }}
                     </v-chip>
+
+                    <v-chip
+                      color="warning"
+                      size="small"
+                      variant="tonal"
+                      prepend-icon="mdi-star"
+                    >
+                      Featured
+                    </v-chip>
                   </div>
 
-                  <h3 class="font-weight-bold text-h4 mb-3">
+                  <h3 class="font-weight-bold text-h4 mb-2">
                     {{ project.title }}
                   </h3>
 
-                  <p class="text-h6 text-medium-emphasis mb-4">
+                  <p class="text-subtitle-1 text-medium-emphasis mb-3">
                     {{ project.shortDescription[locale] }}
                   </p>
 
-                  <p class="text-body-1 mb-6">
+                  <p
+                    class="text-body-2 mb-5"
+                    style="line-height: 1.7;"
+                  >
                     {{ project.description[locale] }}
                   </p>
 
-                  <div class="tech-stack mb-6">
-                    <h4 class="text-subtitle-1 font-weight-medium mb-2">
-                      {{ $t('projects.technologies') }}:
-                    </h4>
+                  <div class="mb-5">
+                    <p class="text-caption text-uppercase font-weight-bold text-medium-emphasis mb-2 tracking-wide">
+                      {{ $t('projects.technologies') }}
+                    </p>
 
-                    <div class="d-flex flex-wrap gap-2">
+                    <div class="d-flex flex-wrap gap-1">
                       <v-chip
                         v-for="tech in project.technologies"
                         :key="tech"
                         size="small"
-                        color="secondary"
-                        variant="outlined"
+                        color="primary"
+                        variant="tonal"
                       >
                         {{ tech }}
                       </v-chip>
                     </div>
                   </div>
 
-                  <div class="project-actions">
+                  <div class="d-flex flex-wrap gap-2">
                     <v-btn
                       :href="project.url"
                       target="_blank"
                       rel="noopener noreferrer"
                       color="primary"
-                      :size="mobile
-                        ? 'small'
-                        : 'large'"
-                      class="mr-3"
+                      variant="elevated"
+                      prepend-icon="mdi-github"
+                      size="small"
                     >
-                      <v-icon start>
-                        mdi-github
-                      </v-icon>
                       {{ $t('projects.viewCode') }}
                     </v-btn>
 
@@ -349,18 +288,25 @@ function openProjectDetails(project: IProject) {
                       target="_blank"
                       rel="noopener noreferrer"
                       color="secondary"
-                      :size="mobile
-                        ? 'small'
-                        : 'large'"
-                      variant="outlined"
+                      variant="tonal"
+                      prepend-icon="mdi-open-in-new"
+                      size="small"
                     >
-                      <v-icon start>
-                        mdi-open-in-new
-                      </v-icon>
                       {{ $t('projects.liveDemo') }}
                     </v-btn>
+
+                    <v-btn
+                      variant="text"
+                      size="small"
+                      @click="openProjectDetails(project)"
+                    >
+                      {{ $t('common.details') || 'Details' }}
+                      <v-icon end>
+                        mdi-arrow-right
+                      </v-icon>
+                    </v-btn>
                   </div>
-                </v-card-text>
+                </div>
               </v-col>
             </v-row>
           </v-card>
@@ -368,303 +314,259 @@ function openProjectDetails(project: IProject) {
       </v-carousel>
     </v-container>
 
-    <!-- All Projects Section -->
+    <!-- All Projects -->
     <v-container class="py-16">
-      <v-row justify="center">
-        <v-col
-          cols="12"
-          class="mb-8 text-center"
+      <!-- Section header + filter -->
+      <div class="d-flex align-center mb-2 justify-center">
+        <div class="section-header">
+          <v-icon
+            color="primary"
+            size="20"
+            class="mr-2"
+          >
+            mdi-folder-multiple-outline
+          </v-icon>
+
+          <span class="section-label">{{ $t('projects.all.title') }}</span>
+        </div>
+      </div>
+
+      <p class="text-body-2 text-medium-emphasis mb-6 text-center">
+        {{ $t('projects.all.subtitle') }}
+      </p>
+
+      <!-- Filter chips -->
+      <template v-if="loading">
+        <div class="d-flex mb-10 flex-wrap justify-center gap-2">
+          <v-skeleton-loader
+            v-for="i in 5"
+            :key="i"
+            type="chip"
+            width="80"
+          />
+        </div>
+      </template>
+
+      <template v-else>
+        <v-chip-group
+          v-model="selectedCategory"
+          color="primary"
+          selected-class="text-primary"
+          class="mb-10 justify-center"
+          mandatory
         >
-          <!-- Loading state for section title -->
-          <template v-if="loading">
-            <v-skeleton-loader
-              type="heading"
-              class="mx-auto mb-4"
-              width="300"
-            />
+          <v-chip
+            v-for="category in categories"
+            :key="category"
+            :value="category"
+            filter
+            variant="outlined"
+            size="small"
+          >
+            {{ category === 'all'
+              ? $t('projects.categories.all')
+              : category }}
+          </v-chip>
+        </v-chip-group>
+      </template>
 
-            <v-skeleton-loader
-              type="subtitle"
-              class="mx-auto mb-6"
-              width="400"
-            />
-
-            <!-- Loading state for category filter -->
-            <div class="d-flex mb-8 justify-center gap-2">
-              <v-skeleton-loader
-                v-for="i in 5"
-                :key="i"
-                type="chip"
-                width="80"
-              />
-            </div>
-          </template>
-
-          <!-- Normal state -->
-          <template v-else>
-            <h2 class="section-title mb-4">
-              <v-icon
-                class="mr-2"
-                color="primary"
-              >
-                mdi-folder-multiple
-              </v-icon>
-              {{ $t('projects.all.title') }}
-            </h2>
-
-            <p class="section-subtitle mb-6">
-              {{ $t('projects.all.subtitle') }}
-            </p>
-
-            <!-- Category Filter -->
-            <v-chip-group
-              v-model="selectedCategory"
-              color="primary"
-              selected-class="text-primary"
-              class="justify-center"
-              mandatory
-            >
-              <v-chip
-                v-for="category in categories"
-                :key="category"
-                :value="category"
-                filter
-                variant="outlined"
-              >
-                {{ category === 'all'
-                  ? $t('projects.categories.all')
-                  : category }}
-              </v-chip>
-            </v-chip-group>
-          </template>
-        </v-col>
-      </v-row>
-
+      <!-- Cards grid -->
       <v-row>
-        <!-- Loading state for project cards -->
+        <!-- Loading skeletons -->
         <template v-if="loading">
           <v-col
             v-for="i in 6"
             :key="`loading-${i}`"
             cols="12"
-            md="6"
+            sm="6"
             lg="4"
           >
             <v-card
               class="project-card h-100"
-              elevation="4"
+              elevation="0"
             >
-              <!-- Loading image -->
-              <div class="project-card-image">
+              <v-skeleton-loader
+                type="image"
+                height="200"
+              />
+
+              <v-card-text class="pa-5">
                 <v-skeleton-loader
-                  type="image"
-                  height="200"
+                  type="heading"
+                  width="150"
+                  class="mb-3"
                 />
-              </div>
-
-              <v-card-text class="pa-6">
-                <div class="d-flex justify-space-between align-center mb-3">
-                  <v-skeleton-loader
-                    type="heading"
-                    width="150"
-                  />
-
-                  <v-skeleton-loader
-                    type="chip"
-                    width="60"
-                  />
-                </div>
 
                 <v-skeleton-loader
                   type="paragraph"
                   class="mb-4"
                 />
 
-                <!-- Loading tech chips -->
-                <div class="mb-4">
-                  <div class="d-flex flex-wrap gap-1">
-                    <v-skeleton-loader
-                      v-for="j in 3"
-                      :key="j"
-                      type="chip"
-                      width="50"
-                    />
-                  </div>
+                <div class="d-flex flex-wrap gap-1">
+                  <v-skeleton-loader
+                    v-for="j in 3"
+                    :key="j"
+                    type="chip"
+                    width="50"
+                  />
                 </div>
-
-                <!-- Loading learned section -->
-                <v-skeleton-loader
-                  type="chip"
-                  class="mb-4"
-                  width="100"
-                />
               </v-card-text>
-
-              <v-card-actions class="pa-6">
-                <v-skeleton-loader
-                  type="button"
-                  width="70"
-                  class="mr-2"
-                />
-
-                <v-skeleton-loader
-                  type="button"
-                  width="70"
-                />
-
-                <v-spacer />
-
-                <v-skeleton-loader
-                  type="chip"
-                  width="60"
-                />
-              </v-card-actions>
             </v-card>
           </v-col>
         </template>
 
-        <!-- Normal project cards -->
+        <!-- Project cards -->
         <template v-else>
           <v-col
             v-for="project in filteredProjects"
             :key="project.value"
             cols="12"
-            md="6"
+            sm="6"
             lg="4"
           >
             <v-card
               class="project-card h-100"
-              elevation="4"
+              elevation="0"
               hover
               @click="openProjectDetails(project)"
             >
-              <!-- Project Image/Placeholder -->
-              <div class="project-card-image">
-                <div class="d-flex align-center project-image-placeholder justify-center">
+              <!-- Image -->
+              <div class="card-image-wrap">
+                <v-img
+                  v-if="project.image"
+                  :src="project.image"
+                  :alt="project.title"
+                  cover
+                  height="200"
+                />
+
+                <div
+                  v-else
+                  class="d-flex align-center card-image-placeholder justify-center"
+                >
                   <v-icon
-                    v-if="!project.image"
                     size="48"
-                    color="primary"
+                    class="placeholder-icon"
                   >
                     mdi-code-braces
                   </v-icon>
+                </div>
 
-                  <v-img
-                    v-else
-                    :src="project.image"
-                    alt="Project Image"
-                    class="object-cover"
-                  />
+                <!-- Badges overlay -->
+                <div class="card-badges">
+                  <v-chip
+                    v-if="project.featured"
+                    color="warning"
+                    size="x-small"
+                    variant="elevated"
+                    prepend-icon="mdi-star"
+                  >
+                    Featured
+                  </v-chip>
                 </div>
               </div>
 
-              <v-card-text class="pa-6">
-                <div class="d-flex justify-space-between align-center mb-3">
-                  <h3 class="text-h6 font-weight-bold">
+              <v-card-text class="pa-5">
+                <div class="d-flex justify-space-between mb-1 gap-2 align-start">
+                  <h3 class="font-weight-bold text-h6">
                     {{ project.title }}
                   </h3>
 
-                  <v-icon
-                    v-if="project.featured"
-                    color="warning"
-                    variant="flat"
+                  <v-chip
+                    color="primary"
+                    size="x-small"
+                    variant="tonal"
+                    class="mt-1 flex-shrink-0"
                   >
-                    mdi-star
-                  </v-icon>
+                    {{ project.category }}
+                  </v-chip>
                 </div>
 
-                <p class="text-body-2 mb-4">
+                <p
+                  class="text-body-2 text-medium-emphasis mb-4"
+                  style="line-height: 1.6;"
+                >
                   {{ project.shortDescription[locale] }}
                 </p>
 
-                <!-- Technologies -->
-                <div class="mb-4">
-                  <div class="d-flex flex-wrap gap-1">
-                    <v-chip
-                      v-for="tech in project.technologies.slice(0, 3)"
-                      :key="tech"
-                      size="x-small"
-                      color="secondary"
-                      variant="outlined"
-                    >
-                      {{ tech }}
-                    </v-chip>
-
-                    <v-chip
-                      v-if="project.technologies.length > 3"
-                      size="x-small"
-                      color="grey"
-                      variant="text"
-                    >
-                      +{{ project.technologies.length - 3 }}
-
-                      <v-tooltip
-                        location="bottom"
-                        activator="parent"
-                      >
-                        <div class="pa-2">
-                          <div
-                            v-for="helpTech in project.technologies.slice(3)"
-                            :key="helpTech"
-                            class="text-caption"
-                          >
-                            • {{ helpTech }}
-                          </div>
-                        </div>
-                      </v-tooltip>
-                    </v-chip>
-                  </div>
-                </div>
-
-                <!-- Learned Section -->
-                <div
-                  v-if="project.learned.length > 0"
-                  class="mb-4"
-                >
-                  <v-tooltip
-                    location="bottom"
+                <!-- Tech chips -->
+                <div class="d-flex mb-3 flex-wrap gap-1">
+                  <v-chip
+                    v-for="tech in project.technologies.slice(0, 3)"
+                    :key="tech"
+                    size="x-small"
+                    color="secondary"
+                    variant="tonal"
                   >
-                    <template #activator="{props}">
-                      <v-chip
-                        v-bind="props"
-                        color="info"
-                        size="small"
-                        variant="outlined"
-                      >
-                        <v-icon start>
-                          mdi-lightbulb
-                        </v-icon>
-                        {{ $t('projects.learned') }}
-                      </v-chip>
-                    </template>
+                    {{ tech }}
+                  </v-chip>
 
-                    <div class="pa-2">
-                      <div
-                        v-for="skill in project.learned"
-                        :key="skill[locale]"
-                        class="text-caption"
-                      >
-                        • {{ skill[locale] }}
+                  <v-chip
+                    v-if="project.technologies.length > 3"
+                    size="x-small"
+                    variant="outlined"
+                  >
+                    +{{ project.technologies.length - 3 }}
+
+                    <v-tooltip
+                      location="bottom"
+                      activator="parent"
+                    >
+                      <div class="pa-1">
+                        <div
+                          v-for="helpTech in project.technologies.slice(3)"
+                          :key="helpTech"
+                          class="text-caption"
+                        >
+                          {{ helpTech }}
+                        </div>
                       </div>
-                    </div>
-                  </v-tooltip>
+                    </v-tooltip>
+                  </v-chip>
                 </div>
+
+                <!-- Learned -->
+                <v-tooltip
+                  v-if="project.learned.length > 0"
+                  location="bottom"
+                >
+                  <template #activator="{props}">
+                    <v-chip
+                      v-bind="props"
+                      color="success"
+                      size="x-small"
+                      variant="tonal"
+                      prepend-icon="mdi-lightbulb-outline"
+                    >
+                      {{ $t('projects.learned') }}
+                    </v-chip>
+                  </template>
+
+                  <div class="pa-1">
+                    <div
+                      v-for="skill in project.learned"
+                      :key="skill[locale]"
+                      class="text-caption"
+                    >
+                      • {{ skill[locale] }}
+                    </div>
+                  </div>
+                </v-tooltip>
               </v-card-text>
 
-              <v-card-actions class="pa-6 pt-auto">
+              <v-divider />
+
+              <v-card-actions class="pa-4">
                 <v-btn
                   :href="project.url"
                   target="_blank"
                   rel="noopener noreferrer"
                   color="primary"
-                  variant="outlined"
+                  variant="tonal"
                   size="small"
-                  class="mr-2"
+                  prepend-icon="mdi-github"
                   @click.stop
                 >
-                  <v-icon start>
-                    mdi-github
-                  </v-icon>
                   Code
                 </v-btn>
 
@@ -676,23 +578,20 @@ function openProjectDetails(project: IProject) {
                   color="secondary"
                   variant="text"
                   size="small"
+                  prepend-icon="mdi-open-in-new"
                   @click.stop
                 >
-                  <v-icon start>
-                    mdi-open-in-new
-                  </v-icon>
                   Demo
                 </v-btn>
 
                 <v-spacer />
 
-                <v-chip
-                  color="accent"
-                  size="x-small"
-                  variant="flat"
-                >
-                  {{ project.category }}
-                </v-chip>
+                <v-btn
+                  variant="text"
+                  size="small"
+                  color="primary"
+                  icon="mdi-arrow-right"
+                />
               </v-card-actions>
             </v-card>
           </v-col>
@@ -700,44 +599,35 @@ function openProjectDetails(project: IProject) {
       </v-row>
     </v-container>
 
-    <!-- Call to Action -->
-    <v-container class="py-16">
-      <v-row justify="center">
-        <v-col
-          cols="12"
-          md="8"
-          class="text-center"
+    <!-- CTA -->
+    <div class="cta-band py-16">
+      <div class="cta-pattern" />
+
+      <v-container
+        class="text-center"
+        style="position: relative; z-index: 1;"
+      >
+        <h2 class="text-h4 font-weight-bold mb-3 text-white">
+          {{ $t('projects.cta.title') }}
+        </h2>
+
+        <p class="cta-subtitle mb-6">
+          {{ $t('projects.cta.subtitle') }}
+        </p>
+
+        <v-btn
+          href="https://github.com/JakubTuta"
+          target="_blank"
+          rel="noopener noreferrer"
+          color="white"
+          size="large"
+          variant="elevated"
+          prepend-icon="mdi-github"
         >
-          <v-card
-            class="cta-card pa-8"
-            color="primary"
-            variant="flat"
-          >
-            <h3 class="text-h4 font-weight-bold mb-4 text-white">
-              {{ $t('projects.cta.title') }}
-            </h3>
-
-            <p class="text-h6 mb-6 text-white opacity-90">
-              {{ $t('projects.cta.subtitle') }}
-            </p>
-
-            <v-btn
-              href="https://github.com/JakubTuta"
-              target="_blank"
-              rel="noopener noreferrer"
-              color="white"
-              size="large"
-              variant="elevated"
-            >
-              <v-icon start>
-                mdi-github
-              </v-icon>
-              {{ $t('projects.cta.button') }}
-            </v-btn>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+          {{ $t('projects.cta.button') }}
+        </v-btn>
+      </v-container>
+    </div>
   </div>
 
   <project-details
@@ -751,149 +641,173 @@ function openProjectDetails(project: IProject) {
   background: rgb(var(--v-theme-background));
 }
 
-.hero-section {
+/* Hero */
+.projects-hero {
+  position: relative;
   background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-  color: rgb(var(--v-theme-on-primary));
-  padding: 6rem 0 4rem;
+  overflow: hidden;
+}
+
+.projects-hero-pattern {
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.projects-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 300;
-  color: rgb(var(--v-theme-on-primary));
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
-  opacity: 0.9;
+  font-size: 1.15rem;
   font-weight: 300;
-  color: rgb(var(--v-theme-on-primary));
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 300;
-  color: rgb(var(--v-theme-on-background));
+.stat-pill {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  backdrop-filter: blur(4px);
+  min-width: 100px;
 }
 
-.section-subtitle {
-  font-size: 1.1rem;
-  color: rgb(var(--v-theme-on-surface-variant));
-  max-width: 600px;
-  margin: 0 auto;
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
 }
 
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+/* Section headers */
+.section-header {
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 2px solid rgb(var(--v-theme-primary));
+  padding-bottom: 0.4rem;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--v-theme-primary));
+}
+
+/* Featured Carousel */
 .featured-carousel {
-  border-radius: 16px !important;
+  border-radius: 20px !important;
   overflow: hidden;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
 }
 
-.featured-project-card,
-.featured-project-loading-card {
-  border-radius: 16px !important;
+.featured-card {
   background: rgb(var(--v-theme-surface));
+  border-radius: 0 !important;
 }
 
-.project-image-section {
+.featured-image-col {
+  overflow: hidden;
+  min-height: 300px;
   background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-  position: relative;
 }
 
-.project-placeholder {
-  background: rgba(var(--v-theme-on-primary), 0.1);
+.featured-placeholder {
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
 }
 
-.project-icon {
-  opacity: 0.7;
-  color: rgb(var(--v-theme-on-primary)) !important;
+.placeholder-icon {
+  opacity: 0.35;
+  color: #fff !important;
 }
 
-.tech-stack .v-chip {
-  margin: 2px;
+.tracking-wide {
+  letter-spacing: 0.08em;
 }
 
+/* Project cards */
 .project-card {
-  transition: all 0.3s ease;
   border-radius: 16px !important;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.08) !important;
   background: rgb(var(--v-theme-surface));
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+  overflow: hidden;
 }
 
 .project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12) !important;
+  border-color: rgba(var(--v-theme-primary), 0.25) !important;
 }
 
-.project-card-image {
-  height: 200px;
+.card-image-wrap {
   position: relative;
+  height: 200px;
   overflow: hidden;
 }
 
-.project-image-placeholder {
-  height: 100%;
-  background: linear-gradient(135deg, rgb(var(--v-theme-surface-variant)) 0%, rgb(var(--v-theme-primary)) 100%);
+.card-image-placeholder {
+  height: 200px;
+  background: linear-gradient(135deg, rgb(var(--v-theme-surface-variant)) 0%, rgba(var(--v-theme-primary), 0.3) 100%);
 }
 
-.cta-card {
-  border-radius: 16px !important;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%) !important;
+.card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 4px;
 }
 
-/* Loading skeleton animations */
-:deep(.v-skeleton-loader__bone) {
-  background: linear-gradient(90deg,
-    rgb(var(--v-theme-surface-variant)) 25%,
-    rgba(var(--v-theme-on-surface), 0.05) 50%,
-    rgb(var(--v-theme-surface-variant)) 75%
-  );
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
+/* CTA band */
+.cta-band {
+  position: relative;
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+  overflow: hidden;
 }
 
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.cta-pattern {
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
-/* Responsive adjustments */
-@media (max-width: 960px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .featured-project-card .v-card-text,
-  .featured-project-loading-card .v-card-text {
-    padding: 2rem !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-section {
-    padding: 4rem 0 2rem;
-  }
-
-  .featured-project-card .v-card-text,
-  .featured-project-loading-card .v-card-text {
-    padding: 1rem !important;
-  }
-
-  .project-actions .v-btn {
-    margin-bottom: 0.5rem;
-  }
+.cta-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 300;
 }
 </style>

@@ -13,6 +13,8 @@ const { locale, t } = useI18n()
 
 // Utility functions
 function scrollToSection(id: string) {
+  if (import.meta.server)
+    return
   document.getElementById(id)?.scrollIntoView({
     behavior: 'smooth',
     block: 'start',
@@ -20,6 +22,8 @@ function scrollToSection(id: string) {
 }
 
 function copyText(text: string) {
+  if (import.meta.server)
+    return
   navigator.clipboard.writeText(text)
 }
 

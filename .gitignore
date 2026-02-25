@@ -30,3 +30,5 @@ logs
 .github/copilot-instructions.md
 BLOG_WRITING_GUIDE.md
 example_blogs/
+CLAUDE.md
+.claude/

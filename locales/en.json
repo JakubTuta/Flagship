@@ -30,7 +30,18 @@
         "title": "Files",
         "description": "Secure file management system for authenticated users. Upload, download, and manage your personal files with cloud storage.",
         "tags": "files, storage, upload, download, personal files, cloud storage, file management"
+      },
+      "notFound": {
+        "title": "Page Not Found",
+        "description": "The page you're looking for doesn't exist or has been moved."
       }
+    }
+  },
+  "error": {
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you're looking for doesn't exist or has been moved.",
+      "cta": "Back to Home"
     }
   },
   "navigation": {
@@ -65,7 +76,9 @@
     "database": "Databases",
     "others": "And more...",
     "containerizationAndOrchestration": "Containerization and Orchestration",
-    "versionControl": "Version control"
+    "versionControl": "Version control",
+    "apiIntegration": "API Integration",
+    "devops": "DevOps & CI/CD"
   },
   "contact": {
     "email": {
@@ -82,7 +95,7 @@
   },
   "landingPage": {
     "hero": {
-      "info": "Back End Developer & Technical Blogger",
+      "info": "Back-End Python Developer",
       "about": "About Me",
       "contact": "Get in Touch"
     },
@@ -90,6 +103,29 @@
       "title": "What I Do",
       "subtitle": "I build modern web applications and write about technology to help developers grow",
       "learnMore": "Learn More"
+    },
+    "bio": {
+      "title": "About Me",
+      "paragraph": "Backend-focused Software Engineer with 2+ years of professional experience designing and deploying scalable server-side systems. Specialized in Python (FastAPI, Django) with a strong emphasis on API performance optimization, database design, and microservice architecture. Experienced in deploying and managing production workloads on Google Cloud Platform — Cloud Run, Cloud Functions, and Firebase. I approach backend development with a software engineering mindset: clear architecture, documented APIs, and infrastructure that scales reliably under load. Vue.js and Nuxt.js serve as my frontend tools when full-stack delivery is needed.",
+      "quote": "A book that doesn't deserve to be reread wasn't worth reading in the first place. [...] But until we've read it, we don't know whether it deserves a second reading. Such is the cruelty of life.",
+      "quoteAuthor": "— Jaume Cabrè, Confessions"
+    },
+    "stats": {
+      "experience": "Years of experience",
+      "projects": "Projects built",
+      "articles": "Articles written",
+      "technologies": "Technologies"
+    },
+    "featuredProjects": {
+      "title": "Featured Projects",
+      "subtitle": "A selection of things I've built — click to explore the full showcase.",
+      "cta": "All projects"
+    },
+    "topBlogs": {
+      "title": "Most Read Articles",
+      "subtitle": "Posts that resonated most with readers.",
+      "cta": "All articles",
+      "views": "views"
     },
     "skills": {
       "title": "Technical Skills",
@@ -202,7 +238,8 @@
   "common": {
     "close": "Close",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "details": "Details"
   },
   "admin": {
     "blog": {
@@ -287,7 +324,8 @@
       "category": "Category",
       "sortByDate": "Sort from the latest to the oldest",
       "sortByViews": "Sort from the most read",
-      "sortBy": "Sorting"
+      "sortBy": "Sorting",
+      "categories": "Categories"
     },
     "noResults": {
       "title": "No blogs from the given category",

@@ -36,16 +36,24 @@ watch(locale, (newLocale) => {
 </script>
 
 <template>
+  <a
+    href="#main-content"
+    class="skip-link"
+  >
+    Skip to content
+  </a>
+
   <v-btn
     v-if="mobile"
     icon="mdi-menu"
     rounded="circle"
+    aria-label="Toggle navigation menu"
     class="d-print-none floating-btn mobile-menu-btn"
     elevation="15"
     @click="drawerStore.toggleDrawer()"
   />
 
-  <v-main>
+  <v-main id="main-content">
     <slot />
 
     <LazyNavigationDrawer
@@ -57,6 +65,23 @@ watch(locale, (newLocale) => {
 </template>
 
 <style scoped>
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 .mobile-menu-btn {
   position: fixed;
   top: 16px;

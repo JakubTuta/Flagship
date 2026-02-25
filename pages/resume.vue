@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-
 const { t, locale } = useI18n()
 const resumeStore = useResumeStore()
 const { resume } = storeToRefs(resumeStore)
@@ -38,8 +36,6 @@ addBreadcrumbs([
   { name: 'Home', item: '/' },
   { name: 'Resume', item: '/resume' },
 ])
-
-const { mobile } = useDisplay()
 
 const fallbackPersonalInfo = {
   name: 'Jakub Tutka',
@@ -253,580 +249,582 @@ function calculateDate(date1: Date, date2: Date | null): string {
 </script>
 
 <template>
-  <div class="cv-container">
-    <v-row justify="center">
-      <v-col
-        cols="12"
-        lg="8"
-        xl="6"
-      >
-        <v-card
-          class="cv-card"
-          elevation="20"
+  <div class="cv-page">
+    <!-- Hero / Header -->
+    <div class="cv-hero">
+      <div class="cv-hero-overlay" />
+
+      <v-container class="cv-hero-content py-12">
+        <v-row
+          align="center"
+          justify="space-between"
         >
-          <!-- Header Section -->
-          <v-card-title class="header-section pa-8">
-            <v-row align="center">
-              <v-col
-                cols="12"
-                md="8"
-              >
-                <h1 class="font-weight-bold display-1 mb-2">
-                  {{ personalInfo.name }}
-                </h1>
+          <!-- Name + title -->
+          <v-col
+            cols="12"
+            md="7"
+          >
+            <p class="hero-eyebrow mb-1">
+              {{ t('resume.print') }}
+            </p>
 
-                <div
-                  class="text-h5 text-high-emphasis"
-                  :class="{'text-center': mobile}"
+            <h1 class="hero-name mb-2">
+              {{ personalInfo.name }}
+            </h1>
+
+            <p class="hero-title mb-6">
+              {{ getTranslatedText(personalInfo.title) }}
+            </p>
+
+            <!-- Contact row -->
+            <div class="contact-row">
+              <div class="contact-item">
+                <v-icon
+                  size="16"
+                  class="mr-1"
                 >
-                  {{ getTranslatedText(personalInfo.title) }}
-                </div>
-              </v-col>
+                  mdi-email-outline
+                </v-icon>
 
-              <v-col
-                cols="12"
-                md="4"
-                class="text-md-right"
-              >
-                <div
-                  class="contact-info"
-                  :class="{'d-flex justify-end': mobile}"
+                <span>{{ personalInfo.email }}</span>
+              </div>
+
+              <div class="contact-item">
+                <v-icon
+                  size="16"
+                  class="mr-1"
                 >
-                  <v-chip
-                    class="ma-1"
-                    color="primary"
-                    variant="elevated"
-                    :class="{'w-70%': mobile}"
-                  >
-                    <v-icon start>
-                      mdi-email
-                    </v-icon>
-                    {{ personalInfo.email }}
-                  </v-chip>
+                  mdi-phone-outline
+                </v-icon>
 
-                  <v-chip
-                    class="ma-1"
-                    color="primary"
-                    variant="elevated"
-                    :class="{'w-70%': mobile}"
-                  >
-                    <v-icon start>
-                      mdi-phone
-                    </v-icon>
-                    {{ personalInfo.phone }}
-                  </v-chip>
+                <span>{{ personalInfo.phone }}</span>
+              </div>
 
-                  <v-chip
-                    class="ma-1"
-                    color="primary"
-                    variant="elevated"
-                    :class="{'w-70%': mobile}"
-                  >
-                    <v-icon start>
-                      mdi-map-marker
-                    </v-icon>
-                    {{ getTranslatedText(personalInfo.location) }}
-                  </v-chip>
+              <div class="contact-item">
+                <v-icon
+                  size="16"
+                  class="mr-1"
+                >
+                  mdi-map-marker-outline
+                </v-icon>
 
-                  <v-chip
-                    class="ma-1"
-                    color="primary"
-                    variant="elevated"
-                    :class="{'w-70%': mobile}"
-                  >
-                    <v-icon start>
-                      mdi-calendar
-                    </v-icon>
-                    {{ personalInfo.birthDate }}
-                  </v-chip>
-                </div>
-              </v-col>
-            </v-row>
-            <!-- Download PDF Button -->
+                <span>{{ getTranslatedText(personalInfo.location) }}</span>
+              </div>
+
+              <div class="contact-item">
+                <v-icon
+                  size="16"
+                  class="mr-1"
+                >
+                  mdi-cake-variant-outline
+                </v-icon>
+
+                <span>{{ personalInfo.birthDate }}</span>
+              </div>
+            </div>
+          </v-col>
+
+          <!-- Actions + social links -->
+          <v-col
+            cols="12"
+            md="auto"
+            class="d-flex flex-column align-md-end gap-3 align-start"
+          >
             <v-btn
               color="white"
               variant="outlined"
-              :class="mobile
-                ? 'mt-4'
-                : ''"
+              prepend-icon="mdi-download"
               @click="handlePrint"
             >
-              <v-icon start>
-                mdi-download
-              </v-icon>
               {{ t('resume.print') }}
             </v-btn>
-          </v-card-title>
 
-          <v-divider />
+            <div class="d-flex gap-2">
+              <v-btn
+                v-for="link in links"
+                :key="getTranslatedText(link.name)"
+                :href="link.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                :icon="link.icon"
+                color="white"
+                variant="text"
+                size="small"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
 
-          <!-- Main Content -->
-          <v-card-text class="pa-8">
-            <v-row>
-              <!-- Left Column -->
-              <v-col
-                cols="12"
-                md="8"
+    <!-- Body -->
+    <v-container class="cv-body py-10">
+      <v-row>
+        <!-- Left: main content -->
+        <v-col
+          cols="12"
+          md="8"
+        >
+          <!-- Experience -->
+          <section class="cv-section mb-10">
+            <div class="section-header mb-6">
+              <v-icon
+                color="primary"
+                size="20"
+                class="mr-2"
               >
-                <!-- Education Section -->
-                <section class="mb-8">
-                  <h2 class="section-title mb-4">
-                    <v-icon
-                      class="mr-2"
-                      color="primary"
-                    >
-                      mdi-school
-                    </v-icon>
-                    {{ t('resume.education.title') }}
-                  </h2>
+                mdi-briefcase-outline
+              </v-icon>
 
-                  <v-card
-                    v-for="(edu, index) in education"
-                    :key="index"
-                    class="education-card mb-4"
-                    variant="outlined"
-                  >
-                    <v-card-text>
-                      <div class="d-flex justify-space-between align-center mb-2">
-                        <h3 class="text-h6 font-weight-medium max-w-75%">
-                          {{ getTranslatedText(edu.institution) }}
-                        </h3>
+              <span class="section-label">{{ t('resume.work.title') }}</span>
+            </div>
 
-                        <v-chip
-                          v-if="!mobile"
-                          color="primary"
-                          size="small"
-                        >
-                          {{ datePeriod(edu.startDate, edu.endDate) }}
-                        </v-chip>
-                      </div>
+            <div
+              v-for="(exp, index) in workExperience"
+              :key="index"
+              class="timeline-item"
+            >
+              <div class="timeline-dot" />
 
-                      <v-chip
-                        v-if="mobile"
-                        color="primary"
-                        size="small"
-                        class="mb-3"
-                      >
-                        {{ datePeriod(edu.startDate, edu.endDate) }}
-                      </v-chip>
+              <div class="timeline-card mb-6">
+                <div class="d-flex justify-space-between mb-1 flex-wrap gap-2 align-start">
+                  <h3 class="text-h6 font-weight-semibold">
+                    {{ getTranslatedText(exp.position) }}
+                  </h3>
 
-                      <div class="text-body-1 mb-1">
-                        <strong>{{ t('resume.education.field') }}:</strong> {{ getTranslatedText(edu.field) }}
-                      </div>
-
-                      <div class="text-body-1 mb-1">
-                        <strong>{{ t('resume.education.specialization') }}:</strong> {{ getTranslatedText(edu.specialization) }}
-                      </div>
-
-                      <div class="text-body-1">
-                        <strong>{{ t('resume.education.level') }}:</strong> {{ getTranslatedText(edu.level) }}
-                      </div>
-                    </v-card-text>
-                  </v-card>
-                </section>
-
-                <!-- Experience Section -->
-                <section class="mb-8">
-                  <h2 class="section-title mb-4">
-                    <v-icon
-                      class="mr-2"
-                      color="primary"
-                    >
-                      mdi-briefcase
-                    </v-icon>
-                    {{ t('resume.work.title') }}
-                  </h2>
-
-                  <v-card
-                    v-for="(exp, index) in workExperience"
-                    :key="index"
-                    class="experience-card mb-4"
-                    variant="outlined"
-                  >
-                    <v-card-text>
-                      <div class="d-flex justify-space-between align-center mb-2">
-                        <h3 class="text-h6 font-weight-medium max-w-75%">
-                          {{ getTranslatedText(exp.position) }}
-                        </h3>
-
-                        <v-chip
-                          v-if="!mobile"
-                          color="success"
-                          size="small"
-                        >
-                          {{ datePeriod(exp.startDate, exp.endDate) }}
-                        </v-chip>
-                      </div>
-
-                      <div class="text-subtitle-1 font-weight-medium mb-3">
-                        {{ exp.company }}
-                      </div>
-
-                      <div class="experience-duration mb-3">
-                        <v-chip
-                          v-if="mobile"
-                          color="success"
-                          size="small"
-                          class="mr-2"
-                        >
-                          {{ datePeriod(exp.startDate, exp.endDate) }}
-                        </v-chip>
-
-                        <v-chip
-                          color="info"
-                          size="small"
-                          variant="outlined"
-                        >
-                          {{ calculateDate(exp.startDate, exp.endDate) }}
-                        </v-chip>
-                      </div>
-
-                      <div class="text-body-1">
-                        <p class="mb-2">
-                          <strong>{{ t('resume.work.responsibilities') }}:</strong>
-                        </p>
-
-                        <ul class="experience-list">
-                          <li
-                            v-for="(responsibility, respIndex) in exp.responsibilities"
-                            :key="respIndex"
-                          >
-                            {{ getTranslatedText(responsibility) }}
-                          </li>
-                        </ul>
-                      </div>
-                    </v-card-text>
-                  </v-card>
-                </section>
-
-                <!-- Additional Activities Section -->
-                <section class="mb-8">
-                  <h2 class="section-title mb-4">
-                    <v-icon
-                      class="mr-2"
-                      color="primary"
-                    >
-                      mdi-lightbulb
-                    </v-icon>
-                    {{ t('resume.activities.title') }}
-                  </h2>
-
-                  <v-card
-                    v-for="(activity, index) in additionalActivities"
-                    :key="index"
-                    class="activity-card mb-4"
-                    variant="outlined"
-                  >
-                    <v-card-text>
-                      <div class="d-flex justify-space-between align-center mb-2">
-                        <h3 class="text-h6 font-weight-medium max-w-75%">
-                          {{ getTranslatedText(activity.title) }}
-                        </h3>
-
-                        <v-chip
-                          v-if="!mobile"
-                          color="warning"
-                          size="small"
-                        >
-                          {{ datePeriod(activity.startDate, activity.endDate) }}
-                        </v-chip>
-                      </div>
-
-                      <div class="text-subtitle-1 font-weight-medium mb-3">
-                        {{ activity.project }}
-                      </div>
-
-                      <div class="activity-duration mb-3">
-                        <v-chip
-                          v-if="mobile"
-                          color="warning"
-                          size="small"
-                          class="mr-2"
-                        >
-                          {{ datePeriod(activity.startDate, activity.endDate) }}
-                        </v-chip>
-
-                        <v-chip
-                          color="info"
-                          size="small"
-                          variant="outlined"
-                        >
-                          {{ calculateDate(activity.startDate, activity.endDate) }}
-                        </v-chip>
-                      </div>
-
-                      <div class="text-body-1">
-                        <ul class="activity-list">
-                          <li
-                            v-for="(act, actIndex) in activity.activities"
-                            :key="actIndex"
-                          >
-                            {{ getTranslatedText(act) }}
-                          </li>
-                        </ul>
-                      </div>
-                    </v-card-text>
-                  </v-card>
-                </section>
-              </v-col>
-
-              <!-- Right Column -->
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <!-- Skills Section -->
-                <section class="mb-8">
-                  <h2 class="section-title mb-4">
-                    <v-icon
-                      class="mr-2"
-                      color="primary"
-                    >
-                      mdi-code-tags
-                    </v-icon>
-                    {{ t('resume.skills.title') }}
-                  </h2>
-
-                  <div class="skills-container">
-                    <div
-                      v-for="skillCategory in skills"
-                      :key="getTranslatedText(skillCategory.title)"
-                      class="skill-category mb-4"
-                    >
-                      <h4 class="text-subtitle-1 font-weight-medium mb-2">
-                        {{ getTranslatedText(skillCategory.title) }}
-                      </h4>
-
-                      <div class="skill-chips">
-                        <v-chip
-                          v-for="skill in skillCategory.skills"
-                          :key="skill.name"
-                          class="ma-1"
-                          :color="skill.color"
-                          variant="flat"
-                        >
-                          {{ skill.name }}
-                        </v-chip>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- Interests Section -->
-                <section class="mb-8">
-                  <h2 class="section-title mb-4">
-                    <v-icon
-                      class="mr-2"
-                      color="primary"
-                    >
-                      mdi-heart
-                    </v-icon>
-                    {{ t('resume.interests.title') }}
-                  </h2>
-
-                  <div class="interests-container">
+                  <div class="d-flex align-center flex-wrap gap-2">
                     <v-chip
-                      v-for="interest in interests"
-                      :key="getTranslatedText(interest.name)"
-                      class="ma-1"
-                      :color="interest.color"
+                      size="x-small"
+                      color="primary"
+                      variant="tonal"
+                    >
+                      {{ datePeriod(exp.startDate, exp.endDate) }}
+                    </v-chip>
+
+                    <v-chip
+                      size="x-small"
                       variant="outlined"
                     >
-                      <v-icon start>
-                        {{ interest.icon }}
-                      </v-icon>
-                      {{ getTranslatedText(interest.name) }}
+                      {{ calculateDate(exp.startDate, exp.endDate) }}
                     </v-chip>
                   </div>
-                </section>
+                </div>
 
-                <!-- Links Section -->
-                <section class="mb-4">
-                  <h2 class="section-title mb-4">
-                    <v-icon
-                      class="mr-2"
-                      color="primary"
-                    >
-                      mdi-link
-                    </v-icon>
-                    {{ t('resume.links.title') }}
-                  </h2>
+                <p class="text-subtitle-2 text-medium-emphasis font-weight-medium mb-3">
+                  {{ exp.company }}
+                </p>
 
-                  <v-btn
-                    v-for="link in links"
-                    :key="getTranslatedText(link.name)"
-                    :href="link.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :color="link.color"
-                    variant="outlined"
-                    block
-                    class="mb-2"
+                <div class="d-flex flex-column gap-2">
+                  <div
+                    v-for="(responsibility, respIndex) in exp.responsibilities"
+                    :key="respIndex"
+                    class="d-flex gap-2 align-start"
                   >
-                    <v-icon start>
-                      {{ link.icon }}
+                    <v-icon
+                      color="primary"
+                      size="14"
+                      class="mt-1 flex-shrink-0"
+                    >
+                      mdi-circle-small
                     </v-icon>
-                    {{ getTranslatedText(link.name) }}
-                  </v-btn>
-                </section>
-              </v-col>
-            </v-row>
-          </v-card-text>
 
-          <!-- Footer -->
-          <v-divider />
-
-          <v-card-text class="footer-section pa-4 text-center">
-            <div class="text-caption text-medium-emphasis">
-              <v-icon
-                size="small"
-                class="mr-1"
-              >
-                mdi-shield-check
-              </v-icon>
-              {{ resume?.footerText
-                ? getTranslatedText(resume.footerText)
-                : t('resume.footer.text') }}
+                    <span class="text-body-2">{{ getTranslatedText(responsibility) }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+          </section>
+
+          <!-- Education -->
+          <section class="cv-section mb-10">
+            <div class="section-header mb-6">
+              <v-icon
+                color="primary"
+                size="20"
+                class="mr-2"
+              >
+                mdi-school-outline
+              </v-icon>
+
+              <span class="section-label">{{ t('resume.education.title') }}</span>
+            </div>
+
+            <div
+              v-for="(edu, index) in education"
+              :key="index"
+              class="timeline-item"
+            >
+              <div class="timeline-dot" />
+
+              <div class="timeline-card mb-6">
+                <div class="d-flex justify-space-between mb-1 flex-wrap gap-2 align-start">
+                  <h3 class="text-h6 font-weight-semibold">
+                    {{ getTranslatedText(edu.institution) }}
+                  </h3>
+
+                  <v-chip
+                    size="x-small"
+                    color="primary"
+                    variant="tonal"
+                  >
+                    {{ datePeriod(edu.startDate, edu.endDate) }}
+                  </v-chip>
+                </div>
+
+                <p class="text-subtitle-2 text-medium-emphasis font-weight-medium mb-3">
+                  {{ getTranslatedText(edu.level) }}
+                </p>
+
+                <div class="d-flex flex-column gap-1">
+                  <div class="d-flex text-body-2 gap-2">
+                    <span class="text-medium-emphasis">{{ t('resume.education.field') }}:</span>
+
+                    <span>{{ getTranslatedText(edu.field) }}</span>
+                  </div>
+
+                  <div class="d-flex text-body-2 gap-2">
+                    <span class="text-medium-emphasis">{{ t('resume.education.specialization') }}:</span>
+
+                    <span>{{ getTranslatedText(edu.specialization) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Additional Activities -->
+          <section class="cv-section mb-4">
+            <div class="section-header mb-6">
+              <v-icon
+                color="primary"
+                size="20"
+                class="mr-2"
+              >
+                mdi-lightbulb-outline
+              </v-icon>
+
+              <span class="section-label">{{ t('resume.activities.title') }}</span>
+            </div>
+
+            <div
+              v-for="(activity, index) in additionalActivities"
+              :key="index"
+              class="timeline-item"
+            >
+              <div class="timeline-dot" />
+
+              <div class="timeline-card mb-6">
+                <div class="d-flex justify-space-between mb-1 flex-wrap gap-2 align-start">
+                  <h3 class="text-h6 font-weight-semibold">
+                    {{ getTranslatedText(activity.title) }}
+                  </h3>
+
+                  <div class="d-flex align-center flex-wrap gap-2">
+                    <v-chip
+                      size="x-small"
+                      color="warning"
+                      variant="tonal"
+                    >
+                      {{ datePeriod(activity.startDate, activity.endDate) }}
+                    </v-chip>
+
+                    <v-chip
+                      size="x-small"
+                      variant="outlined"
+                    >
+                      {{ calculateDate(activity.startDate, activity.endDate) }}
+                    </v-chip>
+                  </div>
+                </div>
+
+                <p class="text-subtitle-2 text-medium-emphasis font-weight-medium mb-3">
+                  {{ activity.project }}
+                </p>
+
+                <div class="d-flex flex-column gap-2">
+                  <div
+                    v-for="(act, actIndex) in activity.activities"
+                    :key="actIndex"
+                    class="d-flex gap-2 align-start"
+                  >
+                    <v-icon
+                      color="warning"
+                      size="14"
+                      class="mt-1 flex-shrink-0"
+                    >
+                      mdi-circle-small
+                    </v-icon>
+
+                    <span class="text-body-2">{{ getTranslatedText(act) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </v-col>
+
+        <!-- Right: sidebar -->
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <!-- Skills -->
+          <section class="cv-section mb-8">
+            <div class="section-header mb-5">
+              <v-icon
+                color="primary"
+                size="20"
+                class="mr-2"
+              >
+                mdi-code-tags
+              </v-icon>
+
+              <span class="section-label">{{ t('resume.skills.title') }}</span>
+            </div>
+
+            <div class="d-flex flex-column gap-5">
+              <div
+                v-for="skillCategory in skills"
+                :key="getTranslatedText(skillCategory.title)"
+              >
+                <p class="text-caption text-uppercase font-weight-bold text-medium-emphasis mb-2 tracking-wide">
+                  {{ getTranslatedText(skillCategory.title) }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-1">
+                  <v-chip
+                    v-for="skill in skillCategory.skills"
+                    :key="skill.name"
+                    size="small"
+                    :color="skill.color"
+                    variant="tonal"
+                  >
+                    {{ skill.name }}
+                  </v-chip>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <v-divider class="mb-8" />
+
+          <!-- Interests -->
+          <section class="cv-section mb-8">
+            <div class="section-header mb-5">
+              <v-icon
+                color="primary"
+                size="20"
+                class="mr-2"
+              >
+                mdi-heart-outline
+              </v-icon>
+
+              <span class="section-label">{{ t('resume.interests.title') }}</span>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+              <v-chip
+                v-for="interest in interests"
+                :key="getTranslatedText(interest.name)"
+                :color="interest.color"
+                variant="tonal"
+                size="small"
+                :prepend-icon="interest.icon"
+              >
+                {{ getTranslatedText(interest.name) }}
+              </v-chip>
+            </div>
+          </section>
+
+          <v-divider class="mb-8" />
+
+          <!-- Links -->
+          <section class="cv-section">
+            <div class="section-header mb-5">
+              <v-icon
+                color="primary"
+                size="20"
+                class="mr-2"
+              >
+                mdi-link-variant
+              </v-icon>
+
+              <span class="section-label">{{ t('resume.links.title') }}</span>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+              <v-btn
+                v-for="link in links"
+                :key="getTranslatedText(link.name)"
+                :href="link.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                :color="link.color"
+                :prepend-icon="link.icon"
+                variant="tonal"
+                block
+                justify="start"
+              >
+                {{ getTranslatedText(link.name) }}
+              </v-btn>
+            </div>
+          </section>
+        </v-col>
+      </v-row>
+
+      <!-- Footer note -->
+      <v-divider class="mb-4 mt-10" />
+
+      <p class="text-caption text-medium-emphasis text-center">
+        <v-icon
+          size="14"
+          class="mr-1"
+        >
+          mdi-shield-check-outline
+        </v-icon>
+        {{ resume?.footerText
+          ? getTranslatedText(resume.footerText)
+          : t('resume.footer.text') }}
+      </p>
+    </v-container>
   </div>
 </template>
 
 <style scoped>
-.cv-container {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+/* Page wrapper */
+.cv-page {
+  background: rgb(var(--v-theme-background));
   min-height: 100vh;
-  padding: 2rem 0;
 }
 
-.cv-card {
-  border-radius: 16px !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
-  background-color: rgb(var(--v-theme-surface)) !important;
-}
-
-.header-section {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-  color: rgb(var(--v-theme-on-primary));
-  border-radius: 16px 16px 0 0 !important;
+/* ── Hero ────────────────────────────────── */
+.cv-hero {
   position: relative;
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+  overflow: hidden;
 }
 
-.header-section .display-1 {
-  font-size: 3rem !important;
-  font-weight: 700 !important;
-  color: rgb(var(--v-theme-on-primary)) !important;
+.cv-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.cv-hero-overlay {
+  display: none;
 }
 
-.contact-info .v-chip {
-  justify-content: flex-start;
+.cv-hero-content {
+  position: relative;
+  z-index: 1;
 }
 
-.section-title {
-  color: rgb(var(--v-theme-primary));
+.hero-eyebrow {
+  font-size: 0.75rem;
   font-weight: 600;
-  font-size: 1.5rem;
-  border-bottom: 2px solid rgb(var(--v-theme-primary));
-  padding-bottom: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.hero-name {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.hero-title {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+
+.contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.contact-item {
   display: flex;
   align-items: center;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.85);
+  gap: 4px;
 }
 
-.education-card,
-.experience-card,
-.activity-card {
-  transition: all 0.3s ease;
-  border-left: 4px solid rgb(var(--v-theme-primary)) !important;
-  background-color: rgb(var(--v-theme-surface)) !important;
+/* ── Body ────────────────────────────────── */
+.cv-body {
+  max-width: 1100px;
 }
 
-.education-card:hover,
-.experience-card:hover,
-.activity-card:hover {
-  box-shadow: 0 8px 25px rgba(var(--v-theme-primary-transparent), 0.15) !important;
+/* ── Section header ──────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid rgb(var(--v-theme-primary));
+  padding-bottom: 0.5rem;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--v-theme-primary));
+}
+
+/* ── Timeline ────────────────────────────── */
+.timeline-item {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 24px;
+  bottom: -12px;
+  width: 2px;
+  background: rgba(var(--v-theme-primary), 0.15);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-primary));
+  border: 2px solid rgb(var(--v-theme-background));
+  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary), 0.25);
+}
+
+.timeline-card {
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.timeline-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
 
-.experience-list,
-.activity-list {
-  padding-left: 1.5rem;
-  margin: 0;
-}
-
-.experience-list li,
-.activity-list li {
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.skills-container {
-  background: rgb(var(--v-theme-surface-variant));
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.skill-category {
-  border-left: 3px solid rgb(var(--v-theme-primary));
-  padding-left: 1rem;
-}
-
-.skill-category h4 {
-  color: rgb(var(--v-theme-on-surface)) !important;
-}
-
-.skill-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.interests-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.footer-section {
-  background-color: rgb(var(--v-theme-surface-variant));
-  border-radius: 0 0 16px 16px;
-  color: rgb(var(--v-theme-on-surface-variant));
-}
-
-/* Responsive adjustments */
-@media (max-width: 960px) {
-  .contact-info {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .header-section .display-1 {
-    font-size: 2.5rem !important;
-    text-align: center;
-  }
-}
-
-@media (max-width: 600px) {
-  .cv-container {
-    padding: 1rem 0;
-  }
-
-  .header-section .display-1 {
-    font-size: 2rem !important;
-  }
-
-  .contact-info .v-chip {
-    font-size: 0.75rem;
-  }
+/* ── Sidebar ─────────────────────────────── */
+.tracking-wide {
+  letter-spacing: 0.1em;
 }
 </style>

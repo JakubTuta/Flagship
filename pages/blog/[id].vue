@@ -100,8 +100,8 @@ watch(() => selectedBlog.value, (newBlog) => {
         : undefined,
       authorName: author.value?.username || 'Jakub Tutka',
       authorUrl: config.public.siteUrl,
-      category: categoryTitle.value,
-      keywords: [categoryTitle.value, 'development', 'programming'],
+      category: getCategoryTitle(newBlog.category),
+      keywords: [getCategoryTitle(newBlog.category), 'development', 'programming'],
     })
 
     // Add breadcrumbs
@@ -213,7 +213,7 @@ function formatDate(date: Date | string | null) {
     </div>
 
     <!-- Blog Content -->
-    <div
+    <article
       v-else
       class="blog-content"
     >
@@ -411,7 +411,7 @@ function formatDate(date: Date | string | null) {
           </v-chip-group>
         </v-card-text>
       </v-card>
-    </div>
+    </article>
   </v-container>
 </template>
 

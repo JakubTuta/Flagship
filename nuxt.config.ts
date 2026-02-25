@@ -28,6 +28,8 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', href: '/images/profile.jpg' },
         { rel: 'manifest', href: '/manifest.json' },
+        { rel: 'dns-prefetch', href: 'https://firestore.googleapis.com' },
+        { rel: 'preconnect', href: 'https://firestore.googleapis.com', crossorigin: 'anonymous' },
       ],
     },
   },

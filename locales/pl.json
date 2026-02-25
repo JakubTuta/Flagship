@@ -30,7 +30,18 @@
         "title": "Pliki",
         "description": "Bezpieczny system zarządzania plikami dla uwierzytelnionych użytkowników. Wgrywaj, pobieraj i zarządzaj swoimi plikami osobistymi w chmurze.",
         "tags": "pliki, przechowywanie, wgrywanie, pobieranie, pliki osobiste, chmura, zarządzanie plikami"
+      },
+      "notFound": {
+        "title": "Nie znaleziono strony",
+        "description": "Strona, której szukasz, nie istnieje lub została przeniesiona."
       }
+    }
+  },
+  "error": {
+    "notFound": {
+      "title": "Nie znaleziono strony",
+      "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
+      "cta": "Powrót na stronę główną"
     }
   },
   "navigation": {
@@ -65,7 +76,9 @@
     "database": "Bazy danych",
     "others": "I więcej...",
     "containerizationAndOrchestration": "Konteneryzacja i Orkiestracja",
-    "versionControl": "Kontrola wersji"
+    "versionControl": "Kontrola wersji",
+    "apiIntegration": "Integracja API",
+    "devops": "DevOps i CI/CD"
   },
   "contact": {
     "email": {
@@ -82,7 +95,7 @@
   },
   "landingPage": {
     "hero": {
-      "info": "Back End Developer i Techniczny Blogger",
+      "info": "Programista Back-End Python",
       "about": "O mnie",
       "contact": "Kontakt"
     },
@@ -91,13 +104,36 @@
       "subtitle": "Tworzę nowoczesne aplikacje webowe i piszę o technologii, aby pomóc developerom się rozwijać",
       "learnMore": "Dowiedz się więcej"
     },
+    "bio": {
+      "title": "O mnie",
+      "paragraph": "Programista backendowy z ponad 2-letnim doświadczeniem zawodowym w projektowaniu i wdrażaniu skalowalnych systemów serwerowych. Specjalizuję się w Pythonie (FastAPI, Django) z naciskiem na optymalizację wydajności API, projektowanie baz danych i architekturę mikroserwisów. Doświadczony we wdrażaniu produkcyjnych aplikacji na Google Cloud Platform — Cloud Run, Cloud Functions i Firebase. Do tworzenia backendu podchodzę z myśleniem inżynieryjnym: czysta architektura, udokumentowane API i infrastruktura skalująca się niezawodnie pod obciążeniem. Vue.js i Nuxt.js to moje narzędzia frontendowe, gdy potrzebne jest pełnostackowe wdrożenie.",
+      "quote": "Książki, która nie zasługuje na ponowne przeczytanie, nie warto było czytać w ogóle. [...] Ale dopóki jej nie przeczytamy, nie wiemy, czy zasługuje na drugie czytanie. Takie okrutne jest życie.",
+      "quoteAuthor": "— Jaume Cabrè, Wyznaję"
+    },
+    "stats": {
+      "experience": "Lata doświadczenia",
+      "projects": "Zbudowane projekty",
+      "articles": "Napisane artykuły",
+      "technologies": "Technologie"
+    },
+    "featuredProjects": {
+      "title": "Wyróżnione Projekty",
+      "subtitle": "Wybór rzeczy, które zbudowałem — kliknij, aby zobaczyć pełne portfolio.",
+      "cta": "Wszystkie projekty"
+    },
+    "topBlogs": {
+      "title": "Najczęściej czytane artykuły",
+      "subtitle": "Posty, które najbardziej trafiły do czytelników.",
+      "cta": "Wszystkie artykuły",
+      "views": "wyświetleń"
+    },
     "skills": {
       "title": "Umiejętności techniczne",
       "subtitle": "Technologie i narzędzia, których używam do tworzenia niezawodnych, skalowalnych rozwiązań"
     },
     "contact": {
       "title": "Współpracujmy",
-      "subtitle": "Zainteresowany współpracą lub masz projekt w planах? Chętnie się z Tobą skontaktuję."
+      "subtitle": "Zainteresowany współpracą lub masz projekt w planach? Chętnie się z Tobą skontaktuję."
     }
   },
   "footer": {
@@ -202,7 +238,8 @@
   "common": {
     "close": "Zamknij",
     "cancel": "Anuluj",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "details": "Szczegóły"
   },
   "admin": {
     "blog": {
@@ -287,7 +324,8 @@
       "category": "Kategoria",
       "sortByDate": "Sortuj od najnowszych do najstarszych",
       "sortByViews": "Sortuj od najczęściej czytanych",
-      "sortBy": "Sortowanie"
+      "sortBy": "Sortowanie",
+      "categories": "Kategorie"
     },
     "noResults": {
       "title": "Brak blogów z podanej kategorii",

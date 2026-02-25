@@ -16,7 +16,9 @@ function closeDialog() {
 <template>
   <v-dialog
     v-model="show"
-    max-width="800"
+    :max-width="mobile
+      ? undefined
+      : '780'"
     :fullscreen="mobile"
     scrollable
   >
@@ -25,81 +27,113 @@ function closeDialog() {
       class="project-details-card"
       :class="{'mobile-card': mobile}"
     >
-      <!-- Image on top -->
-      <div class="project-image-section">
-        <div class="d-flex align-center project-placeholder justify-center">
+      <!-- Hero image / placeholder banner -->
+      <div class="hero-section">
+        <v-img
+          v-if="project.image"
+          :src="project.image"
+          :alt="`${project.title} screenshot`"
+          cover
+          :height="mobile
+            ? 200
+            : 260"
+          class="hero-img"
+        >
+          <div class="hero-overlay" />
+        </v-img>
+
+        <div
+          v-else
+          class="d-flex align-center hero-placeholder justify-center"
+          :style="{'height': mobile
+            ? '200px'
+            : '260px'}"
+        >
           <v-icon
-            v-if="!project.image"
-            :size="mobile
-              ? '80'
-              : '120'"
-            color="primary"
-            class="project-icon"
+            size="96"
+            class="placeholder-icon"
           >
             mdi-code-braces
           </v-icon>
+        </div>
 
-          <v-img
-            v-else
-            :src="project.image"
-            :alt="`${project.title} screenshot`"
-            class="object-cover"
-            :height="mobile
-              ? '200'
-              : '300'"
-          />
+        <!-- Close button -->
+        <v-btn
+          icon
+          variant="flat"
+          size="small"
+          class="close-btn"
+          @click="closeDialog"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+
+        <!-- Title overlay -->
+        <div class="hero-title-bar pa-4">
+          <div class="d-flex align-center flex-wrap gap-2">
+            <span class="font-weight-bold text-h5 text-white">
+              {{ project.title }}
+            </span>
+
+            <v-icon
+              v-if="project.featured"
+              color="warning"
+              size="20"
+            >
+              mdi-star
+            </v-icon>
+
+            <v-chip
+              size="small"
+              variant="tonal"
+              color="white"
+              class="ml-1"
+            >
+              {{ project.category }}
+            </v-chip>
+          </div>
         </div>
       </div>
 
-      <!-- Header with project info -->
-      <v-card-title class="d-flex align-center pa-4">
-        <div class="font-weight-bold text-h5 mt-1">
-          {{ project.title }}
-        </div>
-
-        <v-icon
-          v-if="project.featured"
-          color="warning"
-          class="ml-2"
-        >
-          mdi-star
-        </v-icon>
-
-        <v-chip
-          color="accent"
-          size="small"
-          variant="outlined"
-          class="ml-3"
-        >
-          {{ project.category }}
-        </v-chip>
-      </v-card-title>
-
-      <v-divider />
-
-      <!-- Content -->
-      <v-card-text class="pa-6">
-        <p class="text-h6 text-medium-emphasis mb-4">
+      <!-- Scrollable content -->
+      <v-card-text class="content-area pa-6">
+        <!-- Short description -->
+        <p class="text-subtitle-1 text-medium-emphasis mb-4">
           {{ project.shortDescription[locale] }}
         </p>
 
-        <p class="text-body-1 mb-6">
+        <v-divider class="mb-4" />
+
+        <!-- Full description -->
+        <p
+          class="text-body-1 mb-6"
+          style="line-height: 1.75;"
+        >
           {{ project.description[locale] }}
         </p>
 
         <!-- Technologies -->
-        <div class="tech-stack mb-6">
-          <h4 class="text-subtitle-1 font-weight-medium mb-3">
-            {{ t('projects.technologies') }}:
-          </h4>
+        <div class="mb-6">
+          <div class="d-flex align-center mb-3 gap-2">
+            <v-icon
+              color="primary"
+              size="18"
+            >
+              mdi-layers
+            </v-icon>
+
+            <span class="text-uppercase font-weight-semibold text-subtitle-2 tracking-wide">
+              {{ t('projects.technologies') }}
+            </span>
+          </div>
 
           <div class="d-flex flex-wrap gap-2">
             <v-chip
               v-for="tech in project.technologies"
               :key="tech"
               size="small"
-              color="secondary"
-              variant="outlined"
+              color="primary"
+              variant="tonal"
             >
               {{ tech }}
             </v-chip>
@@ -107,54 +141,52 @@ function closeDialog() {
         </div>
 
         <!-- What I Learned -->
-        <div
-          v-if="project.learned.length > 0"
-          class="learned-section mb-6"
-        >
-          <h4 class="text-subtitle-1 font-weight-medium mb-3">
-            {{ t('projects.learned') }}:
-          </h4>
+        <div v-if="project.learned.length > 0">
+          <div class="d-flex align-center mb-3 gap-2">
+            <v-icon
+              color="success"
+              size="18"
+            >
+              mdi-lightbulb-on
+            </v-icon>
 
-          <v-list class="pa-0">
-            <v-list-item
+            <span class="text-subtitle-2 font-weight-semibold text-uppercase tracking-wide">
+              {{ t('projects.learned') }}
+            </span>
+          </div>
+
+          <div class="d-flex flex-column gap-2">
+            <div
               v-for="skill in project.learned"
               :key="skill[locale]"
-              class="mb-1 pa-0"
+              class="d-flex align-center gap-2"
             >
-              <template #prepend>
-                <v-icon
-                  color="success"
-                  size="small"
-                  class="mr-2"
-                >
-                  mdi-check-circle
-                </v-icon>
-              </template>
+              <v-icon
+                color="success"
+                size="16"
+              >
+                mdi-check-circle
+              </v-icon>
 
-              <v-list-item-title class="text-body-2">
-                {{ skill[locale] }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
+              <span class="text-body-2">{{ skill[locale] }}</span>
+            </div>
+          </div>
         </div>
       </v-card-text>
 
+      <v-divider />
+
       <!-- Action Buttons -->
-      <v-card-actions class="pa-6 pt-0">
+      <v-card-actions class="d-flex flex-wrap gap-2 pa-4">
         <v-btn
           :href="project.url"
           target="_blank"
           rel="noopener noreferrer"
           color="primary"
-          size="large"
-          :class="mobile
-            ? 'mb-2'
-            : 'mr-3'"
+          variant="elevated"
           :block="mobile"
+          prepend-icon="mdi-github"
         >
-          <v-icon start>
-            mdi-github
-          </v-icon>
           {{ t('projects.viewCode') }}
         </v-btn>
 
@@ -164,31 +196,20 @@ function closeDialog() {
           target="_blank"
           rel="noopener noreferrer"
           color="secondary"
-          size="large"
-          variant="outlined"
-          :class="mobile
-            ? 'mb-2'
-            : 'mr-3'"
+          variant="tonal"
           :block="mobile"
+          prepend-icon="mdi-open-in-new"
         >
-          <v-icon start>
-            mdi-open-in-new
-          </v-icon>
           {{ t('projects.liveDemo') }}
         </v-btn>
 
         <v-spacer v-if="!mobile" />
 
         <v-btn
-          color="error"
-          size="large"
-          variant="outlined"
+          variant="text"
           :block="mobile"
           @click="closeDialog"
         >
-          <v-icon start>
-            mdi-close
-          </v-icon>
           {{ t('common.close') }}
         </v-btn>
       </v-card-actions>
@@ -198,69 +219,79 @@ function closeDialog() {
 
 <style scoped>
 .project-details-card {
-  border-radius: 16px !important;
-  background: rgb(var(--v-theme-surface));
-  max-height: 90vh;
+  border-radius: 20px !important;
+  overflow: hidden;
 }
 
 .mobile-card {
   border-radius: 0 !important;
-  height: 100vh;
-  max-height: 100vh;
 }
 
-.project-image-section {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+/* Hero section */
+.hero-section {
   position: relative;
-  min-height: 200px;
+  flex-shrink: 0;
 }
 
-.project-placeholder {
-  background: rgba(var(--v-theme-on-primary), 0.1);
-  height: 100%;
-  min-height: 200px;
+.hero-img {
+  display: block;
+  width: 100%;
 }
 
-.project-icon {
-  opacity: 0.7;
-  color: rgb(var(--v-theme-on-primary)) !important;
+.hero-placeholder {
+  width: 100%;
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
 }
 
-.tech-stack .v-chip {
-  margin: 2px;
+.placeholder-icon {
+  opacity: 0.4;
+  color: #fff !important;
 }
 
-.learned-section .v-list-item {
-  min-height: auto;
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.65) 100%);
 }
 
-/* Custom scrollbar for dialog content */
-:deep(.v-card-text) {
+.hero-title-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.45) !important;
+  color: #fff !important;
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+/* Content */
+.content-area {
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--v-theme-primary)) transparent;
 }
 
-:deep(.v-card-text::-webkit-scrollbar) {
-  width: 6px;
+.content-area::-webkit-scrollbar {
+  width: 5px;
 }
 
-:deep(.v-card-text::-webkit-scrollbar-track) {
+.content-area::-webkit-scrollbar-track {
   background: transparent;
 }
 
-:deep(.v-card-text::-webkit-scrollbar-thumb) {
+.content-area::-webkit-scrollbar-thumb {
   background-color: rgb(var(--v-theme-primary));
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
-/* Mobile responsive adjustments */
-@media (max-width: 600px) {
-  .project-image-section {
-    min-height: 150px;
-  }
-
-  .project-placeholder {
-    min-height: 150px;
-  }
+.tracking-wide {
+  letter-spacing: 0.08em;
 }
 </style>

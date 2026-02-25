@@ -1,7 +1,11 @@
 <script setup lang="ts">
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const currentLocale = computed<'en' | 'pl'>(() => {
+  return locale.value === 'pl'
+    ? 'pl'
+    : 'en'
+})
 
-// Enhanced SEO with all modern best practices
 useSeo({
   useTranslation: true,
   translationKey: 'seo.pages.index',
@@ -10,17 +14,14 @@ useSeo({
   imageAlt: 'Jakub Tutka - Full-stack Developer Profile',
 })
 
-// Add structured data for better search engine understanding
 const { addWebSite, addOrganization, addBreadcrumbs } = useStructuredData()
 
-// Add WebSite schema with search functionality
 addWebSite({
   name: 'Jakub Tutka Portfolio',
   description: t('seo.pages.index.description'),
   hasSearch: true,
 })
 
-// Add Organization schema
 addOrganization({
   name: 'Jakub Tutka',
   description: t('seo.pages.index.description'),
@@ -31,33 +32,33 @@ addOrganization({
   ],
 })
 
-// Add breadcrumbs for navigation
 addBreadcrumbs([
   { name: 'Home', item: '/' },
 ])
 
-const navigationCards = computed(() => [
-  {
-    title: t('navigation.projects.title'),
-    description: t('navigation.projects.description'),
-    icon: 'mdi-code-braces',
-    color: 'primary',
-    route: '/projects',
-  },
-  {
-    title: t('navigation.blog.title'),
-    description: t('navigation.blog.description'),
-    icon: 'mdi-post',
-    color: 'secondary',
-    route: '/blogs',
-  },
-  {
-    title: t('navigation.resume.title'),
-    description: t('navigation.resume.description'),
-    icon: 'mdi-file-document',
-    color: 'accent',
-    route: '/resume',
-  },
+const blogStore = useBlogStore()
+const projectStore = useProjectStore()
+
+const loadingProjects = ref(true)
+const loadingBlogs = ref(true)
+
+const featuredProjects = computed(() => {
+  return projectStore.projects.filter(p => p.featured).slice(0, 3)
+})
+
+const topBlogs = computed(() => {
+  return [...blogStore.publishedBlogs]
+    .sort((a, b) => b.viewCount - a.viewCount)
+    .slice(0, 3)
+})
+
+const yearsOfExperience = computed(() => new Date().getFullYear() - 2023)
+
+const stats = computed(() => [
+  { value: `${yearsOfExperience.value}+`, label: t('landingPage.stats.experience') },
+  { value: `${projectStore.projects.length || 10}+`, label: t('landingPage.stats.projects') },
+  { value: `${blogStore.publishedBlogs.length || 20}+`, label: t('landingPage.stats.articles') },
+  { value: '20+', label: t('landingPage.stats.technologies') },
 ])
 
 const skills = computed(() => [
@@ -65,76 +66,55 @@ const skills = computed(() => [
     name: 'Python',
     icon: 'mdi-language-python',
     color: 'success',
-    additional: [
-      'Django',
-      'FastAPI',
-      'Flask',
-    ],
+    additional: ['Django', 'FastAPI', 'Flask'],
   },
   {
     name: 'Vue.js',
     icon: 'mdi-vuejs',
     color: 'success',
-    additional: [
-      'Nuxt.js',
-    ],
+    additional: ['Nuxt.js'],
   },
   {
     name: 'TypeScript',
     icon: 'mdi-language-typescript',
     color: 'info',
+    additional: ['JavaScript'],
+  },
+  {
+    name: t('skills.apiIntegration'),
+    icon: 'mdi-api',
+    color: 'warning',
+    additional: ['REST', 'GraphQL', 'gRPC', 'WebSocket'],
   },
   {
     name: t('skills.containerizationAndOrchestration'),
     icon: 'mdi-docker',
     color: 'info',
-    additional: [
-      'Docker',
-      'Kubernetes',
-    ],
+    additional: ['Docker', 'Kubernetes'],
   },
   {
     name: t('skills.database'),
     icon: 'mdi-database',
     color: 'accent',
-    additional: [
-      'PostgreSQL',
-      'MongoDB',
-      'Firestore',
-      'Redis',
-    ],
+    additional: ['PostgreSQL', 'MongoDB', 'Firestore', 'Redis'],
   },
   {
-    name: t('skills.versionControl'),
-    icon: 'mdi-git',
+    name: t('skills.devops'),
+    icon: 'mdi-source-branch',
     color: 'error',
-    additional: [
-      'Git',
-      'GitHub',
-      'GitLab',
-    ],
+    additional: ['Git', 'GitHub', 'GitLab', 'GitHub Actions', 'GitLab CI/CD'],
   },
   {
     name: 'Google Cloud Platform',
     icon: 'mdi-google-cloud',
     color: 'info',
-    additional: [
-      'Cloud Functions',
-      'Cloud Run',
-      'Container Registry',
-      'Cloud Storage',
-      'Firebase',
-    ],
+    additional: ['Cloud Functions', 'Cloud Run', 'Container Registry', 'Cloud Storage', 'Firebase'],
   },
   {
-    name: t('skills.others'),
-    icon: 'mdi-plus',
-    color: 'primary',
-    additional: [
-      'VPS',
-      'JavaScript',
-      'Figma',
-    ],
+    name: 'Testing & Monitoring',
+    icon: 'mdi-test-tube',
+    color: 'secondary',
+    additional: ['Postman', 'pytest', 'Sentry'],
   },
 ])
 
@@ -165,11 +145,26 @@ const contactMethods = computed(() => [
   },
 ])
 
+onMounted(async () => {
+  await Promise.all([
+    projectStore.fetchProjects().then(() => { loadingProjects.value = false }),
+    blogStore.fetchPublishedBlogs().then(() => { loadingBlogs.value = false }),
+  ])
+})
+
 function scrollToSection(sectionId: string) {
   const element = document.getElementById(sectionId)
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' })
   }
+}
+
+function formatViews(count: number): string {
+  if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}k`
+  }
+
+  return count.toString()
 }
 </script>
 
@@ -211,7 +206,7 @@ function scrollToSection(sectionId: string) {
                 color="primary"
                 variant="elevated"
                 class="mb-2 mr-4"
-                @click="scrollToSection('about')"
+                @click="scrollToSection('bio')"
               >
                 <v-icon
                   size="x-large"
@@ -243,85 +238,406 @@ function scrollToSection(sectionId: string) {
       </v-row>
 
       <div class="scroll-indicator">
-        <v-icon
+        <v-btn
+          icon
+          variant="text"
+          aria-label="Scroll down"
           class="bounce-animation"
-          size="x-large"
-          @click="scrollToSection('about')"
+          @click="scrollToSection('bio')"
         >
-          mdi-chevron-down
-        </v-icon>
+          <v-icon size="x-large">
+            mdi-chevron-down
+          </v-icon>
+        </v-btn>
       </div>
     </div>
 
-    <!-- Navigation Cards Section -->
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <v-container>
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            v-for="(stat, index) in stats"
+            :key="index"
+            cols="6"
+            sm="3"
+            class="stats-item text-center"
+          >
+            <div class="stats-value">
+              {{ stat.value }}
+            </div>
+
+            <div class="stats-label">
+              {{ stat.label }}
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+
+    <!-- Bio Section -->
     <v-container
-      id="about"
+      id="bio"
       class="py-16"
     >
-      <v-row class="mb-12 justify-center">
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          md="5"
+          class="mb-md-0 mb-8"
+        >
+          <div class="bio-decoration pa-10 text-center">
+            <v-icon
+              size="72"
+              color="white"
+              class="mb-6"
+            >
+              mdi-book-open-page-variant
+            </v-icon>
+
+            <p class="bio-quote">
+              {{ $t('landingPage.bio.quote') }}
+            </p>
+
+            <p class="bio-quote-author mt-4">
+              {{ $t('landingPage.bio.quoteAuthor') }}
+            </p>
+          </div>
+        </v-col>
+
+        <v-col
+          cols="12"
+          md="7"
+          class="pl-md-10"
+        >
+          <h2 class="section-title mb-6">
+            {{ $t('landingPage.bio.title') }}
+          </h2>
+
+          <p class="bio-paragraph mb-8">
+            {{ $t('landingPage.bio.paragraph') }}
+          </p>
+
+          <v-btn
+            color="secondary"
+            variant="outlined"
+            to="/resume"
+          >
+            <v-icon class="mr-2">
+              mdi-file-document
+            </v-icon>
+            {{ $t('navigation.resume.title') }}
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <!-- Featured Projects Section -->
+    <v-container
+      fluid
+      class="featured-projects-section py-16"
+    >
+      <v-container>
+        <v-row class="mb-10 justify-center">
+          <v-col
+            cols="12"
+            md="8"
+            class="text-center"
+          >
+            <h2 class="section-title mb-4">
+              {{ $t('landingPage.featuredProjects.title') }}
+            </h2>
+
+            <p class="section-subtitle">
+              {{ $t('landingPage.featuredProjects.subtitle') }}
+            </p>
+          </v-col>
+        </v-row>
+
+        <v-row
+          v-if="loadingProjects"
+          class="justify-center"
+        >
+          <v-col
+            v-for="i in 3"
+            :key="i"
+            cols="12"
+            sm="6"
+            md="4"
+          >
+            <v-skeleton-loader type="image, article, actions" />
+          </v-col>
+        </v-row>
+
+        <v-row
+          v-else-if="featuredProjects.length"
+          class="justify-center"
+        >
+          <v-col
+            v-for="project in featuredProjects"
+            :key="project.value"
+            cols="12"
+            sm="6"
+            md="4"
+          >
+            <v-card
+              class="project-card h-100"
+              elevation="4"
+              hover
+            >
+              <v-img
+                :src="project.image || ''"
+                :alt="project.title"
+                height="200"
+                cover
+              >
+                <template #error>
+                  <div class="d-flex align-center project-image-fallback h-100 justify-center">
+                    <v-icon
+                      size="64"
+                      color="primary"
+                      opacity="0.35"
+                    >
+                      mdi-code-braces
+                    </v-icon>
+                  </div>
+                </template>
+              </v-img>
+
+              <v-card-title class="pt-4 text-wrap">
+                {{ project.title }}
+              </v-card-title>
+
+              <v-card-text>
+                <p class="text-body-2 mb-4">
+                  {{ project.shortDescription[currentLocale] || project.shortDescription.en }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-1">
+                  <v-chip
+                    v-for="tech in project.technologies.slice(0, 4)"
+                    :key="tech"
+                    size="small"
+                    variant="tonal"
+                    color="primary"
+                  >
+                    {{ tech }}
+                  </v-chip>
+
+                  <v-chip
+                    v-if="project.technologies.length > 4"
+                    size="small"
+                    variant="tonal"
+                    color="secondary"
+                  >
+                    +{{ project.technologies.length - 4 }}
+                  </v-chip>
+                </div>
+              </v-card-text>
+
+              <v-card-actions class="pa-4 pt-0">
+                <v-btn
+                  :href="project.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  color="primary"
+                  variant="text"
+                  size="small"
+                >
+                  <v-icon class="mr-1">
+                    mdi-github
+                  </v-icon>
+                  {{ $t('projects.viewCode') }}
+                </v-btn>
+
+                <v-btn
+                  v-if="project.demoUrl"
+                  :href="project.demoUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  color="secondary"
+                  variant="text"
+                  size="small"
+                >
+                  <v-icon class="mr-1">
+                    mdi-open-in-new
+                  </v-icon>
+                  {{ $t('projects.liveDemo') }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row class="mt-8 justify-center">
+          <v-col
+            cols="12"
+            class="text-center"
+          >
+            <v-btn
+              to="/projects"
+              color="primary"
+              variant="outlined"
+              size="large"
+            >
+              {{ $t('landingPage.featuredProjects.cta') }}
+              <v-icon class="ml-2">
+                mdi-arrow-right
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-container>
+
+    <!-- Most Viewed Blogs Section -->
+    <v-container class="py-16">
+      <v-row class="mb-10 justify-center">
         <v-col
           cols="12"
           md="8"
           class="text-center"
         >
           <h2 class="section-title mb-4">
-            {{ $t('landingPage.about.title') }}
+            {{ $t('landingPage.topBlogs.title') }}
           </h2>
 
           <p class="section-subtitle">
-            {{ $t('landingPage.about.subtitle') }}
+            {{ $t('landingPage.topBlogs.subtitle') }}
           </p>
         </v-col>
       </v-row>
 
-      <v-row class="justify-center">
+      <v-row
+        v-if="loadingBlogs"
+        class="justify-center"
+      >
         <v-col
-          v-for="(card, index) in navigationCards"
-          :key="index"
           cols="12"
-          sm="6"
-          md="3"
+          md="8"
+        >
+          <v-skeleton-loader
+            v-for="i in 3"
+            :key="i"
+            type="list-item-avatar-three-line"
+            class="mb-3"
+          />
+        </v-col>
+      </v-row>
+
+      <v-row
+        v-else-if="topBlogs.length"
+        class="justify-center"
+      >
+        <v-col
+          cols="12"
+          md="8"
         >
           <v-card
-            class="nav-card h-100 pa-6 text-center"
-            elevation="4"
-            hover
-            :to="card.route"
+            elevation="2"
+            class="blog-list-card"
           >
-            <div class="nav-icon mb-4">
-              <v-icon
-                :color="card.color"
-                size="48"
+            <v-list lines="three">
+              <template
+                v-for="(blog, index) in topBlogs"
+                :key="blog.value"
               >
-                {{ card.icon }}
-              </v-icon>
-            </div>
+                <v-list-item
+                  :to="`/blog/${blog.value}`"
+                  class="blog-list-item py-4"
+                >
+                  <template #prepend>
+                    <v-avatar
+                      size="80"
+                      rounded="lg"
+                      class="mr-4"
+                    >
+                      <v-img
+                        v-if="blog.image"
+                        :src="blog.image"
+                        :alt="blog.title[currentLocale] || blog.title.en"
+                        cover
+                      />
 
-            <v-card-title class="mb-2 justify-center">
-              {{ card.title }}
-            </v-card-title>
+                      <v-icon
+                        v-else
+                        size="36"
+                        color="primary"
+                        opacity="0.5"
+                      >
+                        mdi-post
+                      </v-icon>
+                    </v-avatar>
+                  </template>
 
-            <v-card-text>{{ card.description }}</v-card-text>
+                  <v-list-item-title class="blog-item-title mb-2">
+                    {{ blog.title[currentLocale] || blog.title.en }}
+                  </v-list-item-title>
 
-            <v-card-actions class="justify-center">
-              <v-btn
-                :color="card.color"
-                variant="text"
-              >
-                {{ $t('landingPage.about.learnMore') }}
-                <v-icon right>
-                  mdi-arrow-right
-                </v-icon>
-              </v-btn>
-            </v-card-actions>
+                  <v-list-item-subtitle>
+                    <div class="d-flex align-center mt-1 flex-wrap gap-2">
+                      <v-chip
+                        size="x-small"
+                        color="primary"
+                        variant="tonal"
+                      >
+                        {{ $t(`blog.categories.${blog.category}`) }}
+                      </v-chip>
+
+                      <span class="d-flex align-center text-caption">
+                        <v-icon
+                          size="14"
+                          class="mr-1"
+                        >
+                          mdi-eye
+                        </v-icon>
+                        {{ formatViews(blog.viewCount) }} {{ $t('landingPage.topBlogs.views') }}
+                      </span>
+                    </div>
+                  </v-list-item-subtitle>
+
+                  <template #append>
+                    <v-icon color="primary">
+                      mdi-chevron-right
+                    </v-icon>
+                  </template>
+                </v-list-item>
+
+                <v-divider
+                  v-if="index < topBlogs.length - 1"
+                  inset
+                />
+              </template>
+            </v-list>
           </v-card>
         </v-col>
       </v-row>
-    </v-container>
 
-    <v-spacer
-      class="my-30"
-    />
+      <v-row class="mt-8 justify-center">
+        <v-col
+          cols="12"
+          class="text-center"
+        >
+          <v-btn
+            to="/blogs"
+            color="secondary"
+            variant="outlined"
+            size="large"
+          >
+            {{ $t('landingPage.topBlogs.cta') }}
+            <v-icon class="ml-2">
+              mdi-arrow-right
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
 
     <!-- Skills Section -->
     <v-container
@@ -405,10 +721,6 @@ function scrollToSection(sectionId: string) {
       </v-container>
     </v-container>
 
-    <v-spacer
-      class="my-30"
-    />
-
     <!-- Contact Section -->
     <v-container
       id="contact"
@@ -484,10 +796,6 @@ function scrollToSection(sectionId: string) {
         </v-col>
       </v-row>
     </v-container>
-
-    <v-spacer
-      class="my-30"
-    />
   </div>
 </template>
 
@@ -496,6 +804,7 @@ function scrollToSection(sectionId: string) {
   overflow-x: hidden;
 }
 
+/* Hero */
 .hero-section {
   min-height: 100vh;
   background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
@@ -534,6 +843,7 @@ function scrollToSection(sectionId: string) {
   left: 50%;
   transform: translateX(-50%);
   color: rgba(var(--v-theme-on-primary), 0.7);
+  cursor: pointer;
 }
 
 .bounce-animation {
@@ -552,6 +862,61 @@ function scrollToSection(sectionId: string) {
   }
 }
 
+/* Stats Bar */
+.stats-bar {
+  background: rgb(var(--v-theme-surface-variant));
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+}
+
+.stats-item {
+  padding: 1rem;
+}
+
+.stats-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: rgb(var(--v-theme-primary));
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.stats-label {
+  font-size: 0.85rem;
+  color: rgb(var(--v-theme-on-surface-variant));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Bio Section */
+.bio-decoration {
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+}
+
+.bio-quote {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.bio-quote-author {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.bio-paragraph {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgb(var(--v-theme-on-surface-variant));
+}
+
+/* Section shared */
 .section-title {
   font-size: 2.5rem;
   font-weight: 300;
@@ -565,24 +930,42 @@ function scrollToSection(sectionId: string) {
   margin: 0 auto;
 }
 
-.nav-card {
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border-radius: 16px !important;
+/* Featured Projects */
+.featured-projects-section {
+  background: rgb(var(--v-theme-surface-variant));
 }
 
-.nav-card:hover {
+.project-card {
+  border-radius: 16px !important;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
 }
 
-.nav-icon {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.project-image-fallback {
+  background: rgba(var(--v-theme-surface-variant), 0.5);
 }
 
+/* Blog List */
+.blog-list-card {
+  border-radius: 16px !important;
+}
+
+.blog-list-item {
+  transition: background-color 0.2s ease;
+}
+
+.blog-item-title {
+  font-size: 1rem !important;
+  font-weight: 500;
+  white-space: normal !important;
+  line-height: 1.4;
+}
+
+/* Skills */
 .skills-section {
   background: rgb(var(--v-theme-surface-variant));
 }
@@ -602,6 +985,7 @@ function scrollToSection(sectionId: string) {
   color: rgb(var(--v-theme-on-surface));
 }
 
+/* Contact */
 .contact-card {
   transition: all 0.3s ease;
   border-radius: 16px !important;
@@ -616,7 +1000,7 @@ function scrollToSection(sectionId: string) {
   margin-bottom: 0;
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 960px) {
   .hero-title {
     font-size: 2.5rem;
@@ -636,10 +1020,32 @@ function scrollToSection(sectionId: string) {
     font-size: 2rem;
   }
 
+  .stats-value {
+    font-size: 1.75rem;
+  }
+
   .hero-buttons .v-btn {
     display: block;
     width: 100%;
     margin: 0.5rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bounce-animation {
+    animation: none;
+  }
+
+  .project-card,
+  .skill-card,
+  .contact-card {
+    transition: none;
+  }
+
+  .project-card:hover,
+  .skill-card:hover,
+  .contact-card:hover {
+    transform: none;
   }
 }
 </style>
