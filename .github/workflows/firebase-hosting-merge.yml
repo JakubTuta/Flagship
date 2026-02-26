@@ -33,6 +33,8 @@ jobs:
           echo "MEASUREMENT_ID=${{ secrets.MEASUREMENT_ID }}" >> .env
           echo "TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }}" >> .env
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}" >> .env
+          echo "PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env
           echo "NODE_ENV=production" >> .env
 
       - name: Install dependencies
@@ -49,7 +51,7 @@ jobs:
           NITRO_PRESET: firebase
 
       - name: Install functions dependencies
-        run: cd .output/server && bun install
+        run: cd .output/server && npm install --no-package-lock --legacy-peer-deps
 
       - name: Install Firebase CLI
         run: bun add -g firebase-tools
