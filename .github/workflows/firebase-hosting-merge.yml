@@ -53,7 +53,21 @@ jobs:
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
 
+      - name: Create service account credentials
+        run: |
+          jq -n \
+            --arg project_id "$PROJECT_ID" \
+            --arg client_email "$CLIENT_EMAIL" \
+            --arg private_key "$PRIVATE_KEY" \
+            '{type: "service_account", project_id: $project_id, client_email: $client_email, private_key: $private_key, token_uri: "https://oauth2.googleapis.com/token"}' \
+            > sa-key.json
+        env:
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+
       - name: Deploy to Firebase
-        run: bunx firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
+        run: bunx firebase deploy --only hosting,functions --force
         env:
           FIREBASE_PROJECT_ID: flagship-8de31
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa-key.json

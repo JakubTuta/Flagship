@@ -55,10 +55,25 @@ jobs:
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
 
+      - name: Create service account credentials
+        run: |
+          jq -n \
+            --arg project_id "$PROJECT_ID" \
+            --arg client_email "$CLIENT_EMAIL" \
+            --arg private_key "$PRIVATE_KEY" \
+            '{type: "service_account", project_id: $project_id, client_email: $client_email, private_key: $private_key, token_uri: "https://oauth2.googleapis.com/token"}' \
+            > sa-key.json
+        env:
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+
       - name: Deploy preview to Firebase
         run: |
-          PREVIEW_URL=$(bunx firebase hosting:channel:deploy pr-${{ github.event.number }} --expires 7d --token ${{ secrets.FIREBASE_TOKEN }} --project flagship-8de31 --json | jq -r '.result.url')
+          PREVIEW_URL=$(bunx firebase hosting:channel:deploy pr-${{ github.event.number }} --expires 7d --project flagship-8de31 --json | jq -r '.result.url')
           echo "PREVIEW_URL=$PREVIEW_URL" >> $GITHUB_ENV
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa-key.json
 
       - name: Comment PR with preview URL
         uses: actions/github-script@v7
