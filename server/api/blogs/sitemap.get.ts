@@ -3,22 +3,13 @@
  * This ensures all blog posts are discoverable by search engines
  */
 
-import { cert, getApps, initializeApp } from 'firebase-admin/app'
+import { getApps, initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
 export default defineEventHandler(async () => {
   try {
-    const config = useRuntimeConfig()
-
-    // Initialize Firebase Admin if not already initialized
     if (!getApps().length) {
-      initializeApp({
-        credential: cert({
-          projectId: config.projectId,
-          clientEmail: config.clientEmail,
-          privateKey: config.privateKey?.replace(/\\n/g, '\n'),
-        }),
-      })
+      initializeApp()
     }
 
     const firestore = getFirestore()

@@ -26,15 +26,15 @@ jobs:
         run: |
           echo "API_KEY=${{ secrets.API_KEY }}" > .env
           echo "AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }}" >> .env
-          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> .env
+          echo "PROJECT_ID=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | jq -r '.project_id')" >> .env
           echo "STORAGE_BUCKET=${{ secrets.STORAGE_BUCKET }}" >> .env
           echo "MESSAGING_SENDER_ID=${{ secrets.MESSAGING_SENDER_ID }}" >> .env
           echo "APP_ID=${{ secrets.APP_ID }}" >> .env
           echo "MEASUREMENT_ID=${{ secrets.MEASUREMENT_ID }}" >> .env
           echo "TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }}" >> .env
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
-          echo "CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}" >> .env
           echo "NODE_ENV=production" >> .env
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > sa-key.json
 
       - name: Install dependencies
         run: |
@@ -48,23 +48,10 @@ jobs:
           bun run build
         env:
           NITRO_PRESET: firebase
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa-key.json
 
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
-
-      - name: Create service account credentials
-        run: |
-          jq -n \
-            --arg project_id "$PROJECT_ID" \
-            --arg client_email "$CLIENT_EMAIL" \
-            --arg private_key "$PRIVATE_KEY" \
-            '{type: "service_account", project_id: $project_id, client_email: $client_email, private_key: $private_key, token_uri: "https://oauth2.googleapis.com/token"}' \
-            > sa-key.json
-        env:
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 
       - name: Deploy to Firebase
         run: bunx firebase deploy --only hosting,functions --force
