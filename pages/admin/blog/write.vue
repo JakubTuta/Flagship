@@ -150,6 +150,7 @@ watch(savedWorkingBlog, (newWorkingBlog) => {
     mainLanguage.value = newWorkingBlog.mainLanguage || 'pl'
     links.value = newWorkingBlog.links || []
     blogImage.value = newWorkingBlog.image || null
+    currentWorkingBlog.value = newWorkingBlog
   }
 })
 
@@ -979,7 +980,7 @@ async function prepareBlog(isPublished: boolean, reference: DocumentReference | 
     })),
   )
 
-  const value = savedBlog.value?.value || savedWorkingBlog.value?.value || translatedTitle.en.replace(/\s+/g, '-').toLowerCase()
+  const value = savedBlog.value?.value || savedWorkingBlog.value?.value || translatedTitle.en.replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '-').toLowerCase()
 
   return mapIBlogEncoded({
     title: translatedTitle,
@@ -993,6 +994,10 @@ async function prepareBlog(isPublished: boolean, reference: DocumentReference | 
     links: links.value,
     image: blogImage.value || null,
     mainLanguage: mainLanguage.value || 'pl',
+    viewCount: savedBlog.value?.viewCount || 0,
+    publishDate: savedBlog.value?.publishDate || (isPublished
+      ? new Date()
+      : null),
   }, reference)
 }
 
