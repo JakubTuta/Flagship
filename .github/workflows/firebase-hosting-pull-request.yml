@@ -55,12 +55,9 @@ jobs:
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
 
-      - name: Install Firebase CLI
-        run: bun add -g firebase-tools
-
       - name: Deploy preview to Firebase
         run: |
-          PREVIEW_URL=$(firebase hosting:channel:deploy pr-${{ github.event.number }} --expires 7d --token ${{ secrets.FIREBASE_TOKEN }} --project flagship-8de31 --json | jq -r '.result.url')
+          PREVIEW_URL=$(bunx firebase hosting:channel:deploy pr-${{ github.event.number }} --expires 7d --token ${{ secrets.FIREBASE_TOKEN }} --project flagship-8de31 --json | jq -r '.result.url')
           echo "PREVIEW_URL=$PREVIEW_URL" >> $GITHUB_ENV
 
       - name: Comment PR with preview URL

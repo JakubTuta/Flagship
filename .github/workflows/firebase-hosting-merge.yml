@@ -53,10 +53,7 @@ jobs:
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
 
-      - name: Install Firebase CLI
-        run: bun add -g firebase-tools
-
       - name: Deploy to Firebase
-        run: firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
+        run: bunx firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
         env:
           FIREBASE_PROJECT_ID: flagship-8de31
