@@ -33,7 +33,7 @@
     "firebase": "^11.10.0",
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^6.4.0",
-    "firebase-tools": "12.9.1",
+    "firebase-tools": "latest",
     "nuxt": "^3.18.1",
     "nuxt-seo-utils": "^7.0.14",
     "pinia": "^2.3.1",

@@ -56,12 +56,6 @@ jobs:
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
 
-      - name: Fix generated firebase configs
-        run: |
-          for f in $(find .output -name 'firebase.json'); do
-            jq 'del(.extensions)' "$f" > /tmp/firebase_tmp.json && mv /tmp/firebase_tmp.json "$f"
-          done
-
       - name: Deploy to Firebase
         run: bunx firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
         env:
