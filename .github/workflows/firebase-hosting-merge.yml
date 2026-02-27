@@ -34,7 +34,11 @@ jobs:
           echo "TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }}" >> .env
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
           echo "NODE_ENV=production" >> .env
-          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > sa-key.json
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Install dependencies
         run: |
@@ -48,7 +52,6 @@ jobs:
           bun run build
         env:
           NITRO_PRESET: firebase
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa-key.json
 
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
@@ -57,4 +60,3 @@ jobs:
         run: bunx firebase deploy --only hosting,functions --force
         env:
           FIREBASE_PROJECT_ID: flagship-8de31
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa-key.json
