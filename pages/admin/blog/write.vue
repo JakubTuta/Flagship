@@ -1,3 +1,4 @@
+<!-- xdd -->
 <script setup lang="ts">
 import type { DocumentReference } from 'firebase/firestore'
 import { type TBlogCategory, blogCategoriesValues } from '~/helpers/blogCategories'
