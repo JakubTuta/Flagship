@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "flagship-8de31",
     "public": ".output/public",
     "ignore": [
       "firebase.json",
