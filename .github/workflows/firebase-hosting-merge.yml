@@ -56,18 +56,5 @@ jobs:
       - name: Install functions dependencies
         run: cd .output/server && yarn install --no-lockfile --production
 
-      - name: Debug Firebase auth
-        run: |
-          echo "--- firebase projects:list ---"
-          bunx firebase projects:list --token ${{ secrets.FIREBASE_TOKEN }} || true
-          echo "--- firebase use ---"
-          bunx firebase use --token ${{ secrets.FIREBASE_TOKEN }} || true
-          echo "--- token prefix (first 20 chars) ---"
-          echo "${{ secrets.FIREBASE_TOKEN }}" | cut -c1-20
-        env:
-          FIREBASE_PROJECT_ID: flagship-8de31
-
       - name: Deploy to Firebase
-        run: bunx firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
-        env:
-          FIREBASE_PROJECT_ID: flagship-8de31
+        run: bunx firebase deploy --project flagship-8de31 --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
