@@ -57,6 +57,6 @@ jobs:
         run: cd .output/server && yarn install --no-lockfile --production
 
       - name: Deploy to Firebase
-        run: bunx firebase deploy --only hosting,functions --force
+        run: bunx firebase deploy --only hosting,functions --token ${{ secrets.FIREBASE_TOKEN }} --force
         env:
           FIREBASE_PROJECT_ID: flagship-8de31

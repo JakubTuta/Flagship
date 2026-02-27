@@ -60,7 +60,7 @@ jobs:
 
       - name: Deploy preview to Firebase
         run: |
-          PREVIEW_URL=$(bunx firebase hosting:channel:deploy pr-${{ github.event.number }} --expires 7d --project flagship-8de31 --json | jq -r '.result.url')
+          PREVIEW_URL=$(bunx firebase hosting:channel:deploy pr-${{ github.event.number }} --expires 7d --token ${{ secrets.FIREBASE_TOKEN }} --project flagship-8de31 --json | jq -r '.result.url')
           echo "PREVIEW_URL=$PREVIEW_URL" >> $GITHUB_ENV
         env:
           FIREBASE_PROJECT_ID: flagship-8de31
