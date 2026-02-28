@@ -39,8 +39,28 @@ addBreadcrumbs([
 const blogStore = useBlogStore()
 const projectStore = useProjectStore()
 
-const loadingProjects = ref(true)
-const loadingBlogs = ref(true)
+const { data: projectsData, status: projectsStatus } = useAsyncData(
+  'projects',
+  () => $fetch<import('~/models/serialized').IProjectSerialized[]>('/api/projects'),
+)
+
+const { data: blogsData, status: blogsStatus } = useAsyncData(
+  'published-blogs',
+  () => $fetch<import('~/models/serialized').IBlogSerialized[]>('/api/blogs/published'),
+)
+
+watch(projectsData, (data) => {
+  if (data)
+    projectStore.hydrateProjects(data)
+}, { immediate: true })
+
+watch(blogsData, (data) => {
+  if (data)
+    blogStore.hydratePublishedBlogs(data)
+}, { immediate: true })
+
+const loadingProjects = computed(() => projectsStatus.value === 'pending')
+const loadingBlogs = computed(() => blogsStatus.value === 'pending')
 
 const featuredProjects = computed(() => {
   return projectStore.projects.filter(p => p.featured).slice(0, 3)
@@ -144,13 +164,6 @@ const contactMethods = computed(() => [
     to: 'https://github.com/JakubTuta',
   },
 ])
-
-onMounted(async () => {
-  await Promise.all([
-    projectStore.fetchProjects().then(() => { loadingProjects.value = false }),
-    blogStore.fetchPublishedBlogs().then(() => { loadingBlogs.value = false }),
-  ])
-})
 
 function scrollToSection(sectionId: string) {
   const element = document.getElementById(sectionId)

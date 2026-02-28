@@ -3,16 +3,9 @@
  * This ensures all blog posts are discoverable by search engines
  */
 
-import { getApps, initializeApp } from 'firebase-admin/app'
-import { getFirestore } from 'firebase-admin/firestore'
-
 export default defineEventHandler(async () => {
   try {
-    if (!getApps().length) {
-      initializeApp()
-    }
-
-    const firestore = getFirestore()
+    const firestore = getAdminFirestore()
 
     // Fetch all published blogs
     const blogsSnapshot = await firestore

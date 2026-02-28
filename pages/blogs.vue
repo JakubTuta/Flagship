@@ -1,9 +1,9 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import type { TBlogCategory } from '~/helpers/blogCategories'
+import type { IBlogSerialized } from '~/models/serialized'
 
 const { locale } = useI18n()
 
-// Enhanced SEO for blog listing page
 useSeo({
   useTranslation: true,
   translationKey: 'seo.pages.blog',
@@ -12,10 +12,8 @@ useSeo({
   imageAlt: 'Jakub Tutka Blog - Development Insights',
 })
 
-// Add structured data
 const { addBreadcrumbs, addItemList } = useStructuredData()
 
-// Breadcrumbs
 addBreadcrumbs([
   { name: 'Home', item: '/' },
   { name: 'Blog', item: '/blogs' },
@@ -23,30 +21,35 @@ addBreadcrumbs([
 
 const blogsPerLoad = 6
 const displayedBlogsCount = ref(blogsPerLoad)
-const initialLoad = ref(true)
 
 const selectedCategory = ref<TBlogCategory | 'all'>('all')
 const sortBy = ref<'date' | 'views'>('date')
 
 const blogStore = useBlogStore()
-const { publishedBlogs, loading } = storeToRefs(blogStore)
 
-onMounted(async () => {
-  if (!publishedBlogs.value.length) {
-    await blogStore.fetchPublishedBlogs()
-  }
-  initialLoad.value = false
+const { data: blogsData, status: blogsStatus } = useAsyncData(
+  'published-blogs',
+  () => $fetch<IBlogSerialized[]>('/api/blogs/published'),
+)
 
-  // Add ItemList structured data for blog posts (improves SEO)
-  if (publishedBlogs.value.length > 0) {
-    addItemList(
-      publishedBlogs.value.slice(0, 10).map(blog => ({
-        name: blog.title[locale.value] || blog.title.en,
-        url: `/blog/${blog.value}`,
-      })),
-    )
+const loading = computed(() => blogsStatus.value === 'pending')
+
+const publishedBlogs = computed(() => blogsData.value || [])
+
+watch(blogsData, (data) => {
+  if (data) {
+    blogStore.hydratePublishedBlogs(data)
+
+    if (data.length > 0) {
+      addItemList(
+        data.slice(0, 10).map(blog => ({
+          name: blog.title[locale.value] || blog.title.en,
+          url: `/blog/${blog.value}`,
+        })),
+      )
+    }
   }
-})
+}, { immediate: true })
 
 const filteredAndSortedBlogs = computed(() => {
   let blogs = [...publishedBlogs.value]
@@ -80,8 +83,8 @@ const displayedRegularBlogs = computed(() => regularBlogs.value.slice(0, display
 
 const hasMoreBlogs = computed(() => displayedBlogsCount.value < regularBlogs.value.length)
 
-const showFeaturedSkeleton = computed(() => loading.value && initialLoad.value)
-const showRegularSkeleton = computed(() => loading.value && initialLoad.value)
+const showFeaturedSkeleton = computed(() => loading.value)
+const showRegularSkeleton = computed(() => loading.value)
 
 const availableCategories = computed(() => {
   const categories = [...new Set(publishedBlogs.value.map(blog => blog.category))]
@@ -89,15 +92,19 @@ const availableCategories = computed(() => {
   return categories.sort()
 })
 
-function formatDate(date: Date | null): string {
+function formatDate(date: Date | string | null): string {
   if (!date)
     return ''
+
+  const dateObj = typeof date === 'string'
+    ? new Date(date)
+    : date
 
   return new Intl.DateTimeFormat(locale.value, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  }).format(date)
+  }).format(dateObj)
 }
 
 function truncateContent(content: string, maxLength: number = 150): string {
@@ -538,7 +545,7 @@ watch([selectedCategory, sortBy], () => {
             </div>
 
             <v-card-text class="pa-5">
-              <h3 class="font-weight-bold blog-title text-subtitle-1 mb-2">
+              <h3 class="font-weight-bold text-subtitle-1 blog-title mb-2">
                 {{ blog.title[locale] }}
               </h3>
 

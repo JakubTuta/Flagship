@@ -1,9 +1,9 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import type { IProject } from '~/models/project'
+import type { IProjectSerialized } from '~/models/serialized'
 
 const { t, locale } = useI18n()
 
-// Enhanced SEO for projects page
 useSeo({
   useTranslation: true,
   translationKey: 'seo.pages.projects',
@@ -12,10 +12,8 @@ useSeo({
   imageAlt: 'Jakub Tutka Projects Portfolio',
 })
 
-// Add structured data
 const { addBreadcrumbs } = useStructuredData()
 
-// Breadcrumbs for better navigation
 addBreadcrumbs([
   { name: 'Home', item: '/' },
   { name: 'Projects', item: '/projects' },
@@ -25,7 +23,19 @@ const selectedProject = ref<IProject | null>(null)
 const showProjectDialog = ref(false)
 
 const projectStore = useProjectStore()
-const { projects, loading } = storeToRefs(projectStore)
+
+const { data: projectsData, status: projectsStatus } = useAsyncData(
+  'projects',
+  () => $fetch<IProjectSerialized[]>('/api/projects'),
+)
+
+const loading = computed(() => projectsStatus.value === 'pending')
+const projects = computed(() => projectsData.value || [])
+
+watch(projectsData, (data) => {
+  if (data)
+    projectStore.hydrateProjects(data)
+}, { immediate: true })
 
 const featuredProjects = computed(() => projects.value.filter(project => project.featured))
 
@@ -240,7 +250,7 @@ function openProjectDetails(project: IProject) {
                     {{ project.title }}
                   </h3>
 
-                  <p class="text-subtitle-1 text-medium-emphasis mb-3">
+                  <p class="text-medium-emphasis text-subtitle-1 mb-3">
                     {{ project.shortDescription[locale] }}
                   </p>
 
@@ -252,7 +262,7 @@ function openProjectDetails(project: IProject) {
                   </p>
 
                   <div class="mb-5">
-                    <p class="text-caption text-uppercase font-weight-bold text-medium-emphasis mb-2 tracking-wide">
+                    <p class="font-weight-bold text-medium-emphasis text-caption text-uppercase mb-2 tracking-wide">
                       {{ $t('projects.technologies') }}
                     </p>
 

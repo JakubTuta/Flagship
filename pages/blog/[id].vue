@@ -1,45 +1,42 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import BlogContent from '~/components/BlogContent.vue'
-import type { IBlog } from '~/models/blog'
-import type { IUser } from '~/models/user'
+import type { IBlogSerialized, IUserSerialized } from '~/models/serialized'
 
 const route = useRoute()
 const { locale, t } = useI18n()
 const { mobile } = useDisplay()
 const config = useRuntimeConfig()
 
-const blogStore = useBlogStore()
-const authStore = useAuthStore()
+const blogSlug = route.params.id as string
 
-// Fetch published blogs to ensure we have data
-const { pending: blogsPending } = useLazyAsyncData('published-blogs', async () => {
-  await blogStore.fetchPublishedBlogs()
+const { data: blogData, status: blogStatus } = useAsyncData(
+  `blog-${blogSlug}`,
+  () => $fetch<IBlogSerialized>(`/api/blogs/${blogSlug}`),
+)
 
-  return blogStore.publishedBlogs
-})
+const { data: authorData } = useAsyncData(
+  `blog-author-${blogSlug}`,
+  () => {
+    if (!blogData.value?.author) {
+      return Promise.resolve(null)
+    }
 
-const selectedBlog = ref<IBlog | null>(null)
-const isLoading = ref(true)
-const author = ref<IUser | null>(null)
+    return $fetch<IUserSerialized>(`/api/users/${blogData.value.author}`)
+  },
+  { watch: [blogData] },
+)
 
-// Try to get blog data from store first (for faster loading)
-const preloadedBlog = computed(() => {
-  const blogId = route.params.id as string
+const isLoading = computed(() => blogStatus.value === 'pending')
+const selectedBlog = computed(() => blogData.value)
 
-  return blogStore.publishedBlogs.find(blog => blog.value === blogId) || null
-})
-
-// Utility function
 function getCategoryTitle(category: string) {
   return blogCategoriesValues(t).find(cat => cat.value === category)?.title || category
 }
 
-// Utility computed for blog description
 const blogDescription = computed(() => {
-  const blog = selectedBlog.value || preloadedBlog.value
-  if (blog?.content) {
-    const content = blog.content[locale.value] || blog.content.en || blog.content.pl
+  if (selectedBlog.value?.content) {
+    const content = selectedBlog.value.content[locale.value] || selectedBlog.value.content.en || selectedBlog.value.content.pl
     if (content) {
       const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
 
@@ -52,28 +49,21 @@ const blogDescription = computed(() => {
   return t('seo.pages.blog.description')
 })
 
-// Add structured data for Article/BlogPosting
 const { addArticle, addBreadcrumbs } = useStructuredData()
 
-// Watch for blog data and set up SEO + structured data
-watch(() => selectedBlog.value || preloadedBlog.value, (currentBlog) => {
+watch(() => selectedBlog.value, (currentBlog) => {
   if (!currentBlog)
     return
 
-  // Set comprehensive SEO meta tags
   useSeo({
     title: currentBlog.title[locale.value] || currentBlog.title.en,
     description: blogDescription.value,
     image: currentBlog.image || '/images/profile.jpg',
     imageAlt: `${currentBlog.title[locale.value]} - Blog post cover image`,
     type: 'article',
-    publishedTime: currentBlog.publishDate
-      ? new Date(currentBlog.publishDate).toISOString()
-      : undefined,
-    modifiedTime: currentBlog.publishDate
-      ? new Date(currentBlog.publishDate).toISOString()
-      : undefined,
-    author: author.value?.username || 'Jakub Tutka',
+    publishedTime: currentBlog.publishDate || undefined,
+    modifiedTime: currentBlog.publishDate || undefined,
+    author: authorData.value?.username || 'Jakub Tutka',
     tags: currentBlog.category
       ? [getCategoryTitle(currentBlog.category), 'blog', 'development']
       : [],
@@ -81,77 +71,37 @@ watch(() => selectedBlog.value || preloadedBlog.value, (currentBlog) => {
       ? 'summary_large_image'
       : 'summary',
   })
+
+  addArticle({
+    type: 'BlogPosting',
+    headline: currentBlog.title[locale.value] || currentBlog.title.en,
+    description: blogDescription.value,
+    image: currentBlog.image || `${config.public.siteUrl}/images/profile.jpg`,
+    datePublished: currentBlog.publishDate || undefined,
+    dateModified: currentBlog.publishDate || undefined,
+    authorName: authorData.value?.username || 'Jakub Tutka',
+    authorUrl: config.public.siteUrl,
+    category: getCategoryTitle(currentBlog.category),
+    keywords: [getCategoryTitle(currentBlog.category), 'development', 'programming'],
+  })
+
+  addBreadcrumbs([
+    { name: 'Home', item: '/' },
+    { name: 'Blog', item: '/blogs' },
+    { name: currentBlog.title[locale.value] || currentBlog.title.en },
+  ])
 }, { immediate: true })
 
-// Watch for blog data and add structured data when available
-watch(() => selectedBlog.value, (newBlog) => {
-  if (newBlog) {
-    // Add Article structured data
-    addArticle({
-      type: 'BlogPosting',
-      headline: newBlog.title[locale.value] || newBlog.title.en,
-      description: blogDescription.value,
-      image: newBlog.image || `${config.public.siteUrl}/images/profile.jpg`,
-      datePublished: newBlog.publishDate
-        ? new Date(newBlog.publishDate).toISOString()
-        : undefined,
-      dateModified: newBlog.publishDate
-        ? new Date(newBlog.publishDate).toISOString()
-        : undefined,
-      authorName: author.value?.username || 'Jakub Tutka',
-      authorUrl: config.public.siteUrl,
-      category: getCategoryTitle(newBlog.category),
-      keywords: [getCategoryTitle(newBlog.category), 'development', 'programming'],
-    })
-
-    // Add breadcrumbs
-    addBreadcrumbs([
-      { name: 'Home', item: '/' },
-      { name: 'Blog', item: '/blogs' },
-      { name: newBlog.title[locale.value] || newBlog.title.en },
-    ])
-  }
-}, { immediate: true })
-
-onMounted(async () => {
-  try {
-    // Wait for blogs to be loaded if they're still pending
-    await until(() => !blogsPending.value).toBe(true)
-
-    // If we already have the blog from store, use it
-    if (preloadedBlog.value) {
-      selectedBlog.value = preloadedBlog.value
-      author.value = await authStore.getUserDataFromRef(selectedBlog.value.author || null)
-    }
-    else {
-      // Otherwise fetch it
-      const blogId = route.params.id as string
-      selectedBlog.value = await blogStore.getBlogUser(blogId)
-
+onMounted(() => {
+  if (selectedBlog.value) {
+    setTimeout(() => {
       if (selectedBlog.value) {
-        author.value = await authStore.getUserDataFromRef(selectedBlog.value.author || null)
+        $fetch(`/api/blogs/${blogSlug}/view`, { method: 'POST' }).catch(() => {})
       }
-    }
-
-    // Add view after 1 minute
-    if (selectedBlog.value) {
-      setTimeout(() => {
-        if (selectedBlog.value) {
-          blogStore.addView(selectedBlog.value)
-          selectedBlog.value.viewCount += 1
-        }
-      }, 1000 * 60)
-    }
-  }
-  catch (error) {
-    console.error('Error loading blog:', error)
-  }
-  finally {
-    isLoading.value = false
+    }, 1000 * 60)
   }
 })
 
-// Utility functions
 function formatDate(date: Date | string | null) {
   if (!date)
     return ''
@@ -282,7 +232,7 @@ function formatDate(date: Date | string | null) {
                   mdi-account
                 </v-icon>
 
-                <span class="text-body-2 text-on-primary">{{ author?.username || $t('blog.anonymous') }}</span>
+                <span class="text-body-2 text-on-primary">{{ authorData?.username || $t('blog.anonymous') }}</span>
               </v-col>
 
               <v-col

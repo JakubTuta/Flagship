@@ -98,7 +98,7 @@ onMounted(() => {
     style="max-width: 1000px;"
   >
     <div class="d-flex justify-space-between align-center mb-6">
-      <h1 class="text-h4 font-weight-bold">
+      <h1 class="font-weight-bold text-h4">
         {{ $t('files.title') }}
       </h1>
     </div>

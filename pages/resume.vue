@@ -1,7 +1,19 @@
 <script setup lang="ts">
+import type { IResumeSerialized } from '~/models/serialized'
+
 const { t, locale } = useI18n()
 const resumeStore = useResumeStore()
 const { resume } = storeToRefs(resumeStore)
+
+const { data: resumeData } = useAsyncData(
+  'resume',
+  () => $fetch<IResumeSerialized | null>('/api/resume'),
+)
+
+watch(resumeData, (data) => {
+  if (data)
+    resumeStore.hydrateResume(data)
+}, { immediate: true })
 
 // Enhanced SEO for resume/CV page
 useSeo({

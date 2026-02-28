@@ -246,7 +246,7 @@ const contentBlocks = computed(() => {
             >
               <span
                 v-if="block.language"
-                class="font-weight-medium text-caption text-uppercase"
+                class="font-weight-medium text-uppercase text-caption"
               >
                 {{ block.language }}
               </span>

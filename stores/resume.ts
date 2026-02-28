@@ -3,6 +3,7 @@ import { getDownloadURL, ref as storageRef } from 'firebase/storage'
 import { beforeCreateDoc, beforeUpdateDoc, removeReferenceField } from '~/helpers/modelToDatabase'
 import type { IResume } from '~/models/resume'
 import { mapIResume, mapIResumeDecoded, mapIResumeEncoded } from '~/models/resume'
+import type { IResumeSerialized } from '~/models/serialized'
 
 export const useResumeStore = defineStore('resume', () => {
   const resume = ref<IResume | null>(null)
@@ -164,6 +165,49 @@ export const useResumeStore = defineStore('resume', () => {
     loadingPdfs.value = false
   }
 
+  function hydrateResume(serialized: IResumeSerialized) {
+    if (resume.value) {
+      return
+    }
+
+    resume.value = mapIResume({
+      personalInfo: serialized.personalInfo,
+      education: serialized.education.map(edu => ({
+        institution: edu.institution,
+        startDate: new Date(edu.startDate),
+        endDate: edu.endDate
+          ? new Date(edu.endDate)
+          : null,
+        field: edu.field,
+        specialization: edu.specialization,
+        level: edu.level,
+      })),
+      workExperience: serialized.workExperience.map(exp => ({
+        position: exp.position,
+        company: exp.company,
+        startDate: new Date(exp.startDate),
+        endDate: exp.endDate
+          ? new Date(exp.endDate)
+          : null,
+        responsibilities: exp.responsibilities,
+      })),
+      additionalActivities: serialized.additionalActivities.map(act => ({
+        title: act.title,
+        project: act.project,
+        startDate: new Date(act.startDate),
+        endDate: act.endDate
+          ? new Date(act.endDate)
+          : null,
+        activities: act.activities,
+      })),
+      skills: serialized.skills,
+      interests: serialized.interests,
+      links: serialized.links,
+      footerText: serialized.footerText,
+      reference: null,
+    })
+  }
+
   return {
     resume,
     loading,
@@ -175,5 +219,6 @@ export const useResumeStore = defineStore('resume', () => {
     createResume,
     updateResume,
     resetState,
+    hydrateResume,
   }
 })

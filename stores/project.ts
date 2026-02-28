@@ -1,5 +1,6 @@
 import { collection, getDocs } from 'firebase/firestore'
 import { type IProject, mapIProject } from '~/models/project'
+import type { IProjectSerialized } from '~/models/serialized'
 
 export const useProjectStore = defineStore('projects', () => {
   const projects = ref<IProject[]>([])
@@ -33,10 +34,31 @@ export const useProjectStore = defineStore('projects', () => {
     }
   }
 
+  function hydrateProjects(serializedProjects: IProjectSerialized[]) {
+    if (projects.value.length > 0) {
+      return
+    }
+
+    projects.value = serializedProjects.map(p => ({
+      title: p.title,
+      value: p.value,
+      shortDescription: p.shortDescription,
+      description: p.description,
+      url: p.url,
+      demoUrl: p.demoUrl,
+      featured: p.featured,
+      category: p.category,
+      technologies: p.technologies,
+      learned: p.learned,
+      image: p.image,
+    }))
+  }
+
   return {
     projects,
     loading,
     resetState,
     fetchProjects,
+    hydrateProjects,
   }
 })
