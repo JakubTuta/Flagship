@@ -6,6 +6,14 @@ import type { IBlogSerialized, IUserSerialized } from '~/models/serialized'
 const route = useRoute()
 const { locale, t } = useI18n()
 const { mobile } = useDisplay()
+
+const displayLocale = computed<'en' | 'pl'>(() => {
+  const lang = route.query.lang
+  if (lang === 'en' || lang === 'pl')
+    return lang
+
+  return locale.value as 'en' | 'pl'
+})
 const config = useRuntimeConfig()
 
 const blogSlug = route.params.id as string
@@ -36,7 +44,7 @@ function getCategoryTitle(category: string) {
 
 const blogDescription = computed(() => {
   if (selectedBlog.value?.content) {
-    const content = selectedBlog.value.content[locale.value] || selectedBlog.value.content.en || selectedBlog.value.content.pl
+    const content = selectedBlog.value.content[displayLocale.value] || selectedBlog.value.content.en || selectedBlog.value.content.pl
     if (content) {
       const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
 
@@ -56,10 +64,10 @@ watch(() => selectedBlog.value, (currentBlog) => {
     return
 
   useSeo({
-    title: currentBlog.title[locale.value] || currentBlog.title.en,
+    title: currentBlog.title[displayLocale.value] || currentBlog.title.en,
     description: blogDescription.value,
     image: currentBlog.image || '/images/profile.jpg',
-    imageAlt: `${currentBlog.title[locale.value]} - Blog post cover image`,
+    imageAlt: `${currentBlog.title[displayLocale.value]} - Blog post cover image`,
     type: 'article',
     publishedTime: currentBlog.publishDate || undefined,
     modifiedTime: currentBlog.publishDate || undefined,
@@ -74,7 +82,7 @@ watch(() => selectedBlog.value, (currentBlog) => {
 
   addArticle({
     type: 'BlogPosting',
-    headline: currentBlog.title[locale.value] || currentBlog.title.en,
+    headline: currentBlog.title[displayLocale.value] || currentBlog.title.en,
     description: blogDescription.value,
     image: currentBlog.image || `${config.public.siteUrl}/images/profile.jpg`,
     datePublished: currentBlog.publishDate || undefined,
@@ -88,7 +96,7 @@ watch(() => selectedBlog.value, (currentBlog) => {
   addBreadcrumbs([
     { name: 'Home', item: '/' },
     { name: 'Blog', item: '/blogs' },
-    { name: currentBlog.title[locale.value] || currentBlog.title.en },
+    { name: currentBlog.title[displayLocale.value] || currentBlog.title.en },
   ])
 }, { immediate: true })
 
@@ -195,7 +203,7 @@ function formatDate(date: Date | string | null) {
         <div class="blog-header-overlay">
           <div class="blog-header-content">
             <h1 class="blog-title mb-4">
-              {{ selectedBlog.title[locale] }}
+              {{ selectedBlog.title[displayLocale] }}
             </h1>
 
             <!-- Blog Meta Information -->
@@ -294,7 +302,7 @@ function formatDate(date: Date | string | null) {
         elevation="2"
       >
         <BlogContent
-          :blog-content="selectedBlog.content[locale]"
+          :blog-content="selectedBlog.content[displayLocale]"
           :table-of-contents="selectedBlog.tableOfContents"
           :main-language="selectedBlog.mainLanguage || undefined"
         />
