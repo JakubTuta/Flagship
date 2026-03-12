@@ -48,7 +48,6 @@ export default defineNuxtConfig({
       measurementId: process.env.MEASUREMENT_ID,
       // Other public configuration
       githubToken: process.env.TOKEN_GITHUB,
-      GEMINI_API_KEY: process.env.GEMINI_API_KEY,
       siteUrl: baseUrl,
     },
   },

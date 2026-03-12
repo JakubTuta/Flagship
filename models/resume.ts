@@ -27,12 +27,10 @@ export interface IWorkExperience {
   responsibilities: ITranslatedText[]
 }
 
-export interface IAdditionalActivity {
-  title: ITranslatedText
-  project: string
-  startDate: Date
-  endDate: Date | null
-  activities: ITranslatedText[]
+export interface IHighlightedProject {
+  name: ITranslatedText
+  url: string
+  description: ITranslatedText
 }
 
 export interface ISkill {
@@ -62,7 +60,7 @@ export interface IResume {
   personalInfo: IPersonalInfo
   education: IEducation[]
   workExperience: IWorkExperience[]
-  additionalActivities: IAdditionalActivity[]
+  highlightedProjects: IHighlightedProject[]
   skills: ISkillCategory[]
   interests: IInterest[]
   links: ILink[]
@@ -102,13 +100,11 @@ export function mapIWorkExperience(data: Partial<IWorkExperience>): IWorkExperie
   }
 }
 
-export function mapIAdditionalActivity(data: Partial<IAdditionalActivity>): IAdditionalActivity {
+export function mapIHighlightedProject(data: Partial<IHighlightedProject>): IHighlightedProject {
   return {
-    title: data.title || { en: '', pl: '' },
-    project: data.project || '',
-    startDate: data.startDate || new Date(),
-    endDate: data.endDate || null,
-    activities: data.activities || [],
+    name: data.name || { en: '', pl: '' },
+    url: data.url || '',
+    description: data.description || { en: '', pl: '' },
   }
 }
 
@@ -150,7 +146,7 @@ export function mapIResume(data: Partial<IResume>, reference?: DocumentReference
       : mapIPersonalInfo({}),
     education: data.education?.map(edu => mapIEducation(edu)) || [],
     workExperience: data.workExperience?.map(exp => mapIWorkExperience(exp)) || [],
-    additionalActivities: data.additionalActivities?.map(activity => mapIAdditionalActivity(activity)) || [],
+    highlightedProjects: data.highlightedProjects?.map(project => mapIHighlightedProject(project)) || [],
     skills: data.skills?.map(skillCategory => mapISkillCategory(skillCategory)) || [],
     interests: data.interests?.map(interest => mapIInterest(interest)) || [],
     links: data.links?.map(link => mapILink(link)) || [],
@@ -178,11 +174,11 @@ export function mapIResumeDecoded(data: any, reference?: DocumentReference): IRe
     }))
   }
 
-  if (decoded.additionalActivities) {
-    decoded.additionalActivities = decoded.additionalActivities.map((activity: any) => ({
-      ...activity,
-      startDate: activity.startDate?.toDate() || new Date(),
-      endDate: activity.endDate?.toDate() || null,
+  if (decoded.highlightedProjects) {
+    decoded.highlightedProjects = decoded.highlightedProjects.map((project: any) => ({
+      name: project.name || { en: '', pl: '' },
+      url: project.url || '',
+      description: project.description || { en: '', pl: '' },
     }))
   }
 
@@ -208,11 +204,11 @@ export function mapIResumeEncoded(resume: IResume): any {
     }))
   }
 
-  if (encoded.additionalActivities) {
-    encoded.additionalActivities = encoded.additionalActivities.map(activity => ({
-      ...activity,
-      startDate: activity.startDate,
-      endDate: activity.endDate,
+  if (encoded.highlightedProjects) {
+    encoded.highlightedProjects = encoded.highlightedProjects.map((project: any) => ({
+      name: project.name || { en: '', pl: '' },
+      url: project.url || '',
+      description: project.description || { en: '', pl: '' },
     }))
   }
 

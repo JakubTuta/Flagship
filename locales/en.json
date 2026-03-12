@@ -161,13 +161,9 @@
         "level": "Bachelor's Degree"
       }
     },
-    "activities": {
-      "innovation": {
-        "title": "\"Innovation\" Project - Lodz University of Technology",
-        "activity1": "Developed a comprehensive web application for meal ordering systems in kindergartens and nurseries",
-        "activity2": "Mentored junior project participants and provided technical guidance"
-      },
-      "title": "Additional Activities"
+    "highlightedProjects": {
+      "title": "Highlighted Projects",
+      "view": "View"
     },
     "interests": {
       "1": "Software Development",

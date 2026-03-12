@@ -161,13 +161,9 @@
         "level": "Licencjat"
       }
     },
-    "activities": {
-      "innovation": {
-        "title": "Projekt \"Innowacja\" - Politechnika Łódzka",
-        "activity1": "Opracowanie kompleksowej aplikacji webowej do systemu zamawiania posiłków w przedszkolach i żłobkach",
-        "activity2": "Mentoring młodszych uczestników projektu i wsparcie techniczne"
-      },
-      "title": "Dodatkowe aktywności"
+    "highlightedProjects": {
+      "title": "Wyróżnione projekty",
+      "view": "Zobacz"
     },
     "interests": {
       "1": "Rozwój oprogramowania",

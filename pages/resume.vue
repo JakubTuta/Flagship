@@ -84,16 +84,11 @@ const fallbackWorkExperience = [
   },
 ]
 
-const fallbackAdditionalActivities = [
+const fallbackHighlightedProjects = [
   {
-    title: { en: 'Project "Innovation"', pl: 'Projekt "Innowacja"' },
-    project: 'KanapkaMan',
-    startDate: new Date('2023-03-01'),
-    endDate: new Date('2025-02-01'),
-    activities: [
-      { en: 'Developing a front-end web application for food delivery', pl: 'Tworzenie frontendowej aplikacji internetowej do dostawy jedzenia' },
-      { en: 'Collaborating with the IT team on application design and development', pl: 'Współpraca w zespole informatycznym przy projektowaniu i tworzeniu aplikacji' },
-    ],
+    name: { en: 'KanapkaMan', pl: 'KanapkaMan' },
+    url: 'https://kanapkaman.pl',
+    description: { en: 'A web application for meal ordering systems in kindergartens and nurseries', pl: 'Aplikacja internetowa do systemu zamawiania posiłków w przedszkolach i żłobkach' },
   },
 ]
 
@@ -181,7 +176,7 @@ const fallbackLinks = [
 const personalInfo = computed(() => resume.value?.personalInfo || fallbackPersonalInfo)
 const education = computed(() => resume.value?.education || fallbackEducation)
 const workExperience = computed(() => resume.value?.workExperience || fallbackWorkExperience)
-const additionalActivities = computed(() => resume.value?.additionalActivities || fallbackAdditionalActivities)
+const highlightedProjects = computed(() => resume.value?.highlightedProjects || fallbackHighlightedProjects)
 const skills = computed(() => resume.value?.skills || fallbackSkills)
 const interests = computed(() => resume.value?.interests || fallbackInterests)
 const links = computed(() => resume.value?.links || fallbackLinks)
@@ -400,7 +395,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
 
               <div class="timeline-card mb-6">
                 <div class="d-flex justify-space-between mb-1 flex-wrap gap-2 align-start">
-                  <h3 class="text-h6 font-weight-semibold">
+                  <h3 class="font-weight-semibold text-h6">
                     {{ getTranslatedText(exp.position) }}
                   </h3>
 
@@ -504,7 +499,7 @@ function calculateDate(date1: Date, date2: Date | null): string {
             </div>
           </section>
 
-          <!-- Additional Activities -->
+          <!-- Highlighted Projects -->
           <section class="cv-section mb-4">
             <div class="section-header mb-6">
               <v-icon
@@ -512,64 +507,41 @@ function calculateDate(date1: Date, date2: Date | null): string {
                 size="20"
                 class="mr-2"
               >
-                mdi-lightbulb-outline
+                mdi-star-outline
               </v-icon>
 
-              <span class="section-label">{{ t('resume.activities.title') }}</span>
+              <span class="section-label">{{ t('resume.highlightedProjects.title') }}</span>
             </div>
 
             <div
-              v-for="(activity, index) in additionalActivities"
+              v-for="(project, index) in highlightedProjects"
               :key="index"
               class="timeline-item"
             >
               <div class="timeline-dot" />
 
               <div class="timeline-card mb-6">
-                <div class="d-flex justify-space-between mb-1 flex-wrap gap-2 align-start">
+                <div class="d-flex align-center justify-space-between mb-1 flex-wrap gap-2">
                   <h3 class="text-h6 font-weight-semibold">
-                    {{ getTranslatedText(activity.title) }}
+                    {{ getTranslatedText(project.name) }}
                   </h3>
 
-                  <div class="d-flex align-center flex-wrap gap-2">
-                    <v-chip
-                      size="x-small"
-                      color="warning"
-                      variant="tonal"
-                    >
-                      {{ datePeriod(activity.startDate, activity.endDate) }}
-                    </v-chip>
-
-                    <v-chip
-                      size="x-small"
-                      variant="outlined"
-                    >
-                      {{ calculateDate(activity.startDate, activity.endDate) }}
-                    </v-chip>
-                  </div>
-                </div>
-
-                <p class="text-subtitle-2 text-medium-emphasis font-weight-medium mb-3">
-                  {{ activity.project }}
-                </p>
-
-                <div class="d-flex flex-column gap-2">
-                  <div
-                    v-for="(act, actIndex) in activity.activities"
-                    :key="actIndex"
-                    class="d-flex gap-2 align-start"
+                  <v-btn
+                    :href="project.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="x-small"
+                    variant="tonal"
+                    color="primary"
+                    prepend-icon="mdi-open-in-new"
                   >
-                    <v-icon
-                      color="warning"
-                      size="14"
-                      class="mt-1 flex-shrink-0"
-                    >
-                      mdi-circle-small
-                    </v-icon>
-
-                    <span class="text-body-2">{{ getTranslatedText(act) }}</span>
-                  </div>
+                    {{ t('resume.highlightedProjects.view') }}
+                  </v-btn>
                 </div>
+
+                <p class="text-body-2 mt-2">
+                  {{ getTranslatedText(project.description) }}
+                </p>
               </div>
             </div>
           </section>

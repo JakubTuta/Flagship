@@ -61,12 +61,10 @@ export interface IWorkExperienceSerialized {
   responsibilities: ITranslatedText[]
 }
 
-export interface IAdditionalActivitySerialized {
-  title: ITranslatedText
-  project: string
-  startDate: string
-  endDate: string | null
-  activities: ITranslatedText[]
+export interface IHighlightedProjectSerialized {
+  name: ITranslatedText
+  url: string
+  description: ITranslatedText
 }
 
 export interface IResumeSerialized {
@@ -80,7 +78,7 @@ export interface IResumeSerialized {
   }
   education: IEducationSerialized[]
   workExperience: IWorkExperienceSerialized[]
-  additionalActivities: IAdditionalActivitySerialized[]
+  highlightedProjects: IHighlightedProjectSerialized[]
   skills: Array<{
     title: ITranslatedText
     skills: Array<{ name: string, color: string }>

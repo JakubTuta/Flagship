@@ -185,7 +185,7 @@ function openProjectDetails(project: IProject) {
           :key="project.value"
         >
           <v-card
-            class="featured-card fill-height"
+            class="fill-height featured-card"
             elevation="0"
           >
             <v-row

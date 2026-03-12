@@ -191,14 +191,10 @@ export const useResumeStore = defineStore('resume', () => {
           : null,
         responsibilities: exp.responsibilities,
       })),
-      additionalActivities: serialized.additionalActivities.map(act => ({
-        title: act.title,
-        project: act.project,
-        startDate: new Date(act.startDate),
-        endDate: act.endDate
-          ? new Date(act.endDate)
-          : null,
-        activities: act.activities,
+      highlightedProjects: serialized.highlightedProjects.map(project => ({
+        name: project.name,
+        url: project.url,
+        description: project.description,
       })),
       skills: serialized.skills,
       interests: serialized.interests,

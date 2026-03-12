@@ -56,12 +56,10 @@ export default defineEventHandler(async (): Promise<IResumeSerialized | null> =>
         endDate: toIsoOrNull(exp.endDate),
         responsibilities: exp.responsibilities || [],
       })),
-      additionalActivities: (data.additionalActivities || []).map((act: any) => ({
-        title: act.title || { en: '', pl: '' },
-        project: act.project || '',
-        startDate: toIso(act.startDate),
-        endDate: toIsoOrNull(act.endDate),
-        activities: act.activities || [],
+      highlightedProjects: (data.highlightedProjects || []).map((project: any) => ({
+        name: project.name || { en: '', pl: '' },
+        url: project.url || '',
+        description: project.description || { en: '', pl: '' },
       })),
       skills: (data.skills || []).map((cat: any) => ({
         title: cat.title || { en: '', pl: '' },
