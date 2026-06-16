@@ -28,8 +28,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', href: '/images/profile.jpg' },
         { rel: 'manifest', href: '/manifest.json' },
-        { rel: 'dns-prefetch', href: 'https://firestore.googleapis.com' },
-        { rel: 'preconnect', href: 'https://firestore.googleapis.com', crossorigin: 'anonymous' },
+        { rel: 'preconnect', href: 'https://files.jtuta.cloud', crossorigin: 'anonymous' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap' },
@@ -38,20 +37,13 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Private keys (only available on the server-side)
-    projectId: process.env.PROJECT_ID,
+    fileStorage: {
+      username: process.env.FILE_STORAGE_USERNAME,
+      password: process.env.FILE_STORAGE_PASSWORD,
+    },
     public: {
-      // Firebase configuration (available on both server and client)
-      apiKey: process.env.API_KEY,
-      authDomain: process.env.AUTH_DOMAIN,
-      projectId: process.env.PROJECT_ID,
-      storageBucket: process.env.STORAGE_BUCKET,
-      messagingSenderId: process.env.MESSAGING_SENDER_ID,
-      appId: process.env.APP_ID,
-      measurementId: process.env.MEASUREMENT_ID,
-      // Other public configuration
-      githubToken: process.env.TOKEN_GITHUB,
       siteUrl: baseUrl,
+      fileStorageBaseUrl: 'https://files.jtuta.cloud',
     },
   },
 
@@ -101,24 +93,22 @@ export default defineNuxtConfig({
   ssr: true,
 
   nitro: {
-    preset: 'firebase',
-    firebase: {
-      gen: 2,
-      nodeVersion: '20',
-    },
+    preset: 'node-server',
+    serverAssets: [
+      {
+        baseName: 'content',
+        dir: 'server/content',
+      },
+    ],
     storage: {
-      memory: {
-        driver: 'memory',
+      views: {
+        driver: 'fs',
+        base: './.data/views',
       },
     },
     prerender: {
-      // Enable crawling for blog pages
       crawlLinks: true,
-      routes: [
-        '/blogs', // Blog listing page - contains links to individual blogs
-        // Individual blog routes (/blog/[id]) will be discovered through crawling
-        // from the links on the /blogs page
-      ],
+      routes: ['/blogs'],
     },
   },
 

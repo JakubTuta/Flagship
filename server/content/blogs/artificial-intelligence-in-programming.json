@@ -1,0 +1,120 @@
+{
+  "title": {
+    "en": "Artificial intelligence in programming",
+    "pl": "Sztuczna inteligencja w programowaniu"
+  },
+  "value": "artificial-intelligence-in-programming",
+  "content": {
+    "en": "<h2 id=\"PmhdoVxmJa1CrpgSdfCikXZUrdoFOy\">\nA New Partner in the World of Programming\n</h2>\n\nArtificial Intelligence <em>(AI)</em> is revolutionizing subsequent industries — programming is no exception. AI-powered tools are becoming an indispensable part of the modern developer's toolkit. They support us at every stage of work: from writing code, through its analysis and debugging, to creating documentation. Just a few years ago this seemed unattainable, and today it is difficult for me to imagine programming without using artificial intelligence.\n\nCurrently, even people unfamiliar with programming can create applications <em>(so-called vibe coding)</em> — by generating code in a chatbot and pasting it into an AI-integrated editor. As programmers, we shouldn't worry about this. The demand for our skills will not disappear — the nature of the work will simply change. Instead of manually writing code, we will focus on designing architecture, analyzing systems, and verifying and improving code created by AI agents.\n\nIn this article, I will show how to effectively leverage the potential of AI using popular tools like Claude Sonnet or GitHub Copilot as examples.\n\n<h2 id=\"wFdGg6sTWyYStlWi6FlVG33ztwrqmq\">\nClaude Sonnet: a programming genius\n</h2>\n\nOne of the most important players in the AI assistant market is <strong>Claude</strong>, and especially its latest model — <strong>Claude Sonnet 4</strong>. Created by Anthropic, it stands out with its exceptional ability to understand context and generate high-quality code.\n\n<h3 id=\"TtSMhKlsD6mhl9IJT00fj02p89pfj\">\nHow to get started with Claude.ai?\n</h3>\n\nGetting started with Claude is very simple. Just go to <strong>claude.ai</strong> and create a free account. The interface resembles a classic chat where we can describe problems, ask for code snippets, or translate complex topics in natural language.\n\n<h3 id=\"clOGKUw55xJlXFSmdSGQ5d13umMs1z\">\nUploading Files and the Magic of Artifacts\n</h3>\n\nClaude goes one step further than traditional chatbots. One of its key features is the ability to <strong>upload files</strong>. We can attach source code, documentation, or even a database. The model will analyze the content and respond within the context of the provided data.\n\nHowever, what truly sets Claude apart is the function <strong>Artifacts</strong>. After generating code, a website, or a diagram, Claude creates a separate, interactive window — a so-called \"artifact\". You can edit the code, preview the page, and easily copy the ready solution. This is a groundbreaking tool that transforms the chat into an integrated development environment.\n\n<h3 id=\"PHkATk4NW9etSYqIekVJW4p02tZxC0\">\nNew Level: Working with AI in the Terminal\n</h3>\n\nAnd what if we want to move this interaction from the browser directly to the terminal and give AI access to the entire project? Console tools come to the rescue, allowing you to use Claude's power directly on local files.\n\n<strong>Claude Code</strong> works on Linux and macOS systems, as well as on Windows with <em>WSL</em> enabled. After installation, we can work with a simple chat in the terminal that analyzes the entire project, creates new files, and edits existing ones — without the need to manually copy data to the browser.\n\n<h3 id=\"fpZfBahxUCdnB574k1trG2tfkm1p1k\">\nGitHub Copilot: Your Intelligent Pilot in VS Code\n</h3>\n\n<strong>GitHub Copilot</strong> is probably the most well-known AI tool for programmers, created in collaboration with OpenAI. It works as an extension for editors like VS Code or JetBrains and becomes our daily \"co-pilot\" in writing code.\n\n<h3 id=\"Dbh1l53KtXPfgsA0IG6PhycASFhVI9\">\nLive Chat and Suggestions\n</h3>\n\nCopilot offers two main functions:\n1. <strong>Live Code Suggestions</strong>: when writing code, Copilot analyzes the context and suggests entire lines or blocks of code. Just press <em>Tab</em> to accept the suggestion. It can generate repetitive code, unit tests, or entire functions based on a description. Additionally, it allows for refactoring and translating selected code.\n2. <strong>Chat in VS Code</strong>: the integrated chat allows for direct interaction within the editor. In the chat tab, we can select a model, add files to the context, and converse with AI while working on the project.\n\n<h2 id=\"tpBX2lTgYhLjOabZ1cmrP4dnrNlRgz\">\nHow to Optimize Your Workflow\n</h2>\n\n1. <strong>claude.ai</strong>: the ideal place to start a project, conceptual work, and debugging. It's worth describing your problem or functionality accurately and including a few files for context.\n2. <strong>GitHub Copilot (chat in VS Code)</strong>: best for working on individual tasks — asking specific questions and making changes to the code. It is recommended to focus on one problem at a time.\n3. <strong>GitHub Copilot (inline chat)</strong>: works well for editing single functions or a few lines of code. Avoid selecting entire files — this mode offers the smallest operational context.\n\n<h2 id=\"edZM1ANMUbWiS33rPWSos40LEL69un\">\nOther Notable AI Tools\n</h2>\n\nIn recent years, hundreds of tools assisting programmers using AI have emerged. In this abundance, it's worth noting:\n1. <strong>Cursor</strong>: a code editor that was designed from the outset with AI integration in mind. It does not require installing additional extensions.\n2. <strong>Windsurf</strong>: another modern code editor with built-in AI features.\n3. <strong>Amazon Q</strong>: an alternative to Copilot, working similarly, suggesting code in real-time. Furthermore, it also offers code scanning for security\n\n<h2 id=\"wKq2vs0C5xCVYn7BDt6OU0gYXejKi3\">\nSummary\n</h2>\n\nThe hammer did not replace builders — just as artificial intelligence will not replace programmers. The key is to learn how to use it wisely. Simply being able to write a few lines of code is not enough today. The market is changing — we must adapt to remain competitive.\n\nKey takeaways:\n1. <strong>Claude Sonnet</strong>: a powerful model focused on solving complex problems and working with code. The feature <em>Artifacts</em> makes it unique.\n2. <strong>GitHub Copilot</strong>: the most recognizable tool supporting code writing and analysis, ideal for everyday use.\n3. <strong>Automation and speed</strong>: AI handles repetitive tasks and writing boilerplate code very well.\n4. <strong>Support and learning</strong>: tools help debug, translate difficult sections, and suggest better practices.\n5. <strong>Working at a higher level of abstraction</strong>: AI allows focusing on functionalities rather than individual lines of code.\n6. <strong>Verification is fundamental</strong>: AI still makes mistakes. The developer's role as a reviewer and responsible for the final code remains crucial.",
+    "pl": "<h2 id=\"PmhdoVxmJa1CrpgSdfCikXZUrdoFOy\">\nNowy partner w świecie programowania\n</h2>\n\nSztuczna inteligencja <em>(SI)</em> rewolucjonizuje kolejne branże — programowanie nie jest wyjątkiem. Narzędzia oparte na SI stają się nieodłącznym elementem warsztatu nowoczesnego dewelopera. Wspierają nas na każdym etapie pracy: od pisania kodu, przez jego analizę i debugowanie, aż po tworzenie dokumentacji. Jeszcze kilka lat temu wydawało się to nieosiągalne, a dziś trudno mi wyobrazić sobie programowanie bez wykorzystania sztucznej inteligencji.\n\nObecnie nawet osoby nieznające programowania mogą tworzyć aplikacje <em>(tzw. vibe coding)</em> — generując kod w czatbocie i wklejając go do edytora zintegrowanego z SI. Jako programiści nie powinniśmy się tym martwić. Zapotrzebowanie na nasze umiejętności nie zniknie — po prostu zmieni się charakter pracy. Zamiast ręcznego pisania kodu, skupimy się na projektowaniu architektury, analizie systemów oraz weryfikacji i poprawianiu kodu tworzonego przez agentów SI.\n\nW tym artykule pokażę, jak efektywnie wykorzystać potencjał SI na przykładzie popularnych narzędzi, takich jak Claude Sonnet czy GitHub Copilot.\n\n<h2 id=\"wFdGg6sTWyYStlWi6FlVG33ztwrqmq\">\nClaude Sonnet: geniusz programowania\n</h2>\n\nJednym z najważniejszych graczy na rynku asystentów SI jest <strong>Claude</strong>, a szczególnie jego najnowszy model — <strong>Claude Sonnet 4</strong>. Stworzony przez firmę Anthropic, wyróżnia się wyjątkową zdolnością rozumienia kontekstu i generowania wysokiej jakości kodu.\n\n<h3 id=\"TtSMhKlsD6mhl9IJT00fj02p89pfj\">\nJak zacząć z Claude.ai?\n</h3>\n\nRozpoczęcie pracy z Claude’em jest bardzo proste. Wystarczy wejść na <strong>claude.ai</strong> i założyć darmowe konto. Interfejs przypomina klasyczny czat, w którym w naturalnym języku możemy opisywać problemy, prosić o fragmenty kodu lub tłumaczenie złożonych zagadnień.\n\n<h3 id=\"clOGKUw55xJlXFSmdSGQ5d13umMs1z\">\nPrzesyłanie plików i magia Artifacts\n</h3>\n\nClaude idzie o krok dalej niż tradycyjne czatbocie. Jedną z jego kluczowych funkcji jest możliwość <strong>przesyłania plików</strong>. Możemy załączyć kod źródłowy, dokumentację, a nawet bazę danych. Model przeanalizuje zawartość i odpowie w kontekście dostarczonych danych.\n\nTym, co jednak naprawdę wyróżnia Claude’a, jest funkcja <strong>Artifacts</strong>. Po wygenerowaniu kodu, strony internetowej czy diagramu, Claude tworzy osobne, interaktywne okno — tzw. „artefakt”. Można w nim edytować kod, przeglądać podgląd strony i łatwo skopiować gotowe rozwiązanie. To przełomowe narzędzie, które przekształca czat w zintegrowane środowisko deweloperskie.\n\n<h3 id=\"PHkATk4NW9etSYqIekVJW4p02tZxC0\">\nNowy poziom: praca z AI w terminalu\n</h3>\n\nA co, jeśli chcemy przenieść tę interakcję z przeglądarki prosto do terminala i dać SI dostęp do całego projektu? Z pomocą przychodzą narzędzia konsolowe, które pozwalają korzystać z mocy Claude’a bezpośrednio na lokalnych plikach.\n\n<strong>Claude Code</strong> działa na systemach Linux i macOS, a także na Windowsie z włączonym <em>WSL</em>. Po instalacji możemy pracować z prostym czatem w terminalu, który analizuje cały projekt, tworzy nowe pliki i edytuje istniejące — bez konieczności ręcznego kopiowania danych do przeglądarki.\n\n<h3 id=\"fpZfBahxUCdnB574k1trG2tfkm1p1k\">\nGitHub Copilot: Twój inteligentny pilot w VS Code\n</h3>\n\n<strong>GitHub Copilot</strong> to prawdopodobnie najbardziej znane narzędzie SI dla programistów, stworzone we współpracy z OpenAI. Działa jako rozszerzenie do edytorów takich jak VS Code czy JetBrains i staje się naszym codziennym „drugim pilotem” w pisaniu kodu.\n\n<h3 id=\"Dbh1l53KtXPfgsA0IG6PhycASFhVI9\">\nCzat i podpowiedzi na żywo\n</h3>\n\nCopilot oferuje dwie główne funkcje:\n1. <strong>Podpowiedzi kodu na żywo</strong>: podczas pisania kodu Copilot analizuje kontekst i sugeruje całe linie lub bloki kodu. Wystarczy nacisnąć <em>Tab</em>, aby zaakceptować sugestię. Może generować powtarzalny kod, testy jednostkowe czy całe funkcje na podstawie opisu. Dodatkowo umożliwia refaktoryzację i tłumaczenie zaznaczonego fragmentu.\n2. <strong>Czat w VS Code</strong>: zintegrowany czat pozwala na bezpośrednią interakcję w edytorze. W zakładce czatu możemy wybrać model, dodać pliki do kontekstu i rozmawiać z SI w trakcie pracy nad projektem.\n\n<h2 id=\"tpBX2lTgYhLjOabZ1cmrP4dnrNlRgz\">\nJak zoptymalizować swoją pracę\n</h2>\n\n1. <strong>claude.ai</strong>: idealne miejsce do rozpoczęcia projektu, pracy koncepcyjnej i debugowania. Warto opisać dokładnie swój problem lub funkcjonalność oraz dołączyć kilka plików dla kontekstu.\n2. <strong>GitHub Copilot (czat w VS Code)</strong>: najlepszy do pracy z pojedynczymi zadaniami — zadawania konkretnych pytań i nanoszenia zmian w kodzie. Zalecane jest skupienie się na jednym problemie naraz.\n3. <strong>GitHub Copilot (inline chat)</strong>: sprawdza się przy edycji pojedynczych funkcji lub kilku linii kodu. Unikaj zaznaczania całych plików — ten tryb oferuje najmniejszy kontekst działania.\n\n<h2 id=\"edZM1ANMUbWiS33rPWSos40LEL69un\">\nInne warte uwagi narzędzia SI\n</h2>\n\nW ostatnich latach pojawiło się setki narzędzi wspomagających programistów z wykorzystaniem SI. W tym gąszczu warto zwrócić uwagę na:\n1. <strong>Cursor</strong>: edytor kodu, który od początku został zaprojektowany z myślą o integracji z SI. Nie wymaga instalowania dodatkowych rozszerzeń.\n2. <strong>Windsurf</strong>: kolejny nowoczesny edytor kodu z wbudowanymi funkcjami SI.\n3. <strong>Amazon Q</strong>: alternatywa dla Copilota, działająca w podobny sposób, podpowiadająca kod w czasie rzeczywistym. Ponadto oferuje także skanowanie kodu pod względem bezpieczeństwa\n\n<h2 id=\"wKq2vs0C5xCVYn7BDt6OU0gYXejKi3\">\nPodsumowanie\n</h2>\n\nMłotek nie zastąpił budowniczych — tak samo jak sztuczna inteligencja nie zastąpi programistów. Kluczem jest nauczenie się jej mądrego wykorzystania. Samo umiejętne pisanie kilku linijek kodu to dziś za mało. Rynek się zmienia — musimy się dostosować, by pozostać konkurencyjni.\n\nNajważniejsze wnioski:\n1. <strong>Claude Sonnet</strong>: potężny model ukierunkowany na rozwiązywanie złożonych problemów i pracę z kodem. Funkcja <em>Artifacts</em> czyni go wyjątkowym.\n2. <strong>GitHub Copilot</strong>: najbardziej rozpoznawalne narzędzie wspomagające pisanie i analizę kodu, idealne na co dzień.\n3. <strong>Automatyzacja i szybkość</strong>: SI świetnie radzi sobie z powtarzalnymi zadaniami i pisaniem boilerplate’u.\n4. <strong>Wsparcie i nauka</strong>: narzędzia pomagają debugować, tłumaczyć trudne fragmenty i sugerować lepsze praktyki.\n5. <strong>Praca na wyższym poziomie abstrakcji</strong>: SI pozwala skupić się na funkcjonalnościach, zamiast na pojedynczych liniach kodu.\n6. <strong>Weryfikacja to podstawa</strong>: SI nadal popełnia błędy. Rola dewelopera jako recenzenta i odpowiedzialnego za końcowy kod pozostaje kluczowa."
+  },
+  "featured": true,
+  "links": [
+    "https://claude.ai/",
+    "https://docs.anthropic.com/",
+    "https://github.com/features/copilot",
+    "https://www.cursor.com/",
+    "https://windsurf.com/editor",
+    "https://aws.amazon.com/q/"
+  ],
+  "projects": [],
+  "image": "https://files.jtuta.cloud/portfolio/blogs/F9suRl48beNhvxbnqQ9uTch79BYHu0",
+  "isPublished": true,
+  "publishDate": "2025-06-11T21:27:45.312Z",
+  "author": null,
+  "tableOfContents": [
+    {
+      "title": {
+        "en": "New partner in the world of programming",
+        "pl": "Nowy partner w świecie programowania"
+      },
+      "id": "PmhdoVxmJa1CrpgSdfCikXZUrdoFOy",
+      "mainLevel": 1,
+      "subLevel": null
+    },
+    {
+      "title": {
+        "en": "Claude Sonnet: programming genius",
+        "pl": "Claude Sonnet: geniusz programowania"
+      },
+      "id": "wFdGg6sTWyYStlWi6FlVG33ztwrqmq",
+      "mainLevel": 2,
+      "subLevel": null
+    },
+    {
+      "title": {
+        "en": "How to get started with Claude.ai?",
+        "pl": "Jak zacząć z Claude.ai?"
+      },
+      "id": "TtSMhKlsD6mhl9IJT00fj02p89pfj",
+      "mainLevel": 2,
+      "subLevel": 1
+    },
+    {
+      "title": {
+        "en": "File transfer and the magic of Artifacts",
+        "pl": "Przesyłanie plików i magia Artifacts"
+      },
+      "id": "clOGKUw55xJlXFSmdSGQ5d13umMs1z",
+      "mainLevel": 2,
+      "subLevel": 2
+    },
+    {
+      "title": {
+        "en": "New level: working with AI in the terminal",
+        "pl": "Nowy poziom: praca z AI w terminalu"
+      },
+      "id": "PHkATk4NW9etSYqIekVJW4p02tZxC0",
+      "mainLevel": 2,
+      "subLevel": 3
+    },
+    {
+      "title": {
+        "en": "GitHub Copilot: Your intelligent copilot in VS Code",
+        "pl": "GitHub Copilot: Twój inteligentny pilot w VS Code"
+      },
+      "id": "fpZfBahxUCdnB574k1trG2tfkm1p1k",
+      "mainLevel": 2,
+      "subLevel": 4
+    },
+    {
+      "title": {
+        "en": "Live chat and tips",
+        "pl": "Czat i podpowiedzi na żywo"
+      },
+      "id": "Dbh1l53KtXPfgsA0IG6PhycASFhVI9",
+      "mainLevel": 2,
+      "subLevel": 5
+    },
+    {
+      "title": {
+        "en": "How to optimize your work",
+        "pl": "Jak zoptymalizować swoją pracę"
+      },
+      "id": "tpBX2lTgYhLjOabZ1cmrP4dnrNlRgz",
+      "mainLevel": 3,
+      "subLevel": null
+    },
+    {
+      "title": {
+        "en": "Other notable AI tools",
+        "pl": "Inne warte uwagi narzędzia SI"
+      },
+      "id": "edZM1ANMUbWiS33rPWSos40LEL69un",
+      "mainLevel": 4,
+      "subLevel": null
+    },
+    {
+      "title": {
+        "en": "Summary",
+        "pl": "Podsumowanie"
+      },
+      "id": "wKq2vs0C5xCVYn7BDt6OU0gYXejKi3",
+      "mainLevel": 5,
+      "subLevel": null
+    }
+  ],
+  "category": "ai-ml",
+  "viewCount": 8,
+  "mainLanguage": "pl"
+}

@@ -1,39 +1,29 @@
-/**
- * Server API route to fetch published blog IDs for sitemap generation
- * This ensures all blog posts are discoverable by search engines
- */
+import type { IBlogSerialized } from '~/models/serialized'
 
 export default defineEventHandler(async () => {
   try {
-    const firestore = getAdminFirestore()
+    const keys = await listContentKeys('blogs')
 
-    // Fetch all published blogs
-    const blogsSnapshot = await firestore
-      .collection('blogs')
-      .where('isPublished', '==', true)
-      .select('value', 'publishDate') // Only fetch needed fields
-      .get()
+    const routes = await Promise.all(
+      keys.map(async (key) => {
+        const blog = await readContentAsset<Pick<IBlogSerialized, 'value' | 'publishDate'>>(key)
+        if (!blog) return null
 
-    // Map to sitemap-friendly format
-    const blogRoutes = blogsSnapshot.docs.map((doc) => {
-      const data = doc.data()
+        return {
+          url: `/blog/${blog.value}`,
+          lastmod: blog.publishDate
+            ? new Date(blog.publishDate).toISOString()
+            : new Date().toISOString(),
+          changefreq: 'weekly',
+          priority: 0.8,
+        }
+      }),
+    )
 
-      return {
-        url: `/blog/${data.value}`,
-        lastmod: data.publishDate
-          ? new Date(data.publishDate.toDate()).toISOString()
-          : new Date().toISOString(),
-        changefreq: 'weekly',
-        priority: 0.8,
-      }
-    })
-
-    return blogRoutes
+    return routes.filter(Boolean)
   }
   catch (error) {
     console.error('Error fetching blog routes for sitemap:', error)
-
-    // Return empty array on error to prevent sitemap generation failure
     return []
   }
 })

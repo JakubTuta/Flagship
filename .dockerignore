@@ -1,0 +1,15 @@
+node_modules
+.nuxt
+.output
+.data
+.git
+.github
+firestore_data
+*.md
+!CLAUDE.md
+.env
+.env.*
+!.env.example
+firebase.json
+.firebaserc
+storage.rules

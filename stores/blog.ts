@@ -1,6 +1,4 @@
-import { collection, getDocs, increment, query, updateDoc, where } from 'firebase/firestore'
 import type { IBlog } from '~/models/blog'
-import { mapIBlogDecoded } from '~/models/blog'
 import type { IBlogSerialized } from '~/models/serialized'
 
 export const useBlogStore = defineStore('blog', () => {
@@ -10,39 +8,6 @@ export const useBlogStore = defineStore('blog', () => {
   const resetState = () => {
     publishedBlogs.value = []
     loading.value = false
-  }
-
-  const fetchPublishedBlogs = async () => {
-    const { firestore } = useFirebase()
-
-    if (!firestore || import.meta.server) {
-      return
-    }
-
-    loading.value = true
-
-    try {
-      const blogsCollection = collection(firestore, 'blogs')
-      const response = await getDocs(query(blogsCollection, where('isPublished', '==', true)))
-      publishedBlogs.value = response.docs.map(doc => mapIBlogDecoded(doc.data(), doc.ref))
-    }
-    catch (error) {
-      console.error('Error fetching published blogs:', error)
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
-  const addView = (blog: IBlog) => {
-    try {
-      updateDoc(blog.reference!, {
-        viewCount: increment(1),
-      })
-    }
-    catch (error) {
-      console.error('Error adding view to blog:', error)
-    }
   }
 
   function hydratePublishedBlogs(serializedBlogs: IBlogSerialized[]) {
@@ -75,8 +40,6 @@ export const useBlogStore = defineStore('blog', () => {
     publishedBlogs,
     loading,
     resetState,
-    fetchPublishedBlogs,
-    addView,
     hydratePublishedBlogs,
   }
 })
