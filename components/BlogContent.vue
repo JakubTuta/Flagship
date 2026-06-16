@@ -5,9 +5,10 @@ const props = defineProps<{
   blogContent: string
   tableOfContents?: ITableOfContentsItem[]
   mainLanguage?: string
+  hideToc?: boolean
 }>()
 
-const { blogContent, tableOfContents, mainLanguage } = toRefs(props)
+const { blogContent, tableOfContents, mainLanguage, hideToc } = toRefs(props)
 
 const { locale, t } = useI18n()
 
@@ -177,7 +178,7 @@ const contentBlocks = computed(() => {
 
     <!-- Table of Contents -->
     <div
-      v-if="tableOfContents && tableOfContents.length > 0"
+      v-if="!hideToc && tableOfContents && tableOfContents.length > 0"
       class="table-of-contents"
     >
       <v-card-title class="pb-2">
@@ -227,7 +228,7 @@ const contentBlocks = computed(() => {
 
     <!-- Blog Content -->
     <div
-      class="blog-text-container pa-8"
+      class="blog-text-container"
     >
       <div class="blog-text">
         <template
@@ -334,9 +335,9 @@ const contentBlocks = computed(() => {
 
   /* Blog Text Styles */
   .blog-text {
-    font-size: 1.125rem;
-    line-height: 1.7;
-    color: rgb(var(--v-theme-on-surface));
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-muted);
   }
 
   /* Deep styles for content formatting */
@@ -354,12 +355,12 @@ const contentBlocks = computed(() => {
     border-radius: 12px !important;
     overflow: hidden;
     margin: 1.5rem 0;
-    background: rgba(var(--v-theme-surface-variant-dark), 0.3) !important;
-    border: 1px solid rgba(var(--v-theme-primary), 0.15) !important;
+    background: var(--bg-2) !important;
+    border: 1px solid var(--accent-line) !important;
   }
 
   :deep(.blog-code-content) {
-    background: rgba(var(--v-theme-surface-variant-dark), 0.5);
+    background: var(--bg-2);
     margin: 0;
     padding: 1rem;
     white-space: pre-wrap;
@@ -516,122 +517,182 @@ const contentBlocks = computed(() => {
   }
 
   :deep(.blog-h1) {
-    font-size: 2rem;
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
     font-weight: 500;
-    margin: 2rem 0 1rem 0;
-    color: rgb(var(--v-theme-primary));
-    border-bottom: 2px solid rgb(var(--v-theme-primary));
-    padding-bottom: 0.5rem;
-    scroll-margin-top: 100px;
+    letter-spacing: -0.025em;
+    margin: 48px 0 16px;
+    color: var(--text);
+    scroll-margin-top: calc(var(--nav-h) + 20px);
   }
 
   :deep(.blog-h2) {
-    font-size: 1.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3vw, 32px);
     font-weight: 500;
-    margin: 1.5rem 0 0.75rem 0;
-    color: rgb(var(--v-theme-primary));
-    scroll-margin-top: 100px;
+    letter-spacing: -0.02em;
+    margin: 48px 0 16px;
+    color: var(--text);
+    scroll-margin-top: calc(var(--nav-h) + 20px);
+  }
+
+  :deep(.blog-h2:first-child) {
+    margin-top: 0;
   }
 
   :deep(.blog-h3) {
-    font-size: 1.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(19px, 2.2vw, 23px);
     font-weight: 500;
-    margin: 1.25rem 0 0.5rem 0;
-    color: rgb(var(--v-theme-secondary));
-    scroll-margin-top: 100px;
+    letter-spacing: -0.015em;
+    margin: 34px 0 12px;
+    color: var(--text);
+    scroll-margin-top: calc(var(--nav-h) + 20px);
+  }
+
+  :deep(.blog-text-content p) {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  :deep(.blog-text-content p b),
+  :deep(.blog-text-content p strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  :deep(blockquote) {
+    margin: 24px 0;
+    padding: 4px 0 4px 22px;
+    border-left: 3px solid var(--accent);
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--text);
+    font-style: italic;
   }
 
   :deep(.blog-bold) {
     font-weight: 600;
-    color: rgb(var(--v-theme-on-surface));
+    color: var(--text);
   }
 
   :deep(.blog-italic) {
     font-style: italic;
-    color: rgb(var(--v-theme-on-surface-variant));
+    color: var(--text-muted);
   }
 
   :deep(.blog-underline) {
     text-decoration: underline;
-    text-decoration-color: rgb(var(--v-theme-primary));
+    text-decoration-color: var(--accent);
     text-underline-offset: 2px;
   }
 
   :deep(.blog-inline-code) {
-    background: rgba(var(--v-theme-primary), 0.1);
-    color: rgb(var(--v-theme-primary));
-    padding: 0.15rem 0.4rem;
+    font-family: var(--font-code);
+    font-size: 0.88em;
+    background: var(--bg-2);
+    border: 1px solid var(--line-soft);
+    padding: 2px 6px;
     border-radius: 6px;
-    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Monaco', 'Consolas', monospace;
-    font-size: 0.85em;
-    font-weight: 500;
-    border: 1px solid rgba(var(--v-theme-primary), 0.2);
-    letter-spacing: 0.02em;
+    color: var(--accent);
   }
 
   :deep(.blog-list) {
-    margin: 1rem 0;
-    padding-left: 0;
+    margin: 0 0 18px;
+    padding-left: 4px;
     list-style: none;
+    display: grid;
+    gap: 12px;
   }
 
   :deep(.blog-list-item) {
     position: relative;
-    padding-left: 1.5rem;
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
+    padding-left: 28px;
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
   }
 
   :deep(.blog-list-item::before) {
-    content: '•';
-    color: rgb(var(--v-theme-primary));
-    font-weight: bold;
+    content: "";
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 6px;
+    top: 11px;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--accent);
   }
 
   :deep(.blog-numbered-list) {
-    margin: 1rem 0;
-    padding-left: 0;
+    margin: 0 0 18px;
+    padding-left: 4px;
     list-style: none;
+    display: grid;
+    gap: 12px;
     counter-reset: list-counter;
   }
 
   :deep(.blog-numbered-item) {
     position: relative;
-    padding-left: 2rem;
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
+    padding-left: 34px;
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
     counter-increment: list-counter;
   }
 
   :deep(.blog-numbered-item::before) {
-    content: counter(list-counter) '.';
-    color: rgb(var(--v-theme-secondary));
-    font-weight: 600;
+    content: counter(list-counter);
     position: absolute;
     left: 0;
-    top: 0;
-    min-width: 1.5rem;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+  }
+
+  :deep(.blog-numbered-item b),
+  :deep(.blog-numbered-item strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  :deep(.blog-list-item b),
+  :deep(.blog-list-item strong) {
+    color: var(--text);
+    font-weight: 600;
   }
 
   :deep(.blog-sublist-item) {
     position: relative;
-    padding-left: 3rem;
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
+    padding-left: 34px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-muted);
     margin-left: 1rem;
   }
 
   :deep(.blog-sublist-item::before) {
     content: attr(data-number);
-    color: rgb(var(--v-theme-accent));
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
     position: absolute;
     left: 0;
-    top: 0;
-    min-width: 2.5rem;
+    top: 1px;
+    min-width: 2rem;
   }
 
   /* Responsive Design */
@@ -642,27 +703,7 @@ const contentBlocks = computed(() => {
     }
 
     .blog-text {
-      font-size: 1rem;
-    }
-
-    .toc-sub {
-      padding-left: 1rem !important;
-    }
-
-    .toc-number {
-      min-width: 1.5rem;
-    }
-
-    :deep(.blog-h1) {
-      font-size: 1.75rem;
-    }
-
-    :deep(.blog-h2) {
-      font-size: 1.375rem;
-    }
-
-    :deep(.blog-h3) {
-      font-size: 1.125rem;
+      font-size: 16px;
     }
 
     :deep(.blog-code-block-card) {
@@ -680,30 +721,16 @@ const contentBlocks = computed(() => {
 
     :deep(.blog-table-wrapper) {
       margin: 0.75rem 0;
-      /* Show scroll hint on mobile */
       position: relative;
-    }
-
-    :deep(.blog-table-wrapper::after) {
-      content: '← Scroll to see more →';
-      position: absolute;
-      bottom: -1.5rem;
-      right: 0;
-      font-size: 0.75rem;
-      color: rgba(var(--v-theme-on-surface), 0.6);
-      font-style: italic;
-      pointer-events: none;
     }
 
     :deep(.blog-th) {
       padding: 0.75rem 0.5rem;
       font-size: 0.85rem;
-      min-height: 48px; /* Slightly smaller min-height for mobile */
     }
 
     :deep(.blog-td) {
       padding: 0.625rem 0.5rem;
-      min-height: 40px; /* Slightly smaller min-height for mobile */
     }
   }
 </style>

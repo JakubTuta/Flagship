@@ -3,7 +3,8 @@ useSeo({
   useTranslation: true,
   translationKey: 'seo.pages.notFound',
   type: 'website',
-  robots: 'noindex, nofollow',
+  noIndex: true,
+  noFollow: true,
 })
 </script>
 
@@ -23,7 +24,7 @@ useSeo({
         404
       </h1>
 
-      <h2 class="text-h5 font-weight-light mb-4">
+      <h2 class="font-weight-light text-h5 mb-4">
         {{ $t('error.notFound.title') }}
       </h2>
 

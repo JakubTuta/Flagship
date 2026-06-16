@@ -1,6 +1,10 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
+  ignores: [
+    'design_handoff_personal_website/**',
+  ],
+
   stylistic: true,
   imports: true,
   jsonc: false,

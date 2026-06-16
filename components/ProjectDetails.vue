@@ -18,17 +18,17 @@ function closeDialog() {
     v-model="show"
     :max-width="mobile
       ? undefined
-      : '780'"
+      : '760'"
     :fullscreen="mobile"
     scrollable
   >
-    <v-card
+    <div
       v-if="project"
-      class="project-details-card"
-      :class="{'mobile-card': mobile}"
+      class="pd-card"
+      :class="{'pd-card--mobile': mobile}"
     >
-      <!-- Hero image / placeholder banner -->
-      <div class="hero-section">
+      <!-- Hero image -->
+      <div class="pd-hero">
         <v-img
           v-if="project.image"
           :src="project.image"
@@ -37,261 +37,315 @@ function closeDialog() {
           :height="mobile
             ? 200
             : 260"
-          class="hero-img"
         >
-          <div class="hero-overlay" />
+          <div class="pd-hero-overlay" />
         </v-img>
 
         <div
           v-else
-          class="d-flex align-center hero-placeholder justify-center"
+          class="pd-hero-placeholder"
           :style="{'height': mobile
             ? '200px'
             : '260px'}"
         >
           <v-icon
-            size="96"
-            class="placeholder-icon"
+            size="72"
+            color="var(--text-faint)"
           >
             mdi-code-braces
           </v-icon>
         </div>
 
-        <!-- Close button -->
-        <v-btn
-          icon
-          variant="flat"
-          size="small"
-          class="close-btn"
+        <button
+          type="button"
+          class="pd-close"
+          :aria-label="t('common.close')"
           @click="closeDialog"
         >
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+          <v-icon size="18">
+            mdi-close
+          </v-icon>
+        </button>
 
-        <!-- Title overlay -->
-        <div class="hero-title-bar pa-4">
-          <div class="d-flex align-center flex-wrap gap-2">
-            <span class="font-weight-bold text-h5 text-white">
-              {{ project.title }}
+        <div class="pd-title-bar">
+          <h2>{{ project.title }}</h2>
+
+          <div class="pd-title-meta">
+            <span
+              v-if="project.featured"
+              class="badge"
+            >
+              <v-icon
+                size="11"
+                icon="mdi-star"
+              />
+              {{ t('blog.featured1') }}
             </span>
 
-            <v-icon
-              v-if="project.featured"
-              color="warning"
-              size="20"
-            >
-              mdi-star
-            </v-icon>
-
-            <v-chip
-              size="small"
-              variant="tonal"
-              color="white"
-              class="ml-1"
-            >
-              {{ project.category }}
-            </v-chip>
+            <span class="tag">{{ project.category }}</span>
           </div>
         </div>
       </div>
 
       <!-- Scrollable content -->
-      <v-card-text class="content-area pa-6">
-        <!-- Short description -->
-        <p class="text-subtitle-1 text-medium-emphasis mb-4">
+      <div class="pd-body">
+        <p class="pd-short">
           {{ project.shortDescription[locale] }}
         </p>
 
-        <v-divider class="mb-4" />
-
-        <!-- Full description -->
-        <p
-          class="text-body-1 mb-6"
-          style="line-height: 1.75;"
-        >
+        <p class="pd-desc">
           {{ project.description[locale] }}
         </p>
 
         <!-- Technologies -->
-        <div class="mb-6">
-          <div class="d-flex align-center mb-3 gap-2">
+        <div class="pd-section">
+          <div class="pd-section-label">
             <v-icon
-              color="primary"
-              size="18"
+              size="13"
+              color="var(--accent)"
             >
               mdi-layers
             </v-icon>
-
-            <span class="text-uppercase font-weight-semibold text-subtitle-2 tracking-wide">
-              {{ t('projects.technologies') }}
-            </span>
+            {{ t('projects.technologies') }}
           </div>
 
-          <div class="d-flex flex-wrap gap-2">
-            <v-chip
+          <div class="tags">
+            <span
               v-for="tech in project.technologies"
               :key="tech"
-              size="small"
-              color="primary"
-              variant="tonal"
-            >
-              {{ tech }}
-            </v-chip>
+              class="tag"
+            >{{ tech }}</span>
           </div>
         </div>
 
         <!-- What I Learned -->
-        <div v-if="project.learned.length > 0">
-          <div class="d-flex align-center mb-3 gap-2">
+        <div
+          v-if="project.learned.length > 0"
+          class="pd-section"
+        >
+          <div class="pd-section-label">
             <v-icon
-              color="success"
-              size="18"
+              size="13"
+              color="var(--accent)"
             >
-              mdi-lightbulb-on
+              mdi-lightbulb-on-outline
             </v-icon>
-
-            <span class="text-subtitle-2 font-weight-semibold text-uppercase tracking-wide">
-              {{ t('projects.learned') }}
-            </span>
+            {{ t('projects.learned') }}
           </div>
 
-          <div class="d-flex flex-column gap-2">
+          <div class="pd-learned">
             <div
               v-for="skill in project.learned"
               :key="skill[locale]"
-              class="d-flex align-center gap-2"
+              class="pd-learn-item"
             >
               <v-icon
-                color="success"
-                size="16"
+                size="14"
+                color="var(--accent)"
               >
-                mdi-check-circle
+                mdi-check
               </v-icon>
 
-              <span class="text-body-2">{{ skill[locale] }}</span>
+              <span>{{ skill[locale] }}</span>
             </div>
           </div>
         </div>
-      </v-card-text>
+      </div>
 
-      <v-divider />
-
-      <!-- Action Buttons -->
-      <v-card-actions class="d-flex flex-wrap gap-2 pa-4">
-        <v-btn
+      <!-- Footer actions -->
+      <div class="pd-actions">
+        <a
+          v-if="project.url"
           :href="project.url"
           target="_blank"
           rel="noopener noreferrer"
-          color="primary"
-          variant="elevated"
-          :block="mobile"
-          prepend-icon="mdi-github"
+          class="btn btn-sm btn-primary"
         >
+          <v-icon
+            size="14"
+            icon="mdi-github"
+          />
           {{ t('projects.viewCode') }}
-        </v-btn>
+        </a>
 
-        <v-btn
+        <a
           v-if="project.demoUrl"
           :href="project.demoUrl"
           target="_blank"
           rel="noopener noreferrer"
-          color="secondary"
-          variant="tonal"
-          :block="mobile"
-          prepend-icon="mdi-open-in-new"
+          class="btn btn-ghost btn-sm"
         >
+          <v-icon
+            size="14"
+            icon="mdi-open-in-new"
+          />
           {{ t('projects.liveDemo') }}
-        </v-btn>
+        </a>
 
-        <v-spacer v-if="!mobile" />
-
-        <v-btn
-          variant="text"
-          :block="mobile"
+        <button
+          type="button"
+          class="btn btn-ghost btn-sm pd-dismiss"
           @click="closeDialog"
         >
           {{ t('common.close') }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+        </button>
+      </div>
+    </div>
   </v-dialog>
 </template>
 
 <style scoped>
-.project-details-card {
-  border-radius: 20px !important;
+.pd-card {
+  background: var(--bg-1);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-xl);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
 }
 
-.mobile-card {
-  border-radius: 0 !important;
+.pd-card--mobile {
+  border-radius: 0;
+  max-height: 100vh;
 }
 
-/* Hero section */
-.hero-section {
+/* Hero */
+.pd-hero {
   position: relative;
   flex-shrink: 0;
 }
 
-.hero-img {
-  display: block;
+.pd-hero-placeholder {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-2) 100%);
 }
 
-.hero-placeholder {
-  width: 100%;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-}
-
-.placeholder-icon {
-  opacity: 0.4;
-  color: #fff !important;
-}
-
-.hero-overlay {
+.pd-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.65) 100%);
+  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
 }
 
-.hero-title-bar {
+.pd-title-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.close-btn {
+.pd-title-bar h2 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.pd-title-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pd-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.45) !important;
-  color: #fff !important;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
   backdrop-filter: blur(4px);
   z-index: 1;
+  transition: background 0.2s;
 }
 
-/* Content */
-.content-area {
+.pd-close:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/* Body */
+.pd-body {
+  padding: 24px;
   overflow-y: auto;
+  flex: 1;
   scrollbar-width: thin;
-  scrollbar-color: rgb(var(--v-theme-primary)) transparent;
+  scrollbar-color: var(--accent-line) transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.content-area::-webkit-scrollbar {
-  width: 5px;
+.pd-short {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.55;
 }
 
-.content-area::-webkit-scrollbar-track {
-  background: transparent;
+.pd-desc {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  line-height: 1.7;
 }
 
-.content-area::-webkit-scrollbar-thumb {
-  background-color: rgb(var(--v-theme-primary));
-  border-radius: 4px;
+.pd-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.tracking-wide {
+.pd-section-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.pd-learned {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-learn-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Actions */
+.pd-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.pd-dismiss {
+  margin-left: auto;
 }
 </style>

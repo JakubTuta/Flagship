@@ -1,7 +1,6 @@
 import { getAnalytics, isSupported, logEvent } from 'firebase/analytics'
 import type { FirebaseAppSettings, FirebaseOptions } from 'firebase/app'
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
@@ -13,7 +12,6 @@ export default defineNuxtPlugin({
       // Provide null values on server to prevent errors
       nuxtApp.provide('firestore', null)
       nuxtApp.provide('storage', null)
-      nuxtApp.provide('auth', null)
       nuxtApp.provide('analytics', null)
 
       return
@@ -42,7 +40,6 @@ export default defineNuxtPlugin({
 
     const firestore = getFirestore(app)
     const storage = getStorage(app)
-    const auth = getAuth(app)
 
     let analytics = null
     try {
@@ -71,7 +68,6 @@ export default defineNuxtPlugin({
 
     nuxtApp.provide('firestore', firestore)
     nuxtApp.provide('storage', storage)
-    nuxtApp.provide('auth', auth)
     nuxtApp.provide('analytics', analytics)
   },
 })

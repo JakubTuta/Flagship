@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-import BlogContent from '~/components/BlogContent.vue'
-import type { IBlogSerialized, IUserSerialized } from '~/models/serialized'
+import type { IBlogSerialized } from '~/models/serialized'
 
 const route = useRoute()
 const { locale, t } = useI18n()
-const { mobile } = useDisplay()
 
 const displayLocale = computed<'en' | 'pl'>(() => {
   const lang = route.query.lang
@@ -21,18 +18,6 @@ const blogSlug = route.params.id as string
 const { data: blogData, status: blogStatus } = useAsyncData(
   `blog-${blogSlug}`,
   () => $fetch<IBlogSerialized>(`/api/blogs/${blogSlug}`),
-)
-
-const { data: authorData } = useAsyncData(
-  `blog-author-${blogSlug}`,
-  () => {
-    if (!blogData.value?.author) {
-      return Promise.resolve(null)
-    }
-
-    return $fetch<IUserSerialized>(`/api/users/${blogData.value.author}`)
-  },
-  { watch: [blogData] },
 )
 
 const isLoading = computed(() => blogStatus.value === 'pending')
@@ -71,7 +56,7 @@ watch(() => selectedBlog.value, (currentBlog) => {
     type: 'article',
     publishedTime: currentBlog.publishDate || undefined,
     modifiedTime: currentBlog.publishDate || undefined,
-    author: authorData.value?.username || 'Jakub Tutka',
+    author: 'Jakub Tutka',
     tags: currentBlog.category
       ? [getCategoryTitle(currentBlog.category), 'blog', 'development']
       : [],
@@ -87,7 +72,7 @@ watch(() => selectedBlog.value, (currentBlog) => {
     image: currentBlog.image || `${config.public.siteUrl}/images/profile.jpg`,
     datePublished: currentBlog.publishDate || undefined,
     dateModified: currentBlog.publishDate || undefined,
-    authorName: authorData.value?.username || 'Jakub Tutka',
+    authorName: 'Jakub Tutka',
     authorUrl: config.public.siteUrl,
     category: getCategoryTitle(currentBlog.category),
     keywords: [getCategoryTitle(currentBlog.category), 'development', 'programming'],
@@ -124,564 +109,569 @@ function formatDate(date: Date | string | null) {
     day: 'numeric',
   }).format(dateObj)
 }
+
+function getFromLanguage(language: string | null) {
+  const langMap: Record<string, string> = {
+    pl: 'blog.fromPolish',
+    en: 'blog.fromEnglish',
+  }
+
+  return t(langMap[language as string] || 'blog.fromUnknown')
+}
+
+// Reading progress bar
+const scrollProgress = ref(0)
+
+// TOC scroll-spy
+const activeTocId = ref<string>('')
+let tocObserver: IntersectionObserver | null = null
+let scrollCleanup: (() => void) | null = null
+
+function setupTocObserver() {
+  if (!selectedBlog.value?.tableOfContents?.length)
+    return
+
+  tocObserver?.disconnect()
+  tocObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          activeTocId.value = entry.target.id
+
+          return
+        }
+      }
+    },
+    { rootMargin: '-10% 0px -80% 0px', threshold: 0 },
+  )
+
+  nextTick(() => {
+    selectedBlog.value?.tableOfContents?.forEach((item) => {
+      const el = document.getElementById(item.id)
+      if (el)
+        tocObserver?.observe(el)
+    })
+  })
+}
+
+onMounted(() => {
+  const updateProgress = () => {
+    const el = document.documentElement
+    const total = el.scrollHeight - el.clientHeight
+    scrollProgress.value = total > 0
+      ? el.scrollTop / total
+      : 0
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true })
+  scrollCleanup = () => window.removeEventListener('scroll', updateProgress)
+
+  setupTocObserver()
+})
+
+watch(selectedBlog, (val) => {
+  if (!import.meta.server && val) {
+    setupTocObserver()
+  }
+})
+
+onUnmounted(() => {
+  scrollCleanup?.()
+  tocObserver?.disconnect()
+})
 </script>
 
 <template>
-  <v-container class="blog-detail-page py-8">
-    <!-- Loading State -->
-    <div
-      v-if="isLoading"
-      class="py-16 text-center"
+  <div
+    class="progress"
+    :style="{'transform': `scaleX(${scrollProgress})`}"
+    aria-hidden="true"
+  />
+
+  <!-- Loading -->
+  <div
+    v-if="isLoading"
+    class="wrap post-head py-16 text-center"
+  >
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      size="64"
+    />
+
+    <p class="muted mt-4">
+      {{ $t('blog.loading') }}
+    </p>
+  </div>
+
+  <!-- Not found -->
+  <div
+    v-else-if="!selectedBlog"
+    class="wrap post-head py-16 text-center"
+  >
+    <p
+      class="text-h4 mb-4"
+      style="color: var(--text);"
     >
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        size="64"
-      />
+      {{ $t('blog.notFound') }}
+    </p>
 
-      <p class="text-h6 mt-4">
-        {{ $t('blog.loading') }}
-      </p>
-    </div>
+    <NuxtLink
+      to="/blogs"
+      class="btn btn-primary"
+    >
+      {{ $t('blog.backToBlogs') }}
+    </NuxtLink>
+  </div>
 
-    <!-- Error State -->
-    <div
-      v-else-if="!selectedBlog"
-      class="py-16 text-center"
+  <!-- Article -->
+  <article
+    v-else
+    class="wrap post-head"
+  >
+    <NuxtLink
+      to="/blogs"
+      class="back"
     >
       <v-icon
-        size="64"
-        color="error"
-        class="mb-4"
+        size="15"
+        aria-hidden="true"
       >
-        mdi-alert-circle
+        mdi-arrow-left
       </v-icon>
+      {{ $t('blog.backToBlogs') }}
+    </NuxtLink>
 
-      <h2 class="text-h4 mb-4">
-        {{ $t('blog.notFound') }}
-      </h2>
+    <!-- Meta row -->
+    <div class="post-meta">
+      <template v-if="selectedBlog.featured">
+        <span class="badge">
+          <v-icon
+            size="12"
+            aria-hidden="true"
+          >
+            mdi-star
+          </v-icon>
+          {{ $t('blog.featured1') }}
+        </span>
 
-      <v-btn
-        to="/blogs"
-        color="primary"
-        variant="elevated"
-      >
-        {{ $t('blog.backToBlogs') }}
-      </v-btn>
+        <span aria-hidden="true">·</span>
+      </template>
+
+      <span class="cat">{{ getCategoryTitle(selectedBlog.category) }}</span>
+
+      <span aria-hidden="true">·</span>
+
+      <span>{{ formatDate(selectedBlog.publishDate) }}</span>
+
+      <span aria-hidden="true">·</span>
+
+      <span>{{ selectedBlog.viewCount }} {{ $t('blog.views') }}</span>
     </div>
 
-    <!-- Blog Content -->
-    <article
-      v-else
-      class="blog-content"
+    <!-- Title -->
+    <h1 class="post-title">
+      {{ selectedBlog.title[displayLocale] }}
+    </h1>
+
+    <!-- Byline -->
+    <div class="byline">
+      <span
+        class="av"
+        aria-hidden="true"
+      >JT</span>
+
+      <span class="who">
+        <b>{{ 'Jakub Tutka' }}</b>
+
+        <span>{{ $t('landingPage.hero.info') }}</span>
+      </span>
+    </div>
+
+    <!-- Cover image -->
+    <div
+      v-if="selectedBlog.image"
+      class="post-cover"
     >
-      <!-- Back Button -->
-      <div class="d-flex mb-6 justify-end">
-        <v-btn
-          to="/blogs"
-          variant="text"
-          color="primary"
-          prepend-icon="mdi-arrow-left"
-        >
-          {{ $t('blog.backToBlogs') }}
-        </v-btn>
-      </div>
+      <v-img
+        :src="selectedBlog.image"
+        :alt="`${selectedBlog.title[displayLocale]} - cover image`"
+        cover
+        width="100%"
+        height="100%"
+      />
+    </div>
 
-      <!-- Blog Header -->
-      <div
-        class="blog-header mb-8"
-        :class="[
-          selectedBlog.image
-            ? 'blog-header-with-image'
-            : 'blog-header-gradient',
-          {'h-80vh': mobile},
-        ]"
-        :style="selectedBlog.image
-          ? {'backgroundImage': `url(${selectedBlog.image})`}
-          : {}"
+    <!-- Disclaimer -->
+    <div
+      v-if="selectedBlog.mainLanguage && selectedBlog.mainLanguage !== displayLocale"
+      class="disclaimer"
+    >
+      <v-icon
+        size="18"
+        class="disclaimer-icon"
+        aria-hidden="true"
       >
-        <div class="blog-header-overlay">
-          <div class="blog-header-content">
-            <h1 class="blog-title mb-4">
-              {{ selectedBlog.title[displayLocale] }}
-            </h1>
+        mdi-information-outline
+      </v-icon>
 
-            <!-- Blog Meta Information -->
-            <v-row
-              class="blog-meta mb-6"
-              no-gutters
-            >
-              <v-col
-                cols="12"
-                sm="auto"
-                class="d-flex align-center mb-sm-0 mb-2"
-              >
-                <v-icon
-                  size="small"
-                  class="mr-2"
-                  color="on-primary"
-                >
-                  mdi-calendar
-                </v-icon>
+      <p>{{ $t('blog.languageWarning', {"language": getFromLanguage(selectedBlog.mainLanguage)}) }}</p>
+    </div>
 
-                <span class="text-body-2 text-on-primary">{{ formatDate(selectedBlog.publishDate) }}</span>
-              </v-col>
-
-              <v-col
-                cols="12"
-                sm="auto"
-                class="d-flex align-center mb-sm-0 mb-2 sm:ml-6"
-              >
-                <v-icon
-                  size="small"
-                  class="mr-2"
-                  color="on-primary"
-                >
-                  mdi-account
-                </v-icon>
-
-                <span class="text-body-2 text-on-primary">{{ authorData?.username || $t('blog.anonymous') }}</span>
-              </v-col>
-
-              <v-col
-                cols="12"
-                sm="auto"
-                class="d-flex align-center sm:ml-6"
-              >
-                <v-icon
-                  size="small"
-                  class="mr-2"
-                  color="on-primary"
-                >
-                  mdi-eye
-                </v-icon>
-
-                <span class="text-body-2 text-on-primary">{{ selectedBlog.viewCount }} {{ $t('blog.views') }}</span>
-              </v-col>
-            </v-row>
-
-            <v-row
-              class="mx-2 mb-6"
-              dense
-            >
-              <!-- Featured Badge -->
-              <v-col
-                cols="12"
-                sm="auto"
-              >
-                <v-chip
-                  v-if="selectedBlog.featured"
-                  color="warning"
-                  variant="elevated"
-                  prepend-icon="mdi-star"
-                >
-                  {{ $t('blog.featured1') }}
-                </v-chip>
-              </v-col>
-              <!-- Category Badge -->
-              <v-col
-                cols="12"
-                md="auto"
-              >
-                <v-chip
-                  color="surface"
-                  variant="elevated"
-                  prepend-icon="mdi-tag"
-                >
-                  {{ getCategoryTitle(selectedBlog.category) }}
-                </v-chip>
-              </v-col>
-            </v-row>
-          </div>
+    <!-- Post layout: TOC sidebar + prose -->
+    <div
+      class="post-layout"
+      :class="[{'post-layout--notoc': !selectedBlog.tableOfContents?.length}]"
+    >
+      <!-- TOC sidebar -->
+      <nav
+        v-if="selectedBlog.tableOfContents?.length"
+        class="toc"
+        aria-label="Table of contents"
+      >
+        <div class="toc-label">
+          {{ $t('blog.tableOfContents') }}
         </div>
-      </div>
 
-      <!-- Blog Content Card -->
-      <v-card
-        class="blog-content-card mb-8"
-        elevation="2"
-      >
+        <a
+          v-for="item in selectedBlog.tableOfContents"
+          :key="item.id"
+          :href="`#${item.id}`"
+          :class="{'sub': item.subLevel !== null,
+                   'active': activeTocId === item.id}"
+        >
+          {{ item.subLevel === null
+            ? `${item.mainLevel}. ${item.title[displayLocale]}`
+            : `${item.mainLevel}.${item.subLevel}. ${item.title[displayLocale]}` }}
+        </a>
+      </nav>
+
+      <!-- Prose -->
+      <div class="prose">
         <BlogContent
           :blog-content="selectedBlog.content[displayLocale]"
           :table-of-contents="selectedBlog.tableOfContents"
-          :main-language="selectedBlog.mainLanguage || undefined"
+          hide-toc
         />
-      </v-card>
 
-      <!-- Links Section -->
-      <v-card
-        v-if="selectedBlog.links?.length"
-        class="blog-links mb-8"
-        variant="outlined"
-      >
-        <v-card-title class="pb-4">
-          <v-icon class="mr-2">
-            mdi-link
-          </v-icon>
-          {{ $t('blog.relatedLinks') }}
-        </v-card-title>
-
-        <v-card-text>
-          <v-list bg-color="transparent">
-            <v-list-item
-              v-for="(link, index) in selectedBlog.links"
-              :key="index"
-              :href="link"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="max-w-200px px-0"
+        <!-- Related links -->
+        <div
+          v-if="selectedBlog.links?.length"
+          class="related"
+        >
+          <h4>
+            <v-icon
+              size="14"
+              aria-hidden="true"
             >
-              <template #prepend>
-                <v-icon color="primary">
-                  mdi-open-in-new
-                </v-icon>
-              </template>
+              mdi-link-variant
+            </v-icon>
+            {{ $t('blog.relatedLinks') }}
+          </h4>
 
-              <v-list-item-title>{{ link }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-      </v-card>
-
-      <!-- Related Projects -->
-      <v-card
-        v-if="selectedBlog.projects?.length"
-        class="blog-projects"
-        variant="outlined"
-      >
-        <v-card-title class="pb-4">
-          <v-icon class="mr-2">
-            mdi-code-braces
-          </v-icon>
-          {{ $t('blog.relatedProjects') }}
-        </v-card-title>
-
-        <v-card-text>
-          <v-chip-group>
-            <v-chip
-              v-for="(project, index) in selectedBlog.projects"
-              :key="index"
-              color="primary"
-              variant="outlined"
+          <a
+            v-for="(link, index) in selectedBlog.links"
+            :key="index"
+            :href="link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ link }}
+            <v-icon
+              size="14"
+              aria-hidden="true"
             >
-              {{ project.id }}
-            </v-chip>
-          </v-chip-group>
-        </v-card-text>
-      </v-card>
-    </article>
-  </v-container>
+              mdi-open-in-new
+            </v-icon>
+          </a>
+        </div>
+
+        <!-- Post footer -->
+        <div class="post-foot">
+          <NuxtLink
+            to="/blogs"
+            class="back"
+            style="margin: 0;"
+          >
+            <v-icon
+              size="15"
+              aria-hidden="true"
+            >
+              mdi-arrow-left
+            </v-icon>
+            {{ $t('blog.allArticles') }}
+          </NuxtLink>
+
+          <a
+            href="mailto:jakubtutka02@gmail.com"
+            class="btn btn-ghost btn-sm"
+          >
+            {{ $t('blog.discussPost') }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
 </template>
 
 <style scoped>
-/* All existing styles remain the same */
-:deep(.blog-image) {
-  width: 50% !important;
-  height: auto;
-  border-radius: 8px;
-  margin: 1rem auto;
-  display: block;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.blog-detail-page {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.table-of-contents {
-  background: rgb(var(--v-theme-surface-variant));
-  border-radius: 16px 16px 0 0;
-}
-
-.toc-list {
-  padding: 0;
-}
-
-.toc-item {
-  cursor: pointer;
-  border-radius: 8px;
-  margin: 2px 0;
-  transition: all 0.2s ease;
-}
-
-.toc-item:hover {
-  background: rgba(var(--v-theme-primary), 0.08);
-}
-
-.toc-main {
-  font-weight: 500;
-}
-
-.toc-sub {
-  padding-left: 2rem !important;
-  font-weight: 400;
-}
-
-.toc-title {
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.toc-number {
-  font-weight: 600;
-  margin-right: 0.5rem;
-  min-width: 2rem;
-  display: inline-block;
-}
-
-.blog-header {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-}
-
-.blog-header-gradient {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-}
-
-.blog-header-with-image {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.blog-header-overlay {
-  position: absolute;
+.progress {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  height: 3px;
+  z-index: 60;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  pointer-events: none;
+}
+
+.post-head {
+  padding-top: clamp(28px, 4vw, 44px);
+  padding-bottom: clamp(48px, 6vw, 80px);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: color 0.2s, gap 0.2s;
+  margin-bottom: 28px;
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--accent);
+  gap: 12px;
+}
+
+.post-meta {
   display: flex;
   align-items: center;
-  padding: 2rem;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.blog-header-with-image .blog-header-overlay {
-  background: linear-gradient(
-    135deg,
-    rgba(var(--v-theme-primary-rgb), 0.8) 0%,
-    rgba(var(--v-theme-secondary-rgb), 0.6) 100%
-  );
+.post-meta .cat {
+  color: var(--accent);
 }
 
-.blog-header-content {
-  width: 100%;
-  color: rgb(var(--v-theme-on-primary));
+.post-title {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5.5vw, 60px);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  max-width: 18ch;
+  color: var(--text);
 }
 
-.blog-title {
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1.2;
-  color: rgb(var(--v-theme-on-primary));
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.byline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
 }
 
-.blog-meta {
-  color: rgba(var(--v-theme-on-primary-rgb), 0.9);
+.byline .av {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--accent-ink);
+  background: linear-gradient(145deg, var(--accent), var(--accent-2));
+  flex-shrink: 0;
 }
 
-.blog-content-card {
-  border-radius: 16px !important;
+.byline .who b {
+  font-size: 14.5px;
+  display: block;
+  color: var(--text);
+}
+
+.byline .who span {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+.post-cover {
+  margin-top: 32px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  border: 1px solid var(--line);
+  aspect-ratio: 21 / 9;
 }
 
-.blog-text {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: rgb(var(--v-theme-on-surface));
+.disclaimer {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 32px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-1);
 }
 
-:deep(.blog-code-block-card) {
-  border-radius: 12px !important;
-  overflow: hidden;
-  margin: 1.5rem 0;
+.disclaimer-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  margin-top: 1px;
 }
 
-:deep(.blog-code-content) {
-  background: transparent;
-  margin: 0;
-  padding: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-  font-size: 0.9rem;
+.disclaimer p {
+  font-size: 13px;
+  color: var(--text-muted);
   line-height: 1.5;
-  color: rgb(var(--v-theme-on-surface));
-  overflow-x: auto;
+  margin: 0;
 }
 
-:deep(.blog-h1) {
-  font-size: 2rem;
-  font-weight: 500;
-  margin: 2rem 0 1rem 0;
-  color: rgb(var(--v-theme-primary));
-  border-bottom: 2px solid rgb(var(--v-theme-primary));
-  padding-bottom: 0.5rem;
-  scroll-margin-top: 100px;
+.post-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+  margin-top: clamp(40px, 5vw, 56px);
 }
 
-:deep(.blog-h2) {
-  font-size: 1.75rem;
-  font-weight: 500;
-  margin: 1.5rem 0 0.75rem 0;
-  color: rgb(var(--v-theme-primary));
-  scroll-margin-top: 100px;
+.post-layout--notoc {
+  grid-template-columns: 1fr;
 }
 
-:deep(.blog-h3) {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 1.25rem 0 0.5rem 0;
-  color: rgb(var(--v-theme-secondary));
-  scroll-margin-top: 100px;
+.toc {
+  position: sticky;
+  top: calc(var(--nav-h) + 24px);
 }
 
-:deep(.blog-bold) {
-  font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+.toc-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 14px;
 }
 
-:deep(.blog-italic) {
-  font-style: italic;
-  color: rgb(var(--v-theme-on-surface-variant));
+.toc a {
+  display: block;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  padding: 6px 0 6px 14px;
+  border-left: 2px solid var(--line-soft);
+  line-height: 1.35;
+  transition: color 0.2s, border-color 0.2s;
+  text-decoration: none;
 }
 
-:deep(.blog-underline) {
-  text-decoration: underline;
-  text-decoration-color: rgb(var(--v-theme-primary));
-  text-underline-offset: 2px;
+.toc a.sub {
+  padding-left: 26px;
+  font-size: 12.5px;
+  color: var(--text-faint);
 }
 
-:deep(.blog-inline-code) {
-  background: rgba(var(--v-theme-primary), 0.1);
-  color: rgb(var(--v-theme-primary));
-  padding: 0.15rem 0.4rem;
-  border-radius: 6px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-  font-size: 0.85em;
-  font-weight: 500;
-  border: 1px solid rgba(var(--v-theme-primary), 0.2);
+.toc a:hover {
+  color: var(--text);
 }
 
-:deep(.blog-list) {
-  margin: 1rem 0;
-  padding-left: 0;
-  list-style: none;
+.toc a.active {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
-:deep(.blog-list-item) {
-  position: relative;
-  padding-left: 1.5rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
+.prose {
+  max-width: 70ch;
+  min-width: 0;
 }
 
-:deep(.blog-list-item::before) {
-  content: '•';
-  color: rgb(var(--v-theme-primary));
-  font-weight: bold;
-  position: absolute;
-  left: 0;
-  top: 0;
+.related {
+  margin-top: 44px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line-soft);
 }
 
-:deep(.blog-numbered-list) {
-  margin: 1rem 0;
-  padding-left: 0;
-  list-style: none;
-  counter-reset: list-counter;
+.related h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
 }
 
-:deep(.blog-numbered-item) {
-  position: relative;
-  padding-left: 2rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-  counter-increment: list-counter;
+.related a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  transition: all 0.2s;
+  text-decoration: none;
+  word-break: break-all;
 }
 
-:deep(.blog-numbered-item::before) {
-  content: counter(list-counter) '.';
-  color: rgb(var(--v-theme-secondary));
-  font-weight: 600;
-  position: absolute;
-  left: 0;
-  top: 0;
-  min-width: 1.5rem;
+.related a:hover {
+  border-color: var(--accent-line);
+  color: var(--accent);
+  background: var(--accent-soft);
 }
 
-:deep(.blog-sublist-item) {
-  position: relative;
-  padding-left: 3rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-  margin-left: 1rem;
+.post-foot {
+  border-top: 1px solid var(--line-soft);
+  margin-top: clamp(48px, 6vw, 72px);
+  padding-top: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-:deep(.blog-sublist-item::before) {
-  content: attr(data-number);
-  color: rgb(var(--v-theme-accent));
-  font-weight: 500;
-  position: absolute;
-  left: 0;
-  top: 0;
-  min-width: 2.5rem;
-}
-
-@media (max-width: 600px) {
-  :deep(.blog-image) {
-    max-width: 80% !important;
-    width: 80% !important;
+@media (max-width: 860px) {
+  .post-layout {
+    grid-template-columns: 1fr;
   }
 
-  .blog-title {
-    font-size: 2rem;
+  .toc {
+    position: static;
+    margin-bottom: 8px;
   }
 
-  .blog-text {
-    font-size: 1rem;
+  .toc a {
+    display: inline-block;
+    border-left: none;
+    padding-left: 0;
+    padding-right: 12px;
   }
 
-  .blog-header {
-    min-height: 250px;
+  .prose {
+    max-width: 100%;
   }
+}
 
-  .blog-header-overlay {
-    padding: 1.5rem;
-  }
-
-  .toc-sub {
-    padding-left: 1rem !important;
-  }
-
-  .toc-number {
-    min-width: 1.5rem;
-  }
-
-  :deep(.blog-h1) {
-    font-size: 1.75rem;
-  }
-
-  :deep(.blog-h2) {
-    font-size: 1.375rem;
-  }
-
-  :deep(.blog-h3) {
-    font-size: 1.125rem;
-  }
-
-  .blog-meta .v-col {
-    margin-left: 0 !important;
-  }
-
-  :deep(.blog-code-block-card) {
-    margin: 1rem 0;
+@media (max-width: 560px) {
+  .post-title {
+    max-width: 100%;
   }
 }
 </style>

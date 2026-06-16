@@ -98,8 +98,8 @@ export function useSeo(options: SeoOptions = {}) {
     // Basic meta tags
     title: finalTitle,
     description: finalDescription,
-    robots: robotsContent,
-    googlebot: robotsContent,
+    robots: robotsContent as any,
+    googlebot: robotsContent as any,
 
     // Open Graph tags
     ogTitle: `${finalTitle} | ${siteName}`,

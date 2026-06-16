@@ -1,7 +1,7 @@
 export const useThemeStore = defineStore('theme', () => {
   type Themes = 'light' | 'dark'
 
-  const clientTheme = ref<Themes>('light')
+  const clientTheme = ref<Themes>('dark')
   const isInitialized = ref(false)
 
   const setTheme = (theme: Themes) => {
@@ -42,7 +42,7 @@ export const useThemeStore = defineStore('theme', () => {
       const localTheme = localStorage.getItem('tuta-theme')
       const savedTheme: Themes = (localTheme === 'dark' || localTheme === 'light')
         ? localTheme as Themes
-        : 'light'
+        : 'dark'
 
       setTheme(savedTheme)
       isInitialized.value = true

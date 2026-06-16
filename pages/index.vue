@@ -1,10 +1,5 @@
 <script setup lang="ts">
-const { t, locale } = useI18n()
-const currentLocale = computed<'en' | 'pl'>(() => {
-  return locale.value === 'pl'
-    ? 'pl'
-    : 'en'
-})
+const { t } = useI18n()
 
 useSeo({
   useTranslation: true,
@@ -67,7 +62,10 @@ const featuredProjects = computed(() => {
 })
 
 const topBlogs = computed(() => {
-  return [...blogStore.publishedBlogs]
+  if (!blogsData.value)
+    return []
+
+  return [...blogsData.value]
     .sort((a, b) => b.viewCount - a.viewCount)
     .slice(0, 3)
 })
@@ -75,990 +73,751 @@ const topBlogs = computed(() => {
 const yearsOfExperience = computed(() => new Date().getFullYear() - 2023)
 
 const stats = computed(() => [
-  { value: `${yearsOfExperience.value}+`, label: t('landingPage.stats.experience') },
-  { value: `${projectStore.projects.length || 10}+`, label: t('landingPage.stats.projects') },
-  { value: `${blogStore.publishedBlogs.length || 20}+`, label: t('landingPage.stats.articles') },
-  { value: '20+', label: t('landingPage.stats.technologies') },
+  { value: yearsOfExperience.value, accent: '+', label: t('landingPage.stats.experience') },
+  { value: projectStore.projects.length || 16, accent: '', label: t('landingPage.stats.projects') },
+  { value: blogStore.publishedBlogs.length || 20, accent: '+', label: t('landingPage.stats.articles') },
+  { value: 20, accent: '+', label: t('landingPage.stats.technologies') },
 ])
 
-const skills = computed(() => [
-  {
-    name: 'Python',
-    icon: 'mdi-language-python',
-    color: 'success',
-    additional: ['Django', 'FastAPI', 'Flask'],
-  },
-  {
-    name: 'Vue.js',
-    icon: 'mdi-vuejs',
-    color: 'success',
-    additional: ['Nuxt.js'],
-  },
-  {
-    name: 'TypeScript',
-    icon: 'mdi-language-typescript',
-    color: 'info',
-    additional: ['JavaScript'],
-  },
-  {
-    name: t('skills.apiIntegration'),
-    icon: 'mdi-api',
-    color: 'warning',
-    additional: ['REST', 'GraphQL', 'gRPC', 'WebSocket'],
-  },
-  {
-    name: t('skills.containerizationAndOrchestration'),
-    icon: 'mdi-docker',
-    color: 'info',
-    additional: ['Docker', 'Kubernetes'],
-  },
-  {
-    name: t('skills.database'),
-    icon: 'mdi-database',
-    color: 'accent',
-    additional: ['PostgreSQL', 'MongoDB', 'Firestore', 'Redis'],
-  },
-  {
-    name: t('skills.devops'),
-    icon: 'mdi-source-branch',
-    color: 'error',
-    additional: ['Git', 'GitHub', 'GitLab', 'GitHub Actions', 'GitLab CI/CD'],
-  },
-  {
-    name: 'Google Cloud Platform',
-    icon: 'mdi-google-cloud',
-    color: 'info',
-    additional: ['Cloud Functions', 'Cloud Run', 'Container Registry', 'Cloud Storage', 'Firebase'],
-  },
-  {
-    name: 'Testing & Monitoring',
-    icon: 'mdi-test-tube',
-    color: 'secondary',
-    additional: ['Postman', 'pytest', 'Sentry'],
-  },
+const skillColumns = computed(() => [
+  { label: t('landingPage.skills.columns.backend'), icon: 'mdi-code-braces', tags: ['Python', 'FastAPI', 'Django', 'Flask', 'gRPC', 'REST'] },
+  { label: t('landingPage.skills.columns.cloud'), icon: 'mdi-cloud-outline', tags: ['GCP', 'Docker', 'Kubernetes', 'Firebase', 'GitHub Actions', 'GitLab CI'] },
+  { label: t('landingPage.skills.columns.databases'), icon: 'mdi-database-outline', tags: ['PostgreSQL', 'Redis', 'MongoDB', 'Firestore', 'Elasticsearch'] },
+  { label: t('landingPage.skills.columns.frontend'), icon: 'mdi-monitor-outline', tags: ['Vue.js', 'Nuxt.js', 'TypeScript', 'JavaScript'] },
+  { label: t('landingPage.skills.columns.versionControl'), icon: 'mdi-source-branch', tags: ['Git', 'GitHub', 'GitLab'] },
+  { label: t('landingPage.skills.columns.observability'), icon: 'mdi-chart-line', tags: ['Sentry', 'Pytest', 'SSE'] },
 ])
 
-const contactMethods = computed(() => [
+const valueCards = computed(() => [
   {
-    title: 'Email',
-    info: 'jakubtutka02@gmail.com',
-    icon: 'mdi-email',
-    color: 'primary',
-    action: t('contact.email.action'),
-    email: 'jakubtutka02@gmail.com',
+    icon: 'mdi-shield-check-outline',
+    title: t('landingPage.values.ownership.title'),
+    body: t('landingPage.values.ownership.body'),
   },
   {
-    title: 'LinkedIn',
-    info: t('contact.linkedin.info'),
-    icon: 'mdi-linkedin',
-    color: 'info',
-    action: t('contact.linkedin.action'),
-    to: 'https://www.linkedin.com/in/jakub-tutka-077b55352/',
+    icon: 'mdi-shimmer',
+    title: t('landingPage.values.fearless.title'),
+    body: t('landingPage.values.fearless.body'),
   },
   {
-    title: 'GitHub',
-    info: t('contact.github.info'),
-    icon: 'mdi-github',
-    color: 'secondary',
-    action: t('contact.github.action'),
-    to: 'https://github.com/JakubTuta',
+    icon: 'mdi-code-tags',
+    title: t('landingPage.values.production.title'),
+    body: t('landingPage.values.production.body'),
   },
 ])
-
-function scrollToSection(sectionId: string) {
-  const element = document.getElementById(sectionId)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
-}
-
-function formatViews(count: number): string {
-  if (count >= 1000) {
-    return `${(count / 1000).toFixed(1)}k`
-  }
-
-  return count.toString()
-}
 </script>
 
 <template>
-  <div class="landing-page">
-    <!-- Hero Section -->
-    <div class="align-center hero-section flex justify-center pa-0">
-      <v-row
-        no-gutters
-        class="fill-height"
-      >
-        <v-col
-          cols="12"
-          class="align-center d-flex justify-center"
-        >
-          <div class="hero-content text-center">
-            <v-avatar
-              size="150"
-              class="hero-avatar mb-6"
-            >
-              <v-img
-                src="/images/profile.jpg"
-                lazy-src="/images/profile-low.jpg"
-                alt="Profile Picture"
-              />
-            </v-avatar>
-
-            <h1 class="hero-title mb-4">
-              Jakub Tutka
-            </h1>
-
-            <p class="hero-subtitle mb-8">
-              {{ $t('landingPage.hero.info') }}
-            </p>
-
-            <div class="hero-buttons">
-              <v-btn
-                size="large"
-                color="primary"
-                variant="elevated"
-                class="mb-2 mr-4"
-                @click="scrollToSection('bio')"
-              >
-                <v-icon
-                  size="x-large"
-                  class="mr-2"
-                >
-                  mdi-account
-                </v-icon>
-                {{ $t('landingPage.hero.about') }}
-              </v-btn>
-
-              <v-btn
-                size="large"
-                variant="elevated"
-                color="secondary"
-                class="mb-2"
-                @click="scrollToSection('contact')"
-              >
-                <v-icon
-                  size="x-large"
-                  class="mr-2"
-                >
-                  mdi-email
-                </v-icon>
-                {{ $t('landingPage.hero.contact') }}
-              </v-btn>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-
-      <div class="scroll-indicator">
-        <v-btn
-          icon
-          variant="text"
-          aria-label="Scroll down"
-          class="bounce-animation"
-          @click="scrollToSection('bio')"
-        >
-          <v-icon size="x-large">
-            mdi-chevron-down
-          </v-icon>
-        </v-btn>
-      </div>
-    </div>
-
-    <!-- Stats Bar -->
-    <div class="stats-bar">
-      <v-container>
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col
-            v-for="(stat, index) in stats"
-            :key="index"
-            cols="6"
-            sm="3"
-            class="stats-item text-center"
+  <div>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-text">
+          <Reveal
+            tag="span"
+            class="status"
           >
-            <div class="stats-value">
-              {{ stat.value }}
-            </div>
+            <span class="dot" />
+            {{ $t('landingPage.hero.available') }}
+          </Reveal>
 
-            <div class="stats-label">
-              {{ stat.label }}
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-
-    <!-- Bio Section -->
-    <v-container
-      id="bio"
-      class="py-16"
-    >
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <v-col
-          cols="12"
-          md="5"
-          class="mb-md-0 mb-8"
-        >
-          <div class="bio-decoration pa-10 text-center">
-            <v-icon
-              size="72"
-              color="white"
-              class="mb-6"
-            >
-              mdi-book-open-page-variant
-            </v-icon>
-
-            <p class="bio-quote">
-              {{ $t('landingPage.bio.quote') }}
-            </p>
-
-            <p class="bio-quote-author mt-4">
-              {{ $t('landingPage.bio.quoteAuthor') }}
-            </p>
-          </div>
-        </v-col>
-
-        <v-col
-          cols="12"
-          md="7"
-          class="pl-md-10"
-        >
-          <h2 class="section-title mb-6">
-            {{ $t('landingPage.bio.title') }}
-          </h2>
-
-          <p class="bio-paragraph mb-8">
-            {{ $t('landingPage.bio.paragraph') }}
-          </p>
-
-          <v-btn
-            color="secondary"
-            variant="outlined"
-            to="/resume"
+          <Reveal
+            tag="p"
+            class="kicker"
+            :delay="1"
           >
-            <v-icon class="mr-2">
-              mdi-file-document
-            </v-icon>
-            {{ $t('navigation.resume.title') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
+            Jakub Tutka — {{ t('landingPage.hero.info') }}
+          </Reveal>
 
-    <!-- Featured Projects Section -->
-    <v-container
-      fluid
-      class="featured-projects-section py-16"
-    >
-      <v-container>
-        <v-row class="mb-10 justify-center">
-          <v-col
-            cols="12"
-            md="8"
-            class="text-center"
+          <Reveal
+            tag="h1"
+            :delay="1"
           >
-            <h2 class="section-title mb-4">
-              {{ $t('landingPage.featuredProjects.title') }}
-            </h2>
+            {{ $t('landingPage.hero.headingPre') }}<em>{{ $t('landingPage.hero.headingAccent') }}</em>{{ $t('landingPage.hero.headingSuf') }}
+          </Reveal>
 
-            <p class="section-subtitle">
-              {{ $t('landingPage.featuredProjects.subtitle') }}
-            </p>
-          </v-col>
-        </v-row>
-
-        <v-row
-          v-if="loadingProjects"
-          class="justify-center"
-        >
-          <v-col
-            v-for="i in 3"
-            :key="i"
-            cols="12"
-            sm="6"
-            md="4"
+          <Reveal
+            tag="p"
+            class="tagline"
+            :delay="2"
           >
-            <v-skeleton-loader type="image, article, actions" />
-          </v-col>
-        </v-row>
+            {{ $t('landingPage.hero.tagline', {"years": yearsOfExperience}) }}
+          </Reveal>
 
-        <v-row
-          v-else-if="featuredProjects.length"
-          class="justify-center"
-        >
-          <v-col
-            v-for="project in featuredProjects"
-            :key="project.value"
-            cols="12"
-            sm="6"
-            md="4"
+          <Reveal
+            class="hero-cta"
+            :delay="3"
           >
-            <v-card
-              class="project-card h-100"
-              elevation="4"
-              hover
-            >
-              <v-img
-                :src="project.image || ''"
-                :alt="project.title"
-                height="200"
-                cover
-              >
-                <template #error>
-                  <div class="d-flex align-center project-image-fallback h-100 justify-center">
-                    <v-icon
-                      size="64"
-                      color="primary"
-                      opacity="0.35"
-                    >
-                      mdi-code-braces
-                    </v-icon>
-                  </div>
-                </template>
-              </v-img>
-
-              <v-card-title class="pt-4 text-wrap">
-                {{ project.title }}
-              </v-card-title>
-
-              <v-card-text>
-                <p class="text-body-2 mb-4">
-                  {{ project.shortDescription[currentLocale] || project.shortDescription.en }}
-                </p>
-
-                <div class="d-flex flex-wrap gap-1">
-                  <v-chip
-                    v-for="tech in project.technologies.slice(0, 4)"
-                    :key="tech"
-                    size="small"
-                    variant="tonal"
-                    color="primary"
-                  >
-                    {{ tech }}
-                  </v-chip>
-
-                  <v-chip
-                    v-if="project.technologies.length > 4"
-                    size="small"
-                    variant="tonal"
-                    color="secondary"
-                  >
-                    +{{ project.technologies.length - 4 }}
-                  </v-chip>
-                </div>
-              </v-card-text>
-
-              <v-card-actions class="pa-4 pt-0">
-                <v-btn
-                  :href="project.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="primary"
-                  variant="text"
-                  size="small"
-                >
-                  <v-icon class="mr-1">
-                    mdi-github
-                  </v-icon>
-                  {{ $t('projects.viewCode') }}
-                </v-btn>
-
-                <v-btn
-                  v-if="project.demoUrl"
-                  :href="project.demoUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="secondary"
-                  variant="text"
-                  size="small"
-                >
-                  <v-icon class="mr-1">
-                    mdi-open-in-new
-                  </v-icon>
-                  {{ $t('projects.liveDemo') }}
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row class="mt-8 justify-center">
-          <v-col
-            cols="12"
-            class="text-center"
-          >
-            <v-btn
+            <NuxtLink
               to="/projects"
-              color="primary"
-              variant="outlined"
-              size="large"
+              class="btn btn-primary"
             >
-              {{ $t('landingPage.featuredProjects.cta') }}
-              <v-icon class="ml-2">
-                mdi-arrow-right
-              </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-container>
+              {{ $t('landingPage.hero.viewProjects') }}
+              <v-icon
+                size="16"
+                icon="mdi-arrow-right"
+              />
+            </NuxtLink>
 
-    <!-- Most Viewed Blogs Section -->
-    <v-container class="py-16">
-      <v-row class="mb-10 justify-center">
-        <v-col
-          cols="12"
-          md="8"
-          class="text-center"
-        >
-          <h2 class="section-title mb-4">
-            {{ $t('landingPage.topBlogs.title') }}
-          </h2>
+            <NuxtLink
+              to="/resume"
+              class="btn btn-ghost"
+            >
+              {{ $t('landingPage.hero.readResume') }}
+            </NuxtLink>
+          </Reveal>
 
-          <p class="section-subtitle">
-            {{ $t('landingPage.topBlogs.subtitle') }}
-          </p>
-        </v-col>
-      </v-row>
-
-      <v-row
-        v-if="loadingBlogs"
-        class="justify-center"
-      >
-        <v-col
-          cols="12"
-          md="8"
-        >
-          <v-skeleton-loader
-            v-for="i in 3"
-            :key="i"
-            type="list-item-avatar-three-line"
-            class="mb-3"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row
-        v-else-if="topBlogs.length"
-        class="justify-center"
-      >
-        <v-col
-          cols="12"
-          md="8"
-        >
-          <v-card
-            elevation="2"
-            class="blog-list-card"
+          <Reveal
+            class="socials"
+            :delay="3"
           >
-            <v-list lines="three">
-              <template
-                v-for="(blog, index) in topBlogs"
-                :key="blog.value"
-              >
-                <v-list-item
-                  :to="`/blog/${blog.value}`"
-                  class="blog-list-item py-4"
-                >
-                  <template #prepend>
-                    <v-avatar
-                      size="80"
-                      rounded="lg"
-                      class="mr-4"
-                    >
-                      <v-img
-                        v-if="blog.image"
-                        :src="blog.image"
-                        :alt="blog.title[currentLocale] || blog.title.en"
-                        cover
-                      />
+            <a
+              href="https://github.com/JakubTuta"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              class="social-link"
+            >
+              <v-icon
+                size="18"
+                icon="mdi-github"
+              />
+            </a>
 
-                      <v-icon
-                        v-else
-                        size="36"
-                        color="primary"
-                        opacity="0.5"
-                      >
-                        mdi-post
-                      </v-icon>
-                    </v-avatar>
-                  </template>
+            <a
+              href="https://www.linkedin.com/in/jakub-tutka-077b55352/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              class="social-link"
+            >
+              <v-icon
+                size="18"
+                icon="mdi-linkedin"
+              />
+            </a>
 
-                  <v-list-item-title class="blog-item-title mb-2">
-                    {{ blog.title[currentLocale] || blog.title.en }}
-                  </v-list-item-title>
+            <a
+              href="mailto:jakubtutka02@gmail.com"
+              aria-label="Email"
+              class="social-link"
+            >
+              <v-icon
+                size="18"
+                icon="mdi-email-outline"
+              />
+            </a>
+          </Reveal>
+        </div>
 
-                  <v-list-item-subtitle>
-                    <div class="d-flex align-center mt-1 flex-wrap gap-2">
-                      <v-chip
-                        size="x-small"
-                        color="primary"
-                        variant="tonal"
-                      >
-                        {{ $t(`blog.categories.${blog.category}`) }}
-                      </v-chip>
-
-                      <span class="d-flex align-center text-caption">
-                        <v-icon
-                          size="14"
-                          class="mr-1"
-                        >
-                          mdi-eye
-                        </v-icon>
-                        {{ formatViews(blog.viewCount) }} {{ $t('landingPage.topBlogs.views') }}
-                      </span>
-                    </div>
-                  </v-list-item-subtitle>
-
-                  <template #append>
-                    <v-icon color="primary">
-                      mdi-chevron-right
-                    </v-icon>
-                  </template>
-                </v-list-item>
-
-                <v-divider
-                  v-if="index < topBlogs.length - 1"
-                  inset
-                />
-              </template>
-            </v-list>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <v-row class="mt-8 justify-center">
-        <v-col
-          cols="12"
-          class="text-center"
+        <Reveal
+          class="portrait-wrap"
+          :delay="2"
         >
-          <v-btn
-            to="/blogs"
-            color="secondary"
-            variant="outlined"
-            size="large"
-          >
-            {{ $t('landingPage.topBlogs.cta') }}
-            <v-icon class="ml-2">
-              mdi-arrow-right
-            </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <!-- Skills Section -->
-    <v-container
-      fluid
-      class="skills-section py-16"
-    >
-      <v-container>
-        <v-row class="mb-12 justify-center">
-          <v-col
-            cols="12"
-            md="8"
-            class="text-center"
-          >
-            <h2 class="section-title mb-4">
-              {{ $t('landingPage.skills.title') }}
-            </h2>
-
-            <p class="section-subtitle">
-              {{ $t('landingPage.skills.subtitle') }}
-            </p>
-          </v-col>
-        </v-row>
-
-        <v-row class="justify-center">
-          <v-col
-            cols="12"
-            md="8"
-          >
-            <v-row>
-              <v-col
-                v-for="(skill, index) in skills"
-                :key="index"
-                cols="6"
-                sm="4"
-                md="3"
-                class="mb-4 text-center"
-              >
-                <v-card
-                  class="skill-card pa-4"
-                  elevation="2"
-                  hover
-                  min-height="110"
-                  style="display: flex; flex-direction: column; justify-content: center; align-items: center;"
-                >
+          <div class="shot portrait">
+            <v-img
+              src="/images/profile.jpg"
+              alt="Jakub Tutka — Back-End Python Developer"
+              cover
+              width="100%"
+              height="100%"
+            >
+              <template #error>
+                <div class="portrait-placeholder">
                   <v-icon
-                    :color="skill.color"
-                    size="35"
-                    class="mb-2"
-                  >
-                    {{ skill.icon }}
-                  </v-icon>
+                    size="64"
+                    color="var(--text-faint)"
+                    icon="mdi-account-outline"
+                  />
+                </div>
+              </template>
+            </v-img>
 
-                  <div class="skill-name">
-                    {{ skill.name }}
-                  </div>
+            <div class="nameplate">
+              <div>
+                <b>Jakub Tutka</b>
 
-                  <v-tooltip
-                    v-if="skill.additional"
-                    location="bottom"
-                    activator="parent"
-                  >
-                    <v-list
-                      bg-color="transparent"
-                      rounded="xl"
-                      min-width="150"
-                    >
-                      <v-list-item
-                        v-for="item in skill.additional"
-                        :key="item"
-                        class="text-subtitle-2"
-                      >
-                        {{ item }}
-                      </v-list-item>
-                    </v-list>
-                  </v-tooltip>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-container>
+                <span class="sub">{{ t('landingPage.hero.info') }}</span>
+              </div>
 
-    <!-- Contact Section -->
-    <v-container
-      id="contact"
-      class="py-16"
-    >
-      <v-row class="justify-center">
-        <v-col
-          cols="12"
-          md="8"
-          class="text-center"
+              <span class="loc">
+                <v-icon
+                  size="13"
+                  color="var(--accent)"
+                  icon="mdi-map-marker-outline"
+                />
+                Kraków, PL
+              </span>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="wrap section-tight">
+      <Reveal class="stats">
+        <div
+          v-for="s in stats"
+          :key="s.label"
+          class="stat"
         >
-          <h2 class="section-title mb-4">
-            {{ $t('landingPage.contact.title') }}
-          </h2>
+          <div class="n">
+            <CountUp :value="s.value" />
 
-          <p class="section-subtitle mb-8">
-            {{ $t('landingPage.contact.subtitle') }}
+            <span
+              v-if="s.accent"
+              class="accent-text"
+            >{{ s.accent }}</span>
+          </div>
+
+          <div class="l">
+            {{ s.label }}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+
+    <!-- ABOUT -->
+    <section
+      id="about"
+      class="wrap section"
+    >
+      <div class="about-grid">
+        <Reveal>
+          <span class="eyebrow">{{ $t('landingPage.about.eyebrow') }}</span>
+
+          <p
+            class="body-text"
+            style="margin-top: 20px;"
+          >
+            {{ $t('landingPage.bio.paragraph1', {"years": yearsOfExperience}) }}
           </p>
 
-          <v-row class="justify-center">
-            <v-col
-              v-for="(contact, index) in contactMethods"
-              :key="index"
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <v-card
-                class="contact-card pa-6"
-                elevation="3"
-                hover
-              >
-                <v-icon
-                  :color="contact.color"
-                  size="32"
-                  class="mb-3"
-                >
-                  {{ contact.icon }}
-                </v-icon>
+          <p
+            class="body-text"
+            style="margin-top: 18px;"
+          >
+            {{ $t('landingPage.bio.paragraph2') }}
+          </p>
+        </Reveal>
 
-                <h3 class="mb-2">
-                  {{ contact.title }}
-                </h3>
+        <Reveal
+          class="values"
+          :delay="1"
+        >
+          <div
+            v-for="card in valueCards"
+            :key="card.title"
+            class="value"
+          >
+            <span class="ico">
+              <v-icon
+                size="19"
+                :icon="card.icon"
+              />
+            </span>
 
-                <p class="contact-info">
-                  {{ contact.info }}
-                </p>
+            <div>
+              <h4>{{ card.title }}</h4>
 
-                <v-btn
-                  v-if="contact.to"
-                  :href="contact.to"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  :color="contact.color"
-                  variant="outlined"
-                  class="mt-3"
-                >
-                  {{ contact.action }}
-                </v-btn>
+              <p>{{ card.body }}</p>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
 
-                <v-btn
-                  v-if="contact.email"
-                  :href="`mailto:${contact.email}`"
-                  :color="contact.color"
-                  variant="outlined"
-                  class="mt-3"
-                >
-                  {{ contact.action }}
-                </v-btn>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
+    <!-- FEATURED PROJECTS -->
+    <section
+      id="projects"
+      class="wrap section"
+    >
+      <SectionHead
+        :eyebrow="$t('landingPage.featuredProjects.eyebrow')"
+        :title="$t('landingPage.featuredProjects.heading')"
+        :subtitle="$t('landingPage.featuredProjects.about')"
+        has-row
+      >
+        <NuxtLink
+          to="/projects"
+          class="section-link"
+        >
+          {{ $t('landingPage.featuredProjects.ctaWith', {"count": projectStore.projects.length || ''}) }}
+          <v-icon
+            size="15"
+            icon="mdi-arrow-right"
+          />
+        </NuxtLink>
+      </SectionHead>
+
+      <div
+        v-if="loadingProjects"
+        class="feat-grid"
+      >
+        <v-skeleton-loader
+          v-for="i in 3"
+          :key="i"
+          type="image,article"
+          class="card"
+        />
+      </div>
+
+      <div
+        v-else
+        class="feat-grid"
+      >
+        <Reveal
+          v-for="(project, i) in featuredProjects"
+          :key="project.value"
+          :delay="i"
+        >
+          <ProjectCard
+            :project="project"
+            variant="home"
+          />
+        </Reveal>
+      </div>
+    </section>
+
+    <!-- WRITING -->
+    <section
+      id="writing"
+      class="wrap section"
+    >
+      <SectionHead
+        :eyebrow="$t('landingPage.topBlogs.eyebrow')"
+        :title="$t('landingPage.topBlogs.heading')"
+        :subtitle="$t('landingPage.topBlogs.about')"
+        has-row
+      >
+        <NuxtLink
+          to="/blogs"
+          class="section-link"
+        >
+          {{ $t('landingPage.topBlogs.cta') }}
+          <v-icon
+            size="15"
+            icon="mdi-arrow-right"
+          />
+        </NuxtLink>
+      </SectionHead>
+
+      <div
+        v-if="loadingBlogs"
+        class="post-grid"
+      >
+        <v-skeleton-loader
+          v-for="i in 3"
+          :key="i"
+          type="image,article"
+          class="card"
+        />
+      </div>
+
+      <div
+        v-else
+        class="post-grid"
+      >
+        <Reveal
+          v-for="(blog, i) in topBlogs"
+          :key="blog.value"
+          :delay="i"
+        >
+          <PostCard :blog="blog" />
+        </Reveal>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section
+      id="skills"
+      class="wrap section"
+    >
+      <SectionHead
+        :eyebrow="$t('landingPage.skills.eyebrow')"
+        :title="$t('landingPage.skills.heading')"
+        :subtitle="$t('landingPage.skills.about')"
+      />
+
+      <div class="skills-grid">
+        <Reveal
+          v-for="(col, i) in skillColumns"
+          :key="col.label"
+          :delay="i % 3"
+        >
+          <SkillColumn
+            :label="col.label"
+            :icon="col.icon"
+            :tags="col.tags"
+          />
+        </Reveal>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="wrap section">
+      <CtaPanel :eyebrow="$t('landingPage.contact.eyebrow')">
+        <template #heading>
+          <h2>{{ $t('landingPage.contact.heading') }}</h2>
+        </template>
+
+        <template #copy>
+          <p>{{ $t('landingPage.contact.copy') }}</p>
+        </template>
+
+        <template #buttons>
+          <a
+            href="mailto:jakubtutka02@gmail.com"
+            class="btn btn-primary"
+          >
+            <v-icon
+              size="16"
+              icon="mdi-email-outline"
+            />
+            jakubtutka02@gmail.com
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/jakub-tutka-077b55352/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-ghost"
+          >
+            {{ $t('landingPage.contact.linkedin') }}
+          </a>
+        </template>
+      </CtaPanel>
+    </section>
   </div>
 </template>
 
 <style scoped>
-.landing-page {
-  overflow-x: hidden;
-}
-
-/* Hero */
-.hero-section {
-  min-height: 100vh;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-  color: rgb(var(--v-theme-on-primary));
+/* ---- Hero ---- */
+.hero {
+  padding-top: clamp(40px, 7vw, 84px);
+  padding-bottom: clamp(48px, 7vw, 96px);
   position: relative;
 }
 
-.hero-content {
-  z-index: 2;
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
 }
 
-.hero-avatar {
-  border: 4px solid rgba(var(--v-theme-on-primary), 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-muted);
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-1);
 }
 
-.hero-title {
-  font-size: 3rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 0 rgba(159, 212, 184, 0.6);
+  animation: pulse 2.4s infinite;
+  flex-shrink: 0;
 }
 
-.hero-subtitle {
-  font-size: 1.25rem;
-  opacity: 0.9;
-  font-weight: 300;
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(159, 212, 184, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(159, 212, 184, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(159, 212, 184, 0); }
 }
 
-.hero-buttons .v-btn {
-  min-width: 150px;
+@media (prefers-reduced-motion: reduce) {
+  .dot { animation: none; }
 }
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(var(--v-theme-on-primary), 0.7);
-  cursor: pointer;
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  margin-top: 22px;
 }
 
-.bounce-animation {
-  animation: bounce 2s infinite;
+h1 {
+  font-size: clamp(33px, 5vw, 60px);
+  margin: 14px 0 0;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+  max-width: 17ch;
 }
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Stats Bar */
-.stats-bar {
-  background: rgb(var(--v-theme-surface-variant));
-  padding: 2rem 0;
-  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
-}
-
-.stats-item {
-  padding: 1rem;
-}
-
-.stats-value {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: rgb(var(--v-theme-primary));
-  line-height: 1;
-  margin-bottom: 0.35rem;
-}
-
-.stats-label {
-  font-size: 0.85rem;
-  color: rgb(var(--v-theme-on-surface-variant));
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Bio Section */
-.bio-decoration {
-  border-radius: 24px;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-}
-
-.bio-quote {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
+h1 em {
   font-style: italic;
-  font-weight: 300;
-  line-height: 1.7;
-  margin: 0;
+  color: var(--accent);
 }
 
-.bio-quote-author {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+.tagline {
+  font-size: clamp(16px, 2.1vw, 19px);
+  color: var(--text-muted);
+  max-width: 46ch;
+  margin: 24px 0 0;
+  line-height: 1.62;
 }
 
-.bio-paragraph {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: rgb(var(--v-theme-on-surface-variant));
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
 }
 
-/* Section shared */
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 300;
-  color: rgb(var(--v-theme-on-background));
+.socials {
+  display: flex;
+  gap: 8px;
+  margin-top: 26px;
 }
 
-.section-subtitle {
-  font-size: 1.1rem;
-  color: rgb(var(--v-theme-on-surface-variant));
-  max-width: 600px;
-  margin: 0 auto;
+.social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.2s var(--ease);
 }
 
-/* Featured Projects */
-.featured-projects-section {
-  background: rgb(var(--v-theme-surface-variant));
+.social-link:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+  transform: translateY(-2px);
+  background: var(--accent-soft);
 }
 
-.project-card {
-  border-radius: 16px !important;
-  transition: all 0.3s ease;
+/* Portrait */
+.portrait-wrap {
+  position: relative;
 }
 
-.project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+.portrait {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-2);
+  aspect-ratio: 4 / 5;
 }
 
-.project-image-fallback {
-  background: rgba(var(--v-theme-surface-variant), 0.5);
+.portrait-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-2);
 }
 
-/* Blog List */
-.blog-list-card {
-  border-radius: 16px !important;
+.nameplate {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--bg-1) 78%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-2);
 }
 
-.blog-list-item {
-  transition: background-color 0.2s ease;
+.nameplate b {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  display: block;
+  letter-spacing: -0.01em;
 }
 
-.blog-item-title {
-  font-size: 1rem !important;
-  font-weight: 500;
-  white-space: normal !important;
-  line-height: 1.4;
+.nameplate .sub {
+  font-size: 12.5px;
+  color: var(--text-muted);
 }
 
-/* Skills */
-.skills-section {
-  background: rgb(var(--v-theme-surface-variant));
+.nameplate .loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
-.skill-card {
-  transition: all 0.3s ease;
-  border-radius: 12px !important;
+/* Stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
-.skill-card:hover {
-  transform: translateY(-4px);
+.stat {
+  background: var(--bg);
+  padding: 30px 26px;
 }
 
-.skill-name {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: rgb(var(--v-theme-on-surface));
+.n {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5vw, 52px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
 }
 
-/* Contact */
-.contact-card {
-  transition: all 0.3s ease;
-  border-radius: 16px !important;
+.accent-text {
+  color: var(--accent);
 }
 
-.contact-card:hover {
-  transform: translateY(-4px);
+.l {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 8px;
 }
 
-.contact-info {
-  color: rgb(var(--v-theme-on-surface-variant));
-  margin-bottom: 0;
+/* About */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(36px, 6vw, 72px);
+  align-items: start;
+}
+
+.body-text {
+  font-size: clamp(16px, 1.9vw, 19px);
+  color: var(--text-muted);
+  line-height: 1.72;
+}
+
+.body-text b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.values {
+  display: grid;
+  gap: 14px;
+}
+
+.value {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--bg-1);
+}
+
+.ico {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+}
+
+.value h4 {
+  font-size: 15.5px;
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.value p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+/* Grids */
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.feat-grid .reveal,
+.post-grid .reveal,
+.skills-grid .reveal {
+  display: flex;
+  flex-direction: column;
 }
 
 /* Responsive */
 @media (max-width: 960px) {
-  .hero-title {
-    font-size: 2.5rem;
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait-wrap {
+    max-width: 380px;
+    margin-inline: auto;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feat-grid,
+  .post-grid,
+  .skills-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (max-width: 600px) {
-  .hero-title {
-    font-size: 2rem;
+@media (max-width: 680px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .stats-value {
-    font-size: 1.75rem;
-  }
-
-  .hero-buttons .v-btn {
-    display: block;
-    width: 100%;
-    margin: 0.5rem 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bounce-animation {
-    animation: none;
-  }
-
-  .project-card,
-  .skill-card,
-  .contact-card {
-    transition: none;
-  }
-
-  .project-card:hover,
-  .skill-card:hover,
-  .contact-card:hover {
-    transform: none;
+  .feat-grid,
+  .post-grid,
+  .skills-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

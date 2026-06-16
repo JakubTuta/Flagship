@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { TBlogCategory } from '~/helpers/blogCategories'
 import type { IBlogSerialized } from '~/models/serialized'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 useSeo({
   useTranslation: true,
@@ -92,72 +91,6 @@ const availableCategories = computed(() => {
   return categories.sort()
 })
 
-function formatDate(date: Date | string | null): string {
-  if (!date)
-    return ''
-
-  const dateObj = typeof date === 'string'
-    ? new Date(date)
-    : date
-
-  return new Intl.DateTimeFormat(locale.value, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(dateObj)
-}
-
-function truncateContent(content: string, maxLength: number = 150): string {
-  const htmlTagRegex = /^<[^>]+>.*?<\/[^>]+>/
-  let cleanedContent = content.replace(htmlTagRegex, '').trim()
-
-  cleanedContent = cleanedContent.replace(/\|\|\|NEWLINE\|\|\|/g, ' ').trim()
-  cleanedContent = cleanedContent.replace(/<[^>]+>/g, '').trim()
-
-  if (cleanedContent.length <= maxLength)
-    return cleanedContent
-
-  const truncated = cleanedContent.substring(0, maxLength).trim()
-  const lastSpaceIndex = truncated.lastIndexOf(' ')
-
-  if (lastSpaceIndex === -1) {
-    return cleanedContent.length > maxLength
-      ? `${truncated}...`
-      : cleanedContent
-  }
-
-  return `${truncated.substring(0, lastSpaceIndex)}...`
-}
-
-function formatViewCount(count: number): string {
-  if (count >= 1000) {
-    return `${(count / 1000).toFixed(1)}k`
-  }
-
-  return count.toString()
-}
-
-function getCategoryColor(category: TBlogCategory): string {
-  const colors: Record<TBlogCategory, string> = {
-    'frontend': 'blue',
-    'backend': 'green',
-    'fullstack': 'purple',
-    'web dev': 'indigo',
-    'data bases': 'orange',
-    'cloud': 'cyan',
-    'algorithms': 'red',
-    'devops': 'teal',
-    'career': 'pink',
-    'productivity': 'amber',
-    'work-life': 'lime',
-    'personal': 'deep-purple',
-    'ai-ml': 'deep-orange',
-    'other': 'grey',
-  }
-
-  return colors[category] || 'grey'
-}
-
 function loadMoreBlogs() {
   if (!hasMoreBlogs.value)
     return
@@ -168,626 +101,534 @@ function loadMoreBlogs() {
 watch([selectedCategory, sortBy], () => {
   displayedBlogsCount.value = blogsPerLoad
 })
+
+const categoryFilterItems = computed(() => [
+  { label: t('blog.filters.allCategories'), value: 'all' },
+  ...availableCategories.value.map(cat => ({
+    label: t(`blog.categories.${cat}`),
+    value: cat,
+  })),
+])
+
+const featuredHero = computed<IBlogSerialized | null>(() => featuredBlogs.value[0] ?? null)
+
+const heroTitle = computed(() => (featuredHero.value
+  ? (featuredHero.value.title[locale.value as 'en' | 'pl'] || featuredHero.value.title.en)
+  : ''),
+)
+
+const heroExcerpt = computed(() => (featuredHero.value
+  ? truncateContent(featuredHero.value.content[locale.value as 'en' | 'pl'] || featuredHero.value.content.en, 220)
+  : ''),
+)
+
+const heroDate = computed(() => (featuredHero.value
+  ? formatDate(featuredHero.value.publishDate, locale.value)
+  : ''))
+const heroViews = computed(() => (featuredHero.value
+  ? formatViewCount(featuredHero.value.viewCount || 0)
+  : ''))
+const heroCategoryLabel = computed(() => (featuredHero.value
+  ? t(`blog.categories.${featuredHero.value.category}`)
+  : ''))
 </script>
 
 <template>
-  <div class="blog-page">
+  <div>
     <!-- Hero -->
-    <div class="blog-hero">
-      <div class="blog-hero-pattern" />
+    <section class="wrap blog-hero">
+      <Reveal>
+        <span class="eyebrow">{{ $t('blog.hero.eyebrow') }}</span>
+      </Reveal>
 
-      <v-container
-        class="blog-hero-content py-16"
+      <Reveal :delay="1">
+        <h1>{{ $t('blog.hero.heading') }}</h1>
+      </Reveal>
+
+      <Reveal :delay="2">
+        <p class="blog-lead">
+          {{ $t('blog.hero.subtitle') }}
+        </p>
+      </Reveal>
+
+      <Reveal :delay="3">
+        <div class="ph-stats">
+          <div class="ph-stat">
+            <span class="n">{{ publishedBlogs.length }}</span>
+
+            <span class="l">{{ $t('blog.hero.stats.articles') }}</span>
+          </div>
+
+          <div class="ph-stat">
+            <span class="n">{{ featuredBlogs.length }}</span>
+
+            <span class="l">{{ $t('blog.hero.stats.featured') }}</span>
+          </div>
+
+          <div class="ph-stat">
+            <span class="n">{{ availableCategories.length }}</span>
+
+            <span class="l">{{ $t('blog.hero.stats.categories') }}</span>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+
+    <!-- Featured hero article -->
+    <section
+      v-if="!loading && featuredHero"
+      class="wrap"
+    >
+      <NuxtLink
+        :to="`/blog/${featuredHero.value}`"
+        class="card card-hover feat-article"
       >
-        <v-row
-          justify="center"
-          align="center"
-        >
-          <v-col
-            cols="12"
-            md="8"
-            class="text-center"
+        <div class="shot feat-cover">
+          <v-img
+            v-if="featuredHero.image"
+            :src="featuredHero.image"
+            :alt="heroTitle"
+            cover
+            width="100%"
+            height="100%"
+          />
+
+          <div
+            v-else
+            class="hero-placeholder"
           >
-            <p class="hero-eyebrow mb-2">
-              {{ $t('blog.hero.title') }}
-            </p>
-
-            <h1 class="hero-title mb-4">
-              {{ $t('blog.hero.title') }}
-            </h1>
-
-            <p class="hero-subtitle mb-8">
-              {{ $t('blog.hero.subtitle') }}
-            </p>
-
-            <div
-              v-if="!loading"
-              class="d-flex flex-wrap justify-center gap-4"
+            <v-icon
+              size="64"
+              color="var(--text-faint)"
             >
-              <div class="stat-pill">
-                <span class="stat-number">{{ publishedBlogs.length }}</span>
+              mdi-text-box-outline
+            </v-icon>
+          </div>
+        </div>
 
-                <span class="stat-label">{{ $t('blog.recent.title') }}</span>
-              </div>
+        <div class="feat-body">
+          <div class="feat-meta">
+            <span class="badge">
+              <v-icon
+                size="11"
+                icon="mdi-star"
+              />
+              Featured
+            </span>
 
-              <div class="stat-pill">
-                <span class="stat-number">{{ featuredBlogs.length }}</span>
+            <span class="feat-cat">{{ heroCategoryLabel }}</span>
 
-                <span class="stat-label">{{ $t('blog.featured.title') }}</span>
-              </div>
+            <span>·</span>
 
-              <div class="stat-pill">
-                <span class="stat-number">{{ availableCategories.length }}</span>
+            <span>{{ heroDate }}</span>
 
-                <span class="stat-label">{{ $t('blog.filters.categories') }}</span>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
+            <span>·</span>
+
+            <span class="feat-views">
+              <v-icon
+                size="12"
+                icon="mdi-eye-outline"
+              />
+              {{ heroViews }}
+            </span>
+          </div>
+
+          <h2>{{ heroTitle }}</h2>
+
+          <p>{{ heroExcerpt }}</p>
+
+          <span class="btn btn-primary btn-read">
+            {{ $t('blog.readArticle') }}
+
+            <v-icon
+              size="16"
+              icon="mdi-arrow-right"
+            />
+          </span>
+        </div>
+      </NuxtLink>
+    </section>
+
+    <!-- Hero skeleton -->
+    <section
+      v-else-if="showFeaturedSkeleton"
+      class="wrap"
+    >
+      <div class="feat-article card feat-skeleton">
+        <v-skeleton-loader
+          type="image"
+          height="340"
+        />
+
+        <div class="pa-8">
+          <v-skeleton-loader
+            type="heading"
+            class="mb-4"
+          />
+
+          <v-skeleton-loader type="paragraph" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="wrap toolbar-inner">
+        <FilterPills
+          v-model="selectedCategory"
+          :items="categoryFilterItems"
+        />
+
+        <div class="sort">
+          <span class="sort-lbl">{{ $t('blog.filters.sort') }}</span>
+
+          <button
+            class="sortbtn"
+            :class="{'active': sortBy === 'date'}"
+            type="button"
+            @click="sortBy = 'date'"
+          >
+            {{ $t('blog.filters.latest') }}
+          </button>
+
+          <button
+            class="sortbtn"
+            :class="{'active': sortBy === 'views'}"
+            type="button"
+            @click="sortBy = 'views'"
+          >
+            {{ $t('blog.filters.mostRead') }}
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- Filters -->
-    <v-container class="pb-0 pt-10">
-      <v-row justify="center">
-        <v-col
-          cols="12"
-          md="10"
+    <!-- Blog grid -->
+    <section class="wrap blogs-section">
+      <!-- Skeleton -->
+      <div
+        v-if="showRegularSkeleton"
+        class="bgrid"
+      >
+        <div
+          v-for="n in 6"
+          :key="`sk-${n}`"
+          class="card sk-card"
         >
-          <!-- Category chips -->
-          <v-chip-group
-            v-model="selectedCategory"
-            color="primary"
-            selected-class="text-primary"
-            class="mb-3 justify-center"
-            mandatory
-          >
-            <v-chip
-              value="all"
-              filter
-              variant="outlined"
-              size="small"
-            >
-              {{ $t('blog.filters.allCategories') }}
-            </v-chip>
+          <v-skeleton-loader
+            type="image"
+            height="160"
+          />
 
-            <v-chip
-              v-for="cat in availableCategories"
-              :key="cat"
-              :value="cat"
-              filter
-              variant="outlined"
-              size="small"
-            >
-              {{ $t(`blog.categories.${cat}`) }}
-            </v-chip>
-          </v-chip-group>
+          <div class="pa-5">
+            <v-skeleton-loader
+              type="heading"
+              class="mb-2"
+            />
 
-          <!-- Sort toggle -->
-          <div class="d-flex justify-center gap-2">
-            <v-btn
-              :variant="sortBy === 'date'
-                ? 'tonal'
-                : 'text'"
-              color="primary"
-              size="small"
-              prepend-icon="mdi-calendar-sort-descending"
-              @click="sortBy = 'date'"
-            >
-              {{ $t('blog.filters.sortByDate') }}
-            </v-btn>
-
-            <v-btn
-              :variant="sortBy === 'views'
-                ? 'tonal'
-                : 'text'"
-              color="primary"
-              size="small"
-              prepend-icon="mdi-eye"
-              @click="sortBy = 'views'"
-            >
-              {{ $t('blog.filters.sortByViews') }}
-            </v-btn>
+            <v-skeleton-loader type="paragraph" />
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <!-- Featured Blogs -->
-    <v-container
-      v-if="featuredBlogs.length > 0 || showFeaturedSkeleton"
-      class="py-12"
-    >
-      <div class="d-flex align-center mb-2 justify-center">
-        <div class="section-header">
-          <v-icon
-            color="primary"
-            size="20"
-            class="mr-2"
-          >
-            mdi-star
-          </v-icon>
-
-          <span class="section-label">{{ $t('blog.featured.title') }}</span>
         </div>
       </div>
 
-      <p class="text-body-2 text-medium-emphasis mb-8 text-center">
-        {{ $t('blog.featured.subtitle') }}
-      </p>
-
-      <v-row>
-        <!-- Skeleton -->
-        <template v-if="showFeaturedSkeleton">
-          <v-col
-            v-for="n in 2"
-            :key="`fs-${n}`"
-            cols="12"
-            md="6"
-          >
-            <v-card
-              class="blog-card h-100"
-              elevation="0"
-            >
-              <v-skeleton-loader
-                type="image"
-                height="200"
-              />
-
-              <v-card-text class="pa-5">
-                <v-skeleton-loader
-                  type="heading"
-                  class="mb-3"
-                />
-
-                <v-skeleton-loader
-                  type="paragraph"
-                />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </template>
-
-        <!-- Featured cards -->
-        <v-col
-          v-for="blog in featuredBlogs"
-          :key="blog.value"
-          cols="12"
-          md="6"
-        >
-          <v-card
-            class="blog-card blog-card--featured h-100"
-            elevation="0"
-            :to="`/blog/${blog.value}`"
-          >
-            <!-- Image -->
-            <div class="card-image-wrap">
-              <v-img
-                v-if="blog.image"
-                :src="blog.image"
-                :alt="blog.title[locale]"
-                cover
-                height="220"
-              />
-
-              <div
-                v-else
-                class="d-flex align-center card-image-placeholder justify-center"
-              >
-                <v-icon
-                  size="56"
-                  class="placeholder-icon"
-                >
-                  mdi-text-box-outline
-                </v-icon>
-              </div>
-
-              <!-- Badges -->
-              <div class="card-badges">
-                <v-chip
-                  color="warning"
-                  size="x-small"
-                  variant="elevated"
-                  prepend-icon="mdi-star"
-                >
-                  Featured
-                </v-chip>
-
-                <v-chip
-                  :color="getCategoryColor(blog.category)"
-                  size="x-small"
-                  variant="elevated"
-                >
-                  {{ $t(`blog.categories.${blog.category}`) }}
-                </v-chip>
-              </div>
-            </div>
-
-            <v-card-text class="pa-5">
-              <h3 class="font-weight-bold text-h6 mb-2">
-                {{ blog.title[locale] }}
-              </h3>
-
-              <p class="text-body-2 text-medium-emphasis blog-excerpt mb-4">
-                {{ truncateContent(blog.content[locale], 160) }}
-              </p>
-
-              <div class="d-flex align-center justify-space-between">
-                <div class="d-flex align-center gap-3">
-                  <div class="d-flex align-center text-medium-emphasis text-caption gap-1">
-                    <v-icon size="14">
-                      mdi-calendar-outline
-                    </v-icon>
-
-                    <span>{{ formatDate(blog.publishDate) }}</span>
-                  </div>
-
-                  <div class="d-flex align-center text-caption text-medium-emphasis gap-1">
-                    <v-icon size="14">
-                      mdi-eye-outline
-                    </v-icon>
-
-                    <span>{{ formatViewCount(blog.viewCount || 0) }}</span>
-                  </div>
-                </div>
-
-                <v-btn
-                  color="primary"
-                  variant="text"
-                  size="small"
-                  append-icon="mdi-arrow-right"
-                >
-                  {{ $t('blog.readMore') }}
-                </v-btn>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <!-- All / Recent Blogs -->
-    <v-container class="py-12">
-      <div class="d-flex align-center mb-2 justify-center">
-        <div class="section-header">
-          <v-icon
-            color="primary"
-            size="20"
-            class="mr-2"
-          >
-            mdi-post-outline
-          </v-icon>
-
-          <span class="section-label">{{ $t('blog.recent.title') }}</span>
-        </div>
-      </div>
-
-      <p class="text-body-2 text-medium-emphasis mb-8 text-center">
-        {{ $t('blog.recent.subtitle') }}
-      </p>
-
-      <v-row>
-        <!-- Skeleton -->
-        <template v-if="showRegularSkeleton">
-          <v-col
-            v-for="n in blogsPerLoad"
-            :key="`rs-${n}`"
-            cols="12"
-            sm="6"
-            lg="4"
-          >
-            <v-card
-              class="blog-card h-100"
-              elevation="0"
-            >
-              <v-skeleton-loader
-                type="image"
-                height="160"
-              />
-
-              <v-card-text class="pa-5">
-                <v-skeleton-loader
-                  type="heading"
-                  class="mb-2"
-                />
-
-                <v-skeleton-loader type="paragraph" />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </template>
-
-        <!-- Regular cards -->
-        <v-col
+      <!-- Grid -->
+      <div
+        v-else-if="displayedRegularBlogs.length > 0"
+        class="bgrid"
+      >
+        <Reveal
           v-for="blog in displayedRegularBlogs"
           :key="blog.value"
-          cols="12"
-          sm="6"
-          lg="4"
         >
-          <v-card
-            class="blog-card h-100"
-            elevation="0"
-            :to="`/blog/${blog.value}`"
-          >
-            <!-- Image -->
-            <div class="card-image-wrap card-image-wrap--sm">
-              <v-img
-                v-if="blog.image"
-                :src="blog.image"
-                :alt="blog.title[locale]"
-                cover
-                height="160"
-              />
-
-              <div
-                v-else
-                class="d-flex align-center card-image-placeholder card-image-placeholder--sm justify-center"
-              >
-                <v-icon
-                  size="40"
-                  class="placeholder-icon"
-                >
-                  mdi-text-box-outline
-                </v-icon>
-              </div>
-
-              <!-- Category badge -->
-              <div class="card-badges">
-                <v-chip
-                  :color="getCategoryColor(blog.category)"
-                  size="x-small"
-                  variant="elevated"
-                >
-                  {{ $t(`blog.categories.${blog.category}`) }}
-                </v-chip>
-              </div>
-            </div>
-
-            <v-card-text class="pa-5">
-              <h3 class="font-weight-bold text-subtitle-1 blog-title mb-2">
-                {{ blog.title[locale] }}
-              </h3>
-
-              <p class="text-body-2 text-medium-emphasis blog-excerpt mb-4">
-                {{ truncateContent(blog.content[locale], 120) }}
-              </p>
-
-              <div class="d-flex align-center justify-space-between">
-                <div class="d-flex align-center gap-3">
-                  <div class="d-flex align-center text-caption text-medium-emphasis gap-1">
-                    <v-icon size="13">
-                      mdi-calendar-outline
-                    </v-icon>
-
-                    <span>{{ formatDate(blog.publishDate) }}</span>
-                  </div>
-
-                  <div class="d-flex align-center text-caption text-medium-emphasis gap-1">
-                    <v-icon size="13">
-                      mdi-eye-outline
-                    </v-icon>
-
-                    <span>{{ formatViewCount(blog.viewCount || 0) }}</span>
-                  </div>
-                </div>
-
-                <v-icon
-                  color="primary"
-                  size="18"
-                >
-                  mdi-arrow-right
-                </v-icon>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+          <PostCard :blog="blog" />
+        </Reveal>
+      </div>
 
       <!-- No results -->
       <div
-        v-if="!loading && regularBlogs.length === 0 && featuredBlogs.length === 0"
-        class="py-16 text-center"
+        v-else-if="!loading && regularBlogs.length === 0 && featuredBlogs.length === 0"
+        class="no-results"
       >
         <v-icon
           size="64"
-          color="medium-emphasis"
-          class="mb-4"
+          color="var(--text-faint)"
         >
           mdi-magnify-close
         </v-icon>
 
-        <h3 class="text-h5 mb-2">
-          {{ $t('blog.noResults.title') }}
-        </h3>
+        <h3>{{ $t('blog.noResults.title') }}</h3>
 
-        <p class="text-medium-emphasis text-body-1">
-          {{ $t('blog.noResults.subtitle') }}
-        </p>
+        <p>{{ $t('blog.noResults.subtitle') }}</p>
       </div>
 
       <!-- Load more -->
       <div
         v-if="hasMoreBlogs"
-        class="mt-10 text-center"
+        class="load-more"
       >
-        <v-btn
-          color="primary"
-          variant="tonal"
-          size="large"
-          prepend-icon="mdi-plus"
+        <button
+          class="btn btn-ghost"
+          type="button"
           @click="loadMoreBlogs"
         >
           {{ $t('blog.loadMore') }}
-        </v-btn>
+
+          <v-icon
+            size="16"
+            icon="mdi-plus"
+          />
+        </button>
       </div>
-    </v-container>
+    </section>
   </div>
 </template>
 
 <style scoped>
-.blog-page {
-  background: rgb(var(--v-theme-background));
-}
-
 /* Hero */
 .blog-hero {
-  position: relative;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-  overflow: hidden;
+  padding-top: clamp(40px, 6vw, 64px);
+  padding-bottom: clamp(24px, 3vw, 36px);
 }
 
-.blog-hero-pattern {
-  position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  pointer-events: none;
+.blog-hero h1 {
+  font-size: clamp(40px, 7vw, 68px);
+  letter-spacing: -0.035em;
+  margin-top: 14px;
 }
 
-.blog-hero-content {
-  position: relative;
-  z-index: 1;
+.blog-lead {
+  font-size: clamp(17px, 2.2vw, 20px);
+  color: var(--text-muted);
+  max-width: 58ch;
+  margin-top: 16px;
 }
 
-.hero-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.hero-title {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.1;
-}
-
-.hero-subtitle {
-  font-size: 1.15rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.stat-pill {
+.ph-stats {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 0.75rem 1.5rem;
-  backdrop-filter: blur(4px);
-  min-width: 100px;
-}
-
-.stat-number {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 4px;
-}
-
-/* Section headers */
-.section-header {
-  display: inline-flex;
-  align-items: center;
-  border-bottom: 2px solid rgb(var(--v-theme-primary));
-  padding-bottom: 0.4rem;
-}
-
-.section-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgb(var(--v-theme-primary));
-}
-
-/* Cards */
-.blog-card {
-  border-radius: 16px !important;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.08) !important;
-  background: rgb(var(--v-theme-surface));
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-  overflow: hidden;
-  text-decoration: none;
-}
-
-.blog-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12) !important;
-  border-color: rgba(var(--v-theme-primary), 0.25) !important;
-}
-
-.blog-card--featured {
-  border-color: rgba(var(--v-theme-primary), 0.15) !important;
-}
-
-.card-image-wrap {
-  position: relative;
-  height: 220px;
-  overflow: hidden;
-}
-
-.card-image-wrap--sm {
-  height: 160px;
-}
-
-.card-image-placeholder {
-  height: 220px;
-  background: linear-gradient(135deg, rgb(var(--v-theme-surface-variant)) 0%, rgba(var(--v-theme-primary), 0.3) 100%);
-}
-
-.card-image-placeholder--sm {
-  height: 160px;
-}
-
-.placeholder-icon {
-  opacity: 0.35;
-  color: rgb(var(--v-theme-primary)) !important;
-}
-
-.card-badges {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  gap: 4px;
+  gap: 14px;
+  margin-top: 30px;
   flex-wrap: wrap;
 }
 
-/* Clamp excerpt to 3 lines */
-.blog-excerpt {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
+.ph-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--bg-1);
+}
+
+.ph-stat .n {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.ph-stat .l {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Featured hero article */
+.feat-article {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+  margin-bottom: clamp(48px, 7vw, 72px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.feat-cover {
+  position: relative;
+  min-height: 340px;
+  border-right: 1px solid var(--line-soft);
+}
+
+.hero-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feat-body {
+  padding: clamp(28px, 4vw, 44px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feat-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.feat-cat {
+  color: var(--accent);
+}
+
+.feat-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.feat-article h2 {
+  font-size: clamp(26px, 3.4vw, 38px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.feat-body p {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 16px 0 24px;
+}
+
+.btn-read {
+  align-self: flex-start;
+}
+
+.feat-skeleton {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+  margin-bottom: clamp(48px, 7vw, 72px);
+}
+
+/* Toolbar */
+.toolbar {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 20;
+  padding: 16px 0;
+  background: color-mix(in oklab, var(--bg) 86%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 36px;
+}
+
+.toolbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sort {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sort-lbl {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-right: 4px;
+}
+
+.sortbtn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  background: transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.sortbtn.active {
+  color: var(--accent);
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+
+/* Grid */
+.blogs-section {
+  padding-bottom: clamp(64px, 9vw, 110px);
+}
+
+.bgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.sk-card {
   overflow: hidden;
 }
 
-.blog-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+/* No results */
+.no-results {
+  text-align: center;
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .blog-card {
-    transition: none;
+.no-results h3 {
+  font-size: 20px;
+  color: var(--text);
+}
+
+/* Load more */
+.load-more {
+  margin-top: 48px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .bgrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .feat-article {
+    grid-template-columns: 1fr;
+  }
+
+  .feat-cover {
+    min-height: 220px;
+    border-right: none;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .feat-skeleton {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .bgrid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

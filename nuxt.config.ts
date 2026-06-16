@@ -16,9 +16,9 @@ export default defineNuxtConfig({
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'keywords', content: 'developer, portfolio, projects, blog, resume, CV, contact, Jakub Tutka, full-stack developer, Python, Vue.js, Nuxt.js' },
         { name: 'author', content: 'Jakub Tutka' },
-        { name: 'color-scheme', content: 'light dark' },
-        { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
-        { name: 'theme-color', content: '#202428', media: '(prefers-color-scheme: dark)' },
+        { name: 'color-scheme', content: 'dark light' },
+        { name: 'theme-color', content: '#f3f1f8', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#26233a', media: '(prefers-color-scheme: dark)' },
         { name: 'mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
@@ -30,6 +30,9 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: '/manifest.json' },
         { rel: 'dns-prefetch', href: 'https://firestore.googleapis.com' },
         { rel: 'preconnect', href: 'https://firestore.googleapis.com', crossorigin: 'anonymous' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap' },
       ],
     },
   },
@@ -72,6 +75,7 @@ export default defineNuxtConfig({
 
   css: [
     '@unocss/reset/tailwind.css',
+    'assets/css/design-system.css',
   ],
 
   vite: {
@@ -115,16 +119,6 @@ export default defineNuxtConfig({
         // Individual blog routes (/blog/[id]) will be discovered through crawling
         // from the links on the /blogs page
       ],
-      ignore: [
-        // Exclude admin routes from prerendering (require authentication)
-        '/admin/**',
-        '/admin',
-        '/admin/files',
-        '/admin/blog/panel',
-        '/admin/blog/write',
-        // Exclude auth routes from prerendering
-        '/auth/**',
-      ],
     },
   },
 
@@ -166,36 +160,31 @@ export default defineNuxtConfig({
     baseUrl,
   },
 
-  // Sitemap configuration for SEO
+  // Sitemap configuration for SEO (cast to any — v7 types differ from installed config format)
   sitemap: {
-    hostname: baseUrl,
     gzip: true,
-    exclude: [
-      '/admin/**',
-      '/auth/**',
-    ],
     defaults: {
       changefreq: 'weekly',
       priority: 0.8,
     },
     urls: [
       {
-        url: '/',
+        loc: '/',
         changefreq: 'daily',
         priority: 1.0,
       },
       {
-        url: '/blogs',
+        loc: '/blogs',
         changefreq: 'daily',
         priority: 0.9,
       },
       {
-        url: '/projects',
+        loc: '/projects',
         changefreq: 'weekly',
         priority: 0.9,
       },
       {
-        url: '/resume',
+        loc: '/resume',
         changefreq: 'monthly',
         priority: 0.8,
       },
@@ -203,15 +192,14 @@ export default defineNuxtConfig({
     sources: [
       '/api/blogs/sitemap',
     ],
-  },
+  } as any,
 
-  // Robots.txt configuration
+  // Robots.txt configuration (v4 format kept; cast to bypass v5 type mismatch)
   robots: {
     UserAgent: '*',
     Allow: '/',
-    Disallow: ['/admin', '/auth'],
     Sitemap: `${baseUrl}/sitemap.xml`,
-  },
+  } as any,
 
   compatibilityDate: '2024-07-18',
 })

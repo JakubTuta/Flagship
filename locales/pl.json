@@ -26,11 +26,6 @@
         "description": "Dzielę się spostrzeżeniami o web developmencie, tutorialami technicznymi i lekcjami z prawdziwych projektów. Dołącz do eksploracji nowoczesnych praktyk programistycznych.",
         "tags": "blog techniczny, insights o developmencie, tutoriale programistyczne, web development, technical writing"
       },
-      "files": {
-        "title": "Pliki",
-        "description": "Bezpieczny system zarządzania plikami dla uwierzytelnionych użytkowników. Wgrywaj, pobieraj i zarządzaj swoimi plikami osobistymi w chmurze.",
-        "tags": "pliki, przechowywanie, wgrywanie, pobieranie, pliki osobiste, chmura, zarządzanie plikami"
-      },
       "notFound": {
         "title": "Nie znaleziono strony",
         "description": "Strona, której szukasz, nie istnieje lub została przeniesiona."
@@ -61,16 +56,6 @@
       "title": "Strona główna",
       "description": "Witaj w moim portfolio - poznaj moją pracę jako full stack developer i technical writer."
     },
-    "files": {
-      "title": "Pliki",
-      "description": "Zarządzaj swoimi plikami osobistymi z bezpieczną chmurą."
-    },
-    "admin": {
-      "title": "Panel administratora",
-      "blog": "Blog",
-      "projects": "Projekty",
-      "logout": "Wyloguj się"
-    }
   },
   "skills": {
     "database": "Bazy danych",
@@ -97,18 +82,28 @@
     "hero": {
       "info": "Programista Back-End Python",
       "about": "O mnie",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "available": "Dostępny do nowych projektów",
+      "headingPre": "Buduję systemy backendowe, które ",
+      "headingAccent": "skalują",
+      "headingSuf": " — i odpowiadam za nie od końca do końca.",
+      "tagline": "Inżynier oprogramowania backendowego z Krakowa z {years}+ latami doświadczenia w przekształcaniu złożonych wymagań w niezawodne, produkcyjne systemy — zarządzam pracą od pierwszego szkicu do wdrożenia na żywo.",
+      "viewProjects": "Zobacz projekty",
+      "readResume": "Czytaj moje CV"
     },
     "about": {
       "title": "Co robię",
       "subtitle": "Tworzę nowoczesne aplikacje webowe i piszę o technologii, aby pomóc developerom się rozwijać",
-      "learnMore": "Dowiedz się więcej"
+      "learnMore": "Dowiedz się więcej",
+      "eyebrow": "O mnie"
     },
     "bio": {
       "title": "O mnie",
       "paragraph": "Programista backendowy z ponad 2-letnim doświadczeniem zawodowym w projektowaniu i wdrażaniu skalowalnych systemów serwerowych. Specjalizuję się w Pythonie (FastAPI, Django) z naciskiem na optymalizację wydajności API, projektowanie baz danych i architekturę mikroserwisów. Doświadczony we wdrażaniu produkcyjnych aplikacji na Google Cloud Platform — Cloud Run, Cloud Functions i Firebase. Do tworzenia backendu podchodzę z myśleniem inżynieryjnym: czysta architektura, udokumentowane API i infrastruktura skalująca się niezawodnie pod obciążeniem. Vue.js i Nuxt.js to moje narzędzia frontendowe, gdy potrzebne jest pełnostackowe wdrożenie.",
       "quote": "Książki, która nie zasługuje na ponowne przeczytanie, nie warto było czytać w ogóle. [...] Ale dopóki jej nie przeczytamy, nie wiemy, czy zasługuje na drugie czytanie. Takie okrutne jest życie.",
-      "quoteAuthor": "— Jaume Cabrè, Wyznaję"
+      "quoteAuthor": "— Jaume Cabrè, Wyznaję",
+      "paragraph1": "Jestem inżynierem oprogramowania skupionym na backendzie z {years}+ latami doświadczenia zawodowego w projektowaniu i wdrażaniu skalowalnych systemów serwerowych. Specjalizuję się w Pythonie — FastAPI i Django — z dużym naciskiem na wydajność API, projektowanie baz danych i architekturę mikroserwisów.",
+      "paragraph2": "Prowadzę produkcyjne obciążenia na Google Cloud Platform (Cloud Run, Cloud Functions, Firebase) i podchodzę do każdego systemu z myśleniem inżynieryjnym: czysta architektura, udokumentowane API i infrastruktura skalująca się niezawodnie pod obciążeniem. Gdy potrzebne jest pełnostackowe dostarczanie, Vue.js i Nuxt.js to moje narzędzia frontendowe."
     },
     "stats": {
       "experience": "Lata doświadczenia",
@@ -119,25 +114,65 @@
     "featuredProjects": {
       "title": "Wyróżnione Projekty",
       "subtitle": "Wybór rzeczy, które zbudowałem — kliknij, aby zobaczyć pełne portfolio.",
-      "cta": "Wszystkie projekty"
+      "cta": "Wszystkie projekty",
+      "eyebrow": "Wyróżnione projekty",
+      "heading": "Rzeczy, które zbudowałem i wdrożyłem",
+      "about": "Wybór projektów, w których zarządzałem architekturą od początku do końca.",
+      "ctaWith": "Wszystkie {count} projektów"
     },
     "topBlogs": {
       "title": "Najczęściej czytane artykuły",
       "subtitle": "Posty, które najbardziej trafiły do czytelników.",
       "cta": "Wszystkie artykuły",
-      "views": "wyświetleń"
+      "views": "wyświetleń",
+      "eyebrow": "Z bloga",
+      "heading": "Najczęściej czytane artykuły",
+      "about": "Praktyczna wiedza z prawdziwych projektów, napisana po to, by pomóc innym developerom się rozwijać."
     },
     "skills": {
       "title": "Umiejętności techniczne",
-      "subtitle": "Technologie i narzędzia, których używam do tworzenia niezawodnych, skalowalnych rozwiązań"
+      "subtitle": "Technologie i narzędzia, których używam do tworzenia niezawodnych, skalowalnych rozwiązań",
+      "eyebrow": "Ekspertyza",
+      "heading": "Obszary, w których pracuję",
+      "about": "Narzędzia i dyscypliny, na których polegam, aby dostarczać niezawodną, skalowalną pracę.",
+      "columns": {
+        "backend": "Backend",
+        "cloud": "Cloud & DevOps",
+        "databases": "Bazy danych",
+        "frontend": "Frontend",
+        "versionControl": "Kontrola wersji",
+        "observability": "Obserwowalność"
+      }
+    },
+    "values": {
+      "ownership": {
+        "title": "Pełna odpowiedzialność za produkt",
+        "body": "Biorę odpowiedzialność za całość — architekturę, kod, wdrożenia i to, co dzieje się potem."
+      },
+      "fearless": {
+        "title": "Odwaga w nowych technologiach",
+        "body": "gRPC, Kubernetes, NEAT, sieć neuronowa od zera — uczę się tego, czego wymaga problem, i zagłębiam się w temat."
+      },
+      "production": {
+        "title": "Myślenie produkcyjne",
+        "body": "Systemy obsługujące ponad 10 000 zdarzeń/s, skalujące się poziomo i pozostające obserwowalne w rzeczywistym świecie."
+      }
     },
     "contact": {
       "title": "Współpracujmy",
-      "subtitle": "Zainteresowany współpracą lub masz projekt w planach? Chętnie się z Tobą skontaktuję."
+      "subtitle": "Zainteresowany współpracą lub masz projekt w planach? Chętnie się z Tobą skontaktuję.",
+      "eyebrow": "Współpracujmy",
+      "heading": "Masz backend do przyspieszenia?",
+      "copy": "Zainteresowany współpracą lub masz projekt w planach? Chętnie się z Tobą skontaktuję — przejmuję odpowiedzialność i doprowadzam rzeczy do końca.",
+      "linkedin": "Połącz na LinkedIn"
     }
   },
   "footer": {
-    "madeWith": "© 2025 Jakub Tutka. Zbudowane z Nuxt & Vuetify."
+    "madeWith": "© 2026 Jakub Tutka. Zbudowane z Nuxt & Vuetify.",
+    "navigate": "Nawigacja",
+    "elsewhere": "Znajdź mnie",
+    "bio": "Inżynier oprogramowania backend budujący systemy, które skalują. Dostępny do nowych projektów.",
+    "tagline": "Zbudowane z pasją · Kraków"
   },
   "resume": {
     "work": {
@@ -192,6 +227,7 @@
     "technologies": "Użyte technologie",
     "viewCode": "Zobacz kod",
     "liveDemo": "Demo na żywo",
+    "liveDemos": "Wersje demo",
     "learned": "Kluczowe umiejętności",
     "categories": {
       "all": "Wszystkie projekty",
@@ -200,8 +236,9 @@
       "withDemo": "Dostępne online"
     },
     "hero": {
-      "title": "Moje Projekty",
-      "subtitle": "Kolekcja aplikacji webowych i projektów programistycznych, które demonstrują moje umiejętności techniczne i podejście do rozwiązywania problemów."
+      "title": "Moje projekty",
+      "heading": "Rzeczy, które zbudowałem",
+      "subtitle": "Kolekcja aplikacji webowych i systemów backendowych demonstrujących mój zakres techniczny i podejście do rozwiązywania problemów — od pełnowymiarowych aplikacji produkcyjnych po eksperymenty edukacyjne."
     },
     "featured": {
       "title": "Wyróżnione Projekty",
@@ -235,53 +272,8 @@
     "close": "Zamknij",
     "cancel": "Anuluj",
     "delete": "Usuń",
-    "details": "Szczegóły"
-  },
-  "admin": {
-    "blog": {
-      "published": "Opublikowane",
-      "drafts": "Szkice",
-      "create": {
-        "title": "Utwórz nowy post na blogu",
-        "titleInput": "Tytuł",
-        "switchToRaw": "Przełącz na widok surowy",
-        "switchToPreview": "Przełącz na podgląd",
-        "boldTooltip": "Pogrubienie (Ctrl+B)",
-        "italicTooltip": "Kursywa (Ctrl+I)",
-        "underlineTooltip": "Podkreślenie (Ctrl+U)",
-        "inlineCodeTooltip": "Kod w linii",
-        "codeBlockTooltip": "Blok kodu",
-        "raw": "Surowy",
-        "preview": "Podgląd",
-        "contentPlaceholder": "Napisz treść swojego bloga tutaj...",
-        "clear": "Wyczyść",
-        "saveDraft": "Zapisz szkic",
-        "publish": "Opublikuj post",
-        "editTitle": "Edytuj post na blogu",
-        "createTitle": "Utwórz nowy post",
-        "languageSelect": "Wybierz język",
-        "back": "Wstecz",
-        "delete": "Usuń",
-        "listTooltip": "Lista punktowa",
-        "numberedListTooltip": "Lista numerowana",
-        "headerTooltip": "Nagłówek",
-        "subheaderTooltip": "Podtytuł",
-        "categoryInput": "Kategoria",
-        "featuredCheckbox": "Wyróżniony post",
-        "imageTooltip": "Dodaj zdjęcie",
-        "linkTooltip": "Dodaj link",
-        "tableTooltip": "Dodaj tabelę",
-        "languageEnglish": "Angielski",
-        "languagePolish": "Polski",
-        "languageInput": "Język",
-        "linksInput": "Pomocne linki",
-        "imageInput": "Zdjęcie",
-        "removeImage": "Usuń zdjęcie",
-        "addHeaderImage": "Dodaj zdjęcie"
-      },
-      "notPublished": "Nie opublikowane",
-      "createNew": "Stwórz nowy post"
-    }
+    "details": "Szczegóły",
+    "role": "Inżynier Back-End"
   },
   "blog": {
     "categories": {
@@ -302,7 +294,14 @@
     },
     "hero": {
       "title": "Blog Techniczny",
-      "subtitle": "Spostrzeżenia, tutoriale i lekcje wyniesione z projektów web developmentu. Dzielę się praktyczną wiedzą, aby pomóc innym developerom się rozwijać."
+      "subtitle": "Spostrzeżenia, tutoriale i lekcje wyniesione z projektów web developmentu. Dzielę się praktyczną wiedzą, aby pomóc innym developerom się rozwijać.",
+      "eyebrow": "Pisanie",
+      "heading": "Artykuły i pomysły",
+      "stats": {
+        "articles": "Artykuły",
+        "featured": "Wyróżnione",
+        "categories": "Kategorie"
+      }
     },
     "featured": {
       "title": "Wybrane Artykuły",
@@ -310,6 +309,7 @@
       "badge": "Wyróżnione"
     },
     "readMore": "Czytaj więcej",
+    "readArticle": "Czytaj artykuł",
     "recent": {
       "title": "Najnowsze posty",
       "subtitle": "Najnowsze spostrzeżenia i odkrycia z mojej bieżącej pracy programistycznej."
@@ -321,7 +321,10 @@
       "sortByDate": "Sortuj od najnowszych do najstarszych",
       "sortByViews": "Sortuj od najczęściej czytanych",
       "sortBy": "Sortowanie",
-      "categories": "Kategorie"
+      "categories": "Kategorie",
+      "sort": "Sortuj",
+      "latest": "Najnowsze",
+      "mostRead": "Najczęściej czytane"
     },
     "noResults": {
       "title": "Brak blogów z podanej kategorii",
@@ -339,34 +342,8 @@
     "languageWarning": "Zastrzeżenie: Ten tekst został przetłumaczony z {language} przy użyciu sztucznej inteligencji i nie został zweryfikowany przez człowieka. Mogą istnieć różnice między wersją polską a angielską.",
     "fromPolish": "języka polskiego",
     "fromEnglish": "języka angielskiego",
-    "fromUnknown": "nieokreślonego języka"
-  },
-  "files": {
-    "title": "Pliki",
-    "upload": {
-      "title": "Wgraj Pliki",
-      "selectFiles": "Wybierz pliki do wgrania",
-      "button": "Wgraj Pliki",
-      "success": "Pliki zostały pomyślnie wgrane!",
-      "error": "Nie udało się wgrać plików. Spróbuj ponownie."
-    },
-    "list": {
-      "title": "Twoje Pliki",
-      "empty": {
-        "title": "Brak plików",
-        "subtitle": "Wgraj swój pierwszy plik, aby rozpocząć"
-      },
-      "error": "Nie udało się załadować plików. Spróbuj ponownie."
-    },
-    "download": {
-      "success": "Plik został pomyślnie pobrany!",
-      "error": "Nie udało się pobrać pliku. Spróbuj ponownie."
-    },
-    "delete": {
-      "title": "Usuń Plik",
-      "message": "Czy na pewno chcesz usunąć '{fileName}'? Ta akcja nie może zostać cofnięta.",
-      "success": "Plik został pomyślnie usunięty!",
-      "error": "Nie udało się usunąć pliku. Spróbuj ponownie."
-    }
+    "fromUnknown": "nieokreślonego języka",
+    "allArticles": "Wszystkie artykuły",
+    "discussPost": "Omów ten artykuł"
   }
 }

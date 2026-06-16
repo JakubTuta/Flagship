@@ -25,11 +25,6 @@ export interface IBlogSerialized {
   mainLanguage: 'pl' | 'en' | null
 }
 
-export interface IUserSerialized {
-  email: string
-  username: string
-}
-
 export interface IProjectSerialized {
   title: string
   value: string

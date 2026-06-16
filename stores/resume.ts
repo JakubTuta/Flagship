@@ -1,8 +1,7 @@
-import { collection, doc, getDocs, query, setDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, query } from 'firebase/firestore'
 import { getDownloadURL, ref as storageRef } from 'firebase/storage'
-import { beforeCreateDoc, beforeUpdateDoc, removeReferenceField } from '~/helpers/modelToDatabase'
 import type { IResume } from '~/models/resume'
-import { mapIResume, mapIResumeDecoded, mapIResumeEncoded } from '~/models/resume'
+import { mapIResumeDecoded } from '~/models/resume'
 import type { IResumeSerialized } from '~/models/serialized'
 
 export const useResumeStore = defineStore('resume', () => {
@@ -12,10 +11,8 @@ export const useResumeStore = defineStore('resume', () => {
   const loadingPdfs = ref(false)
 
   const { firestore, storage } = useFirebase()
-  const authStore = useAuthStore()
 
   const fetchResume = async () => {
-    // Skip on server side or if firestore is not available
     if (!firestore || import.meta.server) {
       return
     }
@@ -36,69 +33,6 @@ export const useResumeStore = defineStore('resume', () => {
     }
     catch (error) {
       console.error('Error fetching resume:', error)
-      throw error
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
-  const createResume = async (resumeData: Partial<IResume>) => {
-    if (!authStore.userData?.reference) {
-      throw new Error('User not authenticated')
-    }
-
-    // Skip on server side or if firestore is not available
-    if (!firestore || import.meta.server) {
-      return null
-    }
-
-    loading.value = true
-
-    try {
-      const resumeRef = doc(collection(firestore, 'resume'))
-      const newResume = mapIResume(resumeData, resumeRef)
-      const encodedData = mapIResumeEncoded(newResume)
-      const dataToSave = beforeCreateDoc(removeReferenceField(encodedData))
-
-      await setDoc(resumeRef, dataToSave)
-      resume.value = mapIResume(newResume, resumeRef)
-
-      return resume.value
-    }
-    catch (error) {
-      console.error('Error creating resume:', error)
-      throw error
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
-  const updateResume = async (resumeData: Partial<IResume>) => {
-    if (!authStore.userData?.reference || !resume.value?.reference) {
-      throw new Error('User not authenticated or resume not found')
-    }
-
-    // Skip on server side or if firestore is not available
-    if (!firestore || import.meta.server) {
-      return null
-    }
-
-    loading.value = true
-
-    try {
-      const updatedResume = mapIResume({ ...resume.value, ...resumeData }, resume.value.reference)
-      const encodedData = mapIResumeEncoded(updatedResume)
-      const dataToSave = beforeUpdateDoc(removeReferenceField(encodedData))
-
-      await updateDoc(resume.value.reference, dataToSave)
-      resume.value = updatedResume
-
-      return resume.value
-    }
-    catch (error) {
-      console.error('Error updating resume:', error)
       throw error
     }
     finally {
@@ -170,7 +104,7 @@ export const useResumeStore = defineStore('resume', () => {
       return
     }
 
-    resume.value = mapIResume({
+    resume.value = {
       personalInfo: serialized.personalInfo,
       education: serialized.education.map(edu => ({
         institution: edu.institution,
@@ -201,7 +135,7 @@ export const useResumeStore = defineStore('resume', () => {
       links: serialized.links,
       footerText: serialized.footerText,
       reference: null,
-    })
+    }
   }
 
   return {
@@ -212,8 +146,6 @@ export const useResumeStore = defineStore('resume', () => {
     fetchResume,
     fetchResumePdfs,
     downloadResumePdf,
-    createResume,
-    updateResume,
     resetState,
     hydrateResume,
   }

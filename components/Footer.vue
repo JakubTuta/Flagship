@@ -1,86 +1,98 @@
 <script setup lang="ts">
-const socialLinks = [
+const { t } = useI18n()
+
+const navLinks = computed(() => [
+  { label: t('navigation.home.title'), to: '/' },
+  { label: t('navigation.projects.title'), to: '/projects' },
+  { label: t('navigation.blog.title'), to: '/blogs' },
+  { label: t('navigation.resume.title'), to: '/resume' },
+])
+
+const elsewhereLinks = [
   {
-    icon: 'mdi-email',
-    color: 'primary',
-    email: 'jakubtutka02@gmail.com',
+    label: 'GitHub',
+    href: 'https://github.com/JakubTuta',
   },
   {
-    icon: 'mdi-linkedin',
-    color: 'info',
-    to: 'https://www.linkedin.com/in/jakub-tutka-077b55352/',
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/jakub-tutka-077b55352/',
   },
   {
-    icon: 'mdi-github',
-    color: 'secondary',
-    to: 'https://github.com/JakubTuta',
+    label: 'Email',
+    href: 'mailto:jakubtutka02@gmail.com',
   },
 ]
 </script>
 
 <template>
-  <v-footer class="d-print-none footer max-h-200px pa-8">
-    <v-container>
-      <v-row class="justify-center">
-        <v-col
-          cols="12"
-          class="text-center"
-        >
-          <div class="social-links mb-4">
-            <span
-              v-for="(social, index) in socialLinks"
-              :key="index"
-            >
-              <v-btn
-                v-if="social.to"
-                :color="social.color"
-                :icon="social.icon"
-                variant="text"
-                size="x-large"
-                class="mx-2"
-                :href="social.to"
-                target="_blank"
-                rel="noopener noreferrer"
-              />
+  <footer class="d-print-none footer">
+    <div class="wrap">
+      <div class="grid">
+        <div class="brand-col">
+          <div class="brand">
+            <div class="mono">
+              JT
+            </div>
 
-              <v-btn
-                v-if="social.email"
-                :color="social.color"
-                :icon="social.icon"
-                variant="text"
-                size="x-large"
-                class="mx-2"
-                :href="`mailto:${social.email}`"
-              />
-            </span>
+            <div class="who">
+              <b>Jakub Tutka</b>
+
+              <span>{{ t('common.role') }}</span>
+            </div>
           </div>
 
-          <p class="footer-text">
-            {{ $t('footer.madeWith') }}
+          <p class="bio">
+            {{ t('footer.bio') }}
           </p>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-footer>
+        </div>
+
+        <div>
+          <h4>{{ t('footer.navigate') }}</h4>
+
+          <NuxtLink
+            v-for="link in navLinks"
+            :key="link.to"
+            :to="link.to"
+            class="fl"
+          >
+            {{ link.label }}
+          </NuxtLink>
+        </div>
+
+        <div>
+          <h4>{{ t('footer.elsewhere') }}</h4>
+
+          <a
+            v-for="link in elsewhereLinks"
+            :key="link.href"
+            :href="link.href"
+            class="fl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ link.label }}
+          </a>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <span>© 2026 Jakub Tutka</span>
+
+        <span>{{ t('footer.tagline') }}</span>
+      </div>
+    </div>
+  </footer>
 </template>
 
 <style scoped>
-.social-links .v-btn {
-    transition: all 0.3s ease;
+.brand-col .brand {
+  margin-bottom: 14px;
 }
 
-.social-links .v-btn:hover {
-    transform: translateY(-2px);
-}
-
-.footer {
-    background: rgb(var(--v-theme-surface)) !important;
-    color: rgb(var(--v-theme-on-surface));
-    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-}
-
-.footer-text {
-    color: rgba(var(--v-theme-on-surface), 0.7);
-    margin-bottom: 0;
+.bio {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 28ch;
 }
 </style>

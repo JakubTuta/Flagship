@@ -10,8 +10,6 @@ const { resume } = storeToRefs(resumeStore)
 
 const themeStore = useThemeStore()
 
-useAuthStore()
-
 onMounted(() => {
   themeStore.initialize()
 

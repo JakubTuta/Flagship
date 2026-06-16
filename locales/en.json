@@ -26,11 +26,6 @@
         "description": "I share insights about web development, technical tutorials, and lessons learned from real-world projects. Join me in exploring modern development practices and industry trends.",
         "tags": "tech blog, development insights, programming tutorials, web development, technical writing"
       },
-      "files": {
-        "title": "Files",
-        "description": "Secure file management system for authenticated users. Upload, download, and manage your personal files with cloud storage.",
-        "tags": "files, storage, upload, download, personal files, cloud storage, file management"
-      },
       "notFound": {
         "title": "Page Not Found",
         "description": "The page you're looking for doesn't exist or has been moved."
@@ -61,16 +56,6 @@
       "title": "Home",
       "description": "Welcome to my portfolio - discover my work as a full stack developer and technical writer."
     },
-    "files": {
-      "title": "Files",
-      "description": "Manage your personal files with secure cloud storage."
-    },
-    "admin": {
-      "title": "Admin Panel",
-      "blog": "Blog",
-      "projects": "Projects",
-      "logout": "Logout"
-    }
   },
   "skills": {
     "database": "Databases",
@@ -97,18 +82,28 @@
     "hero": {
       "info": "Back-End Python Developer",
       "about": "About Me",
-      "contact": "Get in Touch"
+      "contact": "Get in Touch",
+      "available": "Available for new roles",
+      "headingPre": "I build backend systems that ",
+      "headingAccent": "scale",
+      "headingSuf": " — and own them end to end.",
+      "tagline": "A backend-focused software engineer in Kraków with {years}+ years turning complex requirements into reliable, production-grade systems — owning the work from first sketch to live deployment.",
+      "viewProjects": "View projects",
+      "readResume": "Read my resume"
     },
     "about": {
       "title": "What I Do",
       "subtitle": "I build modern web applications and write about technology to help developers grow",
-      "learnMore": "Learn More"
+      "learnMore": "Learn More",
+      "eyebrow": "About me"
     },
     "bio": {
       "title": "About Me",
       "paragraph": "Backend-focused Software Engineer with 2+ years of professional experience designing and deploying scalable server-side systems. Specialized in Python (FastAPI, Django) with a strong emphasis on API performance optimization, database design, and microservice architecture. Experienced in deploying and managing production workloads on Google Cloud Platform — Cloud Run, Cloud Functions, and Firebase. I approach backend development with a software engineering mindset: clear architecture, documented APIs, and infrastructure that scales reliably under load. Vue.js and Nuxt.js serve as my frontend tools when full-stack delivery is needed.",
       "quote": "A book that doesn't deserve to be reread wasn't worth reading in the first place. [...] But until we've read it, we don't know whether it deserves a second reading. Such is the cruelty of life.",
-      "quoteAuthor": "— Jaume Cabrè, Confessions"
+      "quoteAuthor": "— Jaume Cabrè, Confessions",
+      "paragraph1": "I'm a backend-focused software engineer with {years}+ years of professional experience designing and deploying scalable server-side systems. I specialise in Python — FastAPI and Django — with a strong emphasis on API performance, database design and microservice architecture.",
+      "paragraph2": "I run production workloads on Google Cloud Platform (Cloud Run, Cloud Functions, Firebase) and approach every system with an engineering mindset: clear architecture, documented APIs and infrastructure that scales reliably under load. When full-stack delivery is needed, Vue.js and Nuxt.js are my frontend tools."
     },
     "stats": {
       "experience": "Years of experience",
@@ -119,25 +114,65 @@
     "featuredProjects": {
       "title": "Featured Projects",
       "subtitle": "A selection of things I've built — click to explore the full showcase.",
-      "cta": "All projects"
+      "cta": "All projects",
+      "eyebrow": "Featured work",
+      "heading": "Things I've built & shipped",
+      "about": "A selection of projects where I owned the architecture end to end.",
+      "ctaWith": "All {count} projects"
     },
     "topBlogs": {
       "title": "Most Read Articles",
       "subtitle": "Posts that resonated most with readers.",
       "cta": "All articles",
-      "views": "views"
+      "views": "views",
+      "eyebrow": "From the blog",
+      "heading": "Most-read articles",
+      "about": "Practical knowledge from real projects, written to help other developers grow."
     },
     "skills": {
       "title": "Technical Skills",
-      "subtitle": "Technologies and tools I use to build reliable, scalable solutions"
+      "subtitle": "Technologies and tools I use to build reliable, scalable solutions",
+      "eyebrow": "Expertise",
+      "heading": "Areas I work across",
+      "about": "The tools and disciplines I rely on to deliver reliable, scalable work.",
+      "columns": {
+        "backend": "Backend",
+        "cloud": "Cloud & DevOps",
+        "databases": "Databases",
+        "frontend": "Frontend",
+        "versionControl": "Version control",
+        "observability": "Observability"
+      }
+    },
+    "values": {
+      "ownership": {
+        "title": "Full product ownership",
+        "body": "I take responsibility for the whole thing — architecture, code, deploys and what happens after."
+      },
+      "fearless": {
+        "title": "Fearless about new tech",
+        "body": "gRPC, Kubernetes, NEAT, a neural net from scratch — I learn what a problem needs and go deep."
+      },
+      "production": {
+        "title": "Production-minded",
+        "body": "Systems that handle 10k+ events/sec, scale horizontally and stay observable in the real world."
+      }
     },
     "contact": {
       "title": "Let's Work Together",
-      "subtitle": "Interested in collaboration or have a project in mind? I'd love to hear from you."
+      "subtitle": "Interested in collaboration or have a project in mind? I'd love to hear from you.",
+      "eyebrow": "Let's work together",
+      "heading": "Have a backend that needs to scale?",
+      "copy": "Interested in collaboration or have a project in mind? I'd love to hear from you — I take ownership and see things through.",
+      "linkedin": "Connect on LinkedIn"
     }
   },
   "footer": {
-    "madeWith": "© 2025 Jakub Tutka. Built with Nuxt & Vuetify."
+    "madeWith": "© 2026 Jakub Tutka. Built with Nuxt & Vuetify.",
+    "navigate": "Navigate",
+    "elsewhere": "Elsewhere",
+    "bio": "Backend software engineer building systems that scale. Available for new opportunities.",
+    "tagline": "Built with intent · Kraków, PL"
   },
   "resume": {
     "work": {
@@ -192,6 +227,7 @@
     "technologies": "Technologies Used",
     "viewCode": "View Source",
     "liveDemo": "Live Demo",
+    "liveDemos": "Live demos",
     "learned": "Key Learnings",
     "categories": {
       "all": "All Projects",
@@ -200,8 +236,9 @@
       "withDemo": "Available online"
     },
     "hero": {
-      "title": "My Projects",
-      "subtitle": "A collection of web applications and development projects that demonstrate my technical skills and problem-solving approach."
+      "title": "My projects",
+      "heading": "Things I've built",
+      "subtitle": "A collection of web applications and backend systems that demonstrate my technical range and problem-solving approach — from full-scale production apps to learning experiments."
     },
     "featured": {
       "title": "Featured Projects",
@@ -235,53 +272,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "delete": "Delete",
-    "details": "Details"
-  },
-  "admin": {
-    "blog": {
-      "published": "Published",
-      "drafts": "Drafts",
-      "create": {
-        "title": "Create New Blog Post",
-        "titleInput": "Title",
-        "switchToRaw": "Switch to Raw View",
-        "switchToPreview": "Switch to Preview",
-        "boldTooltip": "Bold (Ctrl+B)",
-        "italicTooltip": "Italic (Ctrl+I)",
-        "underlineTooltip": "Underline (Ctrl+U)",
-        "inlineCodeTooltip": "Inline Code",
-        "codeBlockTooltip": "Code Block",
-        "raw": "Raw",
-        "preview": "Preview",
-        "contentPlaceholder": "Write your blog content here...",
-        "clear": "Clear",
-        "saveDraft": "Save Draft",
-        "publish": "Publish Post",
-        "editTitle": "Edit Blog Post",
-        "createTitle": "Create New Post",
-        "languageSelect": "Select Language",
-        "back": "Back",
-        "delete": "Delete",
-        "listTooltip": "Bullet List",
-        "numberedListTooltip": "Numbered List",
-        "headerTooltip": "Header",
-        "subheaderTooltip": "Subheader",
-        "categoryInput": "Category",
-        "featuredCheckbox": "Featured Post",
-        "imageTooltip": "Add image",
-        "linkTooltip": "Add link",
-        "tableTooltip": "Add table",
-        "languageEnglish": "English",
-        "languagePolish": "Polish",
-        "languageInput": "Language",
-        "linksInput": "Helpful links",
-        "imageInput": "Image",
-        "removeImage": "Remove image",
-        "addHeaderImage": "Add image"
-      },
-      "notPublished": "Not Published",
-      "createNew": "Create new post"
-    }
+    "details": "Details",
+    "role": "Back-End Engineer"
   },
   "blog": {
     "categories": {
@@ -302,7 +294,14 @@
     },
     "hero": {
       "title": "Technical Blog",
-      "subtitle": "Insights, tutorials, and lessons learned from web development projects. I share practical knowledge to help fellow developers grow."
+      "subtitle": "Insights, tutorials, and lessons learned from web development projects. I share practical knowledge to help fellow developers grow.",
+      "eyebrow": "Writing",
+      "heading": "Articles & ideas",
+      "stats": {
+        "articles": "Articles",
+        "featured": "Featured",
+        "categories": "Categories"
+      }
     },
     "featured": {
       "title": "Featured Articles",
@@ -310,6 +309,7 @@
       "badge": "Featured"
     },
     "readMore": "Read More",
+    "readArticle": "Read article",
     "recent": {
       "title": "Recent Posts",
       "subtitle": "Latest insights and discoveries from my ongoing development work."
@@ -321,7 +321,10 @@
       "sortByDate": "Sort from the latest to the oldest",
       "sortByViews": "Sort from the most read",
       "sortBy": "Sorting",
-      "categories": "Categories"
+      "categories": "Categories",
+      "sort": "Sort",
+      "latest": "Latest",
+      "mostRead": "Most read"
     },
     "noResults": {
       "title": "No blogs from the given category",
@@ -339,34 +342,8 @@
     "languageWarning": "Disclaimer: This text was translated from {language} using AI and has not been human-verified. Differences between the Polish and English versions may exist.",
     "fromPolish": "Polish",
     "fromEnglish": "English",
-    "fromUnknown": "Unknown language"
-  },
-  "files": {
-    "title": "Files",
-    "upload": {
-      "title": "Upload Files",
-      "selectFiles": "Select files to upload",
-      "button": "Upload Files",
-      "success": "Files uploaded successfully!",
-      "error": "Failed to upload files. Please try again."
-    },
-    "list": {
-      "title": "Your Files",
-      "empty": {
-        "title": "No files yet",
-        "subtitle": "Upload your first file to get started"
-      },
-      "error": "Failed to load files. Please try again."
-    },
-    "download": {
-      "success": "File downloaded successfully!",
-      "error": "Failed to download file. Please try again."
-    },
-    "delete": {
-      "title": "Delete File",
-      "message": "Are you sure you want to delete '{fileName}'? This action cannot be undone.",
-      "success": "File deleted successfully!",
-      "error": "Failed to delete file. Please try again."
-    }
+    "fromUnknown": "Unknown language",
+    "allArticles": "All articles",
+    "discussPost": "Discuss this post"
   }
 }
