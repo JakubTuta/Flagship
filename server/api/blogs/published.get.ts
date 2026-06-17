@@ -12,7 +12,7 @@ export default defineEventHandler(async (): Promise<IBlogSerialized[]> => {
         if (!meta || !meta.isPublished)
           return null
 
-        const liveCount = await viewsStorage.getItem<number>(slug)
+        const liveCount = await viewsStorage.getItem<number>(slug).catch(() => null)
         const viewCount = liveCount ?? meta.viewCount ?? 0
 
         return {

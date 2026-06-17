@@ -64,5 +64,4 @@ export interface IResume {
   interests: IInterest[]
   links: ILink[]
   footerText: ITranslatedText
-  reference: null
 }

@@ -33,7 +33,6 @@ export const useBlogStore = defineStore('blog', () => {
       category: blog.category,
       viewCount: blog.viewCount,
       mainLanguage: blog.mainLanguage,
-      reference: null,
     }))
   }
 

@@ -18,5 +18,4 @@ export interface IBlog {
   category: TBlogCategory
   viewCount: number
   mainLanguage: 'pl' | 'en' | null
-  reference: null
 }
