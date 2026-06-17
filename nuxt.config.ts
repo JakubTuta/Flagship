@@ -106,6 +106,12 @@ export default defineNuxtConfig({
         base: './.data/views',
       },
     },
+    devStorage: {
+      'assets:content': {
+        driver: 'fs',
+        base: './server/content',
+      },
+    },
     prerender: {
       crawlLinks: true,
       routes: ['/blogs'],

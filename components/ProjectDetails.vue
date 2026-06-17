@@ -154,8 +154,25 @@ function closeDialog() {
 
       <!-- Footer actions -->
       <div class="pd-actions">
+        <template v-if="project.repos?.length">
+          <a
+            v-for="repo in project.repos"
+            :key="repo.url"
+            :href="repo.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-sm btn-primary"
+          >
+            <v-icon
+              size="14"
+              icon="mdi-github"
+            />
+            {{ repo.label }}
+          </a>
+        </template>
+
         <a
-          v-if="project.url"
+          v-else-if="project.url"
           :href="project.url"
           target="_blank"
           rel="noopener noreferrer"

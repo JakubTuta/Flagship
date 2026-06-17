@@ -2,7 +2,7 @@ import type { IProjectSerialized } from '~/models/serialized'
 
 export default defineEventHandler(async (): Promise<IProjectSerialized[]> => {
   try {
-    const projects = await readContentAsset<IProjectSerialized[]>('projects')
+    const projects = await readContentAsset<IProjectSerialized[]>('projects.json')
 
     return projects ?? []
   }

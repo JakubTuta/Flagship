@@ -57,8 +57,8 @@ watch(blogsData, (data) => {
 const loadingProjects = computed(() => projectsStatus.value === 'pending')
 const loadingBlogs = computed(() => blogsStatus.value === 'pending')
 
-const featuredProjects = computed(() => {
-  return projectStore.projects.filter(p => p.featured).slice(0, 3)
+const homeProjects = computed(() => {
+  return projectStore.projects.filter(p => p.showOnHome)
 })
 
 const topBlogs = computed(() => {
@@ -368,7 +368,7 @@ const valueCards = computed(() => [
         class="feat-grid"
       >
         <Reveal
-          v-for="(project, i) in featuredProjects"
+          v-for="(project, i) in homeProjects"
           :key="project.value"
           :delay="i"
         >

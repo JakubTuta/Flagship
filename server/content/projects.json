@@ -1,151 +1,151 @@
 [
   {
-    "title": "Ledger SDK",
-    "value": "ledger-sdk",
+    "title": "Ledger",
+    "value": "ledger",
     "shortDescription": {
-      "en": "One pip install, three lines of code — automatic logging and error tracking for Python apps.",
-      "pl": "Jeden pip install i trzy linijki — automatyczne logowanie i śledzenie błędów dla Pythona."
+      "en": "Self-hosted log analytics — SDK, backend and dashboard. Datadog-style observability you own.",
+      "pl": "Samodzielnie hostowana analityka logów — SDK, backend i dashboard. Obserwowalność u siebie."
     },
     "description": {
-      "en": "The official Python SDK for the Ledger platform. Add it to any FastAPI, Django, or Flask app as middleware and instantly get automatic logging of every request, response, and exception — with full stack traces and performance metrics. All sent to your Ledger dashboard with less than 0.1ms overhead.",
-      "pl": "Oficjalny SDK Pythona dla platformy Ledger. Dodaj do aplikacji FastAPI, Django lub Flask jako middleware i od razu zyskujesz automatyczne logowanie każdego zapytania, odpowiedzi i wyjątku — z pełnymi stack trace'ami i metrykami. Wszystko przesyłane na dashboard z narzutem poniżej 0.1ms."
-    },
-    "url": "https://github.com/JakubTuta/Ledger-SDK",
-    "demoUrl": "https://ledger.jtuta.cloud",
-    "featured": false,
-    "category": "Library/Package",
-    "technologies": [
-      "Python",
-      "FastAPI",
-      "Django",
-      "Flask",
-      "AsyncIO",
-      "PyPI"
-    ],
-    "learned": [
-      {
-        "en": "Designing zero-overhead background logging with batching and automatic retry logic",
-        "pl": "Projektowanie logowania w tle z zerowymi narzutami, batchingiem i automatycznymi ponowieniami"
-      },
-      {
-        "en": "Building framework-agnostic middleware compatible with FastAPI, Django, and Flask",
-        "pl": "Tworzenie middleware niezależnego od frameworka, kompatybilnego z FastAPI, Django i Flask"
-      },
-      {
-        "en": "Publishing and maintaining a production Python package on PyPI",
-        "pl": "Publikowanie i utrzymywanie produkcyjnego pakietu Pythona na PyPI"
-      }
-    ],
-    "image": null
-  },
-  {
-    "title": "AI Assistant",
-    "value": "ai-assistant",
-    "shortDescription": {
-      "en": "Console-based AI assistant with voice/text input for weather, Gmail, Spotify control",
-      "pl": "Konsolowy asystent AI z obsługą głosu/tekstu do pogody, Gmail, kontroli Spotify"
-    },
-    "description": {
-      "en": "A versatile personal assistant powered by AI that accepts both text and voice commands. Features integrations with weather services, Gmail management, and Spotify control. Supports multiple AI models including Claude Sonnet, Google Gemini, and local Ollama models for flexible deployment options.",
-      "pl": "Wszechstronny osobisty asystent zasilany AI, który przyjmuje komendy tekstowe i głosowe. Posiada integracje z usługami pogodowymi, zarządzaniem Gmail i kontrolą Spotify. Obsługuje wiele modeli AI: Claude Sonnet, Google Gemini i lokalne modele Ollama dla elastycznych opcji wdrożenia."
-    },
-    "url": "https://github.com/JakubTuta/AI-assistant",
-    "demoUrl": null,
-    "featured": false,
-    "category": "AI & Machine Learning",
-    "technologies": [
-      "Python",
-      "Speech Recognition",
-      "Claude Sonnet API",
-      "Google Gemini API",
-      "Ollama",
-      "Spotify API",
-      "Gmail API",
-      "OpenWeatherMap API",
-      "Google Cloud TTS"
-    ],
-    "learned": [
-      {
-        "en": "Speech recognition implementation",
-        "pl": "Implementacja rozpoznawania mowy"
-      },
-      {
-        "en": "Multiple AI model integration",
-        "pl": "Integracja wielu modeli AI"
-      },
-      {
-        "en": "API orchestration and management",
-        "pl": "Orkiestracja i zarządzanie API"
-      },
-      {
-        "en": "Voice command processing",
-        "pl": "Przetwarzanie komend głosowych"
-      },
-      {
-        "en": "Natural language to function mapping",
-        "pl": "Mapowanie języka naturalnego na funkcje"
-      },
-      {
-        "en": "Console application development",
-        "pl": "Rozwój aplikacji konsolowych"
-      },
-      {
-        "en": "Local vs cloud AI deployment",
-        "pl": "Wdrażanie AI lokalnie vs w chmurze"
-      }
-    ],
-    "image": null
-  },
-  {
-    "title": "Ledger Dashboard",
-    "value": "ledger-dashboard",
-    "shortDescription": {
-      "en": "The web interface for Ledger — stream, search and visualize your application logs live.",
-      "pl": "Webowy interfejs platformy Ledger — streamuj i wizualizuj logi swojej aplikacji na żywo."
-    },
-    "description": {
-      "en": "The visual front-end for the Ledger log platform. Watch logs stream in real time as your app runs, filter by level or time range, build custom drag-and-drop dashboards, and track recurring errors across projects. Built with Nuxt 3 and Vuetify — fast, responsive, and works great on any screen size.",
-      "pl": "Graficzny interfejs platformy Ledger. Obserwuj logi napływające w czasie rzeczywistym, filtruj po poziomie i przedziale czasu, buduj własne dashboardy metodą drag & drop i śledź powtarzające się błędy w wielu projektach. Zbudowany w Nuxt 3 i Vuetify — szybki i responsywny na każdym ekranie."
+      "en": "Ledger is a self-hosted observability stack I built end to end across three repos. The Python SDK drops into any FastAPI, Django or Flask app as middleware and ships logs, errors and timings in the background. A FastAPI + Elasticsearch backend ingests and queries millions of records, and a Nuxt dashboard streams it all live with drag-and-drop panels.",
+      "pl": "Ledger to platforma obserwowalności, którą zbudowałem od początku do końca w trzech repozytoriach. SDK w Pythonie wpina się do dowolnej aplikacji FastAPI, Django lub Flask jako middleware i wysyła logi, błędy i metryki w tle. Backend na FastAPI i Elasticsearch przyjmuje i przeszukuje miliony rekordów, a dashboard w Nuxt streamuje wszystko na żywo z panelami drag & drop."
     },
     "url": "https://github.com/JakubTuta/Ledger-WEB",
+    "repos": [
+      { "label": "Web", "url": "https://github.com/JakubTuta/Ledger-WEB" },
+      { "label": "Server", "url": "https://github.com/JakubTuta/Ledger-APP" },
+      { "label": "SDK", "url": "https://github.com/JakubTuta/Ledger-SDK" }
+    ],
     "demoUrl": "https://ledger.jtuta.cloud",
     "featured": true,
+    "showOnHome": true,
     "category": "Web Application",
     "technologies": [
       "Nuxt 3",
       "Vue 3",
       "TypeScript",
       "Vuetify",
-      "Pinia",
-      "UnoCSS",
-      "Axios"
+      "FastAPI",
+      "Python",
+      "PostgreSQL",
+      "Elasticsearch",
+      "Redis",
+      "Docker"
     ],
     "learned": [
       {
-        "en": "Building real-time log streaming UIs without performance degradation",
-        "pl": "Budowanie interfejsów streamingu logów w czasie rzeczywistym bez pogorszenia wydajności"
+        "en": "Streaming logs live in the browser without the UI choking on volume",
+        "pl": "Streaming logów na żywo w przeglądarce bez zatykania UI przy dużym wolumenie"
       },
       {
-        "en": "Designing customizable drag-and-drop dashboard layouts with persistent state",
-        "pl": "Projektowanie konfigurowalnych układów dashboardów drag & drop z persystentnym stanem"
+        "en": "Building drag-and-drop dashboards with layouts that persist per user",
+        "pl": "Budowanie dashboardów drag & drop z układami zapisywanymi per użytkownik"
+      },
+      {
+        "en": "Multi-tenant log ingestion that scales horizontally",
+        "pl": "Wielodostępowa agregacja logów skalująca się horyzontalnie"
+      },
+      {
+        "en": "Keeping queries under 50ms over millions of rows with Elasticsearch",
+        "pl": "Utrzymanie zapytań poniżej 50ms na milionach rekordów dzięki Elasticsearch"
+      },
+      {
+        "en": "Writing an SDK with near-zero overhead using background batching and retries",
+        "pl": "Pisanie SDK o znikomym narzucie dzięki batchingowi w tle i ponowieniom"
+      },
+      {
+        "en": "Making one middleware work across FastAPI, Django and Flask",
+        "pl": "Sprawienie, by jedno middleware działało w FastAPI, Django i Flask"
+      },
+      {
+        "en": "Publishing and maintaining a real package on PyPI",
+        "pl": "Publikacja i utrzymanie prawdziwego pakietu na PyPI"
+      },
+      {
+        "en": "Self-hosting production observability with no vendor lock-in",
+        "pl": "Self-hosting obserwowalności klasy produkcyjnej bez vendor lock-in"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/1772062384835_ledger.jpg"
   },
   {
+    "title": "Wony",
+    "value": "wony",
+    "shortDescription": {
+      "en": "Always-on personal AI assistant — voice, web UI, tray mode and 15+ integrations.",
+      "pl": "Zawsze aktywny osobisty asystent AI — głos, web UI, tryb tray i 15+ integracji."
+    },
+    "description": {
+      "en": "Wony is a modular personal AI assistant that runs in the background as a system tray app on Windows. It accepts text and voice commands through a browser-based chat UI or console, routes requests to Claude, Gemini or a local Ollama model, and streams replies sentence by sentence so you hear the first word before the full response is ready. Modules cover weather, Spotify, Gmail, Google Calendar, screen capture, Shazam, smart switches and more — each auto-registers on startup and gracefully skips if its credentials are missing. Voice uses faster-whisper offline STT with optional GPU acceleration and a custom wake word trained on openwakeword. Semantic memory with local embeddings lets it recall past conversations by meaning without any external service.",
+      "pl": "Wony to modularny osobisty asystent AI działający w tle jako aplikacja tray na Windowsie. Przyjmuje komendy tekstowe i głosowe przez przeglądarkowy chat lub konsolę, przekierowuje zapytania do Claude, Gemini lub lokalnego Ollama i strumieniuje odpowiedzi zdanie po zdaniu — pierwsze słowo słyszysz, zanim cała odpowiedź jest gotowa. Moduły obsługują pogodę, Spotify, Gmail, Google Calendar, zrzuty ekranu, Shazam, inteligentne przełączniki i więcej — każdy rejestruje się automatycznie przy starcie i łagodnie pomija brakujące dane uwierzytelniające. Głos używa faster-whisper (STT offline) z opcjonalną akceleracją GPU i niestandardowym słowem aktywacyjnym trenowanym na openwakeword. Pamięć semantyczna z lokalnymi embeddingami pozwala przywoływać poprzednie rozmowy według znaczenia bez żadnych zewnętrznych usług."
+    },
+    "url": "https://github.com/JakubTuta/Wony",
+    "demoUrl": null,
+    "featured": false,
+    "showOnHome": true,
+    "category": "AI & Machine Learning",
+    "technologies": [
+      "Python",
+      "faster-whisper",
+      "Kokoro TTS",
+      "Claude API",
+      "Google Gemini API",
+      "Ollama",
+      "Spotify API",
+      "Gmail API",
+      "Google Calendar API",
+      "OpenWeatherMap API",
+      "MCP",
+      "ONNX",
+      "FAISS"
+    ],
+    "learned": [
+      {
+        "en": "Building a plugin system where modules self-register and degrade gracefully when unconfigured",
+        "pl": "Budowa systemu wtyczek, gdzie moduły rejestrują się samoczynnie i łagodnie degradują bez konfiguracji"
+      },
+      {
+        "en": "Streaming TTS so the first sentence plays before the AI finishes generating",
+        "pl": "Streaming TTS — pierwsza zdanie gra, zanim AI skończy generować"
+      },
+      {
+        "en": "Running offline STT with faster-whisper and GPU acceleration via CUDA",
+        "pl": "Uruchamianie offline STT z faster-whisper i akceleracją GPU przez CUDA"
+      },
+      {
+        "en": "Training a custom wake word model with openwakeword",
+        "pl": "Trenowanie własnego modelu słowa aktywacyjnego z openwakeword"
+      },
+      {
+        "en": "Adding semantic memory with local embeddings and vector search",
+        "pl": "Dodawanie pamięci semantycznej z lokalnymi embeddingami i wyszukiwaniem wektorowym"
+      },
+      {
+        "en": "Integrating an MCP client so the assistant can use any MCP-compatible server",
+        "pl": "Integracja klienta MCP, dzięki czemu asystent może korzystać z dowolnego serwera MCP"
+      },
+      {
+        "en": "Switching between Claude, Gemini and Ollama behind one interface",
+        "pl": "Przełączanie między Claude, Gemini i Ollama za jednym interfejsem"
+      }
+    ],
+    "image": null
+  },
+  {
     "title": "Code Lens",
     "value": "code-lens",
     "shortDescription": {
-      "en": "AI-powered code testing platform using Kubernetes",
-      "pl": "Platforma do testowania kodu zasilana sztuczną inteligencją, wykorzystująca Kubernetes"
+      "en": "AI code-testing platform that runs generated Python tests in isolated Kubernetes pods.",
+      "pl": "Platforma do testowania kodu AI — generowane testy Pythona w izolowanych podach Kubernetes."
     },
     "description": {
-      "en": "CodeLens is a microservices-based platform for generating and executing Python tests using AI. It uses a four-container architecture, with secure, isolated test execution in Kubernetes containers. The system includes a frontend, a main backend for AI services, a test runner, and dynamic test containers.",
-      "pl": "CodeLens to platforma oparta na mikroserwisach, która generuje i wykonuje testy Pythona przy użyciu sztucznej inteligencji. Wykorzystuje architekturę czterech kontenerów, z bezpiecznym, izolowanym środowiskiem testowym w kontenerach Kubernetes. System składa się z frontendu, głównego backendu dla usług AI, serwera do uruchamiania testów oraz dynamicznych kontenerów testowych."
+      "en": "CodeLens generates Python tests with AI and runs them safely in throwaway Kubernetes pods. It's split into four services — a Nuxt frontend, a FastAPI backend handling the AI, a test runner, and the short-lived containers that actually execute the code — talking to each other over WebSockets.",
+      "pl": "CodeLens generuje testy Pythona z pomocą AI i uruchamia je bezpiecznie w jednorazowych podach Kubernetes. Dzieli się na cztery serwisy — frontend w Nuxt, backend FastAPI obsługujący AI, runner testów oraz krótkożyjące kontenery, które faktycznie wykonują kod — komunikujące się przez WebSockety."
     },
     "url": "https://github.com/JakubTuta/CodeLens.git",
     "demoUrl": null,
     "featured": true,
+    "showOnHome": false,
     "category": "Web Application",
     "technologies": [
       "Nuxt.js",
@@ -159,24 +159,24 @@
     ],
     "learned": [
       {
-        "en": "Microservices architecture with clear separation of responsibilities",
-        "pl": "Architektura mikroserwisów z wyraźnym podziałem obowiązków"
+        "en": "Splitting a system into microservices with clear boundaries",
+        "pl": "Podział systemu na mikroserwisy z jasnymi granicami"
       },
       {
-        "en": "Secure and isolated test execution using Kubernetes containers and RBAC",
-        "pl": "Bezpieczne i izolowane wykonywanie testów za pomocą kontenerów Kubernetes i RBAC"
+        "en": "Running untrusted code safely with isolated Kubernetes pods and RBAC",
+        "pl": "Bezpieczne uruchamianie niezaufanego kodu w izolowanych podach Kubernetes z RBAC"
       },
       {
-        "en": "Developing a full-stack application with Nuxt.js, FastAPI, and WebSocket communication",
-        "pl": "Tworzenie pełnej aplikacji (full-stack) z użyciem Nuxt.js, FastAPI i komunikacji przez WebSocket"
+        "en": "Wiring a full stack together over WebSockets",
+        "pl": "Spięcie całego stacku przez WebSockety"
       },
       {
-        "en": "Automated deployment with Docker Compose and Kubernetes",
-        "pl": "Automatyzacja wdrożenia za pomocą Docker Compose i Kubernetes"
+        "en": "Deploying with Docker Compose and Kubernetes",
+        "pl": "Wdrażanie z Docker Compose i Kubernetes"
       },
       {
-        "en": "Integrating AI services (Gemini/Claude) for code generation",
-        "pl": "Integracja usług AI (Gemini/Claude) do generowania kodu"
+        "en": "Using Gemini/Claude to generate test code",
+        "pl": "Generowanie kodu testów przy użyciu Gemini/Claude"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/code-lens.png"
@@ -185,16 +185,17 @@
     "title": "Finance",
     "value": "finance",
     "shortDescription": {
-      "en": "AI-powered financial management tool for expense tracking with privacy-first approach",
-      "pl": "Narzędzie do zarządzania finansami z AI i podejściem zorientowanym na prywatność"
+      "en": "Expense and subscription tracker with AI insights — runs locally when you want privacy.",
+      "pl": "Tracker wydatków i subskrypcji z podpowiedziami AI — lokalnie, gdy zależy ci na prywatności."
     },
     "description": {
-      "en": "A comprehensive financial management application that helps users track expenses, subscriptions, and spending patterns. Features AI-powered recommendations for better financial decisions, local deployment options for privacy, and intuitive expense analysis with currency conversion support.",
-      "pl": "Kompleksowa aplikacja do zarządzania finansami, która pomaga użytkownikom śledzić wydatki, subskrypcje i wzorce wydatków. Zawiera rekomendacje AI dla lepszych decyzji finansowych, opcje lokalnego wdrożenia dla prywatności i intuicyjną analizę wydatków z obsługą konwersji walut."
+      "en": "An app for tracking expenses, subscriptions and where the money actually goes. It imports CSVs, parses them with AI, converts currencies and gives spending suggestions. The whole thing can run locally if you'd rather not hand your finances to someone else's server.",
+      "pl": "Aplikacja do śledzenia wydatków, subskrypcji i tego, gdzie tak naprawdę uciekają pieniądze. Importuje CSV, parsuje je z pomocą AI, przelicza waluty i podpowiada decyzje finansowe. Całość można uruchomić lokalnie, jeśli wolisz nie oddawać finansów na cudzy serwer."
     },
     "url": "https://github.com/JakubTuta/finance",
     "demoUrl": "https://finance-9795f.web.app",
     "featured": false,
+    "showOnHome": false,
     "category": "Web Application",
     "technologies": [
       "FastAPI",
@@ -209,40 +210,28 @@
     ],
     "learned": [
       {
-        "en": "Financial data management",
-        "pl": "Zarządzanie danymi finansowymi"
+        "en": "Importing messy bank CSVs and cleaning them up with AI",
+        "pl": "Import niechlujnych CSV z banku i porządkowanie ich z pomocą AI"
       },
       {
-        "en": "FastAPI backend development",
-        "pl": "Rozwój backendu FastAPI"
+        "en": "Building a FastAPI backend with JWT auth",
+        "pl": "Budowa backendu FastAPI z uwierzytelnianiem JWT"
       },
       {
-        "en": "Currency conversion integration",
-        "pl": "Integracja konwersji walut"
+        "en": "Converting between currencies from a live API",
+        "pl": "Konwersja walut z użyciem API na żywo"
       },
       {
-        "en": "CSV file processing with AI",
-        "pl": "Przetwarzanie plików CSV z AI"
+        "en": "Designing for privacy with a local-first deployment option",
+        "pl": "Projektowanie pod prywatność z opcją wdrożenia lokalnego"
       },
       {
-        "en": "JWT authentication implementation",
-        "pl": "Implementacja uwierzytelniania JWT"
+        "en": "Storing data in MongoDB Atlas and managing the cluster",
+        "pl": "Przechowywanie danych w MongoDB Atlas i zarządzanie klastrem"
       },
       {
-        "en": "Privacy-focused architecture",
-        "pl": "Architektura zorientowana na prywatność"
-      },
-      {
-        "en": "Docker containerization",
-        "pl": "Konteneryzacja Docker"
-      },
-      {
-        "en": "Financial analytics and insights",
-        "pl": "Analityka i wgląd w finanse"
-      },
-      {
-        "en": "Cluster management in MongoDB Atlas",
-        "pl": "Zarządzanie klusterem w MongoDB Atlas"
+        "en": "Turning raw transactions into useful spending insights",
+        "pl": "Przekształcanie surowych transakcji w użyteczne wnioski o wydatkach"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/finance.png"
@@ -251,60 +240,53 @@
     "title": "Flagship",
     "value": "flagship",
     "shortDescription": {
-      "en": "Personal portfolio website with resume, projects, and blog - focused on SSR and SEO",
-      "pl": "Osobista strona portfolio z CV, projektami i blogiem - skupiona na SSR i SEO"
+      "en": "My portfolio — resume, projects and a bilingual blog, built SSR-first for SEO.",
+      "pl": "Moje portfolio — CV, projekty i dwujęzyczny blog, zbudowane pod SSR i SEO."
     },
     "description": {
-      "en": "A comprehensive personal portfolio website featuring resume, project showcase, and blog functionality. Built with Nuxt and deployed on Firebase with custom hosting. Focuses on Server-Side Rendering, SEO optimization, and modern frontend development with custom CSS styling and responsive design.",
-      "pl": "Kompleksowa osobista strona portfolio zawierająca CV, prezentację projektów i funkcjonalność bloga. Zbudowana z Nuxt i wdrożona na Firebase z niestandardowym hostingiem. Skupia się na Server-Side Rendering, optymalizacji SEO i nowoczesnym rozwoju frontendu z niestandardowym stylowaniem CSS."
+      "en": "This site. A portfolio with my resume, project showcase and a bilingual (EN/PL) blog. Built with Nuxt 3 and Vuetify, rendered on the server for SEO, and self-hosted in a Docker container on a VPS. Blog posts are Markdown, content is bundled at build time, and view counts persist in a mounted volume.",
+      "pl": "Ta strona. Portfolio z moim CV, prezentacją projektów i dwujęzycznym (EN/PL) blogiem. Zbudowane na Nuxt 3 i Vuetify, renderowane po stronie serwera pod SEO i hostowane samodzielnie w kontenerze Docker na VPS. Wpisy blogowe są w Markdownie, treść wbudowywana przy buildzie, a liczniki wyświetleń przechowywane w zamontowanym wolumenie."
     },
     "url": "https://github.com/JakubTuta/Flagship",
     "demoUrl": "https://jakubtutka.com",
     "featured": false,
+    "showOnHome": false,
     "category": "Web Application",
     "technologies": [
-      "Vue.js",
-      "Nuxt.js",
-      "Firebase",
-      "Firestore",
+      "Nuxt 3",
+      "Vue 3",
       "TypeScript",
-      "CSS",
-      "HTML",
-      "Firebase Hosting",
+      "Vuetify",
+      "UnoCSS",
+      "Pinia",
+      "Docker",
+      "SSR",
       "SEO"
     ],
     "learned": [
       {
-        "en": "Server-Side Rendering (SSR)",
-        "pl": "Server-Side Rendering (SSR)"
+        "en": "Getting SSR right so pages render fully on the server",
+        "pl": "Poprawne SSR — strony renderowane w całości po stronie serwera"
       },
       {
-        "en": "SEO optimization techniques",
-        "pl": "Techniki optymalizacji SEO"
+        "en": "Practical SEO: meta tags, Open Graph, JSON-LD and hreflang",
+        "pl": "Praktyczne SEO: meta tagi, Open Graph, JSON-LD i hreflang"
       },
       {
-        "en": "Custom CSS styling and design",
-        "pl": "Niestandardowe stylowanie CSS i design"
+        "en": "Shipping a bilingual site with proper i18n",
+        "pl": "Dwujęzyczna strona z porządnym i18n"
       },
       {
-        "en": "Firebase hosting configuration",
-        "pl": "Konfiguracja hostingu Firebase"
+        "en": "Self-hosting on a VPS with Docker instead of a managed platform",
+        "pl": "Self-hosting na VPS z Dockerem zamiast platformy zarządzanej"
       },
       {
-        "en": "Meta tags and head management",
-        "pl": "Zarządzanie meta tagami i head"
+        "en": "Persisting state across redeploys with mounted volumes",
+        "pl": "Zachowanie stanu między wdrożeniami dzięki zamontowanym wolumenom"
       },
       {
-        "en": "Responsive web design",
-        "pl": "Responsywny web design"
-      },
-      {
-        "en": "Frontend performance optimization",
-        "pl": "Optymalizacja wydajności frontendu"
-      },
-      {
-        "en": "Portfolio presentation and UX design",
-        "pl": "Prezentacja portfolio i projektowanie UX"
+        "en": "Keeping the frontend fast and responsive on every screen",
+        "pl": "Utrzymanie szybkiego i responsywnego frontendu na każdym ekranie"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/flagship.png"
@@ -313,16 +295,17 @@
     "title": "Flappy Bird",
     "value": "flappy-bird",
     "shortDescription": {
-      "en": "Python recreation of the popular mobile game using PyGame",
-      "pl": "Pythonowa rekonstrukcja popularnej gry mobilnej używając PyGame"
+      "en": "Flappy Bird rebuilt in Python with PyGame — gravity, collisions and scoring.",
+      "pl": "Flappy Bird odtworzony w Pythonie z PyGame — grawitacja, kolizje i punktacja."
     },
     "description": {
-      "en": "A faithful recreation of the popular mobile game FlappyBird implemented in Python using PyGame. Features classic gameplay mechanics including gravity physics, collision detection, and score tracking with simple but engaging 2D graphics and game loop implementation.",
-      "pl": "Wierna rekonstrukcja popularnej gry mobilnej FlappyBird zaimplementowana w Pythonie przy użyciu PyGame. Zawiera klasyczne mechaniki rozgrywki, w tym fizykę grawitacji, wykrywanie kolizji i śledzenie punktów z prostą, ale angażującą grafiką 2D i implementacją pętli gry."
+      "en": "A clone of Flappy Bird written in Python with PyGame. Nothing fancy — a game loop, gravity-driven physics, collision detection against the pipes, and score tracking. A small project for getting the fundamentals of 2D games down.",
+      "pl": "Klon Flappy Birda napisany w Pythonie z PyGame. Nic wymyślnego — pętla gry, fizyka oparta na grawitacji, wykrywanie kolizji z rurami i liczenie punktów. Mały projekt, żeby ogarnąć podstawy gier 2D."
     },
     "url": "https://github.com/JakubTuta/floppyBird",
     "demoUrl": null,
     "featured": false,
+    "showOnHome": false,
     "category": "Game Development",
     "technologies": [
       "Python",
@@ -330,57 +313,76 @@
     ],
     "learned": [
       {
-        "en": "Game development fundamentals",
-        "pl": "Fundamenty tworzenia gier"
+        "en": "The basics of a game loop and frame timing",
+        "pl": "Podstawy pętli gry i taktowania klatek"
       },
       {
         "en": "2D collision detection",
         "pl": "Wykrywanie kolizji 2D"
       },
       {
-        "en": "Game physics implementation",
-        "pl": "Implementacja fizyki gry"
+        "en": "Simple physics — gravity and jumping",
+        "pl": "Prosta fizyka — grawitacja i skok"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/flappy-bird.png"
   },
   {
     "title": "Minsik",
-    "value": "minsik-web",
+    "value": "minsik",
     "shortDescription": {
-      "en": "A book discovery and tracking app — rate books across 9 dimensions and share your shelf.",
-      "pl": "Aplikacja do odkrywania i śledzenia książek — oceniaj w 9 wymiarach i dziel się półką."
+      "en": "Book tracking app — rate reads across 8 dimensions and share your shelf.",
+      "pl": "Aplikacja do śledzenia książek — oceniaj w 8 wymiarach i dziel się półką."
     },
     "description": {
-      "en": "Minsik is a personal reading companion. Track what you're reading, have read, and want to read next. Rate books not just with stars but across 8 dimensions like Pacing, Emotional Impact, and Writing Quality. Explore authors and series, write spoiler-flagged reviews, and share your public bookshelf.",
-      "pl": "Minsik to osobisty towarzysz czytelnika. Śledź co czytasz, przeczytałeś i planujesz przeczytać. Oceniaj książki nie jedną gwiazdką, lecz w 8 wymiarach: Tempo, Emocje, Głębia intelektualna i inne. Odkrywaj autorów i serie, pisz recenzje ze spoiler-flagą i dziel się półką ze znajomymi."
+      "en": "Minsik is a reading companion: track what you've read, are reading and want to read next, and rate books across eight dimensions like pacing and emotional impact instead of one blunt star score. A Nuxt frontend sits on a FastAPI + gRPC microservice backend that searches millions of titles and keeps importing fresh book data from Open Library and Google Books.",
+      "pl": "Minsik to towarzysz czytelnika: śledź co przeczytałeś, czytasz i planujesz, a książki oceniaj w ośmiu wymiarach — tempo, ładunek emocjonalny i inne — zamiast jedną tępą gwiazdką. Frontend w Nuxt stoi na mikroserwisowym backendzie FastAPI + gRPC, który przeszukuje miliony tytułów i nieustannie importuje świeże dane z Open Library i Google Books."
     },
     "url": "https://github.com/JakubTuta/Minsik-web",
+    "repos": [
+      { "label": "Web", "url": "https://github.com/JakubTuta/Minsik-web" },
+      { "label": "Server", "url": "https://github.com/JakubTuta/Minsik-server" }
+    ],
     "demoUrl": "https://minsik.jtuta.cloud",
     "featured": true,
+    "showOnHome": true,
     "category": "Web Application",
     "technologies": [
       "Nuxt 3",
       "Vue 3",
       "TypeScript",
       "Vuetify",
-      "Pinia",
-      "UnoCSS",
-      "Chart.js",
+      "FastAPI",
+      "Python",
+      "gRPC",
+      "Elasticsearch",
+      "Redis",
       "Docker"
     ],
     "learned": [
       {
-        "en": "Designing multi-dimensional rating systems that go beyond simple star ratings",
-        "pl": "Projektowanie wielowymiarowych systemów ocen wykraczających poza proste gwiazdki"
+        "en": "Designing a rating system that goes past a single star score",
+        "pl": "Projektowanie systemu ocen wykraczającego poza jedną gwiazdkę"
       },
       {
-        "en": "Building SSR pages with JSON-LD structured data and Open Graph meta tags for SEO",
-        "pl": "Budowanie stron SSR z danymi JSON-LD i tagami Open Graph dla SEO"
+        "en": "SSR pages with JSON-LD and Open Graph for SEO",
+        "pl": "Strony SSR z JSON-LD i Open Graph dla SEO"
       },
       {
-        "en": "Implementing full-text search with infinite scroll across large book catalogs",
-        "pl": "Implementacja wyszukiwania pełnotekstowego z nieskończonym przewijaniem w dużych katalogach"
+        "en": "Full-text search with infinite scroll over a huge catalog",
+        "pl": "Wyszukiwanie pełnotekstowe z nieskończonym przewijaniem w wielkim katalogu"
+      },
+      {
+        "en": "Splitting the backend into gRPC microservices",
+        "pl": "Podział backendu na mikroserwisy gRPC"
+      },
+      {
+        "en": "BM25 ranking tuned with popularity and recency signals",
+        "pl": "Ranking BM25 dostrojony sygnałami popularności i aktualności"
+      },
+      {
+        "en": "Continuously pulling data from external APIs (Open Library, Google Books)",
+        "pl": "Ciągłe pobieranie danych z zewnętrznych API (Open Library, Google Books)"
       }
     ],
     "image": null
@@ -389,16 +391,17 @@
     "title": "League Rats",
     "value": "league-rats",
     "shortDescription": {
-      "en": "Track League of Legends pro players, their accounts, and game statistics in real-time",
-      "pl": "Śledź profesjonalnych graczy League of Legends, ich konta i statystyki gier w czasie rzeczywistym"
+      "en": "Track LoL pro players, their accounts and live match stats via the Riot API.",
+      "pl": "Śledź profesjonalnych graczy LoL, ich konta i statystyki meczów przez Riot API."
     },
     "description": {
-      "en": "LeagueRats is a frontend application that allows users to follow League of Legends professional players and their games. Built with modern web technologies and powered by the Riot Games API, it provides real-time tracking, detailed match history, multiple account support, and secure Firebase integration.",
-      "pl": "LeagueRats to aplikacja frontendowa pozwalająca użytkownikom śledzić profesjonalnych graczy League of Legends i ich rozgrywki. Zbudowana z wykorzystaniem nowoczesnych technologii webowych i Riot Games API, zapewnia śledzenie w czasie rzeczywistym, szczegółową historię meczów, obsługę wielu kont oraz bezpieczną integrację z Firebase."
+      "en": "LeagueRats lets you follow League of Legends pros and their games. It pulls from the Riot Games API for live tracking, match history and multi-account support, with a Nuxt frontend, a FastAPI backend and Firebase behind it.",
+      "pl": "LeagueRats pozwala śledzić profesjonalnych graczy League of Legends i ich rozgrywki. Korzysta z API Riot Games do śledzenia na żywo, historii meczów i obsługi wielu kont, z frontendem w Nuxt, backendem FastAPI i Firebase pod spodem."
     },
     "url": "https://github.com/JakubTuta/LeagueRats",
     "demoUrl": "https://leaguerats.net",
     "featured": true,
+    "showOnHome": false,
     "category": "Web Application",
     "technologies": [
       "Vue.js",
@@ -411,24 +414,24 @@
     ],
     "learned": [
       {
-        "en": "Riot Games API Integration",
-        "pl": "Integracja z API Riot Games"
+        "en": "Working with the Riot Games API and its rate limits",
+        "pl": "Praca z API Riot Games i jego limitami zapytań"
       },
       {
-        "en": "Real-time Data Processing",
-        "pl": "Przetwarzanie Danych w Czasie Rzeczywistym"
+        "en": "Processing match data in near real time",
+        "pl": "Przetwarzanie danych meczowych niemal w czasie rzeczywistym"
       },
       {
-        "en": "Deploying Web app to Cloud",
-        "pl": "Wdrażanie Aplikacji Webowej w Chmurze"
+        "en": "Deploying a web app to the cloud with Docker",
+        "pl": "Wdrażanie aplikacji webowej do chmury z Dockerem"
       },
       {
-        "en": "Performance Optimization",
-        "pl": "Optymalizacja Wydajności"
+        "en": "Optimizing performance under lots of API calls",
+        "pl": "Optymalizacja wydajności przy dużej liczbie zapytań API"
       },
       {
-        "en": "Managing Docker Containers",
-        "pl": "Zarządzanie Kontenerami Docker"
+        "en": "Using Firebase for storage and auth",
+        "pl": "Wykorzystanie Firebase do przechowywania danych i autoryzacji"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/league-rats.png"
@@ -437,16 +440,17 @@
     "title": "Neural Network",
     "value": "neural-network",
     "shortDescription": {
-      "en": "From-scratch neural network implementation in Python using only NumPy and base libraries",
-      "pl": "Implementacja sieci neuronowej od podstaw w Pythonie używając tylko NumPy i bibliotek bazowych"
+      "en": "A neural network built from scratch in Python with just NumPy — no TensorFlow, no PyTorch.",
+      "pl": "Sieć neuronowa od zera w Pythonie, tylko NumPy — bez TensorFlow i PyTorch."
     },
     "description": {
-      "en": "A comprehensive neural network implementation built from scratch using only Python base libraries and NumPy. Features custom wrapper classes for layers, activation functions, backpropagation algorithms, and natural language processing capabilities. Achieves same accuracy as TensorFlow/PyTorch while providing deep understanding of underlying mathematics",
-      "pl": "Kompleksowa implementacja sieci neuronowej zbudowana od podstaw używając tylko bazowych bibliotek Pythona i NumPy. Zawiera niestandardowe klasy opakowujące dla warstw, funkcji aktywacji, algorytmów wstecznej propagacji i możliwości przetwarzania języka naturalnego. Osiąga taką samą dokładność jak TensorFlow/PyTorch."
+      "en": "A neural network written from scratch with nothing but Python and NumPy. I wrote my own layers, activation functions and backpropagation to understand the math instead of trusting a framework to handle it. It reaches accuracy comparable to TensorFlow or PyTorch on the same tasks.",
+      "pl": "Sieć neuronowa napisana od zera, wyłącznie w Pythonie i NumPy. Sam zaimplementowałem warstwy, funkcje aktywacji i wsteczną propagację, żeby zrozumieć matematykę, zamiast zdawać się na framework. Osiąga dokładność porównywalną z TensorFlow czy PyTorch na tych samych zadaniach."
     },
     "url": "https://github.com/JakubTuta/Neural_network",
     "demoUrl": null,
     "featured": false,
+    "showOnHome": false,
     "category": "AI & Machine Learning",
     "technologies": [
       "Python",
@@ -458,36 +462,28 @@
     ],
     "learned": [
       {
-        "en": "Neural network fundamentals from scratch",
-        "pl": "Fundamenty sieci neuronowych od podstaw"
+        "en": "How a neural network actually works, layer by layer",
+        "pl": "Jak naprawdę działa sieć neuronowa, warstwa po warstwie"
       },
       {
-        "en": "Backpropagation algorithm implementation",
-        "pl": "Implementacja algorytmu wstecznej propagacji"
+        "en": "Implementing backpropagation by hand",
+        "pl": "Ręczna implementacja wstecznej propagacji"
       },
       {
         "en": "Activation functions and their derivatives",
         "pl": "Funkcje aktywacji i ich pochodne"
       },
       {
-        "en": "Gradient descent optimization",
-        "pl": "Optymalizacja gradientu spadkowego"
+        "en": "Gradient descent and optimization",
+        "pl": "Spadek gradientu i optymalizacja"
       },
       {
-        "en": "Linear algebra in machine learning",
-        "pl": "Algebra liniowa w uczeniu maszynowym"
+        "en": "The linear algebra and calculus underneath ML",
+        "pl": "Algebra liniowa i analiza matematyczna pod spodem ML"
       },
       {
-        "en": "Mathematical foundations of AI",
-        "pl": "Matematyczne podstawy AI"
-      },
-      {
-        "en": "Custom layer architecture design",
-        "pl": "Projektowanie architektury warstw"
-      },
-      {
-        "en": "Natural language processing basics",
-        "pl": "Podstawy przetwarzania języka naturalnego"
+        "en": "Designing a custom layer architecture",
+        "pl": "Projektowanie własnej architektury warstw"
       }
     ],
     "image": null
@@ -496,16 +492,17 @@
     "title": "OllamaChat",
     "value": "ollama-chat",
     "shortDescription": {
-      "en": "Local AI chatbot with Docker & Ollama - privacy-focused conversational AI",
-      "pl": "Lokalny chatbot AI z Docker & Ollama - prywatna sztuczna inteligencja"
+      "en": "Local AI chat — run LLMs on your own machine with Docker and Ollama, fully private.",
+      "pl": "Lokalny chat AI — uruchom LLM-y u siebie z Dockerem i Ollama, w pełni prywatnie."
     },
     "description": {
-      "en": "A powerful chatbot application that enables local deployment of Large Language Models using Docker and Ollama. Features a user-friendly Nuxt frontend with Django backend and MongoDB database, ensuring complete privacy and control over your AI conversations.",
-      "pl": "Potężna aplikacja chatbota umożliwiająca lokalne wdrażanie dużych modeli językowych przy użyciu Docker i Ollama. Zawiera przyjazny interfejs Nuxt z backendem Django i bazą MongoDB, zapewniając pełną prywatność i kontrolę nad konwersacjami AI."
+      "en": "A chat app for running large language models locally with Ollama and Docker, so your conversations never leave your machine. Nuxt frontend, Django backend, MongoDB for history — sign in, pick a model, and chat without sending anything to the cloud.",
+      "pl": "Aplikacja czatu do uruchamiania dużych modeli językowych lokalnie z Ollama i Dockerem, dzięki czemu rozmowy nigdy nie opuszczają twojej maszyny. Frontend w Nuxt, backend Django, MongoDB na historię — zaloguj się, wybierz model i rozmawiaj bez wysyłania czegokolwiek do chmury."
     },
     "url": "https://github.com/JakubTuta/chatbot",
     "demoUrl": null,
     "featured": true,
+    "showOnHome": false,
     "category": "AI & Machine Learning",
     "technologies": [
       "Vue.js",
@@ -519,36 +516,28 @@
     ],
     "learned": [
       {
-        "en": "Local LLM deployment",
-        "pl": "Lokalne wdrażanie LLM"
+        "en": "Running LLMs locally with Ollama",
+        "pl": "Lokalne uruchamianie LLM-ów z Ollama"
       },
       {
-        "en": "Docker containerization",
-        "pl": "Konteneryzacja Docker"
+        "en": "Containerizing the whole stack with Docker",
+        "pl": "Konteneryzacja całego stacku z Dockerem"
       },
       {
-        "en": "AI model integration",
-        "pl": "Integracja modeli AI"
+        "en": "Building a Django backend on MongoDB",
+        "pl": "Budowa backendu Django na MongoDB"
       },
       {
-        "en": "Full-stack development",
-        "pl": "Rozwój full-stack"
+        "en": "User auth and session handling",
+        "pl": "Uwierzytelnianie użytkowników i obsługa sesji"
       },
       {
-        "en": "Privacy-focused architecture",
-        "pl": "Architektura zorientowana na prywatność"
+        "en": "Streaming chat responses in real time",
+        "pl": "Streaming odpowiedzi czatu w czasie rzeczywistym"
       },
       {
-        "en": "MongoDB with Django",
-        "pl": "MongoDB z Django"
-      },
-      {
-        "en": "User authentication",
-        "pl": "Autentykacja użytkowników"
-      },
-      {
-        "en": "Real-time chat",
-        "pl": "Chat w czasie rzeczywistym"
+        "en": "Designing for privacy — nothing leaves the machine",
+        "pl": "Projektowanie pod prywatność — nic nie opuszcza maszyny"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/ollama-chat.png"
@@ -557,16 +546,17 @@
     "title": "SnakeAI",
     "value": "snake-ai",
     "shortDescription": {
-      "en": "Python Snake game with custom NEAT algorithm implementation for AI gameplay",
-      "pl": "Gra Snake w Pythonie z niestandardową implementacją algorytmu NEAT dla AI"
+      "en": "Snake that teaches itself to play with a hand-written NEAT algorithm in Python.",
+      "pl": "Snake, który sam uczy się grać dzięki własnej implementacji NEAT w Pythonie."
     },
     "description": {
-      "en": "A classic Snake game implemented in Python with custom NEAT (NeuroEvolution of Augmenting Topologies) algorithm. The AI learns to navigate the game environment, eat apples, and avoid collisions with walls and itself through evolutionary neural network training.",
-      "pl": "Klasyczna gra Snake zaimplementowana w Pythonie z niestandardowym algorytmem NEAT (NeuroEvolution of Augmenting Topologies). AI uczy się nawigować w środowisku gry, jeść jabłka i unikać kolizji ze ścianami i sobą poprzez ewolucyjne trenowanie sieci neuronowych."
+      "en": "Classic Snake in Python where the snake learns to play itself. I implemented NEAT (NeuroEvolution of Augmenting Topologies) from scratch, so the AI evolves over generations to chase apples and stop running into walls or its own tail.",
+      "pl": "Klasyczny Snake w Pythonie, w którym wąż sam uczy się grać. Zaimplementowałem NEAT (NeuroEvolution of Augmenting Topologies) od podstaw, więc AI ewoluuje przez pokolenia, żeby gonić jabłka i przestać wpadać w ściany i własny ogon."
     },
     "url": "https://github.com/JakubTuta/Snake_AI",
     "demoUrl": null,
     "featured": false,
+    "showOnHome": false,
     "category": "AI & Machine Learning",
     "technologies": [
       "Python",
@@ -575,16 +565,16 @@
     ],
     "learned": [
       {
-        "en": "NEAT algorithm implementation",
-        "pl": "Implementacja algorytmu NEAT"
+        "en": "Implementing NEAT from scratch",
+        "pl": "Implementacja NEAT od podstaw"
       },
       {
-        "en": "Game development basics",
-        "pl": "Podstawy tworzenia gier"
+        "en": "How evolutionary algorithms train neural nets",
+        "pl": "Jak algorytmy ewolucyjne trenują sieci neuronowe"
       },
       {
-        "en": "Evolutionary neural networks",
-        "pl": "Ewolucyjne sieci neuronowe"
+        "en": "The basics of building a game in PyGame",
+        "pl": "Podstawy budowy gry w PyGame"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/snake-ai.png"
@@ -593,16 +583,17 @@
     "title": "Strona randkowa",
     "value": "strona-randkowa",
     "shortDescription": {
-      "en": "University group project - Tinder clone with Firebase Cloud Functions and Nuxt frontend",
-      "pl": "Uniwersytecki projekt grupowy - klon Tindera z Firebase Cloud Functions i Nuxt"
+      "en": "Uni team project — a Tinder-style dating app on Nuxt and Firebase.",
+      "pl": "Projekt zespołowy na studia — randkowa apka w stylu Tindera na Nuxt i Firebase."
     },
     "description": {
-      "en": "A collaborative university project developed by a team of 4 students, creating a Tinder-inspired dating application. Built with Nuxt frontend and Firebase backend, featuring real-time database triggers, scheduled functions, and seamless frontend-backend integration.",
-      "pl": "Projekt uniwersytecki realizowany w zespole 4 studentów, tworzący aplikację randkową wzorowaną na Tinderze. Zbudowany z frontendem Nuxt i backendem Firebase, zawierający triggery bazy danych w czasie rzeczywistym, zaplanowane funkcje i płynną integrację frontend-backend."
+      "en": "A Tinder-style dating app built with three other students for a university project. Nuxt on the frontend, Firebase on the back — we leaned on Firestore triggers and scheduled Cloud Functions for matching and clean-up, which meant plenty of learning to work as a team on a shared codebase.",
+      "pl": "Randkowa aplikacja w stylu Tindera zbudowana z trójką innych studentów na projekt zaliczeniowy. Nuxt na frontendzie, Firebase z tyłu — oparliśmy się na triggerach Firestore i zaplanowanych Cloud Functions do matchowania i sprzątania, co było też lekcją pracy zespołowej na wspólnym repozytorium."
     },
     "url": "https://github.com/JakubTuta/Strona-randkowa",
     "demoUrl": null,
     "featured": false,
+    "showOnHome": false,
     "category": "Web Application",
     "technologies": [
       "Vue.js",
@@ -616,32 +607,24 @@
     ],
     "learned": [
       {
-        "en": "Firebase Cloud Functions development",
-        "pl": "Rozwój Firebase Cloud Functions"
+        "en": "Writing Firebase Cloud Functions",
+        "pl": "Pisanie Firebase Cloud Functions"
       },
       {
-        "en": "Frontend-backend integration",
-        "pl": "Integracja frontend-backend"
+        "en": "Firestore triggers and scheduled jobs",
+        "pl": "Triggery Firestore i zaplanowane zadania"
       },
       {
-        "en": "Database triggers and listeners",
-        "pl": "Triggery i listenery bazy danych"
+        "en": "Wiring a Nuxt frontend to a Firebase backend",
+        "pl": "Spięcie frontendu Nuxt z backendem Firebase"
       },
       {
-        "en": "Scheduled functions implementation",
-        "pl": "Implementacja zaplanowanych funkcji"
+        "en": "Debugging CORS the hard way",
+        "pl": "Walka z CORS po przejściach"
       },
       {
-        "en": "CORS configuration and troubleshooting",
-        "pl": "Konfiguracja i rozwiązywanie problemów CORS"
-      },
-      {
-        "en": "Team collaboration in development",
-        "pl": "Współpraca zespołowa w rozwoju"
-      },
-      {
-        "en": "Firebase ecosystem management",
-        "pl": "Zarządzanie ekosystemem Firebase"
+        "en": "Working in a team on one codebase",
+        "pl": "Praca zespołowa na jednym repozytorium"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/strona-randkowa.png"
@@ -650,16 +633,17 @@
     "title": "Summarizzler",
     "value": "summarizzler",
     "shortDescription": {
-      "en": "AI-powered multi-source content summarization tool for websites, PDFs, text & YouTube",
-      "pl": "Narzędzie AI do streszczania treści ze stron, PDF-ów, tekstu i YouTube"
+      "en": "AI summaries from websites, PDFs, text and YouTube — with a shared, searchable archive.",
+      "pl": "Streszczenia AI ze stron, PDF-ów, tekstu i YouTube — we wspólnym, przeszukiwalnym archiwum."
     },
     "description": {
-      "en": "A powerful web application that leverages AI to provide concise summaries from various sources including websites, text, PDF files, and YouTube videos. Features shared database for community access, search functionality, and fast processing with Gemini 2.0 AI.",
-      "pl": "Potężna aplikacja webowa wykorzystująca AI do tworzenia zwięzłych streszczeń z różnych źródeł: stron internetowych, tekstów, plików PDF i filmów YouTube. Posiada wspólną bazę danych dla społeczności, funkcję wyszukiwania i szybkie przetwarzanie z Gemini."
+      "en": "A web app that summarizes pretty much anything you throw at it — web pages, pasted text, PDFs or YouTube videos — using Gemini. Summaries land in a shared database everyone can search, so you're not re-summarizing something someone already did.",
+      "pl": "Aplikacja webowa, która streszcza niemal wszystko, co jej podrzucisz — strony, wklejony tekst, PDF-y czy filmy z YouTube — przy użyciu Gemini. Streszczenia trafiają do wspólnej bazy, którą każdy może przeszukać, więc nie streszczasz po raz drugi czegoś, co ktoś już zrobił."
     },
     "url": "https://github.com/JakubTuta/Summarizzler",
     "demoUrl": "https://summarizzler.web.app",
     "featured": false,
+    "showOnHome": false,
     "category": "AI & Machine Learning",
     "technologies": [
       "Vue.js",
@@ -673,116 +657,30 @@
     ],
     "learned": [
       {
-        "en": "Multi-format content processing",
-        "pl": "Przetwarzanie treści w różnych formatach"
+        "en": "Pulling text out of very different sources (PDF, web, video)",
+        "pl": "Wyciąganie tekstu z bardzo różnych źródeł (PDF, web, wideo)"
       },
       {
-        "en": "AI model integration (Gemini)",
-        "pl": "Integracja modeli AI (Gemini)"
+        "en": "Summarizing with Gemini",
+        "pl": "Streszczanie z Gemini"
       },
       {
-        "en": "File upload handling",
+        "en": "Scraping web pages for content",
+        "pl": "Scraping stron po treść"
+      },
+      {
+        "en": "Handling file uploads",
         "pl": "Obsługa przesyłania plików"
       },
       {
-        "en": "Web scraping techniques",
-        "pl": "Techniki web scrapingu"
+        "en": "Searching and indexing in PostgreSQL",
+        "pl": "Wyszukiwanie i indeksowanie w PostgreSQL"
       },
       {
-        "en": "Searching in database",
-        "pl": "Przeszukiwanie bazy danych"
-      },
-      {
-        "en": "Database optimization",
-        "pl": "Optymalizacja bazy danych"
-      },
-      {
-        "en": "Full-stack deployment",
-        "pl": "Wdrażanie aplikacji full-stack"
+        "en": "Deploying a full-stack app end to end",
+        "pl": "Wdrożenie aplikacji full-stack od początku do końca"
       }
     ],
     "image": "https://files.jtuta.cloud/portfolio/projects/summarizzler.png"
-  },
-  {
-    "title": "Ledger Server",
-    "value": "ledger-server",
-    "shortDescription": {
-      "en": "Self-hosted log analytics platform — all the power of Datadog or Sentry, at zero cost.",
-      "pl": "Platforma analityki logów we własnej infrastrukturze — wszystko co Datadog, bez kosztów."
-    },
-    "description": {
-      "en": "A self-hosted observability platform that gives you enterprise-grade log management for free. Query millions of logs in real time, automatically group and track errors with full stack traces, and monitor your app's health — all without paying anything. Runs anywhere with Docker in a few minutes.",
-      "pl": "Platforma obserwowalności, która daje pełne zarządzanie logami bez żadnych opłat. Przeszukuj miliony logów w czasie rzeczywistym, automatycznie grupuj błędy z pełnymi stack trace'ami i monitoruj zdrowie aplikacji — bez comiesięcznych rachunków. Uruchom wszędzie z Dockerem w parę minut."
-    },
-    "url": "https://github.com/JakubTuta/Ledger-APP",
-    "demoUrl": "https://ledger.jtuta.cloud",
-    "featured": true,
-    "category": "API/Backend",
-    "technologies": [
-      "Python",
-      "FastAPI",
-      "PostgreSQL",
-      "Redis",
-      "Elasticsearch",
-      "Docker",
-      "JWT",
-      "REST API"
-    ],
-    "learned": [
-      {
-        "en": "Building multi-tenant log ingestion systems that scale horizontally",
-        "pl": "Budowanie wielodostępowych systemów agregacji logów ze skalowaniem horyzontalnym"
-      },
-      {
-        "en": "Achieving sub-50ms query performance over millions of records using Elasticsearch",
-        "pl": "Osiąganie czasów zapytań poniżej 50ms dla milionów rekordów z Elasticsearch"
-      },
-      {
-        "en": "Self-hosting production-grade observability tools with zero vendor lock-in",
-        "pl": "Samodzielne hostowanie narzędzi obserwowalności klasy produkcyjnej bez uzależnienia od dostawcy"
-      }
-    ],
-    "image": null
-  },
-  {
-    "title": "Minsik Server",
-    "value": "minsik-server",
-    "shortDescription": {
-      "en": "The microservices backend powering Minsik — fast search, ratings, and continuous book data.",
-      "pl": "Mikroserwisowy backend platformy Minsik — szybkie wyszukiwanie, oceny i import danych."
-    },
-    "description": {
-      "en": "A multi-service backend built on FastAPI and gRPC that powers the Minsik book app. Handles authentication, full-text search over millions of books via Elasticsearch, multi-dimensional ratings, bookshelves, and continuous automatic ingestion of book data from Open Library and Google Books.",
-      "pl": "Wieloserwisowy backend zbudowany na FastAPI i gRPC, napędzający aplikację Minsik. Obsługuje uwierzytelnianie, wyszukiwanie pełnotekstowe po milionach książek przez Elasticsearch, oceny wielowymiarowe, półki i ciągły automatyczny import danych z Open Library i Google Books."
-    },
-    "url": "https://github.com/JakubTuta/Minsik-server",
-    "demoUrl": "https://minsik.jtuta.cloud",
-    "featured": true,
-    "category": "API/Backend",
-    "technologies": [
-      "Python",
-      "FastAPI",
-      "gRPC",
-      "PostgreSQL",
-      "Elasticsearch",
-      "Redis",
-      "Docker",
-      "JWT"
-    ],
-    "learned": [
-      {
-        "en": "Designing microservice architectures with gRPC for efficient internal communication",
-        "pl": "Projektowanie architektur mikroserwisowych z gRPC do wydajnej komunikacji wewnętrznej"
-      },
-      {
-        "en": "Implementing BM25 full-text search with popularity and recency ranking signals",
-        "pl": "Implementacja wyszukiwania pełnotekstowego BM25 z sygnałami popularności i aktualności"
-      },
-      {
-        "en": "Building continuous data ingestion pipelines from multiple external APIs",
-        "pl": "Budowanie potoków ciągłego pobierania danych z wielu zewnętrznych API"
-      }
-    ],
-    "image": null
   }
 ]

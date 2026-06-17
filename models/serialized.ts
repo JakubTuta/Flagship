@@ -20,14 +20,21 @@ export interface IBlogSerialized {
   mainLanguage: 'pl' | 'en' | null
 }
 
+export interface IProjectRepoSerialized {
+  label: string
+  url: string
+}
+
 export interface IProjectSerialized {
   title: string
   value: string
   shortDescription: ITranslatedText
   description: ITranslatedText
   url: string
+  repos?: IProjectRepoSerialized[]
   demoUrl: string | null
   featured: boolean
+  showOnHome: boolean
   category: string
   technologies: string[]
   learned: ITranslatedText[]

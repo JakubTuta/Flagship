@@ -119,8 +119,20 @@ function handleCardClick() {
       </div>
 
       <div class="links">
+        <template v-if="project.repos?.length">
+          <a
+            v-for="repo in project.repos"
+            :key="repo.url"
+            :href="repo.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-ghost btn-sm"
+            @click.stop
+          >{{ repo.label }}</a>
+        </template>
+
         <a
-          v-if="project.url"
+          v-else-if="project.url"
           :href="project.url"
           target="_blank"
           rel="noopener noreferrer"
