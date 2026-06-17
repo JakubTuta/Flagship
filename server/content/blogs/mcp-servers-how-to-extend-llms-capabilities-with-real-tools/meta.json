@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "MCP Servers: how to extend LLM capabilities with real tools",
+    "pl": "MCP Servers: jak rozszerzyć możliwości LLM-ów o prawdziwe narzędzia"
+  },
+  "description": {
+    "en": "Learn what Model Context Protocol is, why it matters, and how to configure the best MCP servers for Claude, ChatGPT, and Cursor to supercharge your AI workflows.",
+    "pl": "Poznaj Model Context Protocol, dowiedz się dlaczego warto go używać i jak skonfigurować najlepsze serwery MCP dla Claude, ChatGPT i Cursor."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/zPFzCkEelDeBqrF3kjJl9z1VkFGFDS",
+  "category": "ai-ml",
+  "featured": true,
+  "isPublished": true,
+  "publishDate": "2025-11-30T23:21:21.402Z",
+  "author": null,
+  "links": [],
+  "projects": [],
+  "mainLanguage": null,
+  "viewCount": 2
+}

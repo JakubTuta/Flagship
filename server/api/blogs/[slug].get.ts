@@ -8,21 +8,37 @@ export default defineEventHandler(async (event): Promise<IBlogSerialized> => {
   }
 
   try {
-    const blog = await readContentAsset<IBlogSerialized>(`blogs/${slug}`)
+    const meta = await readContentAsset<Omit<IBlogSerialized, 'value' | 'content' | 'tableOfContents'>>(`blogs/${slug}/meta.json`)
 
-    if (!blog) {
+    if (!meta) {
       throw createError({ statusCode: 404, statusMessage: 'Blog not found' })
     }
 
+    const [enMd, plMd] = await Promise.all([
+      readContentRaw(`blogs/${slug}/en.md`),
+      readContentRaw(`blogs/${slug}/pl.md`),
+    ])
+
+    const [en, pl] = await Promise.all([
+      renderMarkdown(enMd ?? '', `${slug}:en`),
+      renderMarkdown(plMd ?? '', `${slug}:pl`),
+    ])
+
     const viewsStorage = useStorage('views')
     const liveCount = await viewsStorage.getItem<number>(slug)
-    const viewCount = liveCount ?? blog.viewCount ?? 0
+    const viewCount = liveCount ?? meta.viewCount ?? 0
 
-    return { ...blog, viewCount }
+    return {
+      ...meta,
+      value: slug,
+      content: { en: en.html, pl: pl.html },
+      tableOfContents: { en: en.toc, pl: pl.toc },
+      viewCount,
+    }
   }
   catch (error: any) {
-    if (error.statusCode) throw error
-    console.error('Error fetching blog by slug:', error)
+    if (error.statusCode)
+      throw error
     throw createError({ statusCode: 500, statusMessage: 'Failed to fetch blog' })
   }
 })

@@ -1,31 +1,8 @@
 <script setup lang="ts">
-const projectStore = useProjectStore()
-const { projects } = storeToRefs(projectStore)
-
-const blogStore = useBlogStore()
-const { publishedBlogs } = storeToRefs(blogStore)
-
-const resumeStore = useResumeStore()
-const { resume } = storeToRefs(resumeStore)
-
 const themeStore = useThemeStore()
 
 onMounted(() => {
   themeStore.initialize()
-
-  if (!projects.value.length) {
-    projectStore.fetchProjects()
-  }
-
-  if (!publishedBlogs.value.length) {
-    blogStore.fetchPublishedBlogs()
-  }
-
-  if (!resume.value) {
-    resumeStore.fetchResume()
-  }
-
-  resumeStore.fetchResumePdfs()
 })
 
 const currentTheme = computed(() => themeStore.currentTheme)

@@ -1,0 +1,24 @@
+{
+  "title": { "en": "Application containerization", "pl": "Konteneryzacja aplikacji" },
+  "description": {
+    "en": "Learn Docker and containerization from scratch: base images, layer caching, .dockerignore, multi-stage builds, and security best practices for Node and Python apps.",
+    "pl": "Naucz się Dockera i konteneryzacji od podstaw: obrazy bazowe, cache warstw, .dockerignore, multi-stage builds i najlepsze praktyki dla aplikacji Node i Python."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/UBcoyvk03NolioRvDqpJF9UzmKDqw1",
+  "category": "devops",
+  "featured": false,
+  "isPublished": true,
+  "publishDate": "2025-07-06T22:51:14.572Z",
+  "author": null,
+  "links": [
+    "https://docs.docker.com/",
+    "https://docker-curriculum.com/",
+    "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/",
+    "https://www.docker.com/products/docker-desktop/",
+    "https://docs.docker.com/compose/",
+    "https://hub.docker.com/"
+  ],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 1
+}

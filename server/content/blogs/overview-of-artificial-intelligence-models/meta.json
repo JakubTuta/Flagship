@@ -1,0 +1,23 @@
+{
+  "title": { "en": "Overview of artificial intelligence models", "pl": "Omówienie modeli sztucznej inteligencji" },
+  "description": {
+    "en": "An overview of the most important AI language models — GPT, Gemini, Claude, and open-source alternatives — with strengths, limitations, and use cases.",
+    "pl": "Przegląd najważniejszych modeli językowych AI — GPT, Gemini, Claude i alternatyw open-source — z mocnymi stronami, ograniczeniami i przypadkami użycia."
+  },
+  "image": null,
+  "category": "ai-ml",
+  "featured": true,
+  "isPublished": true,
+  "publishDate": "2025-06-09T22:50:42.867Z",
+  "author": null,
+  "links": [
+    "https://lmarena.ai/",
+    "https://platform.openai.com/docs/models",
+    "https://ai.google.dev/gemini-api/docs/models",
+    "https://docs.anthropic.com/en/docs/about-claude/models/overview",
+    "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
+  ],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 3
+}

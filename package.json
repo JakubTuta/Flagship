@@ -28,9 +28,12 @@
     "@vueuse/head": "^2.0.0",
     "@vueuse/nuxt": "^10.11.1",
     "eslint": "^8.57.1",
+    "markdown-it": "^14.2.0",
+    "markdown-it-anchor": "^9.2.0",
     "nuxt": "^3.18.1",
     "nuxt-seo-utils": "^7.0.14",
     "pinia": "^2.3.1",
+    "shiki": "^4.2.0",
     "typescript": "^5.9.2",
     "unocss": "66.4.1",
     "vite-plugin-vuetify": "^2.1.2",
@@ -38,5 +41,8 @@
     "vue-router": "^4.5.1",
     "vue-tsc": "^2.2.0",
     "vuetify": "^3.9.3"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2"
   }
 }

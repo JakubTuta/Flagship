@@ -1,0 +1,22 @@
+{
+  "title": {
+    "en": "AGI, the future of artificial intelligence",
+    "pl": "AGI, czyli przyszłość sztucznej inteligencji"
+  },
+  "description": {
+    "en": "Explore what Artificial General Intelligence (AGI) is, how it differs from today's LLMs, and the potential benefits and risks it brings.",
+    "pl": "Odkryj czym jest Sztuczna Inteligencja Ogólna (AGI), czym różni się od LLM i jakie niesie korzyści oraz zagrożenia."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/LgLJpRsfbpbhGb5ax0fELQ6GryT26P",
+  "category": "ai-ml",
+  "featured": false,
+  "isPublished": true,
+  "publishDate": "2025-07-05T00:45:53.730Z",
+  "author": null,
+  "links": [
+    "https://courses.cs.umbc.edu/471/papers/turing.pdf"
+  ],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 1
+}

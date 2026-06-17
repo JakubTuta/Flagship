@@ -1,0 +1,23 @@
+{
+  "title": {
+    "en": "How to optimize databases: PostgreSQL and Redis",
+    "pl": "Jak zoptymalizować bazy danych: PostgreSQL i Redis"
+  },
+  "description": {
+    "en": "Practical guide to PostgreSQL optimization with indexes, partitioning, and EXPLAIN ANALYZE, plus Redis caching patterns for high-traffic production apps.",
+    "pl": "Praktyczny przewodnik po optymalizacji PostgreSQL — indeksy, partycjonowanie, EXPLAIN ANALYZE — oraz wzorce cachowania w Redis dla produkcyjnych aplikacji."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/jinojiquY0qzooKhE6fLfJ6fZGd0SS",
+  "category": "data bases",
+  "featured": true,
+  "isPublished": true,
+  "publishDate": "2025-11-30T22:53:21.565Z",
+  "author": null,
+  "links": [
+    "https://redis.io",
+    "https://www.postgresql.org.pl"
+  ],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 1
+}

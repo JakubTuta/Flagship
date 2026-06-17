@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "How to create a Full Stack application",
+    "pl": "Jak stworzyć aplikację Full Stack"
+  },
+  "description": {
+    "en": "Step-by-step guide to building a Full Stack app with Nuxt.js on the front end and FastAPI/Django on the back end, including database integration.",
+    "pl": "Przewodnik krok po kroku po budowaniu aplikacji Full Stack z Nuxt.js po stronie klienta oraz FastAPI i Django po stronie serwera z integracją bazy danych."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/mZHnHc623pr742x18FPp9Wpf906Kcj",
+  "category": "fullstack",
+  "featured": false,
+  "isPublished": true,
+  "publishDate": "2025-06-15T20:40:39.257Z",
+  "author": null,
+  "links": [],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 1
+}

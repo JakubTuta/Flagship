@@ -3,6 +3,7 @@ import antfu from '@antfu/eslint-config'
 export default antfu({
   ignores: [
     'design_handoff_personal_website/**',
+    'server/content/blogs/**',
   ],
 
   stylistic: true,
@@ -155,5 +156,10 @@ export default antfu({
       'no-unsafe-optional-chaining': 'error',
       'require-await': 'error',
     },
+  },
+}).append({
+  files: ['**/components/BlogContent.vue'],
+  rules: {
+    'vue/no-v-html': 'off',
   },
 })

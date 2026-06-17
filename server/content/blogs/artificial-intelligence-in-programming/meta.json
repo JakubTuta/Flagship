@@ -1,0 +1,27 @@
+{
+  "title": {
+    "en": "Artificial intelligence in programming",
+    "pl": "Sztuczna inteligencja w programowaniu"
+  },
+  "description": {
+    "en": "Discover how AI tools like Claude Sonnet and GitHub Copilot are transforming software development and how to use them effectively in your daily workflow.",
+    "pl": "Odkryj, jak narzędzia AI takie jak Claude Sonnet i GitHub Copilot zmieniają tworzenie oprogramowania i jak efektywnie je wykorzystać w codziennej pracy."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/F9suRl48beNhvxbnqQ9uTch79BYHu0",
+  "category": "ai-ml",
+  "featured": true,
+  "isPublished": true,
+  "publishDate": "2025-06-11T21:27:45.312Z",
+  "author": null,
+  "links": [
+    "https://claude.ai/",
+    "https://docs.anthropic.com/",
+    "https://github.com/features/copilot",
+    "https://www.cursor.com/",
+    "https://windsurf.com/editor",
+    "https://aws.amazon.com/q/"
+  ],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 8
+}

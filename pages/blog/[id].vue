@@ -28,15 +28,8 @@ function getCategoryTitle(category: string) {
 }
 
 const blogDescription = computed(() => {
-  if (selectedBlog.value?.content) {
-    const content = selectedBlog.value.content[displayLocale.value] || selectedBlog.value.content.en || selectedBlog.value.content.pl
-    if (content) {
-      const plainText = content.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
-
-      return plainText.length > 160
-        ? `${plainText.substring(0, 157)}...`
-        : plainText
-    }
+  if (selectedBlog.value?.description) {
+    return selectedBlog.value.description[displayLocale.value] || selectedBlog.value.description.en || t('seo.pages.blog.description')
   }
 
   return t('seo.pages.blog.description')
@@ -128,7 +121,8 @@ let tocObserver: IntersectionObserver | null = null
 let scrollCleanup: (() => void) | null = null
 
 function setupTocObserver() {
-  if (!selectedBlog.value?.tableOfContents?.length)
+  const toc = selectedBlog.value?.tableOfContents?.[displayLocale.value]
+  if (!toc?.length)
     return
 
   tocObserver?.disconnect()
@@ -146,7 +140,7 @@ function setupTocObserver() {
   )
 
   nextTick(() => {
-    selectedBlog.value?.tableOfContents?.forEach((item) => {
+    selectedBlog.value?.tableOfContents?.[displayLocale.value]?.forEach((item) => {
       const el = document.getElementById(item.id)
       if (el)
         tocObserver?.observe(el)
@@ -171,6 +165,12 @@ onMounted(() => {
 
 watch(selectedBlog, (val) => {
   if (!import.meta.server && val) {
+    setupTocObserver()
+  }
+})
+
+watch(displayLocale, () => {
+  if (!import.meta.server) {
     setupTocObserver()
   }
 })
@@ -282,7 +282,7 @@ onUnmounted(() => {
       >JT</span>
 
       <span class="who">
-        <b>{{ 'Jakub Tutka' }}</b>
+        <b>Jakub Tutka</b>
 
         <span>{{ $t('landingPage.hero.info') }}</span>
       </span>
@@ -321,11 +321,11 @@ onUnmounted(() => {
     <!-- Post layout: TOC sidebar + prose -->
     <div
       class="post-layout"
-      :class="[{'post-layout--notoc': !selectedBlog.tableOfContents?.length}]"
+      :class="[{'post-layout--notoc': !selectedBlog.tableOfContents?.[displayLocale]?.length}]"
     >
       <!-- TOC sidebar -->
       <nav
-        v-if="selectedBlog.tableOfContents?.length"
+        v-if="selectedBlog.tableOfContents?.[displayLocale]?.length"
         class="toc"
         aria-label="Table of contents"
       >
@@ -334,15 +334,15 @@ onUnmounted(() => {
         </div>
 
         <a
-          v-for="item in selectedBlog.tableOfContents"
+          v-for="item in selectedBlog.tableOfContents[displayLocale]"
           :key="item.id"
           :href="`#${item.id}`"
           :class="{'sub': item.subLevel !== null,
                    'active': activeTocId === item.id}"
         >
           {{ item.subLevel === null
-            ? `${item.mainLevel}. ${item.title[displayLocale]}`
-            : `${item.mainLevel}.${item.subLevel}. ${item.title[displayLocale]}` }}
+            ? `${item.mainLevel}. ${item.title}`
+            : `${item.mainLevel}.${item.subLevel}. ${item.title}` }}
         </a>
       </nav>
 
@@ -350,8 +350,6 @@ onUnmounted(() => {
       <div class="prose">
         <BlogContent
           :blog-content="selectedBlog.content[displayLocale]"
-          :table-of-contents="selectedBlog.tableOfContents"
-          hide-toc
         />
 
         <!-- Related links -->

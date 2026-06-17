@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "To understand software engineering",
+    "pl": "Zrozumieć architekturę aplikacji"
+  },
+  "description": {
+    "en": "Learn the core concepts of web application architecture: frontend/backend split, monolith vs microservices, Docker, CI/CD pipelines, and VPS vs cloud hosting.",
+    "pl": "Poznaj kluczowe koncepcje architektury aplikacji: podział frontend/backend, monolit vs mikroserwisy, Docker, CI/CD oraz porównanie VPS i chmury."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/JXhRtXCdUcjzOqcbp3EZWAodOUzbDp.jpg",
+  "category": "devops",
+  "featured": true,
+  "isPublished": true,
+  "publishDate": "2026-03-01T17:17:57.204Z",
+  "author": null,
+  "links": [],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 2
+}

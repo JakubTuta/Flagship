@@ -10,11 +10,7 @@ const { locale, t } = useI18n()
 const title = computed(() => props.blog.title[locale.value as 'en' | 'pl'] || props.blog.title.en,
 )
 
-const excerpt = computed(() => truncateContent(
-  props.blog.content[locale.value as 'en' | 'pl'] || props.blog.content.en,
-  135,
-),
-)
+const excerpt = computed(() => props.blog.description[locale.value as 'en' | 'pl'] || props.blog.description.en)
 
 const date = computed(() => formatDate(props.blog.publishDate, locale.value))
 const views = computed(() => formatViewCount(props.blog.viewCount || 0))

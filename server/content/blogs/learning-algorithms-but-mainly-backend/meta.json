@@ -1,0 +1,17 @@
+{
+  "title": { "en": "Learning algorithms, but mainly backend", "pl": "Nauka algorytmów, ale głównie backend" },
+  "description": {
+    "en": "A practical guide to essential algorithms — search, sort, graph, tree, and string matching — with backend use cases for each.",
+    "pl": "Praktyczny przewodnik po kluczowych algorytmach — wyszukiwanie, sortowanie, grafy, drzewa i dopasowanie wzorców — z zastosowaniami backendowymi."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/TDQobZ8XRwoH9CNElCxrOG5csYDAa",
+  "category": "algorithms",
+  "featured": false,
+  "isPublished": true,
+  "publishDate": "2025-09-06T21:31:06.506Z",
+  "author": null,
+  "links": [],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 1
+}

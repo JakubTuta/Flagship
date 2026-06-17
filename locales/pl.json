@@ -55,7 +55,7 @@
     "home": {
       "title": "Strona główna",
       "description": "Witaj w moim portfolio - poznaj moją pracę jako full stack developer i technical writer."
-    },
+    }
   },
   "skills": {
     "database": "Bazy danych",

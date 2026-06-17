@@ -1,14 +1,10 @@
+import type { TBlogCategory } from '~/helpers/blogCategories'
+import type { ITocItem } from '~/models/toc'
 import type { ITranslatedText } from '~/models/translatedText'
-
-export interface ITableOfContentsItem {
-  title: ITranslatedText
-  id: string
-  mainLevel: number
-  subLevel: number | null
-}
 
 export interface IBlog {
   title: ITranslatedText
+  description: ITranslatedText
   value: string
   content: ITranslatedText
   featured: boolean
@@ -18,7 +14,7 @@ export interface IBlog {
   isPublished: boolean
   publishDate: Date | null
   author: string | null
-  tableOfContents: ITableOfContentsItem[]
+  tableOfContents: { en: ITocItem[], pl: ITocItem[] }
   category: TBlogCategory
   viewCount: number
   mainLanguage: 'pl' | 'en' | null

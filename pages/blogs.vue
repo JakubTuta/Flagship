@@ -118,7 +118,7 @@ const heroTitle = computed(() => (featuredHero.value
 )
 
 const heroExcerpt = computed(() => (featuredHero.value
-  ? truncateContent(featuredHero.value.content[locale.value as 'en' | 'pl'] || featuredHero.value.content.en, 220)
+  ? (featuredHero.value.description[locale.value as 'en' | 'pl'] || featuredHero.value.description.en)
   : ''),
 )
 

@@ -1,30 +1,33 @@
 import type { IBlogSerialized } from '~/models/serialized'
+import type { ITocItem } from '~/models/toc'
 
 export default defineEventHandler(async (): Promise<IBlogSerialized[]> => {
   try {
-    const keys = await listContentKeys('blogs')
+    const slugs = await listBlogSlugs()
     const viewsStorage = useStorage('views')
 
     const blogs = await Promise.all(
-      keys.map(async (key) => {
-        const blog = await readContentAsset<IBlogSerialized>(key)
-        if (!blog) return null
+      slugs.map(async (slug): Promise<IBlogSerialized | null> => {
+        const meta = await readContentAsset<Omit<IBlogSerialized, 'value' | 'content' | 'tableOfContents'>>(`blogs/${slug}/meta.json`)
+        if (!meta || !meta.isPublished)
+          return null
 
-        const liveCount = await viewsStorage.getItem<number>(blog.value)
-        const viewCount = liveCount ?? blog.viewCount ?? 0
+        const liveCount = await viewsStorage.getItem<number>(slug)
+        const viewCount = liveCount ?? meta.viewCount ?? 0
 
         return {
-          ...blog,
+          ...meta,
+          value: slug,
           content: { en: '', pl: '' },
+          tableOfContents: { en: [] as ITocItem[], pl: [] as ITocItem[] },
           viewCount,
-        } satisfies IBlogSerialized
+        }
       }),
     )
 
     return blogs.filter((b): b is IBlogSerialized => b !== null)
   }
-  catch (error) {
-    console.error('Error fetching published blogs:', error)
+  catch {
     throw createError({ statusCode: 500, statusMessage: 'Failed to fetch published blogs' })
   }
 })

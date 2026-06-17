@@ -17,6 +17,7 @@ export const useBlogStore = defineStore('blog', () => {
 
     publishedBlogs.value = serializedBlogs.map(blog => ({
       title: blog.title,
+      description: blog.description,
       value: blog.value,
       content: blog.content,
       featured: blog.featured,

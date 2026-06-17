@@ -8,8 +8,8 @@
  *   server/content/projects.json      – all projects
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -18,13 +18,20 @@ const ROOT = resolve(__dirname, '..')
 // ── Firestore value decoder ──────────────────────────────────────────────────
 
 function decodeValue(v) {
-  if (v === null || v === undefined) return null
-  if ('stringValue' in v) return v.stringValue
-  if ('integerValue' in v) return Number(v.integerValue)
-  if ('doubleValue' in v) return Number(v.doubleValue)
-  if ('booleanValue' in v) return v.booleanValue
-  if ('nullValue' in v) return null
-  if ('timestampValue' in v) return v.timestampValue // keep as ISO string
+  if (v === null || v === undefined)
+    return null
+  if ('stringValue' in v)
+    return v.stringValue
+  if ('integerValue' in v)
+    return Number(v.integerValue)
+  if ('doubleValue' in v)
+    return Number(v.doubleValue)
+  if ('booleanValue' in v)
+    return v.booleanValue
+  if ('nullValue' in v)
+    return null
+  if ('timestampValue' in v)
+    return v.timestampValue // keep as ISO string
   if ('referenceValue' in v) {
     // Extract the document ID from path: .../{collection}/{id}
     const parts = v.referenceValue.split('/')
@@ -54,7 +61,8 @@ function decodeDocument(doc) {
 // ── Whitespace decoder (mirrors server/utils/whitespace.ts) ─────────────────
 
 function decodeWhitespace(text) {
-  if (!text || typeof text !== 'string') return text || ''
+  if (!text || typeof text !== 'string')
+    return text || ''
   return text
     .replace(/\|\|\|NEWLINE\|\|\|/g, '\n')
     .replace(/\|\|\|TAB\|\|\|/g, '\t')
@@ -67,14 +75,16 @@ function decodeWhitespace(text) {
 const BASE_FILE_URL = 'https://files.jtuta.cloud/portfolio'
 
 function rewriteImageUrl(url, section) {
-  if (!url || typeof url !== 'string') return null
+  if (!url || typeof url !== 'string')
+    return null
   if (url.startsWith('https://firebasestorage.googleapis.com')) {
     try {
       const parsed = new URL(url)
       const objectPath = decodeURIComponent(parsed.pathname.split('/o/')[1] || '')
       const basename = objectPath.split('/').pop()
       return `${BASE_FILE_URL}/${section}/${basename}`
-    } catch {
+    }
+    catch {
       return null
     }
   }
@@ -92,7 +102,8 @@ let blogCount = 0
 for (const doc of blogsRaw.documents || []) {
   const data = decodeDocument(doc)
 
-  if (!data.isPublished) continue
+  if (!data.isPublished)
+    continue
   const slug = data.value
   if (!slug) {
     console.warn('  Skipping blog with no slug')

@@ -1,0 +1,20 @@
+{
+  "title": {
+    "en": "Learning data structures",
+    "pl": "Nauka struktur danych"
+  },
+  "description": {
+    "en": "A practical guide to the most important data structures: arrays, linked lists, hash tables, sets, stacks, queues, trees, and graphs with Big O complexity.",
+    "pl": "Praktyczny przewodnik po najważniejszych strukturach danych: tablice, listy, tablice hashujące, zestawy, stosy, kolejki, drzewa i grafy ze złożonością Big O."
+  },
+  "image": "https://files.jtuta.cloud/portfolio/blogs/bQmBB8MjywQk4VyuvHyGVsB2LXURpj",
+  "category": "algorithms",
+  "featured": false,
+  "isPublished": true,
+  "publishDate": "2025-08-28T21:17:53.474Z",
+  "author": null,
+  "links": [],
+  "projects": [],
+  "mainLanguage": "pl",
+  "viewCount": 2
+}
