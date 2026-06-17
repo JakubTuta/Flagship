@@ -1,22 +1,14 @@
 export const useThemeStore = defineStore('theme', () => {
   type Themes = 'light' | 'dark'
 
-  const clientTheme = ref<Themes>('dark')
-  const isInitialized = ref(false)
+  const clientTheme = useCookie<Themes>('tuta-theme', {
+    default: () => 'dark',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365,
+  })
 
   const setTheme = (theme: Themes) => {
     clientTheme.value = theme
-
-    if (import.meta.client) {
-      const html = document.documentElement
-
-      html.setAttribute('data-theme', theme)
-
-      html.classList.remove('light-mode', 'dark-mode')
-      html.classList.add(`${theme}-mode`)
-
-      localStorage.setItem('tuta-theme', theme)
-    }
   }
 
   const toggleTheme = () => {
@@ -34,28 +26,11 @@ export const useThemeStore = defineStore('theme', () => {
     return clientTheme.value
   }
 
-  const initialize = () => {
-    if (isInitialized.value)
-      return
-
-    if (import.meta.client) {
-      const localTheme = localStorage.getItem('tuta-theme')
-      const savedTheme: Themes = (localTheme === 'dark' || localTheme === 'light')
-        ? localTheme as Themes
-        : 'dark'
-
-      setTheme(savedTheme)
-      isInitialized.value = true
-    }
-  }
-
   return {
     currentTheme,
     isDark,
     setTheme,
     toggleTheme,
     getTheme,
-    initialize,
-    isInitialized,
   }
 })

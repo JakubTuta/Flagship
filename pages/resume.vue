@@ -235,9 +235,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
 
           <!-- Experience -->
           <Reveal class="block">
-            <div class="block-title">
+            <h2 class="block-title">
               {{ t('resume.work.title') }}
-            </div>
+            </h2>
 
             <div class="tl">
               <div
@@ -269,9 +269,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
 
           <!-- Education -->
           <Reveal class="block">
-            <div class="block-title">
+            <h2 class="block-title">
               {{ t('resume.education.title') }}
-            </div>
+            </h2>
 
             <div class="tl">
               <div
@@ -300,9 +300,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
 
           <!-- Highlighted Projects -->
           <Reveal class="block">
-            <div class="block-title">
+            <h2 class="block-title">
               {{ t('resume.highlightedProjects.title') }}
-            </div>
+            </h2>
 
             <div class="rproj">
               <article
@@ -344,9 +344,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
         <!-- SIDEBAR -->
         <aside class="side">
           <Reveal class="card r-side-card">
-            <h4 class="side-title">
+            <h2 class="side-title">
               {{ t('resume.skills.title') }}
-            </h4>
+            </h2>
 
             <div
               v-for="skillCategory in skills"
@@ -376,9 +376,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
             :delay="1"
             class="card r-side-card"
           >
-            <h4 class="side-title">
+            <h2 class="side-title">
               {{ t('resume.interests.title') }}
-            </h4>
+            </h2>
 
             <div class="r-interests">
               <div
@@ -398,9 +398,9 @@ function calculateDate(date1: Date, date2: Date | null): string {
             :delay="2"
             class="card r-side-card"
           >
-            <h4 class="side-title">
+            <h2 class="side-title">
               {{ t('resume.links.title') }}
-            </h4>
+            </h2>
 
             <div class="r-links-list">
               <a

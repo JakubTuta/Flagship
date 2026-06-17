@@ -1,12 +1,12 @@
-## Wprowadzenie
+﻿## Wprowadzenie
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2F5BJYLX6YJUQF4wXikNINDSCDZNvpQk?alt=media&token=10ea4ae8-c106-4366-af89-08e612db4f89)
+![](https://files.jtuta.cloud/public/portfolio/blogs/5BJYLX6YJUQF4wXikNINDSCDZNvpQk.jpg)
 
 Notacja *O(n)* w strukturach danych opisuje najgorszy przypadek złożoności algorytmu, analizując w jaki sposób jego wydajność (czas wykonania lub wykorzystanie pamięci) skaluje się wraz z rozmiarem danych wejściowych, oznaczonym przez "n".
 
 ## Tablica
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FQw8mDu3l0DXPxIrBn89QDSXhqiBxf?alt=media&token=c1918402-1087-4112-bc12-13381165933d)
+![](https://files.jtuta.cloud/public/portfolio/blogs/Qw8mDu3l0DXPxIrBn89QDSXhqiBxf.png)
 
 **Opis**
 Tablice to kolekcje elementów przechowywanych w ciągłej pamięci komputera, do wybranego elementu można dostać się za pomocą numerycznego indeksu. Każdy element zajmuje taką samą ilość pamięci pozwalając na prosty dostęp do danych pod wybranym indeksem *(początek pamięci + (indeks * ilość pamięci pojedynczego elementu))*.
@@ -29,7 +29,7 @@ Tablice to kolekcje elementów przechowywanych w ciągłej pamięci komputera, d
 
 ## Lista powiązana
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FgSe0VP7oH9UlkiiHqfCWcMPd5TuLmY?alt=media&token=9bba88ea-f08f-4762-b3c3-d02f490ee9f9)
+![](https://files.jtuta.cloud/public/portfolio/blogs/gSe0VP7oH9UlkiiHqfCWcMPd5TuLmY.jpg)
 
 **Opis**
 Lista powiązana składa się z węzłów zawierających dane oraz wskaźnik do następnego elementu (czasami też do poprzedniego - **podwójnie powiązana lista**). Elementy przechowywane są w różnych, rozproszonych miejscach pamięci, powiązane są jedynie poprzez referencje w pamięci tworząc sekwencyjny łańcuch danych bez potrzeby rezerwowania dużego bloku pamięci.
@@ -52,7 +52,7 @@ Lista powiązana składa się z węzłów zawierających dane oraz wskaźnik do 
 
 ## Tablica hashująca
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2Fl8dvV8AzxsXng1DSX2oVnWZltEggGy?alt=media&token=07355e9f-2162-4578-9be8-7b0c8e83bf4b)
+![](https://files.jtuta.cloud/public/portfolio/blogs/l8dvV8AzxsXng1DSX2oVnWZltEggGy.png)
 
 **Opis**
 To specjalny rodzaj tablicy, gdzie kluczem może być dowolny typ danych: liczba, tekst, obiekt. Wykorzystuje funkcję hashującą do obliczania indeksu w tablicy co pozwala na bardzo szybki dostęp do wartości pod podanym kluczem. Bardzo ważna jest dobra funkcja hashująca, gdyż to ona pozwoli zapobiec konfliktom między kluczami. Nowoczesne implementacje (jak Python dict czy Java HashMap) mają bardzo dobre funkcje hashujące i techniki rozwiązywania kolizji, dzięki czemu najgorszy przypadek *O(n)* jest w praktyce bardzo rzadki.
@@ -75,7 +75,7 @@ To specjalny rodzaj tablicy, gdzie kluczem może być dowolny typ danych: liczba
 
 ## Zestaw
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FkqMNkvdKTh2YnsEU3rmGVbNLDdxbGS?alt=media&token=a2f0399b-4935-40af-bfa9-da0d347dfe19)
+![](https://files.jtuta.cloud/public/portfolio/blogs/kqMNkvdKTh2YnsEU3rmGVbNLDdxbGS.png)
 
 **Opis**
 Zestawy to kolekcje, które wymuszają unikalność danych przechowując każdą wartość maksymalnie raz. Typowo implementowane przy pomocy tablic hashujących lub zbalansowanych drzew zapewniając wydajne sprawdzanie istnienia wartości i operacje matematyczne.
@@ -97,7 +97,7 @@ Zestawy to kolekcje, które wymuszają unikalność danych przechowując każdą
 
 ## Stos
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FbuxDqyRgmdvA1hm4Ce93yVHyZpqMVl?alt=media&token=f2c4b693-81f9-4ec6-adc8-b9329b4a6141)
+![](https://files.jtuta.cloud/public/portfolio/blogs/buxDqyRgmdvA1hm4Ce93yVHyZpqMVl.png)
 
 **Opis**
 Stos to abstrakcyjna struktura danych implementująca styl dostępu **FILO *(First In - Last Out)***. Sam w sobie nie jest oddzielną strukturą danych, tak jak tablice czy lista powiązana, a jedynie wykorzystuje różne implementacje zapewniając inny dostęp do danych. Elementy są dodawane i usuwane z tej samej strony, tak zwanej "góry stosu". Można sobie wyobrazić jak ustawianie książek na stosie, żeby dostać się na dół, trzeba najpierw usunąć wszystkie z góry.
@@ -120,7 +120,7 @@ Stos to abstrakcyjna struktura danych implementująca styl dostępu **FILO *(Fir
 
 ## Kolejka
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2F9ECsGjIHkih5uIn4tGycukH8rwGAVU?alt=media&token=05be3f8d-b336-41b4-a97f-f6d2d879900b)
+![](https://files.jtuta.cloud/public/portfolio/blogs/9ECsGjIHkih5uIn4tGycukH8rwGAVU.png)
 
 **Opis**
 Podobnie do stosu, kolejka to też abstrakcyjna struktura danych, ale implementuje styl dostępu **FIFO *(First In - First Out)***. Elementy dodawane są na tył, a usuwane od przodu, co zapewnia sprawiedliwe przetwarzanie danych w kolejności w jakiej je dodaliśmy. Wydajną implementację można uzyskać wykorzystując circular buffer lub podwójnie powiązaną listę.
@@ -142,7 +142,7 @@ Podobnie do stosu, kolejka to też abstrakcyjna struktura danych, ale implementu
 
 ## Drzewa
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2F83XGx2QXOPTkffeFw5MPwNuNFaDNfY?alt=media&token=1ef865fa-2fe4-4bac-918f-4e7fd9bbdaa8)
+![](https://files.jtuta.cloud/public/portfolio/blogs/83XGx2QXOPTkffeFw5MPwNuNFaDNfY.jpg)
 
 **Opis**
 Drzewa to hierarchiczna struktura danych zawierająca węzły połączone krawędziami, z jednego węzła do drugiego zawsze jest tylko 1 połączenie. Drzewo zawsze zaczyna się od jednego elementu, tak zwanego **"korzenia"**, w przypadku zwykłych drzew każdy węzęł może posiadać zero lub wiele potomnych węzłów tworząc relacje rodzic-dziecko pomiędzy węzłami. Popularne samobalansujące się implementacje to drzewa AVL i Red-Black.
@@ -166,7 +166,7 @@ Drzewa to hierarchiczna struktura danych zawierająca węzły połączone krawę
 
 ## Graf
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FJhXKjxXTnDP6s4mkahUWoVgLxAeSVg?alt=media&token=7cf55164-45c8-4983-b011-c32b3450fbf1)
+![](https://files.jtuta.cloud/public/portfolio/blogs/JhXKjxXTnDP6s4mkahUWoVgLxAeSVg.png)
 
 **Opis**
 Grafy to kolekcje wierzchołków połączonych krawędziami reprezentującymi relacje pomiędzy wartościami. Mogą być jedno lub dwu kierunkowe, ważone - nieważone lub cykliczne, dzięki czemu mogą być najbardziej zróżnicowane wśród struktur danych. Złożoności operacji bardzo zależą od sposobu reprezentacji - poniższe dotyczą reprezentacji za pomocą listy sąsiedztwa.

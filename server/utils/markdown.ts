@@ -75,6 +75,22 @@ function buildMd(hl: Awaited<ReturnType<typeof createHighlighter>>) {
     return defaultLinkOpen(tokens, idx, options, env, self)
   }
 
+  _md.renderer.rules.image = (tokens, idx, options, env: { fallbackAlt?: string }, self) => {
+    const token = tokens[idx]
+    const src = token.attrGet('src') || ''
+    let alt = self.renderInlineAsText(token.children ?? [], options, env).trim()
+    if (!alt)
+      alt = env?.fallbackAlt || 'Article illustration'
+    const title = token.attrGet('title')
+    const escapedSrc = _md!.utils.escapeHtml(src)
+    const escapedAlt = _md!.utils.escapeHtml(alt)
+    const titleAttr = title
+      ? ` title="${_md!.utils.escapeHtml(title)}"`
+      : ''
+
+    return `<img src="${escapedSrc}" alt="${escapedAlt}" loading="lazy" decoding="async"${titleAttr}>`
+  }
+
   return _md
 }
 
@@ -113,9 +129,15 @@ function extractToc(tokens: ReturnType<ReturnType<typeof markdownIt>['parse']>):
 
 const renderCache = new Map<string, RenderedMarkdown>()
 
-export async function renderMarkdown(source: string, cacheKey?: string): Promise<RenderedMarkdown> {
-  if (cacheKey) {
-    const cached = renderCache.get(cacheKey)
+export async function renderMarkdown(source: string, cacheKey?: string, fallbackAlt?: string): Promise<RenderedMarkdown> {
+  const resolvedKey = cacheKey
+    ? fallbackAlt
+      ? `${cacheKey}:${fallbackAlt}`
+      : cacheKey
+    : undefined
+
+  if (resolvedKey) {
+    const cached = renderCache.get(resolvedKey)
     if (cached)
       return cached
   }
@@ -123,13 +145,16 @@ export async function renderMarkdown(source: string, cacheKey?: string): Promise
   const hl = await ensureHighlighter()
   const md = buildMd(hl)
 
-  const tokens = md.parse(source, {})
+  const env: { fallbackAlt?: string } = fallbackAlt
+    ? { fallbackAlt }
+    : {}
+  const tokens = md.parse(source, env)
   const toc = extractToc(tokens)
-  const html = md.render(source)
+  const html = md.render(source, env)
 
   const result: RenderedMarkdown = { html, toc }
-  if (cacheKey)
-    renderCache.set(cacheKey, result)
+  if (resolvedKey)
+    renderCache.set(resolvedKey, result)
 
   return result
 }

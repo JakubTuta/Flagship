@@ -1,12 +1,12 @@
-## Introduction
+﻿## Introduction
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2F5BJYLX6YJUQF4wXikNINDSCDZNvpQk?alt=media&token=10ea4ae8-c106-4366-af89-08e612db4f89)
+![](https://files.jtuta.cloud/public/portfolio/blogs/5BJYLX6YJUQF4wXikNINDSCDZNvpQk.jpg)
 
 The *O(n)* notation in data structures describes the worst-case complexity of an algorithm, analyzing how its performance (execution time or memory usage) scales with the size of the input data, denoted by "n".
 
 ## Array
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FQw8mDu3l0DXPxIrBn89QDSXhqiBxf?alt=media&token=c1918402-1087-4112-bc12-13381165933d)
+![](https://files.jtuta.cloud/public/portfolio/blogs/Qw8mDu3l0DXPxIrBn89QDSXhqiBxf.png)
 
 **Description**
 Arrays are collections of elements stored in contiguous computer memory; a selected element can be accessed using a numerical index. Each element occupies the same amount of memory, allowing for simple data access at a selected index *(memory start + (index * size of a single element))*.
@@ -29,7 +29,7 @@ Arrays are collections of elements stored in contiguous computer memory; a selec
 
 ## Linked list
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FgSe0VP7oH9UlkiiHqfCWcMPd5TuLmY?alt=media&token=9bba88ea-f08f-4762-b3c3-d02f490ee9f9)
+![](https://files.jtuta.cloud/public/portfolio/blogs/gSe0VP7oH9UlkiiHqfCWcMPd5TuLmY.jpg)
 
 **Description**
 A linked list consists of nodes containing data and a pointer to the next element (sometimes also to the previous one - **doubly linked list**). Elements are stored in various, scattered memory locations, linked only by memory references, creating a sequential data chain without the need to reserve a large memory block.
@@ -52,7 +52,7 @@ A linked list consists of nodes containing data and a pointer to the next elemen
 
 ## Hash table
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2Fl8dvV8AzxsXng1DSX2oVnWZltEggGy?alt=media&token=07355e9f-2162-4578-9be8-7b0c8e83bf4b)
+![](https://files.jtuta.cloud/public/portfolio/blogs/l8dvV8AzxsXng1DSX2oVnWZltEggGy.png)
 
 **Description**
 This is a special type of array where the key can be any data type: number, text, object. It uses a hashing function to calculate the index in the array, which allows for very fast access to the value associated with the given key. A good hashing function is very important, as it will help prevent conflicts between keys. Modern implementations (like Python dict or Java HashMap) have very good hashing functions and collision resolution techniques, making the worst-case *O(n)* very rare in practice.
@@ -75,7 +75,7 @@ This is a special type of array where the key can be any data type: number, text
 
 ## Set
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FkqMNkvdKTh2YnsEU3rmGVbNLDdxbGS?alt=media&token=a2f0399b-4935-40af-bfa9-da0d347dfe19)
+![](https://files.jtuta.cloud/public/portfolio/blogs/kqMNkvdKTh2YnsEU3rmGVbNLDdxbGS.png)
 
 **Description**
 Sets are collections that enforce data uniqueness by storing each value at most once. Typically implemented using hash tables or balanced trees, they provide efficient checking for value existence and mathematical operations.
@@ -97,7 +97,7 @@ Sets are collections that enforce data uniqueness by storing each value at most 
 
 ## Stack
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FbuxDqyRgmdvA1hm4Ce93yVHyZpqMVl?alt=media&token=f2c4b693-81f9-4ec6-adc8-b9329b4a6141)
+![](https://files.jtuta.cloud/public/portfolio/blogs/buxDqyRgmdvA1hm4Ce93yVHyZpqMVl.png)
 
 **Description**
 A stack is an abstract data structure implementing the **FILO *(First In - Last Out)*** access style. It is not a separate data structure in itself, like arrays or linked lists, but merely uses various implementations to provide different data access. Elements are added and removed from the same side, known as the "top of the stack". You can imagine it like stacking books, to get to the bottom, you must first remove all the books from the top.
@@ -120,7 +120,7 @@ A stack is an abstract data structure implementing the **FILO *(First In - Last 
 
 ## Queue
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2F9ECsGjIHkih5uIn4tGycukH8rwGAVU?alt=media&token=05be3f8d-b336-41b4-a97f-f6d2d879900b)
+![](https://files.jtuta.cloud/public/portfolio/blogs/9ECsGjIHkih5uIn4tGycukH8rwGAVU.png)
 
 **Description**
 Similar to a stack, a queue is also an abstract data structure, but it implements the **FIFO *(First In - First Out)*** access style. Elements are added to the back and removed from the front, ensuring fair data processing in the order they were added. An efficient implementation can be achieved using a circular buffer or a doubly linked list.
@@ -142,7 +142,7 @@ Similar to a stack, a queue is also an abstract data structure, but it implement
 
 ## Trees
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2F83XGx2QXOPTkffeFw5MPwNuNFaDNfY?alt=media&token=1ef865fa-2fe4-4bac-918f-4e7fd9bbdaa8)
+![](https://files.jtuta.cloud/public/portfolio/blogs/83XGx2QXOPTkffeFw5MPwNuNFaDNfY.jpg)
 
 **Description**
 Trees are hierarchical data structures containing nodes connected by edges, with always only 1 connection from one node to another. A tree always starts with a single element, called the **"root"**; in the case of regular trees, each node can have zero or many child nodes, forming parent-child relationships between nodes. Popular self-balancing implementations include AVL and Red-Black trees.
@@ -166,7 +166,7 @@ Trees are hierarchical data structures containing nodes connected by edges, with
 
 ## Graph
 
-![](https://firebasestorage.googleapis.com/v0/b/flagship-8de31.firebasestorage.app/o/blogs%2FJhXKjxXTnDP6s4mkahUWoVgLxAeSVg?alt=media&token=7cf55164-45c8-4983-b011-c32b3450fbf1)
+![](https://files.jtuta.cloud/public/portfolio/blogs/JhXKjxXTnDP6s4mkahUWoVgLxAeSVg.png)
 
 **Description**
 Graphs are collections of vertices connected by edges representing relationships between values. They can be unidirectional or bidirectional, weighted or unweighted, or cyclic, making them the most diverse among data structures. The complexity of operations heavily depends on the representation method - the following refer to representation using an adjacency list.

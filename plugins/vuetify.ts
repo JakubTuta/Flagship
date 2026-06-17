@@ -4,10 +4,12 @@ import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import 'vuetify/styles'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const themeCookie = useCookie<'light' | 'dark'>('tuta-theme', { default: () => 'dark' })
+
   const vuetify = createVuetify({
     ssr: true,
     theme: {
-      defaultTheme: 'dark',
+      defaultTheme: themeCookie.value,
       themes: {
         light: {
           dark: false,

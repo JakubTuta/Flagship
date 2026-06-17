@@ -37,37 +37,61 @@ const blogDescription = computed(() => {
 
 const { addArticle, addBreadcrumbs } = useStructuredData()
 
-const blogTitle = computed(() =>
-  selectedBlog.value?.title[displayLocale.value] || selectedBlog.value?.title.en || t('seo.site.title'),
+const blogTitle = computed(() => selectedBlog.value?.title[displayLocale.value] || selectedBlog.value?.title.en || t('seo.site.title'),
 )
 
 const absoluteImage = computed(() => {
   const img = selectedBlog.value?.image || '/images/profile.jpg'
 
-  return img.startsWith('http') ? img : `${config.public.siteUrl}${img}`
+  return img.startsWith('http')
+    ? img
+    : `${config.public.siteUrl}${img}`
 })
 
+const canonicalUrl = computed(() => `${config.public.siteUrl}/blog/${blogSlug}`)
+
 useSeoMeta(() => ({
-  title: blogTitle.value,
-  description: blogDescription.value,
-  ogTitle: `${blogTitle.value} | Jakub Tutka | Developer Portfolio`,
-  ogDescription: blogDescription.value,
-  ogImage: absoluteImage.value,
-  ogImageAlt: blogTitle.value,
-  ogType: 'article',
-  ogSiteName: 'Jakub Tutka | Developer Portfolio',
-  ogLocale: locale.value === 'en' ? 'en_US' : 'pl_PL',
-  ogLocaleAlternate: locale.value === 'en' ? 'pl_PL' : 'en_US',
-  twitterCard: selectedBlog.value?.image ? 'summary_large_image' : 'summary',
-  twitterTitle: blogTitle.value,
-  twitterDescription: blogDescription.value,
-  twitterImage: absoluteImage.value,
-  twitterSite: '@JakubTutka',
-  twitterCreator: '@JakubTutka',
-  keywords: selectedBlog.value?.category
+  'title': blogTitle.value,
+  'description': blogDescription.value,
+  'ogTitle': `${blogTitle.value} | Jakub Tutka | Developer Portfolio`,
+  'ogDescription': blogDescription.value,
+  'ogImage': absoluteImage.value,
+  'ogImageAlt': blogTitle.value,
+  'ogType': 'article',
+  'ogSiteName': 'Jakub Tutka | Developer Portfolio',
+  'ogLocale': locale.value === 'en'
+    ? 'en_US'
+    : 'pl_PL',
+  'ogLocaleAlternate': locale.value === 'en'
+    ? 'pl_PL'
+    : 'en_US',
+  'article:published_time': selectedBlog.value?.publishDate || undefined,
+  'article:modified_time': selectedBlog.value?.publishDate || undefined,
+  'article:author': 'Jakub Tutka',
+  'twitterCard': selectedBlog.value?.image
+    ? 'summary_large_image'
+    : 'summary',
+  'twitterTitle': blogTitle.value,
+  'twitterDescription': blogDescription.value,
+  'twitterImage': absoluteImage.value,
+  'twitterSite': '@JakubTutka',
+  'twitterCreator': '@JakubTutka',
+  'keywords': selectedBlog.value?.category
     ? `${getCategoryTitle(selectedBlog.value.category)}, development, programming`
     : '',
-  robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  'robots': 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+}))
+
+useHead(() => ({
+  link: [
+    { rel: 'canonical', href: canonicalUrl.value },
+    { rel: 'alternate', hreflang: 'en', href: canonicalUrl.value },
+    { rel: 'alternate', hreflang: 'pl', href: canonicalUrl.value },
+    { rel: 'alternate', hreflang: 'x-default', href: canonicalUrl.value },
+  ],
+  htmlAttrs: {
+    lang: locale.value,
+  },
 }))
 
 watch(() => selectedBlog.value, (currentBlog) => {

@@ -20,8 +20,8 @@ export default defineEventHandler(async (event): Promise<IBlogSerialized> => {
     ])
 
     const [en, pl] = await Promise.all([
-      renderMarkdown(enMd ?? '', `${slug}:en`),
-      renderMarkdown(plMd ?? '', `${slug}:pl`),
+      renderMarkdown(enMd ?? '', `${slug}:en`, meta.title.en),
+      renderMarkdown(plMd ?? '', `${slug}:pl`, meta.title.pl),
     ])
 
     const viewsStorage = useStorage('views')

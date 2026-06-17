@@ -1,19 +1,18 @@
 <script setup lang="ts">
 const themeStore = useThemeStore()
 
-onMounted(() => {
-  themeStore.initialize()
+useHead({
+  htmlAttrs: {
+    'data-theme': () => themeStore.currentTheme,
+    'class': () => `${themeStore.currentTheme}-mode`,
+  },
 })
 
 const currentTheme = computed(() => themeStore.currentTheme)
-const themeClass = computed(() => `v-theme--${themeStore.currentTheme}`)
 </script>
 
 <template>
-  <v-app
-    :theme="currentTheme"
-    :class="themeClass"
-  >
+  <v-app :theme="currentTheme">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
