@@ -4,7 +4,7 @@
     "en": "Learn Docker and containerization from scratch: base images, layer caching, .dockerignore, multi-stage builds, and security best practices for Node and Python apps.",
     "pl": "Naucz się Dockera i konteneryzacji od podstaw: obrazy bazowe, cache warstw, .dockerignore, multi-stage builds i najlepsze praktyki dla aplikacji Node i Python."
   },
-  "image": "https://files.jtuta.cloud/portfolio/blogs/UBcoyvk03NolioRvDqpJF9UzmKDqw1",
+  "image": "https://files.jtuta.cloud/public/portfolio/blogs/UBcoyvk03NolioRvDqpJF9UzmKDqw1.png",
   "category": "devops",
   "featured": false,
   "isPublished": true,

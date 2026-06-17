@@ -77,7 +77,8 @@ const filteredAndSortedBlogs = computed(() => {
 })
 
 const featuredBlogs = computed(() => filteredAndSortedBlogs.value.filter(blog => blog.featured))
-const regularBlogs = computed(() => filteredAndSortedBlogs.value.filter(blog => !blog.featured))
+const featuredHero = computed<IBlogSerialized | null>(() => featuredBlogs.value[0] ?? null)
+const regularBlogs = computed(() => filteredAndSortedBlogs.value.filter(blog => blog.value !== featuredHero.value?.value))
 const displayedRegularBlogs = computed(() => regularBlogs.value.slice(0, displayedBlogsCount.value))
 
 const hasMoreBlogs = computed(() => displayedBlogsCount.value < regularBlogs.value.length)
@@ -109,8 +110,6 @@ const categoryFilterItems = computed(() => [
     value: cat,
   })),
 ])
-
-const featuredHero = computed<IBlogSerialized | null>(() => featuredBlogs.value[0] ?? null)
 
 const heroTitle = computed(() => (featuredHero.value
   ? (featuredHero.value.title[locale.value as 'en' | 'pl'] || featuredHero.value.title.en)

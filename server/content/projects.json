@@ -66,7 +66,7 @@
         "pl": "Self-hosting obserwowalności klasy produkcyjnej bez vendor lock-in"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/1772062384835_ledger.jpg"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/ledger.png"
   },
   {
     "title": "Wony",
@@ -129,7 +129,7 @@
         "pl": "Przełączanie między Claude, Gemini i Ollama za jednym interfejsem"
       }
     ],
-    "image": null
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/wony.png"
   },
   {
     "title": "Code Lens",
@@ -179,7 +179,7 @@
         "pl": "Generowanie kodu testów przy użyciu Gemini/Claude"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/code-lens.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/code-lens.png"
   },
   {
     "title": "Finance",
@@ -234,7 +234,7 @@
         "pl": "Przekształcanie surowych transakcji w użyteczne wnioski o wydatkach"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/finance.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/finance.png"
   },
   {
     "title": "Flagship",
@@ -289,7 +289,7 @@
         "pl": "Utrzymanie szybkiego i responsywnego frontendu na każdym ekranie"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/flagship.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/flagship.png"
   },
   {
     "title": "Flappy Bird",
@@ -325,7 +325,7 @@
         "pl": "Prosta fizyka — grawitacja i skok"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/flappy-bird.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/flappy-bird.png"
   },
   {
     "title": "Minsik",
@@ -385,7 +385,7 @@
         "pl": "Ciągłe pobieranie danych z zewnętrznych API (Open Library, Google Books)"
       }
     ],
-    "image": null
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/minsik.png"
   },
   {
     "title": "League Rats",
@@ -434,7 +434,7 @@
         "pl": "Wykorzystanie Firebase do przechowywania danych i autoryzacji"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/league-rats.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/league-rats.png"
   },
   {
     "title": "Neural Network",
@@ -540,7 +540,7 @@
         "pl": "Projektowanie pod prywatność — nic nie opuszcza maszyny"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/ollama-chat.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/ollama-chat.png"
   },
   {
     "title": "SnakeAI",
@@ -577,7 +577,7 @@
         "pl": "Podstawy budowy gry w PyGame"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/snake-ai.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/snake-ai.png"
   },
   {
     "title": "Strona randkowa",
@@ -627,7 +627,7 @@
         "pl": "Praca zespołowa na jednym repozytorium"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/strona-randkowa.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/strona-randkowa.png"
   },
   {
     "title": "Summarizzler",
@@ -681,6 +681,6 @@
         "pl": "Wdrożenie aplikacji full-stack od początku do końca"
       }
     ],
-    "image": "https://files.jtuta.cloud/portfolio/projects/summarizzler.png"
+    "image": "https://files.jtuta.cloud/public/portfolio/projects/summarizzler.png"
   }
 ]

@@ -84,9 +84,9 @@
       "about": "About Me",
       "contact": "Get in Touch",
       "available": "Available for new roles",
-      "headingPre": "I build backend systems that ",
-      "headingAccent": "scale",
-      "headingSuf": " — and own them end to end.",
+      "headingPre": "Mostly ",
+      "headingAccent": "backend servers",
+      "headingSuf": ". Sometimes full-stack apps, games, or whole systems. Let's build something.",
       "tagline": "A backend-focused software engineer in Kraków with {years}+ years turning complex requirements into reliable, production-grade systems — owning the work from first sketch to live deployment.",
       "viewProjects": "View projects",
       "readResume": "Read my resume"

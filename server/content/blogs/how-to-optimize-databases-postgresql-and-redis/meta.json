@@ -7,7 +7,7 @@
     "en": "Practical guide to PostgreSQL optimization with indexes, partitioning, and EXPLAIN ANALYZE, plus Redis caching patterns for high-traffic production apps.",
     "pl": "Praktyczny przewodnik po optymalizacji PostgreSQL — indeksy, partycjonowanie, EXPLAIN ANALYZE — oraz wzorce cachowania w Redis dla produkcyjnych aplikacji."
   },
-  "image": "https://files.jtuta.cloud/portfolio/blogs/jinojiquY0qzooKhE6fLfJ6fZGd0SS",
+  "image": "https://files.jtuta.cloud/public/portfolio/blogs/jinojiquY0qzooKhE6fLfJ6fZGd0SS.png",
   "category": "data bases",
   "featured": true,
   "isPublished": true,

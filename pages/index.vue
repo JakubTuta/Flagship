@@ -502,7 +502,7 @@ const valueCards = computed(() => [
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 1.35fr 0.65fr;
   gap: clamp(32px, 5vw, 72px);
   align-items: center;
 }

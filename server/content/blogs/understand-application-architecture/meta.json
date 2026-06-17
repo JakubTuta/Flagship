@@ -7,7 +7,7 @@
     "en": "Learn the core concepts of web application architecture: frontend/backend split, monolith vs microservices, Docker, CI/CD pipelines, and VPS vs cloud hosting.",
     "pl": "Poznaj kluczowe koncepcje architektury aplikacji: podział frontend/backend, monolit vs mikroserwisy, Docker, CI/CD oraz porównanie VPS i chmury."
   },
-  "image": "https://files.jtuta.cloud/portfolio/blogs/JXhRtXCdUcjzOqcbp3EZWAodOUzbDp.jpg",
+  "image": "https://files.jtuta.cloud/public/portfolio/blogs/JXhRtXCdUcjzOqcbp3EZWAodOUzbDp.png",
   "category": "devops",
   "featured": true,
   "isPublished": true,

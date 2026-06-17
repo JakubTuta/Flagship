@@ -37,26 +37,42 @@ const blogDescription = computed(() => {
 
 const { addArticle, addBreadcrumbs } = useStructuredData()
 
+const blogTitle = computed(() =>
+  selectedBlog.value?.title[displayLocale.value] || selectedBlog.value?.title.en || t('seo.site.title'),
+)
+
+const absoluteImage = computed(() => {
+  const img = selectedBlog.value?.image || '/images/profile.jpg'
+
+  return img.startsWith('http') ? img : `${config.public.siteUrl}${img}`
+})
+
+useSeoMeta(() => ({
+  title: blogTitle.value,
+  description: blogDescription.value,
+  ogTitle: `${blogTitle.value} | Jakub Tutka | Developer Portfolio`,
+  ogDescription: blogDescription.value,
+  ogImage: absoluteImage.value,
+  ogImageAlt: blogTitle.value,
+  ogType: 'article',
+  ogSiteName: 'Jakub Tutka | Developer Portfolio',
+  ogLocale: locale.value === 'en' ? 'en_US' : 'pl_PL',
+  ogLocaleAlternate: locale.value === 'en' ? 'pl_PL' : 'en_US',
+  twitterCard: selectedBlog.value?.image ? 'summary_large_image' : 'summary',
+  twitterTitle: blogTitle.value,
+  twitterDescription: blogDescription.value,
+  twitterImage: absoluteImage.value,
+  twitterSite: '@JakubTutka',
+  twitterCreator: '@JakubTutka',
+  keywords: selectedBlog.value?.category
+    ? `${getCategoryTitle(selectedBlog.value.category)}, development, programming`
+    : '',
+  robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+}))
+
 watch(() => selectedBlog.value, (currentBlog) => {
   if (!currentBlog)
     return
-
-  useSeo({
-    title: currentBlog.title[displayLocale.value] || currentBlog.title.en,
-    description: blogDescription.value,
-    image: currentBlog.image || '/images/profile.jpg',
-    imageAlt: `${currentBlog.title[displayLocale.value]} - Blog post cover image`,
-    type: 'article',
-    publishedTime: currentBlog.publishDate || undefined,
-    modifiedTime: currentBlog.publishDate || undefined,
-    author: 'Jakub Tutka',
-    tags: currentBlog.category
-      ? [getCategoryTitle(currentBlog.category), 'blog', 'development']
-      : [],
-    twitterCard: currentBlog.image
-      ? 'summary_large_image'
-      : 'summary',
-  })
 
   addArticle({
     type: 'BlogPosting',
