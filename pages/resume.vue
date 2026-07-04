@@ -53,8 +53,15 @@ function getTranslatedText(text: { en: string, pl: string } | string) {
 function handlePrint() {
   if (!import.meta.server) {
     const a = document.createElement('a')
-    a.href = `/files/resume_${locale.value}.pdf`
-    a.download = `resume_${locale.value}.pdf`
+
+    if (locale.value === 'en') {
+      a.href = `/files/Jakub_Tutka_Resume_EN_2.pdf`
+      a.download = `Jakub_Tutka_Resume_EN_2.pdf`
+    }
+    else if (locale.value === 'pl') {
+      a.href = '/files/Jakub_Tutka_CV_PL_2.pdf'
+      a.download = 'Jakub_Tutka_CV_PL_2.pdf'
+    }
     a.target = '_blank'
     document.body.appendChild(a)
     a.click()

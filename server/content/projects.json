@@ -81,7 +81,7 @@
     },
     "url": "https://github.com/JakubTuta/Wony",
     "demoUrl": null,
-    "featured": false,
+    "featured": true,
     "showOnHome": true,
     "category": "AI & Machine Learning",
     "technologies": [
@@ -400,7 +400,7 @@
     },
     "url": "https://github.com/JakubTuta/LeagueRats",
     "demoUrl": "https://leaguerats.net",
-    "featured": true,
+    "featured": false,
     "showOnHome": false,
     "category": "Web Application",
     "technologies": [
