@@ -1,30 +1,30 @@
 {
   "seo": {
     "site": {
-      "title": "Jakub Tutka | Full Stack Developer Portfolio",
-      "description": "I'm Jakub Tutka, a full stack developer and technical writer passionate about creating exceptional web experiences and sharing knowledge with the developer community.",
-      "tags": "Jakub Tutka, full stack developer portfolio, web development, technical writer, software engineer, modern web solutions"
+      "title": "Jakub Tutka | Back-End Software Engineer Portfolio",
+      "description": "Jakub Tutka — backend-focused software engineer specializing in Python, FastAPI, and scalable cloud systems. Explore projects, technical writing, and experience.",
+      "tags": "Jakub Tutka, backend developer, Python engineer, FastAPI, software engineer portfolio, cloud infrastructure"
     },
     "pages": {
       "index": {
         "title": "Home",
-        "description": "Welcome to my portfolio where I showcase my development projects, technical expertise, and professional journey as a full stack developer and technical writer.",
-        "tags": "home, developer portfolio, Jakub Tutka, full stack developer, web development"
+        "description": "Backend-focused software engineer with 3+ years building scalable Python APIs and cloud systems. Browse featured projects, technical articles, and experience.",
+        "tags": "home, backend developer, Jakub Tutka, Python engineer, software engineer portfolio"
       },
       "resume": {
         "title": "Resume",
-        "description": "Explore my professional background, technical skills, and career journey. From university projects to production applications - discover what I bring to development teams.",
-        "tags": "resume, CV, Jakub Tutka, developer experience, technical skills, career journey"
+        "description": "Resume of Jakub Tutka, a backend-focused software engineer skilled in Python, FastAPI, Django, and cloud infrastructure. View work experience, skills, and education.",
+        "tags": "resume, CV, Jakub Tutka, backend engineer experience, Python skills, career journey"
       },
       "projects": {
         "title": "Projects",
-        "description": "Discover my collection of web applications and development projects. Each project demonstrates problem-solving skills, technical expertise, and commitment to quality code.",
-        "tags": "projects, web applications, development portfolio, technical solutions, code examples"
+        "description": "Browse backend and full-stack projects by Jakub Tutka — Python APIs, cloud deployments, and web applications built with production-grade engineering practices.",
+        "tags": "projects, Python APIs, backend projects, cloud deployments, web applications"
       },
       "blog": {
         "title": "Blog",
-        "description": "I share insights about web development, technical tutorials, and lessons learned from real-world projects. Join me in exploring modern development practices and industry trends.",
-        "tags": "tech blog, development insights, programming tutorials, web development, technical writing"
+        "description": "Technical articles by Jakub Tutka on backend development, Python, APIs, and cloud infrastructure — practical insights from real production systems.",
+        "tags": "tech blog, backend development, Python tutorials, API design, cloud infrastructure"
       },
       "notFound": {
         "title": "Page Not Found",

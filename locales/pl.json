@@ -1,30 +1,30 @@
 {
   "seo": {
     "site": {
-      "title": "Jakub Tutka | Portfolio Full Stack Developera",
-      "description": "Jestem Jakub Tutka, full stack developer i technical writer, pasjonat tworzenia wyjątkowych aplikacji webowych i dzielenia się wiedzą ze społecznością developerów.",
-      "tags": "Jakub Tutka, portfolio full stack developer, web development, technical writer, inżynier oprogramowania, nowoczesne rozwiązania webowe"
+      "title": "Jakub Tutka | Portfolio Backend Software Engineera",
+      "description": "Jakub Tutka — backendowy inżynier oprogramowania specjalizujący się w Pythonie, FastAPI i skalowalnych systemach chmurowych. Zobacz projekty i wpisy techniczne.",
+      "tags": "Jakub Tutka, backend developer, inżynier Python, FastAPI, portfolio inżyniera oprogramowania, infrastruktura chmurowa"
     },
     "pages": {
       "index": {
         "title": "Strona główna",
-        "description": "Witaj w moim portfolio, gdzie prezentuję projekty programistyczne, wiedzę techniczną i zawodową drogę jako full stack developer i technical writer.",
-        "tags": "strona główna, portfolio developera, Jakub Tutka, full stack developer, web development"
+        "description": "Backendowy inżynier oprogramowania z 3+ letnim doświadczeniem w budowie skalowalnych API w Pythonie i systemów chmurowych. Zobacz projekty i artykuły techniczne.",
+        "tags": "strona główna, backend developer, Jakub Tutka, inżynier Python, portfolio inżyniera oprogramowania"
       },
       "resume": {
         "title": "CV",
-        "description": "Poznaj moje doświadczenie zawodowe, umiejętności techniczne i drogę kariery. Od projektów uniwersyteckich po aplikacje produkcyjne - zobacz, co wnoszę do zespołów developerskich.",
-        "tags": "CV, resume, Jakub Tutka, doświadczenie developera, umiejętności techniczne, droga kariery"
+        "description": "CV Jakuba Tutki, backendowego inżyniera oprogramowania z doświadczeniem w Pythonie, FastAPI, Django i infrastrukturze chmurowej. Poznaj doświadczenie, umiejętności i edukację.",
+        "tags": "CV, resume, Jakub Tutka, doświadczenie backend engineer, umiejętności Python, droga kariery"
       },
       "projects": {
         "title": "Projekty",
-        "description": "Odkryj moją kolekcję aplikacji webowych i projektów programistycznych. Każdy projekt pokazuje umiejętności rozwiązywania problemów, wiedzę techniczną i zaangażowanie w jakość kodu.",
-        "tags": "projekty, aplikacje webowe, portfolio programistyczne, rozwiązania techniczne, przykłady kodu"
+        "description": "Przeglądaj projekty backendowe i full-stack Jakuba Tutki — API w Pythonie, wdrożenia chmurowe i aplikacje webowe zbudowane zgodnie z praktykami produkcyjnymi.",
+        "tags": "projekty, API w Pythonie, projekty backendowe, wdrożenia chmurowe, aplikacje webowe"
       },
       "blog": {
         "title": "Blog",
-        "description": "Dzielę się spostrzeżeniami o web developmencie, tutorialami technicznymi i lekcjami z prawdziwych projektów. Dołącz do eksploracji nowoczesnych praktyk programistycznych.",
-        "tags": "blog techniczny, insights o developmencie, tutoriale programistyczne, web development, technical writing"
+        "description": "Artykuły techniczne Jakuba Tutki o backendzie, Pythonie, API i infrastrukturze chmurowej — praktyczna wiedza z prawdziwych systemów produkcyjnych.",
+        "tags": "blog techniczny, rozwój backendu, tutoriale Python, projektowanie API, infrastruktura chmurowa"
       },
       "notFound": {
         "title": "Nie znaleziono strony",
